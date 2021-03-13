@@ -2,6 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Funcs\ModelFuncs;
+use App\Models\Image;
+use App\Models\ProfileImage;
+use App\Models\Video;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +20,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+//        $this->app->when([Video::class])
+//            ->needs(FilesystemAdapter::class)
+//            ->give(Storage::disk('videos'));
+//        $this->app->when([Image::class])
+//            ->needs(FilesystemAdapter::class)
+//            ->give(Storage::disk('images'));
+//        $this->app->when([ProfileImage::class])
+//            ->needs(FilesystemAdapter::class)
+//            ->give(Storage::disk('profile_images'));
+        $this->app->singleton(ModelFuncs::class, function(){
+            return new ModelFuncs();
+        });
     }
 
     /**
@@ -23,6 +41,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
     }
 }

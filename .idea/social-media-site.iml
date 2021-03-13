@@ -6,6 +6,12 @@
       <sourceFolder url="file://$MODULE_DIR$/database/seeders" isTestSource="false" packagePrefix="Database\Seeders\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/database/factories" isTestSource="false" packagePrefix="Database\Factories\" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pestphp/pest" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pestphp/pest-plugin" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pestphp/pest-plugin-coverage" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pestphp/pest-plugin-expectations" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pestphp/pest-plugin-init" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/pestphp/pest-plugin-laravel" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

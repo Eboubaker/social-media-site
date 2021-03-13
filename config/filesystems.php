@@ -34,13 +34,13 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-
-        'public' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-        ],
+//
+//        'public' => [
+//            'driver' => 'local',
+//            'root' => storage_path('app/public'),
+//            'url' => env('APP_URL').'/storage',
+//            'visibility' => 'public',
+//        ],
 
         's3' => [
             'driver' => 's3',
@@ -51,7 +51,34 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
         ],
-
+        'images' => [
+            'driver' => 'local',
+            'root' => storage_path('app\public\images\\'),
+            'url' => env('APP_URL').'/storage/images/',
+            'visibility' => 'public',
+        ],
+        'faker_videos' => [
+            'driver' => 'local',
+            'root' => storage_path('faker\videos\\'),
+            'visibility' => 'public',
+        ],
+        'faker_images' => [
+            'driver' => 'local',
+            'root' => storage_path('faker\images\\'),
+            'visibility' => 'public',
+        ],
+        'profile_images' => [
+            'driver' => 'local',
+            'root' => storage_path('app\public\profile_images\\'),
+            'url' => env('APP_URL').'/storage/profile_images/',
+            'visibility' => 'public',
+        ],
+        'videos' => [
+            'driver' => 'local',
+            'root' => storage_path('app\public\videos\\'),
+            'url' => env('APP_URL').'/storage/videos/',
+            'visibility' => 'public',
+        ],
     ],
 
     /*
