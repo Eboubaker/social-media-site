@@ -18,6 +18,7 @@ class VideoResource extends JsonResource
         return [
             'id' => $this->{Video::PKEY},
             'url' => $this->url,
+            'meta' => $this->meta,
             'createdAt' => $this->created_at,
         ];
     }

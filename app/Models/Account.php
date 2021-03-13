@@ -12,6 +12,12 @@ use Illuminate\Support\Str;
 /**
  * @property ProfileImage profileImage
  * @property AccountSettings settings
+ * @property BusinessProfile businessProfile
+ * @property SocialProfile socialProfile
+ * @property string lastName
+ * @property string firstName
+ * @property string public_id
+ *
  */
 class Account extends Authenticatable
 {
@@ -65,6 +71,12 @@ class Account extends Authenticatable
     {
         return $this->hasOne(SocialProfile::class, self::FKEY, self::PKEY);
     }
+
+    public function getPublicIdAttribute()
+    {
+        return $this->attributes['public_id'];
+    }
+
     public function getFirstNameAttribute()
     {
         return $this->attributes['first_name'];
@@ -72,5 +84,13 @@ class Account extends Authenticatable
     public function getLastNameAttribute()
     {
         return $this->attributes['last_name'];
+    }
+    public function setFirstNameAttribute($new)
+    {
+        $this->attributes['first_name'] = $new;
+    }
+    public function setLastNameAttribute($new)
+    {
+        $this->attributes['last_name'] = $new;
     }
 }

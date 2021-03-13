@@ -17,7 +17,7 @@ class CreateBusinessProfilesTable extends Migration
     public function up()
     {
         Schema::create(BusinessProfile::TABLE, function (Blueprint $table) {
-            $table->uuid(BusinessProfile::PKEY)->primary();
+            $table->uuid(BusinessProfile::PKEY)->index()->primary();
             $table->uuid(Account::FKEY);
             $table->foreign(Account::FKEY)
                 ->references(Account::PKEY)

@@ -22,7 +22,6 @@ class Post extends Postable
     protected $guarded = [
         self::PKEY
     ];
-
     public function __construct(array $attributes = [], $pass = false)
     {
         parent::__construct($attributes, $pass);

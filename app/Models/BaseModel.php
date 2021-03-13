@@ -31,6 +31,8 @@ use Illuminate\Support\Collection;
  * @method static Collection all()
  * @method static Collection get($columns='*')
  *
+ * @method integer|string getKey()
+
  *
  *
  */
@@ -40,8 +42,6 @@ class BaseModel extends Model
     // i added this class just to attach the magic properties
     // and methods of the Model class
 
-
-    protected $dateFormat = 'm-d-Y HH:MI:SS';
 
 
     public function getIdAttribute()

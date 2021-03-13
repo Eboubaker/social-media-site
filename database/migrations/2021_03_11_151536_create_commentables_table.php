@@ -17,7 +17,7 @@ class CreateCommentablesTable extends Migration
     public function up()
     {
         Schema::create(Commentable::TABLE, function (Blueprint $table) {
-            $table->uuid(Comment::FKEY);
+            $table->uuid(Comment::FKEY)->index();
             $table->uuidMorphs(Commentable::$morphRelationName);
             if(Commentable::CREATED_AT)
             {

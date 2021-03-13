@@ -16,7 +16,7 @@ class AccountResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->{Account::PKEY},
+            'id' => $this->public_id,
             'profileImage' => $this->profileImage->url,
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,

@@ -18,9 +18,10 @@ class CommentResource extends JsonResource
         return [
             'id' => $this->{Comment::PKEY},
             'author' => new AccountResource($this->profileable->account),
-            'comments' => self::collection($this->whenLoaded('comments')),
+            'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'videos' => VideoResource::collection($this->whenLoaded('videos')),
+            'commentsCount' => count($this->whenLoaded('comments')),
             'content' => $this->content,
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,

@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\AccountSettings;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Log;
 
 class AccountSettingsFactory extends Factory
 {
@@ -21,8 +22,12 @@ class AccountSettingsFactory extends Factory
      */
     public function definition()
     {
-        return [
+        Log::debug("Entering AccountSettingsFactory definition");
+
+        $atts = [
             'data' => json_encode(new \stdClass(), JSON_THROW_ON_ERROR)
         ];
+        Log::debug("Leaving AccountSettingsFactory definition");
+        return $atts;
     }
 }

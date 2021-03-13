@@ -19,7 +19,7 @@ class CreateAccountsTable extends Migration
     {
         Schema::create(Account::TABLE, function (Blueprint $table) {
             // this id should be hidden in the model, only the back-end server can see it
-            $table->uuid(Account::PKEY)->primary();
+            $table->uuid(Account::PKEY)->index()->primary();
 
             // we add a public id which can be shared by other users
             $table->string('public_id', Account::PUPLIC_ID_LEN)->unique();
@@ -30,8 +30,8 @@ class CreateAccountsTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
 
-            $table->string('email')->nullable()->unique();
-            $table->string('phone')->nullable()->unique();
+            $table->string('email')->index()->nullable()->unique();
+            $table->string('phone')->index()->nullable()->unique();
 
             $table->timestamp('phone_verified_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();

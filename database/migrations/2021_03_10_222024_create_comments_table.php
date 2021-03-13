@@ -19,7 +19,7 @@ class CreateCommentsTable extends Migration
     public function up()
     {
         Schema::create(Comment::TABLE, function (Blueprint $table) {
-            $table->uuid(Comment::PKEY)->primary();
+            $table->uuid(Comment::PKEY)->index()->primary();
             // foreign key for either a social account or a business account
             $table->json('content');
             $table->uuidMorphs(Profileable::$morphRelationName);

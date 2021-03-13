@@ -18,6 +18,7 @@ class ImageResource extends JsonResource
         return [
             'id' => $this->{Image::PKEY},
             'url' => $this->url,
+            'meta' => $this->meta,
             'createdAt' => $this->created_at,
         ];
     }

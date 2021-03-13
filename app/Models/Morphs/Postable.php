@@ -2,6 +2,7 @@
 
 namespace App\Models\Morphs;
 
+use App\Casts\JsonObject;
 use App\Models\Comment;
 use App\Models\Funcs\ModelFuncs;
 use App\Models\Image;
@@ -15,11 +16,13 @@ class Postable extends Commentable
 {
     use HasFactory;
     public static $morphRelationName = 'postable';
+    protected $with = ['comments', 'videos', 'images'];
 
     function __construct(array $attributes = [], $pass = false)
     {
+        $this->casts['content'] = JsonObject::class;
         parent::__construct($attributes);
-        $this->casts = $this->casts[] = ['content' => 'object'];
+
         if(!$pass) {
             $handler = app()->make(ModelFuncs::class);
             $HasUuid = $handler->funcs[ModelFuncs::$HasUuid];

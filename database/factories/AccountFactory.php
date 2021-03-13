@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\AccountSettings;
 use App\Models\ProfileImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class AccountFactory extends Factory
@@ -25,8 +26,10 @@ class AccountFactory extends Factory
      */
     public function definition(): array
     {
+        Log::debug("Entering AccountFactory definition");
+
         $email = random_int(0, 100) > 50;
-        return [
+        $atts = [
             Account::PKEY => Str::uuid()->toString(),
             'public_id' => Str::random(Account::PUPLIC_ID_LEN),
             'phone' => $email ? null : $this->faker->phoneNumber,
@@ -38,12 +41,16 @@ class AccountFactory extends Factory
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // Hash::make('password')
             'remember_token' => Str::random(10),
         ];
+        Log::debug("Leaving AccountFactory definition");
+        return $atts;
     }
     public function configure()
     {
         return $this->afterCreating(function (Account $account) {
+            Log::debug("Entering AccountFactory afterCreating");
             $account->settings()->create(AccountSettings::factory()->make()->attributesToArray());
             $account->profileImage()->create(ProfileImage::factory()->make()->attributesToArray());
+            Log::debug("Leaving AccountFactory afterCreating");
         });
     }
     /**

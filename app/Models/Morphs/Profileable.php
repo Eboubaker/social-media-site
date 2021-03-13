@@ -2,6 +2,7 @@
 
 namespace App\Models\Morphs;
 
+use App\Casts\JsonObject;
 use App\Models\Account;
 use App\Models\BaseModel;
 use App\Models\Comment;
@@ -33,7 +34,9 @@ class Profileable extends BaseModel
 
     function __construct(array $attributes = [])
     {
+        $this->casts['data'] = JsonObject::class;
         parent::__construct($attributes);
+
         $handler = app()->get(ModelFuncs::class);
         $HasUuid = $handler->funcs[ModelFuncs::$HasUuid];
         static::creating($HasUuid);

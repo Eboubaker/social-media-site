@@ -13,7 +13,7 @@ class Comment extends Postable
 
     public const TABLE = "comments";
     public const TABLE_DOT_KEY = self::TABLE . "." . self::PKEY;
-    public const FKEY = "comment_id";
+    public const FKEY = "comment_uuid";
     public const CREATED_AT = "created_at";
     public const UPDATED_AT = "updated_at";
 
@@ -24,20 +24,4 @@ class Comment extends Postable
     protected $guarded = [
         self::PKEY
     ];
-
-    public function __construct(array $attributes = [], $pass = false)
-    {
-        parent::__construct($attributes, $pass);
-    }
-
-    public function comments()
-    {
-        $morphicName = Commentable::$morphRelationName;
-        return $this->morphedByMany(self::class,
-            $morphicName,
-            Commentable::TABLE,
-            $morphicName.'_id',
-            self::FKEY,
-            self::PKEY, self::PKEY);
-    }
 }

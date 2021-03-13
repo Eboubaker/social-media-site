@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\ProfileImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -24,24 +25,32 @@ class ProfileImageFactory extends Factory
      */
     public function definition()
     {
-        $uuid = Str::uuid();
+        Log::debug("Entering ProfileImageFactory definition");
+
+        $uuid = Str::uuid()->toString();
 
         $disk = Storage::disk('faker_images');
         $files = $disk->files();
         $chosen = $files[random_int(0, count($files)-1)];
         self::$image = $disk->path($chosen);
         $hash = hash('sha256', $disk->get($chosen));
-        return [
+        $atts =  [
             ProfileImage::PKEY => $uuid,
             'sha256' => $hash,
-            'meta' => json_encode(new \stdClass(), JSON_THROW_ON_ERROR),
+            'meta' => (object)["with" => 1024, "height" => 1280],
             'type' => ProfileImage::getAllowedTypes()->where('fileSuffix', 'png')->keys()->first(),
         ];
+        Log::debug("Leaving ProfileImageFactory definition");
+        return $atts;
     }
     public function configure()
     {
-        return $this->afterCreating(function(ProfileImage  $image){
+        return $this->afterMaking(function(ProfileImage  $image){
+            Log::debug("Entering ProfileImageFactory afterMaking");
+
             copy(self::$image, $image->realPath);
+            Log::debug("Entering ProfileImageFactory afterMaking");
+
         });
     }
 }

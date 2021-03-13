@@ -32,6 +32,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ModelFuncs::class, function(){
             return new ModelFuncs();
         });
+        if(strtolower(date_default_timezone_get()) !== "africa/algiers")
+        {
+            date_default_timezone_set("Africa/Algiers");
+        }
     }
 
     /**

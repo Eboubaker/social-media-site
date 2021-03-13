@@ -12,6 +12,7 @@ use App\Models\SocialProfile;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CommentFactory extends Factory
@@ -31,18 +32,23 @@ class CommentFactory extends Factory
      */
     public function definition()
     {
+        Log::debug("Entering CommentFactory definition");
 
-        $comment = json_encode((object)["body"=>$this->faker->sentence], JSON_THROW_ON_ERROR);
-        return [
+        $comment = (object)["body"=>$this->faker->sentence];
+        $atts = [
+            Comment::PKEY => Str::uuid()->toString(),
             'content' => $comment,
-            Comment::PKEY => Str::uuid()
         ];
+        Log::debug("Leaving CommentFactory definition");
+
+        return $atts;
     }
 
     public function configure()
     {
         return $this->afterMaking(static function(Comment $comment)
         {
+            Log::debug("Entering CommentFactory afterMaking");
             $profile = random_int(0, 100) > 50 ? new BusinessProfile() : new SocialProfile();
             if(!$profile || !$profile->exists || random_int(0, 100) > 80)
             {
@@ -51,15 +57,19 @@ class CommentFactory extends Factory
             $comment->profileable()->associate($profile);
             if(count(debug_backtrace()) < 50) {
                 for ($i = random_int(0, random_int(0, random_int(0, random_int(0, random_int(0, random_int(0, random_int(0, 100))))))); $i > 0; $i--) {
+                    Log::debug("Creating a comment for the comment " . $comment->getKey());
                     $comment->comments()->create(Comment::factory()->make()->attributesToArray());
                 }
             }
             for ($i = random_int(0, random_int(0, random_int(0, random_int(0, 4)))); $i > 0; $i--) {
+                Log::debug("Creating a Image for the comment " . $comment->getKey());
                 $comment->images()->create(Image::factory()->make()->attributesToArray());
             }
             for ($i = random_int(0, random_int(0, random_int(0, random_int(0, 4)))); $i > 0; $i--) {
+                Log::debug("Creating a Video for the comment " . $comment->getKey());
                 $comment->videos()->create(Video::factory()->make()->attributesToArray());
             }
+            Log::debug("Leaving CommentFactory afterMaking");
         });
     }
 }

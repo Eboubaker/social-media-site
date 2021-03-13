@@ -18,7 +18,7 @@ class CreateVideosTable extends Migration
     public function up()
     {
         Schema::create(Video::TABLE, function (Blueprint $table) {
-            $table->uuid(Video::PKEY)->primary();
+            $table->uuid(Video::PKEY)->index()->primary();
             $table->char('sha256', 64)->index();
             $table->uuidMorphs(Postable::$morphRelationName);
             $table->tinyInteger('type');

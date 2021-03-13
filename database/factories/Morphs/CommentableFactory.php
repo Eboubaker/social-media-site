@@ -4,6 +4,7 @@ namespace Database\Factories\Morphs;
 
 use App\Models\Morphs\Commentable;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class CommentableFactory extends Factory
@@ -22,8 +23,13 @@ class CommentableFactory extends Factory
      */
     public function definition()
     {
-        return [
+        Log::debug("Entering CommentableFactory definition");
+
+        $atts = [
             Commentable::PKEY => Str::uuid()
         ];
+        Log::debug("Leaving CommentableFactory definition");
+        return $atts;
+
     }
 }

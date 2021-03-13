@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create(Post::TABLE, function (Blueprint $table) {
-            $table->uuid(Post::PKEY)->primary();
+            $table->uuid(Post::PKEY)->index()->primary();
             // foreign key for either a social account or a business account
             $table->json('content');
             $table->uuidMorphs(Profileable::$morphRelationName);

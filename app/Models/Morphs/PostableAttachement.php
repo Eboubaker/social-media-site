@@ -2,6 +2,7 @@
 
 namespace App\Models\Morphs;
 
+use App\Casts\JsonObject;
 use App\Models\BaseModel;
 use App\Models\Funcs\ModelFuncs;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,6 +30,7 @@ class PostableAttachement extends BaseModel
 
     function __construct(array $attributes = [], $pass = false)
     {
+        $this->casts['meta'] = JsonObject::class;
         parent::__construct($attributes);
         if(!$pass) {
             $handler = app()->get(ModelFuncs::class);

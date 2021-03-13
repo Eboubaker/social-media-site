@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use App\Models\Post;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
+use Illuminate\Support\Facades\Log;
 
 class PostResource extends JsonResource
 {
@@ -19,9 +21,10 @@ class PostResource extends JsonResource
             'id' => $this->{Post::PKEY},
             'author' => new AccountResource($this->profileable->account),
             'content' => $this->content,
-            'comments' => CommentResource::collection($this->whenPivotLoaded('commentables','comment')),
-            'images' => ImageResource::collection($this->whenPivotLoaded('images','images')),
-            'videos' => VideoResource::collection($this->whenPivotLoaded('videos','videos')),
+            'comments' => CommentResource::collection($this->whenLoaded('comments')),
+            'images' => ImageResource::collection($this->whenLoaded('images')),
+            'videos' => VideoResource::collection($this->whenLoaded('videos')),
+            'commentsCount' => count($this->whenLoaded('comments')),
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
         ];

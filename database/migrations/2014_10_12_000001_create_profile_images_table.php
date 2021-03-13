@@ -18,7 +18,7 @@ class CreateProfileImagesTable extends Migration
     {
         Schema::create(ProfileImage::TABLE, function (Blueprint $table) {
             // sha256 hash (64 bytes)
-            $table->uuid(ProfileImage::PKEY)->primary();
+            $table->uuid(ProfileImage::PKEY)->index()->primary();
             $table->uuid(Account::FKEY);
             $table->foreign(Account::FKEY)
                 ->references(Account::PKEY)

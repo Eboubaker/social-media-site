@@ -17,7 +17,7 @@ class CreateAccountNotificationsTable extends Migration
     public function up()
     {
         Schema::create(AccountNotification::TABLE, function (Blueprint $table) {
-            $table->uuid(AccountNotification::PKEY)->primary();
+            $table->uuid(AccountNotification::PKEY)->index()->primary();
             $table->uuid(Account::FKEY);
             $table->foreign(Account::FKEY)
                 ->references(Account::PKEY)

@@ -7,6 +7,7 @@ use App\Models\AccountSettings;
 use App\Models\ProfileImage;
 use App\Models\SocialProfile;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class SocialProfileFactory extends Factory
@@ -24,6 +25,7 @@ class SocialProfileFactory extends Factory
      */
     public function definition()
     {
+        Log::debug("Entering SocialProfileFactory definition");
         $data = (object)[
             "personal_info" => (object)[
                 "bio" => $this->faker->sentence,
@@ -32,15 +34,18 @@ class SocialProfileFactory extends Factory
                 "study" => $this->faker->words,
             ],
         ];
-        return [
+        $atts = [
             SocialProfile::PKEY => Str::uuid(),
-            'data' => json_encode($data, JSON_THROW_ON_ERROR)
+            'data' => $data
         ];
+        Log::debug("Leaving SocialProfileFactory definition");
+        return $atts;
     }
 
     public function configure()
     {
         return $this->afterMaking(function(SocialProfile $socialProfile){
+            Log::debug("Entering SocialProfileFactory AfterMaking");
             $acc = Account::query()->whereDoesntHave('socialProfile')->first();
             if($acc && random_int(0, 100) > 80)
             {
@@ -48,6 +53,7 @@ class SocialProfileFactory extends Factory
             }else{
                 $socialProfile->account()->associate(Account::factory()->create());
             }
+            Log::debug("Leaving SocialProfileFactory AfterMaking");
         });
     }
 

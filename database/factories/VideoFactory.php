@@ -7,6 +7,7 @@ use App\Models\Morphs\Postable;
 use App\Models\Post;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -31,6 +32,8 @@ class VideoFactory extends Factory
      */
     public function definition()
     {
+        Log::debug("Entering VideoFactory definition");
+
         $morph = random_int(0, 100) > 50 ? Post::query()->offset(random_int(0,Post::count()))->first()
             : Comment::query()->offset(random_int(0,Comment::count()))->first();
         $morph = $morph ?: Post::make();
@@ -41,20 +44,24 @@ class VideoFactory extends Factory
         $chosen = $files[random_int(0, count($files)-1)];
         self::$video = $disk->path($chosen);
         $hash = hash('sha256', $disk->get($chosen));
-        return [
+        $atts = [
             Video::PKEY => $uuid,
             'sha256' => $hash,
             Postable::$morphRelationName.'_type' => $morph->getMorphClass(),
             Postable::$morphRelationName.'_id' => $morph->getKey() ?? 0,
-            'meta' => json_encode(new \stdClass(), JSON_THROW_ON_ERROR),
+            'meta' => (object)["with" => 1024, "height" => 1280],
             'type' => Video::getAllowedTypes()->keys()->first()
         ];
+        Log::debug("Leaving VideoFactory definition");
+        return $atts;
     }
 
     public function configure()
     {
-        return $this->afterCreating(function(Video $video){
+        return $this->afterMaking(function(Video $video){
+            Log::debug("Entering VideoFactory afterMaking");
             copy(self::$video, $video->realPath);
+            Log::debug("Leaving VideoFactory afterMaking");
         });
     }
 }

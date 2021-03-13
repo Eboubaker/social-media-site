@@ -17,7 +17,7 @@ class CreateSocialProfilesTable extends Migration
     public function up()
     {
         Schema::create(SocialProfile::TABLE, function (Blueprint $table) {
-            $table->uuid(SocialProfile::PKEY)->primary();
+            $table->uuid(SocialProfile::PKEY)->index()->primary();
             $table->uuid(Account::FKEY);
             $table->foreign(Account::FKEY)
                 ->references(Account::PKEY)

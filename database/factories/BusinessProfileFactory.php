@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\BusinessProfile;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class BusinessProfileFactory extends Factory
@@ -25,6 +26,8 @@ class BusinessProfileFactory extends Factory
      */
     public function definition()
     {
+        Log::debug("Entering BusinessProfileFactory definition");
+
         $data = (object)[
             "business_details" => (object)[
                 "name" => $this->faker->words(),
@@ -32,15 +35,18 @@ class BusinessProfileFactory extends Factory
                 "yearly_income" => random_int(120000, random_int(120000, 5000000))
             ],
         ];
-        return [
-            BusinessProfile::PKEY => Str::uuid(),
-            'data' => json_encode($data, JSON_THROW_ON_ERROR)
+        $atts =  [
+            BusinessProfile::PKEY => Str::uuid()->toString(),
+            'data' => $data
         ];
+        Log::debug("Leaving BusinessProfileFactory definition");
+        return $atts;
     }
 
     public function configure()
     {
         return $this->afterMaking(function(BusinessProfile $businessProfile){
+            Log::debug("Entering BusinessProfileFactory afterMaking");
             $acc = Account::query()->whereDoesntHave('businessProfile')->first();
             if($acc && random_int(0, 100) > 80)
             {
@@ -48,6 +54,7 @@ class BusinessProfileFactory extends Factory
             }else{
                 $businessProfile->account()->associate(Account::factory()->create());
             }
+            Log::debug("Leaving BusinessProfileFactory afterMaking");
         });
     }
 }
