@@ -35,7 +35,6 @@ class SocialProfileFactory extends Factory
             ],
         ];
         $atts = [
-            SocialProfile::PKEY => Str::uuid(),
             'data' => $data
         ];
         Log::debug("Leaving SocialProfileFactory definition");
@@ -46,8 +45,9 @@ class SocialProfileFactory extends Factory
     {
         return $this->afterMaking(function(SocialProfile $socialProfile){
             Log::debug("Entering SocialProfileFactory AfterMaking");
+            $socialProfile->makeUuid();
             $acc = Account::query()->whereDoesntHave('socialProfile')->first();
-            if($acc && random_int(0, 100) > 80)
+            if($acc && FactoryHelper::randc(.8))
             {
                 $socialProfile->account()->associate($acc);
             }else{

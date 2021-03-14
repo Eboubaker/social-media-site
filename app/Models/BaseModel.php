@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 
 /**
@@ -14,7 +15,7 @@ use Illuminate\Support\Collection;
  * @package App\Models
  *
  * @method static integer count()
- * @method static bool exists()
+ * @method bool exists()
  *
  * @method static Builder inRandomOrder()
  * @method static Builder where()
@@ -39,13 +40,23 @@ use Illuminate\Support\Collection;
 
 class BaseModel extends Model
 {
+    public const PUBLIC_ID_LEN = 8;
     // i added this class just to attach the magic properties
     // and methods of the Model class
 
 
 
-    public function getIdAttribute()
+//    public function getIdAttribute()
+//    {
+//        return $this->attributes[self::PKEY];
+//    }
+
+    public function makeUuid($uuid = null)
     {
-        return $this->getKey();
+        $this->setAttribute($this->getKeyName(), $uuid ?? Str::uuid()->toString());
+    }
+    public function makePublicId()
+    {
+        $this->setAttribute('public_id', Str::random(self::PUBLIC_ID_LEN));
     }
 }

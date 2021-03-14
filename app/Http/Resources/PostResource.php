@@ -24,7 +24,7 @@ class PostResource extends JsonResource
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'videos' => VideoResource::collection($this->whenLoaded('videos')),
-            'commentsCount' => count($this->whenLoaded('comments')),
+            'commentsCount' => $this->comments->count(),
             'createdAt' => $this->created_at,
             'updatedAt' => $this->updated_at,
         ];

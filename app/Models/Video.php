@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Funcs\ModelFuncs;
+use App\Models\Events\ModelEvents;
 use App\Models\Morphs\PostableAttachement;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

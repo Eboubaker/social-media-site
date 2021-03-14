@@ -18,13 +18,14 @@ class CreateProfileImagesTable extends Migration
     {
         Schema::create(ProfileImage::TABLE, function (Blueprint $table) {
             // sha256 hash (64 bytes)
-            $table->uuid(ProfileImage::PKEY)->index()->primary();
-            $table->uuid(Account::FKEY);
-            $table->foreign(Account::FKEY)
-                ->references(Account::PKEY)
-                ->on(Account::TABLE)
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->uuid('id')->unique()->primary();
+            $table->uuid('public_id')->unique();
+            $table->foreignId('account_id');
+            $table->foreign('account_id')
+                ->references('id')
+                ->on('accounts')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             // we will use the uuid as the name part of the image path
             $table->char('sha256', 64)->index();
             $table->tinyInteger('type');

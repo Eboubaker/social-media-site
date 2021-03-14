@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Mockery\Exception;
 
 class ProfileImage extends Image
 {
@@ -13,4 +14,13 @@ class ProfileImage extends Image
     public static $Storage = 'profile_images';
     public $storage = 'profile_images';
     protected $table = self::TABLE;
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo|void
+     * @deprecated profile images does not have a postable
+     */
+    public function postable()
+    {
+        throw new Exception("Does not have Postable");
+    }
 }

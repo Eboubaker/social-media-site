@@ -22,14 +22,12 @@ use Illuminate\Support\Str;
 class Account extends Authenticatable
 {
     use HasFactory, Notifiable;
-    public $incrementing = false;
-    public $keyType = 'string';
 
     public const TABLE = "accounts";
-    public const PKEY = "quick_id";
+    public const PKEY = "id";
     public const PUPLIC_ID_LEN = 8;
     public const TABLE_DOT_KEY = self::TABLE . "." . self::PKEY;
-    public const FKEY = "quick_id";
+    public const FKEY = "account_id";
     public const CREATED_AT = "created_at";
     public const UPDATED_AT = "updated_at";
 
