@@ -23,9 +23,8 @@ class AccountSettingsFactory extends Factory
     public function definition()
     {
         Log::debug("Entering AccountSettingsFactory definition");
-
         $atts = [
-            'data' => json_encode(new \stdClass(), JSON_THROW_ON_ERROR)
+            'data' => new \stdClass()
         ];
         Log::debug("Leaving AccountSettingsFactory definition");
         return $atts;

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\JsonObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,5 +24,8 @@ class AccountSettings extends BaseModel
     ];
     protected $hidden = [
         self::PKEY
+    ];
+    protected $casts = [
+        'data' => JsonObject::class
     ];
 }

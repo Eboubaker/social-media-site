@@ -2,19 +2,19 @@
 
 namespace Database\Factories\Morphs;
 
-use App\Models\Morphs\Commentable;
+use App\Models\Morphs\Postable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class CommentableFactory extends Factory
+class PostableFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Commentable::class;
+    protected $model = Postable::class;
 
     /**
      * Define the model's default state.
@@ -23,12 +23,12 @@ class CommentableFactory extends Factory
      */
     public function definition()
     {
-        Log::debug("Entering CommentableFactory definition");
+        Log::debug("Entering PostableFactory definition");
 
         $atts = [
-            Commentable::PKEY => Str::uuid()
+            Postable::PKEY => Str::uuid()
         ];
-        Log::debug("Leaving CommentableFactory definition");
+        Log::debug("Leaving PostableFactory definition");
         return $atts;
 
     }

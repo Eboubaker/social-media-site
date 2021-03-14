@@ -2,10 +2,16 @@
 
 namespace App\Providers;
 
-use App\Models\Funcs\ModelFuncs;
+use App\Models\Events\ModelEvents;
 use App\Models\Image;
+use App\Models\Morphs\Postable;
+use App\Models\Morphs\PostableAttachement;
+use App\Models\Morphs\Profileable;
 use App\Models\ProfileImage;
 use App\Models\Video;
+use App\Observers\PostableAttachementObserver;
+use App\Observers\PostableObserver;
+use App\Observers\ProfileableObserver;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
@@ -29,9 +35,7 @@ class AppServiceProvider extends ServiceProvider
 //        $this->app->when([ProfileImage::class])
 //            ->needs(FilesystemAdapter::class)
 //            ->give(Storage::disk('profile_images'));
-        $this->app->singleton(ModelFuncs::class, function(){
-            return new ModelFuncs();
-        });
+
         if(strtolower(date_default_timezone_get()) !== "africa/algiers")
         {
             date_default_timezone_set("Africa/Algiers");

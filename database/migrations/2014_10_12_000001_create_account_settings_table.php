@@ -16,13 +16,13 @@ class CreateAccountSettingsTable extends Migration
     public function up()
     {
         Schema::create(AccountSettings::TABLE, function (Blueprint $table) {
-            $table->id(AccountSettings::PKEY);
-            $table->uuid(Account::FKEY);
-            $table->foreign(Account::FKEY)
-                ->references(Account::PKEY)
-                ->on(Account::TABLE)
-                ->cascadeOnUpdate()
-                ->cascadeOnDelete();
+            $table->id();
+            $table->foreignId('account_id');
+            $table->foreign('account_id')
+                ->references('id')
+                ->on('accounts')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->json('data');
             $table->timestamps();
         });

@@ -6,7 +6,7 @@ use App\Casts\JsonObject;
 use App\Models\Account;
 use App\Models\BaseModel;
 use App\Models\Comment;
-use App\Models\Funcs\ModelFuncs;
+use App\Models\Events\ModelEvents;
 use App\Models\Post;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
@@ -25,21 +25,26 @@ use Ramsey\Collection\Collection;
 class Profileable extends BaseModel
 {
     use HasFactory;
-    public $keyType = 'string';
+    public const PKEY = "id";
     public $incrementing = false;
-    public const PKEY = "uuid";
-
+    protected $keyType = 'string';
+    protected $primaryKey = self::PKEY;
     public static $morphRelationName = 'profileable';
     protected $guarded = [];
 
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function($model)
+        {
+            ModelEvents::addUuid($model);
+            ModelEvents::addPublicId($model);
+        });
+    }
     function __construct(array $attributes = [])
     {
         $this->casts['data'] = JsonObject::class;
         parent::__construct($attributes);
-
-        $handler = app()->get(ModelFuncs::class);
-        $HasUuid = $handler->funcs[ModelFuncs::$HasUuid];
-        static::creating($HasUuid);
     }
 
     public function posts()

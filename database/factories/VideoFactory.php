@@ -33,22 +33,11 @@ class VideoFactory extends Factory
     public function definition()
     {
         Log::debug("Entering VideoFactory definition");
-
-        $morph = random_int(0, 100) > 50 ? Post::query()->offset(random_int(0,Post::count()))->first()
-            : Comment::query()->offset(random_int(0,Comment::count()))->first();
-        $morph = $morph ?: Post::make();
-        $uuid = Str::uuid()->toString();
-
         $disk = Storage::disk('faker_videos');
         $files = $disk->files();
         $chosen = $files[random_int(0, count($files)-1)];
         self::$video = $disk->path($chosen);
-        $hash = hash('sha256', $disk->get($chosen));
         $atts = [
-            Video::PKEY => $uuid,
-            'sha256' => $hash,
-            Postable::$morphRelationName.'_type' => $morph->getMorphClass(),
-            Postable::$morphRelationName.'_id' => $morph->getKey() ?? 0,
             'meta' => (object)["with" => 1024, "height" => 1280],
             'type' => Video::getAllowedTypes()->keys()->first()
         ];
@@ -60,6 +49,7 @@ class VideoFactory extends Factory
     {
         return $this->afterMaking(function(Video $video){
             Log::debug("Entering VideoFactory afterMaking");
+            $video->makeUuid();
             copy(self::$video, $video->realPath);
             Log::debug("Leaving VideoFactory afterMaking");
         });

@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\BusinessProfile;
 use App\Models\Comment;
 use App\Models\Image;
-use App\Models\Morphs\Commentable;
 use App\Models\Morphs\Postable;
 use App\Models\Morphs\Profileable;
 use App\Models\Post;
@@ -37,13 +36,9 @@ class PostFactory extends Factory
     public function definition(): array
     {
         Log::debug("Entering PostFactory definition");
-        $uuid = Str::uuid();
-
         $content = new stdClass();
         $content->body = $this->faker->sentence;
-
         $atts = [
-            Post::PKEY => $uuid,
             'content' => $content,
         ];
         Log::debug("Leaving PostFactory definition");
@@ -54,31 +49,33 @@ class PostFactory extends Factory
     {
         return $this->afterMaking(static function(Post $post){
             Log::debug("Entering PostFactory AfterMaking");
-            $profile = random_int(0, 100) > 50 ? new BusinessProfile() : new SocialProfile();
-            $prof = $profile::inRandomOrder()->first();
-            if(!$prof || !$prof->exists || random_int(0, 100) > 80)
+            $post->makeUuid();
+            $post->makePublicId();
+            $profile = FactoryHelper::randc(.5) ? new BusinessProfile() : new SocialProfile();
+            $author = $profile::inRandomOrder()->first();
+            if(!$author || !$author->exists() || FactoryHelper::randc(.8))
             {
                 Log::debug("Creating a ". $profile->getMorphClass() ." profile for the post " . $post->getKey());
-                $prof = $profile::factory()->create();
+                $author = $profile::factory()->create();
             }
-            $post->profileable()->associate($prof);
-
+            $post->profileable()->associate($author);
+            Log::debug("Leaving PostFactory AfterMaking");
+        })->afterCreating(function(Post $post){
             DB::transaction(function() use ($post) {
-                for ($i = random_int(0, random_int(0, random_int(0, random_int(0, 3)))); $i > 0; $i--) {
+                for ($i = FactoryHelper::nestedRandom(3, 4); $i > 0; $i--) {
                     Log::debug("Creating an image for the post " . $post->getKey());
-                    $post->images()->create(Image::factory()->make()->attributesToArray());
+                    $post->images()->save(Image::factory()->make());
                 }
-                for ($i = random_int(0, random_int(0, random_int(0, random_int(0, 3)))); $i > 0; $i--) {
+                for ($i = FactoryHelper::nestedRandom(3, 4); $i > 0; $i--) {
                     Log::debug("Creating a video for the post " . $post->getKey());
-                    $post->videos()->create(Video::factory()->make()->attributesToArray());
+                    $post->videos()->save(Video::factory()->make());
                 }
-                for($i = random_int(0, random_int(0, random_int(0, random_int(0, 20)))); $i > 0; $i--)
+                for($i = FactoryHelper::nestedRandom(20, 4); $i > 0; $i--)
                 {
                     Log::debug("Creating a comment for the post " . $post->getKey());
-                    $post->comments()->create(Comment::factory()->make()->attributesToArray());
+                    $post->comments()->attach(Comment::factory()->create());
                 }
             });
-            Log::debug("Leaving PostFactory AfterMaking");
         });
     }
 }

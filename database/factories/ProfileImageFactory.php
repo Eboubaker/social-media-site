@@ -26,17 +26,11 @@ class ProfileImageFactory extends Factory
     public function definition()
     {
         Log::debug("Entering ProfileImageFactory definition");
-
-        $uuid = Str::uuid()->toString();
-
         $disk = Storage::disk('faker_images');
         $files = $disk->files();
         $chosen = $files[random_int(0, count($files)-1)];
         self::$image = $disk->path($chosen);
-        $hash = hash('sha256', $disk->get($chosen));
         $atts =  [
-            ProfileImage::PKEY => $uuid,
-            'sha256' => $hash,
             'meta' => (object)["with" => 1024, "height" => 1280],
             'type' => ProfileImage::getAllowedTypes()->where('fileSuffix', 'png')->keys()->first(),
         ];
@@ -47,10 +41,9 @@ class ProfileImageFactory extends Factory
     {
         return $this->afterMaking(function(ProfileImage  $image){
             Log::debug("Entering ProfileImageFactory afterMaking");
-
+            $image->makeUuid();
             copy(self::$image, $image->realPath);
             Log::debug("Entering ProfileImageFactory afterMaking");
-
         });
     }
 }

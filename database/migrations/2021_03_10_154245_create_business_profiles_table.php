@@ -17,11 +17,12 @@ class CreateBusinessProfilesTable extends Migration
     public function up()
     {
         Schema::create(BusinessProfile::TABLE, function (Blueprint $table) {
-            $table->uuid(BusinessProfile::PKEY)->index()->primary();
-            $table->uuid(Account::FKEY);
-            $table->foreign(Account::FKEY)
-                ->references(Account::PKEY)
-                ->on(Account::TABLE)
+            $table->uuid('id')->unique()->primary();
+            $table->uuid('public_id')->unique();
+            $table->foreignId('account_id');
+            $table->foreign('account_id')
+                ->references('id')
+                ->on('accounts')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->json('data');

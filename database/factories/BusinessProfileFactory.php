@@ -36,7 +36,6 @@ class BusinessProfileFactory extends Factory
             ],
         ];
         $atts =  [
-            BusinessProfile::PKEY => Str::uuid()->toString(),
             'data' => $data
         ];
         Log::debug("Leaving BusinessProfileFactory definition");
@@ -47,8 +46,9 @@ class BusinessProfileFactory extends Factory
     {
         return $this->afterMaking(function(BusinessProfile $businessProfile){
             Log::debug("Entering BusinessProfileFactory afterMaking");
+            $businessProfile->makeUuid();
             $acc = Account::query()->whereDoesntHave('businessProfile')->first();
-            if($acc && random_int(0, 100) > 80)
+            if($acc && FactoryHelper::randc(.8))
             {
                 $businessProfile->account()->associate($acc);
             }else{

@@ -27,15 +27,14 @@ class AccountFactory extends Factory
     public function definition(): array
     {
         Log::debug("Entering AccountFactory definition");
-
         $email = random_int(0, 100) > 50;
         $atts = [
-            Account::PKEY => Str::uuid()->toString(),
+//            Account::PKEY => Str::uuid()->toString(),
             'public_id' => Str::random(Account::PUPLIC_ID_LEN),
             'phone' => $email ? null : $this->faker->phoneNumber,
             'email' => $email? $this->faker->unique()->safeEmail : null,
-            'email_verified_at' => $email ? (random_int(0, 100) > 50 ? now() : null) : null,
-            'phone_verified_at' => $email ? null : (random_int(0, 100) > 50 ? now() : null),
+            'email_verified_at' => $email ? (FactoryHelper::randc(.5) ? now() : null) : null,
+            'phone_verified_at' => $email ? null : (FactoryHelper::randc(.5) ? now() : null),
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // Hash::make('password')
