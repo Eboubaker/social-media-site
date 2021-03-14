@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ModelFuncs
+
 {
     public $funcs = [];
     public static $HasUuid = 'HasUuid';
@@ -17,7 +18,7 @@ class ModelFuncs
     public function __construct()
     {
         $this->funcs[self::$HasUuid] = static function($model){
-            if(empty($model->{$model::PKEY}))
+            if(empty($model->attributes[$model::PKEY]))
             {
                 $tries = 3;
                 $uuid = Str::uuid()->toString();
