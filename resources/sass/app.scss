@@ -1,6 +1,13 @@
 // Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+//@import url('https://fonts.googleapis.com/css?family=Nunito');
 
+// tailwind
 @import "~tailwindcss/base";
 @import "~tailwindcss/components";
 @import "~tailwindcss/utilities";
+
+// google icons
+@import "../css/material-icons.css";
+
+// custom css
+@import "../css/custom-css.css";

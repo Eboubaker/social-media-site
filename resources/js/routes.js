@@ -4,6 +4,7 @@ import ConfirmationCode from "./components/ConfirmationCode";
 import SocialBuisnessAccount from "./components/SocialBuisnessAccount";
 import NavBar from "./components/NavBar";
 import Post from "./components/Post";
+import PlayGround from "./components/PlayGround";
 
 export default {
     mode: "history",
@@ -21,6 +22,11 @@ export default {
             name: "confirm",
             path: "/confirm",
             component: ConfirmationCode
+        },
+        {
+            name: "playground",
+            path: "/playground",
+            component: PlayGround
         },
         {
             name: "account",
