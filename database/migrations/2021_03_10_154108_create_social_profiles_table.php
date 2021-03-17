@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Account;
+use App\Models\User;
 use App\Models\SocialProfile;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
@@ -19,7 +19,7 @@ class CreateSocialProfilesTable extends Migration
     {
         Schema::create(SocialProfile::TABLE, function (Blueprint $table) {
             $table->id();
-            MigrationHelper::addForeign($table, new Account);
+            MigrationHelper::addForeign($table, new User);
             $table->json('data');
             MigrationHelper::addTimeStamps($table, new SocialProfile());
         });

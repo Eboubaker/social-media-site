@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Account;
-use App\Models\AccountNotification;
-use App\Models\AccountSettings;
+use App\Models\User;
+use App\Models\UserNotification;
+use App\Models\UserSettings;
 use App\Models\BusinessProfile;
 use App\Models\Comment;
 use App\Models\Image;
@@ -54,9 +54,9 @@ class TruncateTables extends Command
         try {
             Db::transaction(function () {
                 DB::statement("SET foreign_key_checks=0");
-                Account::truncate();
-                AccountSettings::truncate();
-                AccountNotification::truncate();
+                User::truncate();
+                UserSettings::truncate();
+                UserNotification::truncate();
                 BusinessProfile::truncate();
                 SocialProfile::truncate();
                 DB::statement('truncate postables_comments');

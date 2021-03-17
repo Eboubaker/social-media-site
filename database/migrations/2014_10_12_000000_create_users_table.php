@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Account;
-use App\Models\AccountSettings;
+use App\Models\User;
+use App\Models\UserSettings;
 use App\Models\ProfileImage;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
@@ -9,7 +9,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccountsTable extends Migration
+class CreateUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,24 +18,23 @@ class CreateAccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Account::TABLE, function (Blueprint $table) {
+        Schema::create(User::TABLE, function (Blueprint $table) {
             $table->id();
-
-            $table->string('first_name');
-            $table->string('last_name');
 
             $table->string('email')->index()->nullable()->unique();
             $table->string('phone')->index()->nullable()->unique();
 
             $table->timestamp('phone_verified_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+
             $table->string('password');
-            $table->string('api_token');
-            // this is a foreign key it may reference work_accounts or social_accounts
-            // depending on the chosen account by the user
-            $table->unsignedBigInteger('used_account')->nullable();
+            $table->string('api_token')->unique()->nullable()->default(null);
+
+            $table->unsignedBigInteger('used_profileable_id')->nullable()->default(null);
+            $table->string('active_profileable_type')->nullable()->default(null);
+
             $table->rememberToken();
-            MigrationHelper::addTimeStamps($table, new Account);
+            MigrationHelper::addTimeStamps($table, new User);
         });
     }
 
@@ -46,6 +45,6 @@ class CreateAccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Account::TABLE);
+        Schema::dropIfExists(User::TABLE);
     }
 }

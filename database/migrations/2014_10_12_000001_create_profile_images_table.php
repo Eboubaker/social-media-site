@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Account;
+use App\Models\User;
 use App\Models\ProfileImage;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
@@ -20,7 +20,7 @@ class CreateProfileImagesTable extends Migration
     {
         Schema::create(ProfileImage::TABLE, function (Blueprint $table) {
             $table->id();
-            MigrationHelper::addForeign($table, new Account);
+            MigrationHelper::addForeign($table, new User);
             $table->char('sha256', 64)->index();
             $table->tinyInteger('type');
             $table->json('meta');

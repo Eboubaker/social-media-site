@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\AccountNotification;
+use App\Models\UserNotification;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class AccountNotificationFactory extends Factory
+class UserNotificationFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = AccountNotification::class;
+    protected $model = UserNotification::class;
 
     /**
      * Define the model's default state.

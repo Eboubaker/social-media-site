@@ -1,5 +1,10 @@
 {
     "/js/app.js": "/js/app.js",
-    "/C:/Users/me/Desktop/resources/css/__tailwind.css": "/C:/Users/me/Desktop/resources/css/__tailwind.css",
-    "/css/app.css": "/css/app.css"
+    "/css/app.css": "/css/app.css",
+    "/fonts/MaterialIcons-Regular.eot": "/fonts/MaterialIcons-Regular.eot",
+    "/fonts/MaterialIcons-Regular.ijmap": "/fonts/MaterialIcons-Regular.ijmap",
+    "/fonts/MaterialIcons-Regular.svg": "/fonts/MaterialIcons-Regular.svg",
+    "/fonts/MaterialIcons-Regular.ttf": "/fonts/MaterialIcons-Regular.ttf",
+    "/fonts/MaterialIcons-Regular.woff": "/fonts/MaterialIcons-Regular.woff",
+    "/fonts/MaterialIcons-Regular.woff2": "/fonts/MaterialIcons-Regular.woff2"
 }

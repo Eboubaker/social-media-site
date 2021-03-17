@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\Account;
-use App\Models\AccountSettings;
+use App\Models\User;
+use App\Models\UserSettings;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAccountSettingsTable extends Migration
+class CreateUserSettingsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,11 +16,11 @@ class CreateAccountSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create(AccountSettings::TABLE, function (Blueprint $table) {
+        Schema::create(UserSettings::TABLE, function (Blueprint $table) {
             $table->id();
-            MigrationHelper::addForeign($table, new Account);
+            MigrationHelper::addForeign($table, new User);
             $table->json('data');
-            MigrationHelper::addTimeStamps($table, new AccountSettings());
+            MigrationHelper::addTimeStamps($table, new UserSettings());
         });
     }
 
@@ -31,6 +31,6 @@ class CreateAccountSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(AccountSettings::TABLE);
+        Schema::dropIfExists(UserSettings::TABLE);
     }
 }

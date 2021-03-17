@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Account;
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AccountResource extends JsonResource

@@ -7,13 +7,21 @@ use Illuminate\Support\Facades\DB;
 
 class MigrationHelper
 {
-    public static function addForeign(Blueprint $table, Model $target, $onUpdateCascade = true, $onDeleteCascade = true)
+    /**
+     * @param Blueprint $table
+     * @param Model $target
+     * @param bool $onUpdateCascade
+     * @param bool $onDeleteCascade
+     * @return array index 0 = ForeignIdColumnDefinition index 1 = ForeignKeyDefinition
+     */
+    public static function addForeign(Blueprint $table, Model $target, $onUpdateCascade = true, $onDeleteCascade = true): array
     {
         $foreign = $target->getForeignKey();
+        $column = null;
         if($target->getKeyType() === 'string')
-            $table->foreignUuid($foreign)->index();
+            $column = $table->foreignUuid($foreign)->index();
         else
-            $table->foreignId($foreign)->index();
+            $column = $table->foreignId($foreign)->index();
         $keydef = $table->foreign($foreign)
             ->references($target->getKeyName())
             ->on($target->getTable());
@@ -21,6 +29,7 @@ class MigrationHelper
             $keydef->cascadeOnDelete();
         if($onUpdateCascade)
             $keydef->cascadeOnUpdate();
+        return [$column, $keydef];
     }
     public static function addTimeStamps(Blueprint $table, Model $target)
     {

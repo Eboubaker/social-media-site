@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\AccountSettings;
+use App\Models\UserSettings;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Log;
 
-class AccountSettingsFactory extends Factory
+class UserSettingsFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = AccountSettings::class;
+    protected $model = UserSettings::class;
 
     /**
      * Define the model's default state.

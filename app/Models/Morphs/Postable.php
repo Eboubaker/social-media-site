@@ -4,14 +4,11 @@ namespace App\Models\Morphs;
 
 use App\Casts\JsonObject;
 use App\Models\BaseModel;
-use App\Models\Comment;
-use App\Models\Events\ModelEvents;
 use App\Models\Image;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Postable extends BaseModel
 {

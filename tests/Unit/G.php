@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Models\Account;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -16,6 +16,6 @@ class G extends TestCase
     public function test_example()
     {
         $response = $this->get('/');
-        it('not null')->assertNotNull(Account::factory()->create());
+        it('not null')->assertNotNull(User::factory()->create());
     }
 }

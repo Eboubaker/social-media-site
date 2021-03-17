@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Account;
+use App\Models\User;
 use App\Models\BusinessProfile;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -46,12 +46,12 @@ class BusinessProfileFactory extends Factory
     {
         return $this->afterMaking(function(BusinessProfile $businessProfile){
 //            Log::debug("Entering BusinessProfileFactory afterMaking");
-            $acc = Account::query()->whereDoesntHave('businessProfile')->first();
+            $acc = User::query()->whereDoesntHave('businessProfile')->first();
             if($acc && FactoryHelper::randc(.9))
             {
                 $businessProfile->account()->associate($acc);
             }else{
-                $businessProfile->account()->associate(Account::factory()->create());
+                $businessProfile->account()->associate(User::factory()->create());
             }
 //            Log::debug("Leaving BusinessProfileFactory afterMaking");
         });

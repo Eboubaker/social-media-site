@@ -3,7 +3,7 @@
 namespace App\Models\Morphs;
 
 use App\Casts\JsonObject;
-use App\Models\Account;
+use App\Models\User;
 use App\Models\BaseModel;
 use App\Models\Comment;
 use App\Models\Events\ModelEvents;
@@ -18,7 +18,7 @@ use Ramsey\Collection\Collection;
 /**
  * @property Collection posts
  * @property Collection comments
- * @property Account account
+ * @property User account
  *
  * @property string create_at
  */
@@ -47,6 +47,6 @@ class Profileable extends BaseModel
 
     public function account()
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(User::class);
     }
 }

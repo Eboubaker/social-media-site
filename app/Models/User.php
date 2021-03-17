@@ -13,15 +13,16 @@ use Illuminate\Support\Str;
 
 /**
  * @property ProfileImage profileImage
- * @property AccountSettings settings
+ * @property UserSettings settings
  * @property BusinessProfile businessProfile
  * @property SocialProfile socialProfile
  * @property string lastName
  * @property string firstName
  * @property string public_id
  *
+ * @method static create(array $array) : Account
  */
-class Account extends Authenticatable
+class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -58,7 +59,7 @@ class Account extends Authenticatable
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        self::creating(static function(Account $account){
+        self::creating(static function(User $account){
             $account->setAttribute('api_token', hash('sha256', Str::random(32)));
         });
     }
@@ -69,7 +70,7 @@ class Account extends Authenticatable
     }
     public function settings()
     {
-        return $this->hasOne(AccountSettings::class, self::FKEY, self::PKEY);
+        return $this->hasOne(UserSettings::class, self::FKEY, self::PKEY);
     }
 
     public function businessProfile()
@@ -102,5 +103,8 @@ class Account extends Authenticatable
     {
         $this->attributes['last_name'] = $new;
     }
-
+    public function activeProfile()
+    {
+        return $this->morphTo('active_profileable');
+    }
 }

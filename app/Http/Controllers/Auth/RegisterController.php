@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use App\Models\Account;
+use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -51,9 +52,10 @@ class RegisterController extends Controller
     {
         $method = preg_match('/[A-Za-z]/', $data['login'], $matches) ? "email" : "phone";
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'login' => ['required', 'string', $method, 'max:255', 'unique:'.Account::TABLE.'.'.$method],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'firstName' => ['required', 'string', 'max:255'],
+            'lastName' => ['required', 'string', 'max:255'],
+            'login' => ['required', 'string', $method, 'max:255', 'unique:'.User::TABLE.'.'.$method],
+            'password' => ['required', 'string', 'min:8'],
         ]);
     }
 
@@ -61,14 +63,15 @@ class RegisterController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return \App\Models\Account
+     * @return \App\Models\User
      */
     protected function create(array $data)
     {
-        return Account::create([
+        return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'api_token' => Str::random(80),
         ]);
     }
 }

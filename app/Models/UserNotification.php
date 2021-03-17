@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-use App\Casts\JsonObject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AccountSettings extends BaseModel
+class UserNotification extends BaseModel
 {
     use HasFactory;
-    public const TABLE = "account_settings";
+    public const TABLE = "account_notifications";
     public const PKEY = "id";
     public const TABLE_DOT_KEY = self::TABLE . "." . self::PKEY;
-    public const FKEY = "account_settings_id";
+    public const FKEY = "account_notification_id";
     public const CREATED_AT = "created_at";
-    public const UPDATED_AT = "updated_at";
+    public const UPDATED_AT = null;
 
     protected $table = self::TABLE;
     protected $primaryKey = self::PKEY;
@@ -26,6 +25,6 @@ class AccountSettings extends BaseModel
         self::PKEY
     ];
     protected $casts = [
-        'data' => JsonObject::class
+        'content' => 'object'
     ];
 }
