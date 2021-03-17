@@ -22,11 +22,11 @@ class AccountSettingsFactory extends Factory
      */
     public function definition()
     {
-        Log::debug("Entering AccountSettingsFactory definition");
+//        Log::debug("Entering AccountSettingsFactory definition");
         $atts = [
             'data' => new \stdClass()
         ];
-        Log::debug("Leaving AccountSettingsFactory definition");
+//        Log::debug("Leaving AccountSettingsFactory definition");
         return $atts;
     }
 }

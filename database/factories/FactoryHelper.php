@@ -14,12 +14,12 @@ class FactoryHelper
         return $result;
     }
 
-    public static function nestedRandomStep(int $limit, int $level, int $step = 1):int
+    public static function nestedRandomStep(int $limit, int $level, int $step = 1, int $starts = 0):int
     {
         $result = $limit;
-        $steps = 0;
+        $steps = $starts;
         while($level-- > 0) {
-            $result = random_int($steps, $result);
+            $result = random_int($steps>$result?$result-1:$steps, $result);
             $steps+=$step;
         }
         return $result;

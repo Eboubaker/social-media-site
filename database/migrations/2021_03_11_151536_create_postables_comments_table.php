@@ -1,14 +1,14 @@
 <?php
 
-use App\Models\Account;
-use App\Models\BusinessProfile;
+use App\Models\Comment;
+use App\Models\Morphs\Postable;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBusinessProfilesTable extends Migration
+class CreatePostablesCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,11 +17,10 @@ class CreateBusinessProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create(BusinessProfile::TABLE, function (Blueprint $table) {
-            $table->id();
-            MigrationHelper::addForeign($table, new Account);
-            $table->json('data');
-            MigrationHelper::addTimeStamps($table, new BusinessProfile());
+        Schema::create('postables_comments', function (Blueprint $table) {
+            MigrationHelper::addForeign($table, new Comment());
+            $table->morphs('postable');
+            $table->timestamps();
         });
     }
 
@@ -32,6 +31,6 @@ class CreateBusinessProfilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(BusinessProfile::TABLE);
+        Schema::dropIfExists('postables_comments');
     }
 }

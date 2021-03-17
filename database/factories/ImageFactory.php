@@ -31,7 +31,7 @@ class ImageFactory extends Factory
      */
     public function definition()
     {
-        Log::debug("Entering ImageFactory definition");
+//        Log::debug("Entering ImageFactory definition");
         $disk = Storage::disk('faker_images');
         $files = $disk->files();
         $chosen = $files[random_int(0, count($files)-1)];
@@ -40,18 +40,16 @@ class ImageFactory extends Factory
             'meta' => (object)["with" => 1024, "height" => 1280],
             'type' => Image::getAllowedTypes()->where('fileSuffix', 'png')->keys()->first(),
         ];
-        Log::debug("Leaving ImageFactory definition");
+//        Log::debug("Leaving ImageFactory definition");
         return $atts;
     }
 
     public function configure()
     {
         return $this->afterMaking(function(Image $image){
-            $image->makeUuid();
-            $image->makePublicId();
-            Log::debug("Entering ImageFactory AfterMaking");
+//            Log::debug("Entering ImageFactory AfterMaking");
             copy(self::$image, $image->realPath);
-            Log::debug("Leaving ImageFactory AfterMaking");
+//            Log::debug("Leaving ImageFactory AfterMaking");
         });
     }
 }

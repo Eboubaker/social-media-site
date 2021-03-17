@@ -26,21 +26,9 @@ class Profileable extends BaseModel
 {
     use HasFactory;
     public const PKEY = "id";
-    public $incrementing = false;
-    protected $keyType = 'string';
     protected $primaryKey = self::PKEY;
-    public static $morphRelationName = 'profileable';
     protected $guarded = [];
 
-    public static function boot()
-    {
-        parent::boot();
-        static::creating(function($model)
-        {
-            ModelEvents::addUuid($model);
-            ModelEvents::addPublicId($model);
-        });
-    }
     function __construct(array $attributes = [])
     {
         $this->casts['data'] = JsonObject::class;
@@ -49,16 +37,16 @@ class Profileable extends BaseModel
 
     public function posts()
     {
-        return $this->morphMany(Post::class, 'postable', 'postable_type', 'postable_id', Postable::PKEY);
+        return $this->morphMany(Post::class, 'postable');
     }
 
     public function comments()
     {
-        return $this->morphMany(Comment::class, 'postable', 'postable_type', 'postable_id', Postable::PKEY);
+        return $this->morphMany(Comment::class, 'postable');
     }
 
     public function account()
     {
-        return $this->belongsTo(Account::class, Account::FKEY, Account::PKEY, Account::TABLE);
+        return $this->belongsTo(Account::class);
     }
 }

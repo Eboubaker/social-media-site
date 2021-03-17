@@ -32,7 +32,7 @@ class VideoFactory extends Factory
      */
     public function definition()
     {
-        Log::debug("Entering VideoFactory definition");
+//        Log::debug("Entering VideoFactory definition");
         $disk = Storage::disk('faker_videos');
         $files = $disk->files();
         $chosen = $files[random_int(0, count($files)-1)];
@@ -41,17 +41,16 @@ class VideoFactory extends Factory
             'meta' => (object)["with" => 1024, "height" => 1280],
             'type' => Video::getAllowedTypes()->keys()->first()
         ];
-        Log::debug("Leaving VideoFactory definition");
+//        Log::debug("Leaving VideoFactory definition");
         return $atts;
     }
 
     public function configure()
     {
         return $this->afterMaking(function(Video $video){
-            Log::debug("Entering VideoFactory afterMaking");
-            $video->makeUuid();
+//            Log::debug("Entering VideoFactory afterMaking");
             copy(self::$video, $video->realPath);
-            Log::debug("Leaving VideoFactory afterMaking");
+//            Log::debug("Leaving VideoFactory afterMaking");
         });
     }
 }

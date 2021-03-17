@@ -50,6 +50,7 @@ class TruncateTables extends Command
      */
     public function handle()
     {
+        $ex = null;
         try {
             Db::transaction(function () {
                 DB::statement("SET foreign_key_checks=0");
@@ -58,7 +59,7 @@ class TruncateTables extends Command
                 AccountNotification::truncate();
                 BusinessProfile::truncate();
                 SocialProfile::truncate();
-                Postable::truncate();
+                DB::statement('truncate postables_comments');
                 Comment::truncate();
                 Post::truncate();
 
@@ -77,9 +78,12 @@ class TruncateTables extends Command
             });
         }catch (Exception $e)
         {
+            $ex = $e;
+        } finally {
             DB::statement("SET foreign_key_checks=1");
-            throw $e;
         }
+        if($ex)
+            throw $ex;
         return 0;
     }
 }

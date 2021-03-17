@@ -6,7 +6,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 
@@ -24,7 +26,6 @@ use Illuminate\Support\Str;
  * @method static Builder with($relation)
  * @method static Builder whereHas()
  * @method static Builder whereDoesntHave()
- *
  * @method static Model make()
  * @method static Model create()
  * @method static Model first()

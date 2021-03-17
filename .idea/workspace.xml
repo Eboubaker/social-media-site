@@ -23,18 +23,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="65bd1ddc-7596-43e6-98ac-c8f506ba5a12" name="Default Changelist" comment="fixed nested comments issue">
-      <change afterPath="$PROJECT_DIR$/resources/css/custom-css.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/laravel-plugin.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/lang/ar/auth.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/lang/ar/pagination.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/lang/ar/passwords.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/lang/ar/validation.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Console/Commands/TruncateTables.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Commands/TruncateTables.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Account.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Account.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/BaseModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/BaseModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Morphs/Postable.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Morphs/Postable.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Morphs/PostableAttachement.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Morphs/PostableAttachement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Morphs/Profileable.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Morphs/Profileable.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/AccountFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/AccountFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/AccountSettingsFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/AccountSettingsFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/BusinessProfileFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/BusinessProfileFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/CommentFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/CommentFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/FactoryHelper.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/FactoryHelper.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/ImageFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/ImageFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/Morphs/PostableFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/Morphs/PostableFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/PostFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/PostFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/ProfileImageFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/ProfileImageFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/SocialProfileFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/SocialProfileFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/VideoFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/VideoFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_accounts_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_accounts_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000001_create_account_notifications_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000001_create_account_notifications_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000001_create_account_settings_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000001_create_account_settings_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000001_create_profile_images_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000001_create_profile_images_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_03_10_124755_create_images_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_03_10_124755_create_images_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_03_10_145944_create_videos_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_03_10_145944_create_videos_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_03_10_154108_create_social_profiles_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_03_10_154108_create_social_profiles_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_03_10_154245_create_business_profiles_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_03_10_154245_create_business_profiles_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_03_10_160422_create_posts_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_03_10_160422_create_posts_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_03_10_222024_create_comments_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_03_10_222024_create_comments_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_03_11_151536_create_postables_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_03_11_151536_create_postables_comments_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/mix-manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/css/app.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/bootstrap.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/routes.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/routes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/sass/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sass/app.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.mix.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.mix.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/PlayGround.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/PlayGround.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/login.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/register.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/register.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +88,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpDebugGeneral" listening_started="true" />
   <component name="PhpServers">
     <servers>
       <server host="127.0.0.1" id="dc4a6177-791a-4f9b-9f9e-0f86051e2c89" name="127.0.0.1" port="8000" />
@@ -193,7 +224,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/tp_bagass-20210313T203315Z-001/tp_bagass" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/sass" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -204,10 +235,13 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\me\Desktop\social-media-site\resources\sass" />
+      <recent name="C:\Users\me\Desktop\social-media-site\resources\lang\ar" />
       <recent name="C:\Users\me\Desktop\social-media-site\app\Models" />
       <recent name="C:\Users\me\Desktop\social-media-site" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\me\Desktop\social-media-site\database\seeders" />
       <recent name="C:\Users\me\Desktop\social-media-site\tests\Unit" />
       <recent name="C:\Users\me\Desktop\social-media-site\database\factories\Morphs" />
       <recent name="C:\Users\me\Desktop\social-media-site\app\Models\Morphs" />
@@ -258,10 +292,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.dev" />
         <item itemvalue="npm.watch" />
         <item itemvalue="JavaScript Debug.ExampleTest.php" />
         <item itemvalue="npm.production" />
-        <item itemvalue="npm.dev" />
       </list>
     </recent_temporary>
   </component>
@@ -293,7 +327,11 @@
       <workItem from="1615711530513" duration="46000" />
       <workItem from="1615713749296" duration="196000" />
       <workItem from="1615713954012" duration="16055000" />
-      <workItem from="1615740930161" duration="2621000" />
+      <workItem from="1615740930161" duration="5935000" />
+      <workItem from="1615813633248" duration="3168000" />
+      <workItem from="1615891986264" duration="957000" />
+      <workItem from="1615901273011" duration="8528000" />
+      <workItem from="1615920141588" duration="12214000" />
     </task>
     <servers />
   </component>
@@ -322,70 +360,78 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="176" y="134" width="853" height="474" key="#Vim_Emulation" timestamp="1615901034437">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="176" y="134" width="853" height="474" key="#Vim_Emulation/0.0.1366.728@0.0.1366.728" timestamp="1615901034437" />
     <state x="198" y="168" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1615632834266">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="198" y="168" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1366.728@0.0.1366.728" timestamp="1615632834266" />
-    <state x="441" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1615653056672">
+    <state x="441" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1615901316699">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="441" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1366.728@0.0.1366.728" timestamp="1615653056672" />
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1615730023301">
+    <state x="441" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1366.728@0.0.1366.728" timestamp="1615901316699" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1615988812280">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1615730023301" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1615988812280" />
     <state width="569" height="466" key="DebuggerActiveHint" timestamp="1615733698519">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="569" height="466" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1615733698519" />
+    <state x="92" y="92" width="1182" height="544" maximized="true" key="DiffContextDialog" timestamp="1615975057625">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="92" y="92" width="1182" height="544" maximized="true" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1615975057625" />
     <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1615667657805">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1615667657805" />
-    <state width="1323" height="236" key="GridCell.Tab.0.bottom" timestamp="1615741673153">
+    <state width="1323" height="2" key="GridCell.Tab.0.bottom" timestamp="1615974958069">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="236" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1615741673153" />
-    <state width="1323" height="236" key="GridCell.Tab.0.center" timestamp="1615741673153">
+    <state width="1323" height="2" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1615974958069" />
+    <state width="1323" height="2" key="GridCell.Tab.0.center" timestamp="1615974958069">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="236" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1615741673153" />
-    <state width="1323" height="236" key="GridCell.Tab.0.left" timestamp="1615741673153">
+    <state width="1323" height="2" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1615974958069" />
+    <state width="1323" height="2" key="GridCell.Tab.0.left" timestamp="1615974958068">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="236" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1615741673153" />
-    <state width="1323" height="236" key="GridCell.Tab.0.right" timestamp="1615741673153">
+    <state width="1323" height="2" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1615974958068" />
+    <state width="1323" height="2" key="GridCell.Tab.0.right" timestamp="1615974958069">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="236" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1615741673153" />
-    <state width="1323" height="240" key="GridCell.Tab.1.bottom" timestamp="1615733713077">
+    <state width="1323" height="2" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1615974958069" />
+    <state width="1323" height="159" key="GridCell.Tab.1.bottom" timestamp="1615903262838">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="240" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1615733713077" />
-    <state width="1323" height="240" key="GridCell.Tab.1.center" timestamp="1615733713077">
+    <state width="1323" height="159" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1615903262838" />
+    <state width="1323" height="159" key="GridCell.Tab.1.center" timestamp="1615903262838">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="240" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1615733713077" />
-    <state width="1323" height="240" key="GridCell.Tab.1.left" timestamp="1615733713076">
+    <state width="1323" height="159" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1615903262838" />
+    <state width="1323" height="159" key="GridCell.Tab.1.left" timestamp="1615903262838">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="240" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1615733713076" />
-    <state width="1323" height="240" key="GridCell.Tab.1.right" timestamp="1615733713077">
+    <state width="1323" height="159" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1615903262838" />
+    <state width="1323" height="159" key="GridCell.Tab.1.right" timestamp="1615903262838">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="240" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1615733713077" />
-    <state x="434" y="104" width="513" height="557" key="NewPhpClassDialog" timestamp="1615723714302">
+    <state width="1323" height="159" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1615903262838" />
+    <state x="434" y="104" width="519" height="557" key="NewPhpClassDialog" timestamp="1615988635450">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="434" y="104" width="513" height="557" key="NewPhpClassDialog/0.0.1366.728@0.0.1366.728" timestamp="1615723714302" />
+    <state x="434" y="104" width="519" height="557" key="NewPhpClassDialog/0.0.1366.728@0.0.1366.728" timestamp="1615988635450" />
     <state x="517" y="287" key="NewPhpFileDialog" timestamp="1615665881167">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="517" y="287" key="NewPhpFileDialog/0.0.1366.728@0.0.1366.728" timestamp="1615665881167" />
-    <state x="205" y="17" key="SettingsEditor" timestamp="1615546494665">
+    <state x="205" y="17" key="SettingsEditor" timestamp="1615920101774">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="205" y="17" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1615546494665" />
+    <state x="205" y="17" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1615920101774" />
     <state x="92" y="92" width="1182" height="544" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1615642078464">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -398,14 +444,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="453" height="461" key="javadoc.popup.new/0.0.1366.728@0.0.1366.728" timestamp="1615731459709" />
-    <state x="339" y="162" width="672" height="677" key="run.anything.popup" timestamp="1615740963780">
+    <state x="339" y="162" width="672" height="677" key="run.anything.popup" timestamp="1615903886998">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="339" y="162" width="672" height="677" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1615740963780" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1615741646583">
+    <state x="339" y="162" width="672" height="677" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1615903886998" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1615985387709">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1615741646583" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1615985387709" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -434,6 +480,11 @@
           <url>file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Relations/BelongsToMany.php</url>
           <line>1092</line>
           <option name="timeStamp" value="60" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/database/factories/FactoryHelper.php</url>
+          <line>18</line>
+          <option name="timeStamp" value="61" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

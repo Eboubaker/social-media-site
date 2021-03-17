@@ -26,7 +26,7 @@ class BusinessProfileFactory extends Factory
      */
     public function definition()
     {
-        Log::debug("Entering BusinessProfileFactory definition");
+//        Log::debug("Entering BusinessProfileFactory definition");
 
         $data = (object)[
             "business_details" => (object)[
@@ -38,23 +38,22 @@ class BusinessProfileFactory extends Factory
         $atts =  [
             'data' => $data
         ];
-        Log::debug("Leaving BusinessProfileFactory definition");
+//        Log::debug("Leaving BusinessProfileFactory definition");
         return $atts;
     }
 
     public function configure()
     {
         return $this->afterMaking(function(BusinessProfile $businessProfile){
-            Log::debug("Entering BusinessProfileFactory afterMaking");
-            $businessProfile->makeUuid();
+//            Log::debug("Entering BusinessProfileFactory afterMaking");
             $acc = Account::query()->whereDoesntHave('businessProfile')->first();
-            if($acc && FactoryHelper::randc(.8))
+            if($acc && FactoryHelper::randc(.9))
             {
                 $businessProfile->account()->associate($acc);
             }else{
                 $businessProfile->account()->associate(Account::factory()->create());
             }
-            Log::debug("Leaving BusinessProfileFactory afterMaking");
+//            Log::debug("Leaving BusinessProfileFactory afterMaking");
         });
     }
 }

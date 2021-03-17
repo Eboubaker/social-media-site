@@ -25,7 +25,7 @@ class ProfileImageFactory extends Factory
      */
     public function definition()
     {
-        Log::debug("Entering ProfileImageFactory definition");
+//        Log::debug("Entering ProfileImageFactory definition");
         $disk = Storage::disk('faker_images');
         $files = $disk->files();
         $chosen = $files[random_int(0, count($files)-1)];
@@ -34,16 +34,15 @@ class ProfileImageFactory extends Factory
             'meta' => (object)["with" => 1024, "height" => 1280],
             'type' => ProfileImage::getAllowedTypes()->where('fileSuffix', 'png')->keys()->first(),
         ];
-        Log::debug("Leaving ProfileImageFactory definition");
+//        Log::debug("Leaving ProfileImageFactory definition");
         return $atts;
     }
     public function configure()
     {
         return $this->afterMaking(function(ProfileImage  $image){
-            Log::debug("Entering ProfileImageFactory afterMaking");
-            $image->makeUuid();
+//            Log::debug("Entering ProfileImageFactory afterMaking");
             copy(self::$image, $image->realPath);
-            Log::debug("Entering ProfileImageFactory afterMaking");
+//            Log::debug("Entering ProfileImageFactory afterMaking");
         });
     }
 }

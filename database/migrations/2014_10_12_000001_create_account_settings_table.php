@@ -2,6 +2,7 @@
 
 use App\Models\Account;
 use App\Models\AccountSettings;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,14 +18,9 @@ class CreateAccountSettingsTable extends Migration
     {
         Schema::create(AccountSettings::TABLE, function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_id');
-            $table->foreign('account_id')
-                ->references('id')
-                ->on('accounts')
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            MigrationHelper::addForeign($table, new Account);
             $table->json('data');
-            $table->timestamps();
+            MigrationHelper::addTimeStamps($table, new AccountSettings());
         });
     }
 

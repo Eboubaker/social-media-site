@@ -1,6 +1,6 @@
 <template>
     <div>
-        <span class="material-icons">face</span>
+        <span class="material-icons text-red-300">face</span>
     </div>
 </template>
 

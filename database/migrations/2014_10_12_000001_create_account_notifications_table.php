@@ -2,6 +2,7 @@
 
 use App\Models\Account;
 use App\Models\AccountNotification;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -18,16 +19,11 @@ class CreateAccountNotificationsTable extends Migration
     {
         Schema::create(AccountNotification::TABLE, function (Blueprint $table) {
             $table->id();
-            $table->foreignId('account_id');
-            $table->foreign('account_id')
-                ->references('id')
-                ->on('accounts')
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            MigrationHelper::addForeign($table, new Account);
             $table->json('content');
             $table->tinyInteger('type');
             $table->string('event_url');
-            $table->timestamps();
+            MigrationHelper::addTimeStamps($table, new AccountNotification);
         });
     }
 

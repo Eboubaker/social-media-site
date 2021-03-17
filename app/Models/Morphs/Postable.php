@@ -15,13 +15,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Postable extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, Commentable;
     public const PKEY = 'id';
-    protected $keyType = 'string';
-    public $incrementing = false;
-    public const TABLE = 'postables';
-    public static $morphTable = 'postables';
-    public static $morphRelationName = 'postable';
     protected $primaryKey = self::PKEY;
     protected $guarded = [];
     // TODO: remove this in production
@@ -34,33 +29,20 @@ class Postable extends BaseModel
         $this->casts['content'] = JsonObject::class;
         parent::__construct($attributes);
     }
-    public static function boot()
-    {
-        parent::boot();
-        static::creating(function($model)
-        {
-            ModelEvents::addUuid($model);
-            ModelEvents::addPublicId($model);
-        });
-    }
     public function videos(): MorphMany
     {
-        return $this->morphMany(Video::class, self::$morphRelationName, null, null, self::PKEY);
+        return $this->morphMany(Video::class, 'postable');
     }
     public function images(): MorphMany
     {
-        return $this->morphMany(Image::class, self::$morphRelationName, null, null, self::PKEY);
+        return $this->morphMany(Image::class, 'postable');
     }
     public function postable(): MorphTo
     {
-        return $this->morphTo('postable', null, null, self::PKEY);
+        return $this->morphTo('postable');
     }
     public function profileable(): MorphTo
     {
-        return $this->morphTo(Profileable::$morphRelationName, null, null, Profileable::PKEY);
-    }
-    public function comments(): MorphToMany
-    {
-        return $this->morphToMany(Comment::class, self::$morphRelationName, self::$morphTable);
+        return $this->morphTo('profileable');
     }
 }

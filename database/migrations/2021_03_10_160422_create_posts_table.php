@@ -2,6 +2,7 @@
 
 use App\Models\Morphs\Profileable;
 use App\Models\Post;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -17,19 +18,10 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create(Post::TABLE, function (Blueprint $table) {
-            $table->uuid('id')->unique()->primary();
-            $table->uuid('public_id')->unique();
-            // foreign key for either a social account or a business account
+            $table->id();
             $table->json('content');
-            $table->uuidMorphs(Profileable::$morphRelationName);
-            if(Post::CREATED_AT)
-            {
-                $table->timestamp(Post::CREATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
-            if(Post::UPDATED_AT)
-            {
-                $table->timestamp(Post::UPDATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
+            $table->morphs('profileable');
+            MigrationHelper::addTimeStamps($table, new Post());
         });
     }
 

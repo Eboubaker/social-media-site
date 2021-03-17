@@ -2405,9 +2405,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
 
-window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js"); // icons
-// require('material-design-icons');
-
+window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -21265,6 +21263,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/sass/__app.scss":
+/*!***********************************!*\
+  !*** ./resources/sass/__app.scss ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -27082,7 +27093,9 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", [
-      _c("span", { staticClass: "material-icons" }, [_vm._v("face")])
+      _c("span", { staticClass: "material-icons text-red-300" }, [
+        _vm._v("face")
+      ])
     ])
   }
 ]
@@ -42901,12 +42914,13 @@ Vue.compile = compileToFunctions;
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// Promise = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"/js/app": 0
+/******/ 			"/public/js/app": 0
 /******/ 		};
 /******/ 		
 /******/ 		var deferredModules = [
 /******/ 			["./resources/js/app.js"],
-/******/ 			["./resources/sass/app.scss"]
+/******/ 			["./resources/sass/app.scss"],
+/******/ 			["./resources/sass/__app.scss"]
 /******/ 		];
 /******/ 		// no chunk on demand loading
 /******/ 		

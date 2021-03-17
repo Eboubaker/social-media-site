@@ -21,8 +21,6 @@ class PostableAttachement extends BaseModel
     use HasFactory;
 
     public const PKEY = 'id';
-    protected $keyType = 'string';
-    public $incrementing = false;
     protected $primaryKey = self::PKEY;
 
     protected $guarded = [];
@@ -35,8 +33,6 @@ class PostableAttachement extends BaseModel
         parent::boot();
         static::creating(function($model)
         {
-            ModelEvents::addUuid($model);
-            ModelEvents::addPublicId($model);
             ModelEvents::addSha256($model);
         });
         static::deleted(function($model)
@@ -52,7 +48,7 @@ class PostableAttachement extends BaseModel
 
     public function postable()
     {
-        return $this->morphTo(Postable::$morphRelationName, null, null, Postable::PKEY);
+        return $this->morphTo('postable');
     }
 
     public function getUrlAttribute(): string
@@ -66,7 +62,7 @@ class PostableAttachement extends BaseModel
     }
     public function getFileNameAttribute(): string
     {
-        return $this->attributes[self::PKEY] .".". $this->fileFormat;
+        return $this->getKey() .".". $this->fileFormat;
     }
 
     public function getRealPathAttribute(): string

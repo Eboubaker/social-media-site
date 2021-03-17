@@ -2,6 +2,7 @@
 
 use App\Models\Account;
 use App\Models\SocialProfile;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -17,23 +18,10 @@ class CreateSocialProfilesTable extends Migration
     public function up()
     {
         Schema::create(SocialProfile::TABLE, function (Blueprint $table) {
-            $table->uuid('id')->unique()->primary();
-            $table->uuid('public_id')->unique();
-            $table->foreignId('account_id');
-            $table->foreign('account_id')
-                ->references('id')
-                ->on('accounts')
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            $table->id();
+            MigrationHelper::addForeign($table, new Account);
             $table->json('data');
-            if(SocialProfile::CREATED_AT)
-            {
-                $table->timestamp(SocialProfile::CREATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
-            if(SocialProfile::UPDATED_AT)
-            {
-                $table->timestamp(SocialProfile::UPDATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
+            MigrationHelper::addTimeStamps($table, new SocialProfile());
         });
     }
 

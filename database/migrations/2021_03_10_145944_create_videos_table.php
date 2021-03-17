@@ -2,6 +2,7 @@
 
 use App\Models\Morphs\Postable;
 use App\Models\Video;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -18,20 +19,12 @@ class CreateVideosTable extends Migration
     public function up()
     {
         Schema::create(Video::TABLE, function (Blueprint $table) {
-            $table->uuid('id')->unique()->primary();
-            $table->uuid('public_id')->unique();
+            $table->id();
             $table->char('sha256', 64)->index();
-            $table->uuidMorphs(Postable::$morphRelationName);
+            $table->morphs('postable');
             $table->tinyInteger('type');
             $table->json('meta');
-            if(Video::CREATED_AT)
-            {
-                $table->timestamp(Video::CREATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
-            if(Video::UPDATED_AT)
-            {
-                $table->timestamp(Video::UPDATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
+            MigrationHelper::addTimeStamps($table, new Video());
         });
     }
 

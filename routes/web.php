@@ -17,6 +17,6 @@ use Illuminate\Support\Facades\Route;
 // anything that does NOT start with "storage/" (which is where we store videos & images)
 // will be mapped to vue routers
 Route::get('/{any}', function () {
-   return view('welcome');
-    // return  CommentResource::collection(Comment::all());
-})->where('any', '^(?!storage\/).*');
+   return view('auth.login');
+//     return  PostResource::collection(Post::inRandomOrder()->limit(100)->get());
+})->where('any', '^(?!api\/).*');

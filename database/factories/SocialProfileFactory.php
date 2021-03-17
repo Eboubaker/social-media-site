@@ -25,7 +25,7 @@ class SocialProfileFactory extends Factory
      */
     public function definition()
     {
-        Log::debug("Entering SocialProfileFactory definition");
+//        Log::debug("Entering SocialProfileFactory definition");
         $data = (object)[
             "personal_info" => (object)[
                 "bio" => $this->faker->sentence,
@@ -37,15 +37,14 @@ class SocialProfileFactory extends Factory
         $atts = [
             'data' => $data
         ];
-        Log::debug("Leaving SocialProfileFactory definition");
+//        Log::debug("Leaving SocialProfileFactory definition");
         return $atts;
     }
 
     public function configure()
     {
         return $this->afterMaking(function(SocialProfile $socialProfile){
-            Log::debug("Entering SocialProfileFactory AfterMaking");
-            $socialProfile->makeUuid();
+//            Log::debug("Entering SocialProfileFactory AfterMaking");
             $acc = Account::query()->whereDoesntHave('socialProfile')->first();
             if($acc && FactoryHelper::randc(.8))
             {
@@ -53,7 +52,7 @@ class SocialProfileFactory extends Factory
             }else{
                 $socialProfile->account()->associate(Account::factory()->create());
             }
-            Log::debug("Leaving SocialProfileFactory AfterMaking");
+//            Log::debug("Leaving SocialProfileFactory AfterMaking");
         });
     }
 

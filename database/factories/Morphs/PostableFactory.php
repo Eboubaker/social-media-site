@@ -23,12 +23,12 @@ class PostableFactory extends Factory
      */
     public function definition()
     {
-        Log::debug("Entering PostableFactory definition");
+//        Log::debug("Entering PostableFactory definition");
 
         $atts = [
             Postable::PKEY => Str::uuid()
         ];
-        Log::debug("Leaving PostableFactory definition");
+//        Log::debug("Leaving PostableFactory definition");
         return $atts;
 
     }

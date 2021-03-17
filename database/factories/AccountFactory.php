@@ -26,11 +26,10 @@ class AccountFactory extends Factory
      */
     public function definition(): array
     {
-        Log::debug("Entering AccountFactory definition");
+//        Log::debug("Entering AccountFactory definition");
         $email = random_int(0, 100) > 50;
         $atts = [
 //            Account::PKEY => Str::uuid()->toString(),
-            'public_id' => Str::random(Account::PUPLIC_ID_LEN),
             'phone' => $email ? null : $this->faker->phoneNumber,
             'email' => $email? $this->faker->unique()->safeEmail : null,
             'email_verified_at' => $email ? (FactoryHelper::randc(.5) ? now() : null) : null,
@@ -46,10 +45,10 @@ class AccountFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (Account $account) {
-            Log::debug("Entering AccountFactory afterCreating");
-            $account->settings()->create(AccountSettings::factory()->make()->attributesToArray());
-            $account->profileImage()->create(ProfileImage::factory()->make()->attributesToArray());
-            Log::debug("Leaving AccountFactory afterCreating");
+//            Log::debug("Entering AccountFactory afterCreating");
+            $account->settings()->save(AccountSettings::factory()->make());
+            $account->profileImage()->save(ProfileImage::factory()->make());
+//            Log::debug("Leaving AccountFactory afterCreating");
         });
     }
     /**

@@ -5,8 +5,10 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\JsonEncodingException;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 /**
@@ -52,6 +54,15 @@ class Account extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        self::creating(static function(Account $account){
+            $account->setAttribute('api_token', hash('sha256', Str::random(32)));
+        });
+    }
+
     public function profileImage()
     {
         return $this->hasOne(ProfileImage::class, self::FKEY, self::PKEY);
@@ -91,4 +102,5 @@ class Account extends Authenticatable
     {
         $this->attributes['last_name'] = $new;
     }
+
 }

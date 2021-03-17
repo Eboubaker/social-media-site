@@ -2,10 +2,12 @@
 
 use App\Models\Account;
 use App\Models\ProfileImage;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class CreateProfileImagesTable extends Migration
 {
@@ -17,29 +19,12 @@ class CreateProfileImagesTable extends Migration
     public function up()
     {
         Schema::create(ProfileImage::TABLE, function (Blueprint $table) {
-            // sha256 hash (64 bytes)
-            $table->uuid('id')->unique()->primary();
-            $table->uuid('public_id')->unique();
-            $table->foreignId('account_id');
-            $table->foreign('account_id')
-                ->references('id')
-                ->on('accounts')
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            // we will use the uuid as the name part of the image path
+            $table->id();
+            MigrationHelper::addForeign($table, new Account);
             $table->char('sha256', 64)->index();
             $table->tinyInteger('type');
-            // we will store all the meta data of the image here (height, width, quality ...)
             $table->json('meta');
-
-            if(ProfileImage::CREATED_AT)
-            {
-                $table->timestamp(ProfileImage::CREATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
-            if(ProfileImage::UPDATED_AT)
-            {
-                $table->timestamp(ProfileImage::UPDATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
+            MigrationHelper::addTimeStamps($table, new ProfileImage());
         });
     }
 

@@ -35,7 +35,6 @@ class AppServiceProvider extends ServiceProvider
 //        $this->app->when([ProfileImage::class])
 //            ->needs(FilesystemAdapter::class)
 //            ->give(Storage::disk('profile_images'));
-
         if(strtolower(date_default_timezone_get()) !== "africa/algiers")
         {
             date_default_timezone_set("Africa/Algiers");

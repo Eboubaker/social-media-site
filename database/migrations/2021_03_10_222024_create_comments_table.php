@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\Comment;
-use App\Models\Morphs\Commentable;
 use App\Models\Morphs\Profileable;
 use App\Models\Post;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -19,19 +19,10 @@ class CreateCommentsTable extends Migration
     public function up()
     {
         Schema::create(Comment::TABLE, function (Blueprint $table) {
-            $table->uuid('id')->unique()->primary();
-            $table->uuid('public_id')->unique();
-            // foreign key for either a social account or a business account
+            $table->id();
             $table->json('content');
-            $table->uuidMorphs(Profileable::$morphRelationName);
-            if(Comment::CREATED_AT)
-            {
-                $table->timestamp(Comment::CREATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
-            if(Comment::UPDATED_AT)
-            {
-                $table->timestamp(Comment::UPDATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
-            }
+            $table->morphs('profileable');
+            MigrationHelper::addTimeStamps($table, new Comment());
         });
     }
 
