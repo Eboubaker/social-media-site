@@ -16,6 +16,19 @@ class ProfileImage extends Image
     protected $table = self::TABLE;
 
     /**
+     * gives the default field values of the model
+     * @return array
+     */
+    public static function getDefault(): array
+    {
+        return [
+            "meta" => (object)[
+                // TODO: write default values of
+            ]
+        ];
+    }
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo|void
      * @deprecated profile images does not have a postable
      */

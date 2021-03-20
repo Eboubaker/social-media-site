@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProfileImage;
+use App\Models\UserSettings;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -51,12 +53,20 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         $method = preg_match('/[A-Za-z]/', $data['login'], $matches) ? "email" : "phone";
-        return Validator::make($data, [
-            'firstName' => ['required', 'string', 'max:255'],
-            'lastName' => ['required', 'string', 'max:255'],
-            'login' => ['required', 'string', $method, 'max:255', 'unique:'.User::TABLE.'.'.$method],
+        $rules = [
             'password' => ['required', 'string', 'min:8'],
-        ]);
+        ];
+        if($method === 'email')
+        {
+            $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:'.User::TABLE.'.email'];
+            $data['email'] = $data['login'];
+            unset($data['login']);
+        }else{
+            $rules['phone'] = ['required', 'string', 'phone', 'max:16', 'unique:'.User::TABLE.'.phone'];
+            $data['phone'] = $data['login'];
+            unset($data['login']);
+        }
+        return Validator::make($data, $rules);
     }
 
     /**
@@ -67,11 +77,21 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+        $userData = [
             'password' => Hash::make($data['password']),
             'api_token' => Str::random(80),
-        ]);
+        ];
+        if(isset($data['email']))
+        {
+            $userData['email'] = $data['email'];
+        }
+        if(isset($data['phone']))
+        {
+            $userData['phone'] = $data['phone'];
+        }
+        $user = User::create($userData);
+        $user->settings()->create(UserSettings::getDefault());
+        $user->profileImage()->create(ProfileImage::getDefault());
+        return $user;
     }
 }

@@ -7,6 +7,7 @@ use App\Models\BaseModel;
 use App\Models\Events\ModelEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Expr\AssignOp\Mod;
 
@@ -22,18 +23,20 @@ class PostableAttachement extends BaseModel
 
     public const PKEY = 'id';
     protected $primaryKey = self::PKEY;
-
-    protected $guarded = [];
-    protected $hidden = [];
-    public $allowedTypes = [];
+    public static $allowedTypes = [];
     public $storage;
-
+    public $_tempFile;
+    private $fformat;
     public static function boot()
     {
         parent::boot();
         static::creating(function($model)
         {
             ModelEvents::addSha256($model);
+        });
+        static::created(function($model)
+        {
+            ModelEvents::copyTempToStorage($model);
         });
         static::deleted(function($model)
         {
@@ -58,16 +61,23 @@ class PostableAttachement extends BaseModel
 
     public function getFileFormatAttribute()
     {
-        return $this->allowedTypes[$this->attributes['type']]['fileSuffix'] ?? null;
+        if(empty($this->fformat))
+        {
+            $this->fformat = self::getAllowedTypes()->where('typeId', $this->getAttribute('type'))->get('format');
+        }
+        return $this->fformat;
     }
     public function getFileNameAttribute(): string
     {
-        return $this->getKey() .".". $this->fileFormat;
+        return $this->getAttribute('storage_id') .".". $this->fileFormat;
     }
-
     public function getRealPathAttribute(): string
     {
         return Storage::disk($this->storage)->path($this->fileName);
     }
 
+    public static function getAllowedTypes(): Collection
+    {
+        return collect(self::$allowedTypes);
+    }
 }

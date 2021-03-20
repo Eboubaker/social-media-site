@@ -24,15 +24,11 @@ class Video extends PostableAttachement
     protected $primaryKey = self::PKEY;
     public static $Storage = 'videos';
     public $storage = 'videos';
-    public $allowedTypes = [
-        0 => [
-            'fileSuffix' => 'mp4',
-            'signature' => ["00","00","00","20","66","74","79","70","69","73","6F","6D"]
-        ],
+    public static $allowedTypes = [
+        [
+            'mime' => 'video/mp4',
+            'typeId' => 1,
+            'format' => 'mp4'
+        ]
     ];
-    public static function getAllowedTypes(): Collection
-    {
-        return collect((new self)->allowedTypes);
-    }
-
 }

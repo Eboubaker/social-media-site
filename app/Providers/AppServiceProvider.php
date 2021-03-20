@@ -16,6 +16,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use libphonenumber\PhoneNumberUtil;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,15 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-//        $this->app->when([Video::class])
-//            ->needs(FilesystemAdapter::class)
-//            ->give(Storage::disk('videos'));
-//        $this->app->when([Image::class])
-//            ->needs(FilesystemAdapter::class)
-//            ->give(Storage::disk('images'));
-//        $this->app->when([ProfileImage::class])
-//            ->needs(FilesystemAdapter::class)
-//            ->give(Storage::disk('profile_images'));
+        $this->app->singleton('phoneNumberUtil', 'PhoneNumberUtil@getInstance()');
         if(strtolower(date_default_timezone_get()) !== "africa/algiers")
         {
             date_default_timezone_set("Africa/Algiers");

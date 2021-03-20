@@ -37,12 +37,12 @@ class Profileable extends BaseModel
 
     public function posts()
     {
-        return $this->morphMany(Post::class, 'postable');
+        return $this->morphMany(Post::class, 'profileable');
     }
 
     public function comments()
     {
-        return $this->morphMany(Comment::class, 'postable');
+        return $this->morphMany(Comment::class, 'profileable');
     }
 
     public function account()

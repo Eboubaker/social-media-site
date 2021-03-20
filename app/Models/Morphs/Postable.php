@@ -19,7 +19,7 @@ class Postable extends BaseModel
     // TODO: remove this in production
     protected $fillable = ['id','content', 'public_id', 'profileable_type', 'profileable_id', 'created_at', 'updated_at'];
     // TODO: in production mode check for unnecessary eager loaded relations, exclude them using $model->without(...)
-    protected $with = ['comments', 'videos', 'images', 'profileable'];
+    protected $with = ['videos', 'images', 'profileable'];
 
     function __construct(array $attributes = [], $pass = false)
     {
@@ -33,10 +33,6 @@ class Postable extends BaseModel
     public function images(): MorphMany
     {
         return $this->morphMany(Image::class, 'postable');
-    }
-    public function postable(): MorphTo
-    {
-        return $this->morphTo('postable');
     }
     public function profileable(): MorphTo
     {

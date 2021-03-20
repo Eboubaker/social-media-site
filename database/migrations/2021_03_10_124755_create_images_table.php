@@ -16,9 +16,10 @@ class CreateImagesTable extends Migration
     {
         Schema::create(Image::TABLE, function (Blueprint $table) {
             $table->id();
-            $table->char('sha256', 64)->index();
-            $table->morphs('postable');
+            $table->char('sha256', 64)->index('images_by_sha256');
+            $table->string('storage_id', 36)->index('images_by_storage_id');
             $table->tinyInteger('type');
+            $table->morphs('postable');
             $table->json('meta');
             MigrationHelper::addTimeStamps($table, new Image());
         });

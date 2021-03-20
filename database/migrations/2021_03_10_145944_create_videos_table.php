@@ -20,8 +20,9 @@ class CreateVideosTable extends Migration
     {
         Schema::create(Video::TABLE, function (Blueprint $table) {
             $table->id();
-            $table->char('sha256', 64)->index();
+            $table->char('sha256', 64)->index('videos_by_sha256');
             $table->morphs('postable');
+            $table->string('storage_id', 36)->index('videos_by_storage_id');
             $table->tinyInteger('type');
             $table->json('meta');
             MigrationHelper::addTimeStamps($table, new Video());

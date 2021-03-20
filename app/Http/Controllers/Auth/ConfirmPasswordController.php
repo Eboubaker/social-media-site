@@ -37,4 +37,26 @@ class ConfirmPasswordController extends Controller
     {
         $this->middleware('auth');
     }
+
+    /**
+     * Get the password confirmation validation rules.
+     *
+     * @return array
+     */
+    protected function rules()
+    {
+        return [
+            'password' => 'required|password',
+        ];
+    }
+
+    /**
+     * Get the password confirmation validation error messages.
+     *
+     * @return array
+     */
+    protected function validationErrorMessages()
+    {
+        return [];
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\JsonObject;
 use App\Models\Morphs\PostableAttachement;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Collection;
@@ -22,21 +23,33 @@ class Image extends PostableAttachement
     public $storage = 'images';
     public static $morphClass = 'App\Models\\' . self::class;
 
-    public $allowedTypes = [
-        0 => [
-            'fileSuffix' => 'png',
-            'signature' => ['89','50','4E','47','0D','0A','1A','0A']
+    public static $allowedTypes = [
+        [
+            'typeId' => 1,
+            'mime' => 'image/jpeg',
+            'format' => 'jpg'
         ],
-        1 => [
-            'fileSuffix' => 'jpg',
-            'signature' => ['FF','D8','FF']
+        [
+            'typeId' => 2,
+            'mime' => 'image/jpeg',
+            'format' => 'jpeg'
+        ],
+        [
+            'typeId' => 3,
+            'mime' => 'image/png',
+            'format' => 'png',
+        ],
+        [
+            'typeId' => 4,
+            'mime' => 'image/webp',
+            'format' => 'webp',
         ]
     ];
 
-
-    public static function getAllowedTypes(): Collection
+    function __construct(array $attributes = [], $pass = false)
     {
-        return collect((new self)->allowedTypes);
+        parent::__construct($attributes);
     }
+
 
 }

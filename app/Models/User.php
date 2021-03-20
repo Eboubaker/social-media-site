@@ -20,17 +20,17 @@ use Illuminate\Support\Str;
  * @property string firstName
  * @property string public_id
  *
- * @method static create(array $array) : Account
+ * @method static User create(array $array)
  */
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    public const TABLE = "accounts";
+    public const TABLE = "users";
     public const PKEY = "id";
     public const PUPLIC_ID_LEN = 8;
     public const TABLE_DOT_KEY = self::TABLE . "." . self::PKEY;
-    public const FKEY = "account_id";
+    public const FKEY = "user_id";
     public const CREATED_AT = "created_at";
     public const UPDATED_AT = "updated_at";
 
@@ -66,20 +66,20 @@ class User extends Authenticatable
 
     public function profileImage()
     {
-        return $this->hasOne(ProfileImage::class, self::FKEY, self::PKEY);
+        return $this->hasOne(ProfileImage::class);
     }
     public function settings()
     {
-        return $this->hasOne(UserSettings::class, self::FKEY, self::PKEY);
+        return $this->hasOne(UserSettings::class);
     }
 
     public function businessProfile()
     {
-        return $this->hasOne(BusinessProfile::class, self::FKEY, self::PKEY);
+        return $this->hasOne(BusinessProfile::class);
     }
     public function socialProfile()
     {
-        return $this->hasOne(SocialProfile::class, self::FKEY, self::PKEY);
+        return $this->hasOne(SocialProfile::class);
     }
 
     public function getPublicIdAttribute()
