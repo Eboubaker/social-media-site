@@ -28,6 +28,11 @@ class AppServiceProvider extends ServiceProvider
         });
         // Register Twilio Service
         $this->app->bind(Service::class, Verification::class);
+
+        $this->app->singleton('country-code-for-client', function(){
+            // TODO: set default region using the IP address of the client
+            return 'DZ';
+        });
     }
 
     /**

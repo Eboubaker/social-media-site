@@ -22,10 +22,12 @@ use Illuminate\Support\Str;
  * @property string public_id
  * @property string phoneNumber
  * @property string email
+ * @property \DateTime phone_verified_at
+ * @property \DateTime email_verified_at
  *
  * @method static User create(array $array)
  */
-class User extends Authenticatable implements MustVerifyEmail, MustVerifyPhone
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, MustVerifyPhone;
 
@@ -44,10 +46,8 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyPhone
         self::PKEY
     ];
     protected $fillable = [
-        'public_id',
-        'first_name',
-        'last_name',
         'email',
+        'phone',
         'password',
     ];
     protected $hidden = [
@@ -56,6 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyPhone
     ];
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
     ];
 
 
@@ -63,29 +64,35 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyPhone
     {
         parent::__construct($attributes);
         self::creating(static function(User $account){
-            $account->setAttribute('api_token', hash('sha256', Str::random(32)));
+            if(empty($account->getAttribute('api_token')))
+            {
+                // it will be hashed later by the api guard
+                $account->setAttribute('api_token', Str::random(80));
+            }
         });
     }
 
-    public function settings()
+    //----- RELATIONS -------//
+    public function activeProfile(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    {
+        return $this->morphTo('active_profileable');
+    }
+
+    public function settings(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(UserSettings::class);
     }
 
-    public function businessProfile()
+    public function businessProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(BusinessProfile::class);
     }
-    public function socialProfile()
+    public function socialProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(SocialProfile::class);
     }
 
-    public function getPublicIdAttribute()
-    {
-        return $this->attributes['public_id'];
-    }
-
+    //----- ATTRIBUTES -------//
     public function getFirstNameAttribute()
     {
         return $this->attributes['first_name'];
@@ -94,16 +101,33 @@ class User extends Authenticatable implements MustVerifyEmail, MustVerifyPhone
     {
         return $this->attributes['last_name'];
     }
-    public function setFirstNameAttribute($new)
+    public function setFirstNameAttribute($new): void
     {
         $this->attributes['first_name'] = $new;
     }
-    public function setLastNameAttribute($new)
+    public function setLastNameAttribute($new): void
     {
         $this->attributes['last_name'] = $new;
     }
-    public function activeProfile()
+    public function getPhoneNumberAttribute()
     {
-        return $this->morphTo('active_profileable');
+        return $this->attributes['phone'];
+    }
+    public function setPhoneNumberAttribute($new): void
+    {
+        $this->attributes['phone'] = $new;
+    }
+
+
+    //---- HELPERS -----//
+    public function isVerified(): bool
+    {
+        return $this->hasVerifiedPhone() || $this->hasVerifiedEmail();
+    }
+
+    public function getEmailForVerification(): string
+    {
+        $salt = "SHA-2021-03-24-66f4bce05e6af8e4";
+        return $this->email . $salt;
     }
 }

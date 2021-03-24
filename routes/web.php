@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Models\Comment;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 
 // anything that does NOT start with "storage/" (which is where we store videos & images)
@@ -23,29 +25,29 @@ Auth::routes();
 
 
 
-Route::get('/sms/send/{to}', function(\Vonage\Client $nexmo, $to){
-    $message = $nexmo->message()->send([
-        'to' => $to,
-        'from' => '@leggetter',
-        'text' => 'PIN CODE #5145'
-    ]);
-    Log::info('sent message: ' . $message['message-id']);
+// Route::get('/sms/send/{to}', function(\Vonage\Client $nexmo, $to){
+//     $message = $nexmo->message()->send([
+//         'to' => $to,
+//         'from' => '@leggetter',
+//         'text' => 'PIN CODE #5145'
+//     ]);
+//     Log::info('sent message: ' . $message['message-id']);
+// });
+
+
+
+Route::get('/',function(){
+    return "This is the home page you are " . (Auth::guest() ? "not" : "") . " logged in " . (Auth::guest() ? "" : (" and your account is " . (Auth::user()->isVerified() ? "" : "not")." verified"));
 });
 
-
-
-
-
 //-- Verification Routes --//
-Route::get('/email/verify', function () {
+Route::get('/verify/notice', function () {
     // TODO: create this view
-    return view('auth.verify-email');
+    return view('auth.verify-test');
 })->middleware('auth')->name('verification.notice');
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    // TODO: set the proper redirection
-    return redirect('/home');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/verify/attempt', 'VerificationController@verify')->name('verification.verify');
+Route::post('/verify/resend', 'VerificationController@verify')->name('verification.resend');
+
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');

@@ -47,6 +47,6 @@ trait MustVerifyPhone
      */
     public function getPhoneForVerification()
     {
-        return $this->phone;
+        return $this->phoneNumber;
     }
 }

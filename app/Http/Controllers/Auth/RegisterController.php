@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
+use libphonenumber\PhoneNumberFormat;
 
 class RegisterController extends Controller
 {
@@ -104,7 +105,10 @@ class RegisterController extends Controller
         {
             $userData['email'] = $data[$this->loginFieldName];
         }else{
-            $userData['phone'] = $data[$this->loginFieldName];
+            $phone = $data[$this->loginFieldName];
+            $phone = app('phoneNumberUtil')->parse($phone, app()->get('country-code-for-client'));
+            $phone = app('phoneNumberUtil')->format($phone, PhoneNumberFormat::INTERNATIONAL);
+            $userData['phone'] = $phone;
         }
         return DB::transaction(function() use ($userData) {
             $user = User::create($userData);
@@ -130,8 +134,8 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-
-        event(new Registered($user = $this->create($request->all())));
+        $user = $this->create($request->all());
+        // event(new Registered($user));
 
         $this->guard()->login($user);
 
@@ -151,21 +155,21 @@ class RegisterController extends Controller
      * @return mixed
      * @throws AuthenticationException
      */
-    protected function registered(Request $request, $user)
+    protected function registered(Request $request,User $user)
     {
         $method = $this->getLoginMethod($request->all());
         $messages = new MessageBag();
         if($method === 'phone') {
             // --------- Phone auth can be changed here
-            $verification = $this->verify->startVerification($user->phone_number, $request->post('channel', 'sms'));
-            if (!$verification->isValid()) {
-                $user->delete();
-                $errors = new MessageBag();
-                foreach ($verification->getErrors() as $error) {
-                    $errors->add('verification', $error);
-                }
-                return view('auth.register')->withErrors($errors);
-            }
+            // $verification = $this->verify->startVerification($user->phoneNumber, 'sms');
+            // if (!$verification->isValid()) {
+            //     $user->delete();
+            //     $errors = new MessageBag();
+            //     foreach ($verification->getErrors() as $error) {
+            //         $errors->add('verification', $error);
+            //     }
+            //     return view('auth.register')->withErrors($errors);
+            // }
             // ---------
             $messages->add('verification', "Code sent to {$request->user()->phoneNumber}");
         }else if($method === 'email')

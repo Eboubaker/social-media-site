@@ -19,7 +19,7 @@ class AddBeforeUserInsertTrigger extends Migration
     BEFORE INSERT
     ON users FOR EACH ROW
 BEGIN
-    IF NEW.email IS NULL or regexp_like(NEW.email,'^\s*$') and (NEW.phone IS NULL or regexp_like(NEW.phone,'^\s*$')) THEN
+    IF (NEW.email IS NULL or NEW.email='') and (NEW.phone IS NULL or NEW.phone='') THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'email and phone are both empty';
     END IF;
 END;");

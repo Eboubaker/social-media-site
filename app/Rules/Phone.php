@@ -35,8 +35,7 @@ class Phone implements Rule
          */
         $phoneUtil = app()->get('phoneNumberUtil');
         try {
-            // TODO: set default region using the IP address of the client
-            $phoneNumber = $phoneUtil->parse($rawNumber, "DZ");
+            $phoneNumber = $phoneUtil->parse($rawNumber, app()->get('country-code-for-client'));
             return $phoneNumber !== null && $phoneUtil->isValidNumber($phoneNumber);
         }catch (\Exception $e)
         {

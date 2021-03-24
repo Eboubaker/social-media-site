@@ -10,7 +10,9 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Str;
 
 class VerificationController extends Controller
 {
@@ -53,13 +55,17 @@ class VerificationController extends Controller
      * Show the verification required notice.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function show(Request $request)
     {
-        return $request->user()->hasVerifiedEmail()
-            ? redirect($this->redirectPath())
-            : view('auth.verify');
+        $method = $this->getLoginMethod($request);
+        if(($method === 'email' && $request->user()->hasVerifiedEmail()) ||
+           ($method === 'phone' && $request->user()->hasVerifiedPhone()))
+        {
+            return redirect($this->redirectPath());
+        }
+        return View::make('auth.verify-test');
     }
 
     /**
@@ -84,7 +90,11 @@ class VerificationController extends Controller
             $verification = $this->verify->checkVerification($phone, $code);
 
             if ($verification->isValid()) {
-                $request->user()->markPhoneAsVerified();
+                $wasNotVerified = !$request->user()->isVerified();
+                $result = $request->user()->markPhoneAsVerified();
+                if ($result && $wasNotVerified) {
+                    event(new Verified($request->user()));
+                }
                 return redirect($this->redirectPath());
             }
 
@@ -97,21 +107,19 @@ class VerificationController extends Controller
         }
 
         if($method === 'email') {
-            if (!hash_equals((string)$request->route('id'), (string)$request->user()->getKey())) {
+            if(strlen(request('code')) !== 5 ||
+                !Str::startsWith(strtolower(\request('code')), $request->user()->getEmailForVerification()))
+            {
                 throw new AuthorizationException;
             }
-
-            if (!hash_equals((string)$request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
-                throw new AuthorizationException;
-            }
-
             if ($request->user()->hasVerifiedEmail()) {
                 return $request->wantsJson()
                     ? new JsonResponse([], 204)
                     : redirect($this->redirectPath());
             }
-
-            if ($request->user()->markEmailAsVerified()) {
+            $wasNotVerified = !$request->user()->isVerified();
+            $result = $request->user()->markEmailAsVerified();
+            if ($result && $wasNotVerified) {
                 event(new Verified($request->user()));
             }
 
