@@ -36,4 +36,9 @@ class ProfileImage extends Image
     {
         throw new Exception("Does not have Postable");
     }
+
+    public function profileable()
+    {
+        return $this->morphTo('profileable');
+    }
 }

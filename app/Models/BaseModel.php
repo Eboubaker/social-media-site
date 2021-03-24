@@ -26,9 +26,9 @@ use Illuminate\Support\Str;
  * @method static Builder with($relation)
  * @method static Builder whereHas()
  * @method static Builder whereDoesntHave()
- * @method static Model make()
- * @method static Model create()
- * @method static Model first()
+ * @method static self make()
+ * @method static self create()
+ * @method static self first()
  *
  * @method static Collection all()
  * @method static Collection get($columns='*')

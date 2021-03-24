@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\HasDatabaseNotifications;
 use Illuminate\Support\Str;
 use Ramsey\Collection\Collection;
 
@@ -24,10 +25,12 @@ use Ramsey\Collection\Collection;
  */
 class Profileable extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, HasDatabaseNotifications;
+
     public const PKEY = "id";
     protected $primaryKey = self::PKEY;
-    protected $guarded = [];
+    public const CREATED_AT = "created_at";
+    public const UPDATED_AT = "updated_at";
 
     function __construct(array $attributes = [])
     {
@@ -48,5 +51,10 @@ class Profileable extends BaseModel
     public function account()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function notifications()
+    {
+        return $this->morphTo();
     }
 }

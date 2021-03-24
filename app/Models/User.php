@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\MustVerifyPhone;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\JsonEncodingException;
@@ -19,12 +20,14 @@ use Illuminate\Support\Str;
  * @property string lastName
  * @property string firstName
  * @property string public_id
+ * @property string phoneNumber
+ * @property string email
  *
  * @method static User create(array $array)
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail, MustVerifyPhone
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, MustVerifyPhone;
 
     public const TABLE = "users";
     public const PKEY = "id";
@@ -64,10 +67,6 @@ class User extends Authenticatable
         });
     }
 
-    public function profileImage()
-    {
-        return $this->hasOne(ProfileImage::class);
-    }
     public function settings()
     {
         return $this->hasOne(UserSettings::class);

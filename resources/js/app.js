@@ -1,6 +1,6 @@
 
 require('./bootstrap.js');
-
+require('./int-tel-input');
 
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
@@ -12,7 +12,7 @@ import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
 // import FormError component
-import FormError from './components/FormError.vue';
+// import FormError from './components/FormError.vue';
 window.Vue = Vue;
 // import VueRouter from 'vue-router';
 // import routes from './routes';

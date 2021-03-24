@@ -6,5 +6,7 @@
     "/fonts/MaterialIcons-Regular.svg": "/fonts/MaterialIcons-Regular.svg",
     "/fonts/MaterialIcons-Regular.ttf": "/fonts/MaterialIcons-Regular.ttf",
     "/fonts/MaterialIcons-Regular.woff": "/fonts/MaterialIcons-Regular.woff",
-    "/fonts/MaterialIcons-Regular.woff2": "/fonts/MaterialIcons-Regular.woff2"
+    "/fonts/MaterialIcons-Regular.woff2": "/fonts/MaterialIcons-Regular.woff2",
+    "/img/flags.png": "/img/flags.png",
+    "/img/flags@2x.png": "/img/flags@2x.png"
 }

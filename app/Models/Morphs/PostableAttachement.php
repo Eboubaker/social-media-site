@@ -16,6 +16,8 @@ use PhpParser\Node\Expr\AssignOp\Mod;
  * @property string fileName
  * @property string url
  * @property string realPath
+ * @property object meta
+ *
  */
 class PostableAttachement extends BaseModel
 {
@@ -27,16 +29,17 @@ class PostableAttachement extends BaseModel
     public $storage;
     public $_tempFile;
     private $fformat;
+    protected $fillable = ['meta', 'storage_id'];
     public static function boot()
     {
         parent::boot();
-        static::creating(function($model)
-        {
-            ModelEvents::addSha256($model);
-        });
         static::created(function($model)
         {
             ModelEvents::copyTempToStorage($model);
+        });
+        static::creating(function($model)
+        {
+            ModelEvents::addSha256($model);
         });
         static::deleted(function($model)
         {
@@ -79,5 +82,14 @@ class PostableAttachement extends BaseModel
     public static function getAllowedTypes(): Collection
     {
         return collect(self::$allowedTypes);
+    }
+    public function setTemp($path): self
+    {
+        $this->_tempFile = $path;
+        return $this;
+    }
+    public function getTemp()
+    {
+        return $this->_tempFile;
     }
 }

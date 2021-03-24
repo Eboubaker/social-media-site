@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Casts\JsonObject;
 use App\Models\Morphs\Profileable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class SocialProfile extends Profileable
 {
@@ -13,17 +15,16 @@ class SocialProfile extends Profileable
     public const TABLE = "social_profiles";
     public const TABLE_DOT_KEY = self::TABLE . "." . self::PKEY;
     public const FKEY = "social_profile_id";
-    public const CREATED_AT = "created_at";
-    public const UPDATED_AT = "updated_at";
+
 
     protected $table = self::TABLE;
     protected $primaryKey = self::PKEY;
 
-    protected $guarded = [
-        self::PKEY
-    ];
-    protected $hidden = [];
-    protected $casts = [
-        'data' => 'object'
-    ];
+
+    public function profileImage(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'profileable');
+    }
+
+
 }

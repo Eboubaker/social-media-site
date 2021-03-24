@@ -27,4 +27,6 @@ class UserNotification extends BaseModel
     protected $casts = [
         'content' => 'object'
     ];
+
+
 }

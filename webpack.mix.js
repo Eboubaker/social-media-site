@@ -12,6 +12,9 @@ mix.js("resources/js/app.js", "public/js")
         postCss: [tailwindcss("./tailwind.config.js")],
     })
     .purgeCss();
+
+//TODO: in production use a cdn to get material-icons css library (less heavy for our server)
+//
 // google icons
 mix.copy("node_modules/material-design-icons/iconfont/MaterialIcons-Regular.eot", 'public/fonts');
 mix.copy("node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ijmap", 'public/fonts');
@@ -19,3 +22,6 @@ mix.copy("node_modules/material-design-icons/iconfont/MaterialIcons-Regular.svg"
 mix.copy("node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf", 'public/fonts');
 mix.copy("node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff", 'public/fonts');
 mix.copy("node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff2", 'public/fonts');
+
+mix.copy("node_modules/intl-tel-input/build/img/flags.png", 'public/img');
+mix.copy("node_modules/intl-tel-input/build/img/flags@2x.png", 'public/img');

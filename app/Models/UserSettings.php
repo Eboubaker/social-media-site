@@ -18,16 +18,13 @@ class UserSettings extends BaseModel
 
     protected $table = self::TABLE;
     protected $primaryKey = self::PKEY;
-
-    protected $guarded = [
-        self::PKEY
-    ];
     protected $hidden = [
         self::PKEY
     ];
     protected $casts = [
         'data' => JsonObject::class
     ];
+    protected $fillable = ['data'];
 
     /**
      * gives the default field values of the model
@@ -37,7 +34,7 @@ class UserSettings extends BaseModel
     {
         return [
             "data" => (object)[
-                  // TODO: write default values of user settings
+                // TODO: write default values of
             ]
         ];
     }

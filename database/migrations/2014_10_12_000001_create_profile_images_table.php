@@ -20,7 +20,7 @@ class CreateProfileImagesTable extends Migration
     {
         Schema::create(ProfileImage::TABLE, function (Blueprint $table) {
             $table->id();
-            MigrationHelper::addForeign($table, new User);
+            $table->morphs('profileable');
             $table->char('sha256', 64)->index();
             $table->tinyInteger('type');
             $table->json('meta');

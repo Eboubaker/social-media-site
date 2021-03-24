@@ -2,21 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\Events\ModelEvents;
-use App\Models\Image;
-use App\Models\Morphs\Postable;
-use App\Models\Morphs\PostableAttachement;
-use App\Models\Morphs\Profileable;
-use App\Models\ProfileImage;
-use App\Models\Video;
-use App\Observers\PostableAttachementObserver;
-use App\Observers\PostableObserver;
-use App\Observers\ProfileableObserver;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Support\Facades\Storage;
+use Aloha\Twilio\Twilio;
 use Illuminate\Support\ServiceProvider;
 use libphonenumber\PhoneNumberUtil;
+use App\Verify\Service;
+use App\Services\Twilio\Verification;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,11 +17,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('phoneNumberUtil', 'PhoneNumberUtil@getInstance()');
+        // TODO: are you sure about how you will manage different timezones for different geo-users ??
         if(strtolower(date_default_timezone_get()) !== "africa/algiers")
         {
             date_default_timezone_set("Africa/Algiers");
         }
+        // Register Google's Phone-Number-Utility Service
+        $this->app->singleton('phoneNumberUtil', function(){
+            return PhoneNumberUtil::getInstance();
+        });
+        // Register Twilio Service
+        $this->app->bind(Service::class, Verification::class);
     }
 
     /**
