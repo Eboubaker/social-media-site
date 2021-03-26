@@ -1,0 +1,9 @@
+{
+    "invalid phone number": "رقم الهاتف لا يوجد",
+    "didn't receive the code?": "لم تستلم الكود؟",
+    "send another" : "أرسِل مجددا",
+    "submit": "إرسال",
+    "verification code does not match": "الكود خاطئ",
+    "try again": "حاول مجددا",
+    "try again later": "حاول مجددا لاحقا"
+}

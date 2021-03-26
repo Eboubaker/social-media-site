@@ -22,33 +22,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65bd1ddc-7596-43e6-98ac-c8f506ba5a12" name="Default Changelist" comment="modified more of VerificationController still doesn't work">
-      <change afterPath="$PROJECT_DIR$/.idea/jsonSchemas.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Listeners/SendPhoneVerificationNotification.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/BusinessProfile.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/BusinessProfile.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/MustVerifyPhone.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/SocialProfile.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/SocialProfile.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Traits/MustVerifyPhone.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Traits/MustVerifyPhone.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/EventServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/EventServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lang/ar/auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/ar/auth.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lang/en/auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/en/auth.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/auth/register-test.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/auth/register.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/register-old.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/auth/verify.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-    </list>
+    <list default="true" id="65bd1ddc-7596-43e6-98ac-c8f506ba5a12" name="Default Changelist" comment="added localization support, now the registration controllers are working, bugs are unkown..." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,7 +44,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpDebugGeneral" xdebug_force_break_when_no_path_mapping="false" xdebug_force_break_when_outside_project="false" />
+  <component name="PhpDebugGeneral" listening_started="true" xdebug_force_break_when_no_path_mapping="false" xdebug_force_break_when_outside_project="false" />
   <component name="PhpServers">
     <servers>
       <server host="127.0.0.1" id="dc4a6177-791a-4f9b-9f9e-0f86051e2c89" name="127.0.0.1" port="8000" />
@@ -336,7 +310,7 @@
       <workItem from="1616418078572" duration="43673000" />
       <workItem from="1616608363094" duration="8665000" />
       <workItem from="1616698593773" duration="12182000" />
-      <workItem from="1616753955510" duration="22890000" />
+      <workItem from="1616753955510" duration="23212000" />
     </task>
     <task id="LOCAL-00001" summary="i should stop working on the database this circle won't end">
       <created>1616015972174</created>
@@ -359,7 +333,14 @@
       <option name="project" value="LOCAL" />
       <updated>1616613083711</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="added localization support, now the registration controllers are working, bugs are unkown...">
+      <created>1616777837139</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1616777837139</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -381,7 +362,8 @@
     <MESSAGE value="i should stop working on the database this circle won't end" />
     <MESSAGE value="changed how attachements are stored, not tested" />
     <MESSAGE value="modified more of VerificationController still doesn't work" />
-    <option name="LAST_COMMIT_MESSAGE" value="modified more of VerificationController still doesn't work" />
+    <MESSAGE value="added localization support, now the registration controllers are working, bugs are unkown..." />
+    <option name="LAST_COMMIT_MESSAGE" value="added localization support, now the registration controllers are working, bugs are unkown..." />
   </component>
   <component name="WindowStateProjectService">
     <state x="275" y="22" key="#JSON_Schema_Mappings" timestamp="1616704877390">
@@ -416,38 +398,38 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1616090693209" />
-    <state width="1323" height="281" key="GridCell.Tab.0.bottom" timestamp="1616777356982">
+    <state width="1323" height="465" key="GridCell.Tab.0.bottom" timestamp="1616777615245">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1616777356982" />
-    <state width="1323" height="281" key="GridCell.Tab.0.center" timestamp="1616777356982">
+    <state width="1323" height="465" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1616777615245" />
+    <state width="1323" height="465" key="GridCell.Tab.0.center" timestamp="1616777615244">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1616777356982" />
-    <state width="1323" height="281" key="GridCell.Tab.0.left" timestamp="1616777356982">
+    <state width="1323" height="465" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1616777615244" />
+    <state width="1323" height="465" key="GridCell.Tab.0.left" timestamp="1616777615244">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1616777356982" />
-    <state width="1323" height="281" key="GridCell.Tab.0.right" timestamp="1616777356982">
+    <state width="1323" height="465" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1616777615244" />
+    <state width="1323" height="465" key="GridCell.Tab.0.right" timestamp="1616777615245">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1616777356982" />
-    <state width="1323" height="281" key="GridCell.Tab.1.bottom" timestamp="1616777356983">
+    <state width="1323" height="465" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1616777615245" />
+    <state width="1323" height="465" key="GridCell.Tab.1.bottom" timestamp="1616777615245">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1616777356983" />
-    <state width="1323" height="281" key="GridCell.Tab.1.center" timestamp="1616777356982">
+    <state width="1323" height="465" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1616777615245" />
+    <state width="1323" height="465" key="GridCell.Tab.1.center" timestamp="1616777615245">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1616777356982" />
-    <state width="1323" height="281" key="GridCell.Tab.1.left" timestamp="1616777356982">
+    <state width="1323" height="465" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1616777615245" />
+    <state width="1323" height="465" key="GridCell.Tab.1.left" timestamp="1616777615245">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1616777356982" />
-    <state width="1323" height="281" key="GridCell.Tab.1.right" timestamp="1616777356983">
+    <state width="1323" height="465" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1616777615245" />
+    <state width="1323" height="465" key="GridCell.Tab.1.right" timestamp="1616777615245">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="281" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1616777356983" />
+    <state width="1323" height="465" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1616777615245" />
     <state x="563" y="94" width="555" height="557" key="NewPhpClassDialog" timestamp="1616525107312">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -460,10 +442,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="205" y="17" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1616508828755" />
-    <state x="275" y="96" key="Vcs.Push.Dialog.v2" timestamp="1616613086942">
+    <state x="275" y="96" key="Vcs.Push.Dialog.v2" timestamp="1616777843847">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="96" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1616613086942" />
+    <state x="275" y="96" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1616777843847" />
     <state x="87" y="21" width="1182" height="544" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1616611612894">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
