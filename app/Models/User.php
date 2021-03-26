@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\MustVerifyPhone;
+use App\Notifications\EmailVerificationNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\JsonEncodingException;
@@ -10,6 +11,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -127,7 +129,45 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getEmailForVerification(): string
     {
-        $salt = "SHA-2021-03-24-66f4bce05e6af8e4";
-        return $this->email . $salt;
+        return $this->email;
     }
+    public function getCodeForVerification(): string
+    {
+        // now we just take the last 4 characters from the email hash of the user
+        $salt = "SHA-2021-03-24-66f4bce05e6af8e4";
+        $email = $this->email;
+        return strtoupper(substr(hash('sha256', $email . $salt), -4));
+    }
+    public function sendEmailVerificationNotification()
+    {
+        $this->notify(new EmailVerificationNotification());
+    }
+
+    /**
+     * returns the user's user name or email or phone number (the one that exists)
+     * @param string $prefer "email" or "phone"
+     * @return string
+     */
+    public function getUserName($prefer='email')
+    {
+        if($this->socialProfile)
+        {
+            return $this->socialProfile->lastName;
+        }
+        $this->businessProfile;// loading the magic attribute
+        if(isset($this->businessProfile->data->businessOwner->lastName))
+        {
+            return $this->businessProfile->data->businessOwner->lastName;
+        }
+        if($prefer === 'email' && !empty($this->email))
+        {
+            return $this->email;
+        }
+        if($prefer === 'phone' && !empty($this->phoneNumber))
+        {
+            return $this->phoneNumber;
+        }
+        return !empty($this->email) ? $this->email : $this->phoneNumber;
+    }
+
 }

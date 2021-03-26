@@ -4,12 +4,16 @@
 namespace App\Models\Traits;
 
 
+use App\Services\Twilio\Verification;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\View\View;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 
 trait MustVerifyPhone
 {
     /**
-     * Determine if the user has verified their email address.
+     * Determine if the user has verified their phone number.
      *
      * @return bool
      */
@@ -19,7 +23,7 @@ trait MustVerifyPhone
     }
 
     /**
-     * Mark the given user's email as verified.
+     * Mark the given user's phone number as verified.
      *
      * @return bool
      */
@@ -31,17 +35,26 @@ trait MustVerifyPhone
     }
 
     /**
-     * Send the email verification notification.
+     * Send the phone verification message.
      *
-     * @return void
+     * @return View|null
      */
     public function sendPhoneVerificationNotification()
     {
-        $this->notify(new VerifyEmail);
+        $verification = (new Verification())->startVerification($this->getPhoneForVerification(), 'sms');
+        if (!$verification->isValid()) {
+            $this->delete();
+            foreach ($verification->getErrors() as $error)
+            {
+                report($error);
+            }
+            return view('auth.register')->withErrors(['verification' => __("invalid phone number")]);
+        }
+        return null;
     }
 
     /**
-     * Get the email address that should be used for verification.
+     * Get the phone number that should be used for verification.
      *
      * @return string
      */

@@ -16,5 +16,7 @@ return [
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    'code_sent' => 'We have sent a verification code to',
+    'code_resent' => 'Another code was sent to',
+    'sms_send_fail' => "invalid phone number"
 ];

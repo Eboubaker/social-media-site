@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 
 class VerificationController extends Controller
 {
@@ -41,12 +42,12 @@ class VerificationController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param Service $verify
      */
     public function __construct(Service $verify)
     {
         $this->middleware('auth');
-        $this->middleware('signed')->only('verify');
+//        $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
         $this->verify = $verify;
     }
@@ -59,13 +60,27 @@ class VerificationController extends Controller
      */
     public function show(Request $request)
     {
-        $method = $this->getLoginMethod($request);
-        if(($method === 'email' && $request->user()->hasVerifiedEmail()) ||
-           ($method === 'phone' && $request->user()->hasVerifiedPhone()))
+        $method = \request('method');
+        $user = $request->user();
+        $ev = $user->hasVerifiedEmail();
+        $pv = $user->hasVerifiedPhone();
+        if(($method === 'email' && $ev) ||
+           ($method === 'phone' && $pv))
         {
             return redirect($this->redirectPath());
         }
-        return View::make('auth.verify-test');
+        $login = null;
+        if($method === 'email')
+            $login = $user->email;
+        else if($method === 'phone')
+            $login = $user->phoneNumber;
+        return view('auth.verify', [
+            'messages' => [
+                "message" =>__('auth.code_sent'),
+                "login" => $login
+            ],
+            "method" => $method
+        ]);
     }
 
     /**
@@ -79,8 +94,11 @@ class VerificationController extends Controller
     public function verify(Request $request)
     {
         $method = $this->getLoginMethod($request);
-        if($method === 'phone') {
-            if ($request->user()->hasVerifiedPhone()) {
+        $errors = new MessageBag();
+        if($method === 'phone')
+        {
+            if ($request->user()->hasVerifiedPhone())
+            {
                 return redirect($this->redirectPath());
             }
 
@@ -89,32 +107,36 @@ class VerificationController extends Controller
 
             $verification = $this->verify->checkVerification($phone, $code);
 
-            if ($verification->isValid()) {
+            if ($verification->isValid())
+            {
                 $wasNotVerified = !$request->user()->isVerified();
                 $result = $request->user()->markPhoneAsVerified();
                 if ($result && $wasNotVerified) {
                     event(new Verified($request->user()));
                 }
-                return redirect($this->redirectPath());
+                return \request()->wantsJson()
+                    ? new JsonResponse(["success" => true, "messages" => ["result" => "verification was successful"]], 200)
+                    : redirect($this->redirectPath());
             }
-
-            $errors = new MessageBag();
-            foreach ($verification->getErrors() as $error) {
-                $errors->add('verification', $error);
-            }
-
-            return view('auth.verify')->withErrors($errors);
+            $errors->add('result', __("verification code does not match"));
+            return \request()->wantsJson()
+                ? new JsonResponse(["success" => false, "messages" => $errors->all()], 406)
+                : view('auth.verify')->with("method", $method)->withErrors($errors);
         }
 
-        if($method === 'email') {
-            if(strlen(request('code')) !== 5 ||
-                !Str::startsWith(strtolower(\request('code')), $request->user()->getEmailForVerification()))
+        if($method === 'email')
+        {
+            if(request('code') && \request('code') !== $request->user()->getCodeForVerification())
             {
-                throw new AuthorizationException;
+                $errors->add('result', __("verification code does not match"));
+                return \request()->wantsJson()
+                    ? new JsonResponse(["success" => false, "messages" => $errors->all()], 406)
+                    : view('auth.verify')->with("method", $method)->withErrors($errors);
             }
-            if ($request->user()->hasVerifiedEmail()) {
+            if ($request->user()->hasVerifiedEmail())
+            {
                 return $request->wantsJson()
-                    ? new JsonResponse([], 204)
+                    ? new JsonResponse(["success" => true, "messages"=>[]], 301)
                     : redirect($this->redirectPath());
             }
             $wasNotVerified = !$request->user()->isVerified();
@@ -122,14 +144,10 @@ class VerificationController extends Controller
             if ($result && $wasNotVerified) {
                 event(new Verified($request->user()));
             }
-
-            if ($response = $this->verified($request)) {
-                return $response;
-            }
-
+            $this->verified($request);
             return $request->wantsJson()
-                ? new JsonResponse([], 204)
-                : redirect($this->redirectPath())->with('verified', true);
+                ? new JsonResponse(["success" => true, "messages" => ["result" => "verification was successful"]], 201)
+                : redirect($this->redirectPath());
         }
         throw new AuthorizationException("invalid verification method was given");
     }
@@ -155,6 +173,7 @@ class VerificationController extends Controller
     public function resend(Request $request)
     {
         $method = $this->getLoginMethod($request);
+        $messages = [];
         if($method === 'email') {
             if ($request->user()->hasVerifiedEmail()) {
                 return $request->wantsJson()
@@ -162,6 +181,7 @@ class VerificationController extends Controller
                     : redirect($this->redirectPath());
             }
             $request->user()->sendEmailVerificationNotification();
+            $messages['login'] = $request->user()->email;
         }else if($method === 'phone')
         {
             if ($request->user()->hasVerifiedPhone()) {
@@ -172,27 +192,26 @@ class VerificationController extends Controller
             $verification = $this->verify->startVerification($phone, 'sms');
 
             if (!$verification->isValid()) {
-
-                $errors = new MessageBag();
-                foreach($verification->getErrors() as $error) {
-                    $errors->add('verification', $error);
-                }
-                return redirect('/verify')->withErrors($errors);
+//                $errors = new MessageBag();
+//                foreach($verification->getErrors() as $error) {
+//                    $errors->add('verification', $error);
+//                }
+                return $request->wantsJson()
+                    ? new JsonResponse(['sent' => false, 'message' => "Can't send sms to this number ,ie.number doesn't exist"], 406)
+                    : back()->with('sent', false)->with('messages', ['message' => __('auth.sms_send_fail')]);
             }
-            $messages = new MessageBag();
-            $messages->add('verification', "Another code was sent to $phone");
-
-            return redirect('/verify')->with('messages', $messages);
+            $messages['login'] = $phone;
         }else{
             throw new AuthorizationException("invalid verification method was given");
         }
+        $messages['message'] = __('auth.code_resent');
         return $request->wantsJson()
-            ? new JsonResponse(['resent' => true], 202)
-            : back()->with('resent', true);
+            ? new JsonResponse(['sent' => true], 202)
+            : back()->with('sent', true)->with('messages', $messages);
     }
     private function getLoginMethod(Request $request)
     {
-        return $request->post('verificationMethod');
+        return request('method');
     }
     /**
      * Get the post register / login redirect path.
@@ -205,6 +224,6 @@ class VerificationController extends Controller
             return $this->redirectTo();
         }
 
-        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/home';
+        return property_exists($this, 'redirectTo') ? $this->redirectTo : '/';
     }
 }

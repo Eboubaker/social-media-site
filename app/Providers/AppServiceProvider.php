@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Aloha\Twilio\Twilio;
+use App\Http\Middleware\SetLocale;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 use libphonenumber\PhoneNumberUtil;
 use App\Verify\Service;
@@ -32,6 +34,25 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('country-code-for-client', function(){
             // TODO: set default region using the IP address of the client
             return 'DZ';
+        });
+        $this->app->singleton('locale-for-client', function(){
+//            response()->withCookie(cookie('locale', 'ar'));
+            $seg = request()->segment(1);
+            if(in_array($seg, config('app.locales'), true))
+            {
+                return $seg;
+            }
+            if(!empty(request()->cookie('locale'))) {
+                $locale = request()->cookie('locale');
+            }else{
+                $locale = request()->server('HTTP_ACCEPT_LANGUAGE');
+                $locale = substr($locale, 0, 2);
+            }
+            if(in_array($locale, config('app.locales'), true))
+            {
+                return $locale;
+            }
+            return config('app.fallback_locale');
         });
     }
 

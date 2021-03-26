@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
+/**
+ * @property string lastName
+ */
 class SocialProfile extends Profileable
 {
     use HasFactory;
@@ -26,5 +29,8 @@ class SocialProfile extends Profileable
         return $this->morphOne(Image::class, 'profileable');
     }
 
-
+    public function getLastNameAttribute()
+    {
+        return $this->getAttribute('last_name');
+    }
 }

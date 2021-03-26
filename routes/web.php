@@ -13,13 +13,52 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
+// set default locale
+// Group all routes with the locale
+// NOTE: API routes should not be added here instead they should be in ~/routes/api.php
 
-// anything that does NOT start with "storage/" (which is where we store videos & images)
-// will be mapped to vue routers
+Route::group([
+    'prefix' => '{locale}',
+    'middleware' => 'setLocale'
+], function() {
+    //--- AUTH TEST
+    Route::get('/',function(){
+        return "This is the home page you are " . (Auth::guest() ? "not" : "") . " logged in " . (Auth::guest() ? "" : (" and your account is " . (Auth::user()->isVerified() ? "" : "not")." verified"));
+    });
+
+    //-- Legal stuff
+    Route::get('/terms',function(){
+        return "The terms blade-view";
+    })->name('legal.terms');
+    Route::get('/privacy',function(){
+        return "The privacy blade-view";
+    })->name('legal.privacy');
+
+    //-- Authentication Routes --//
+    Auth::routes();
+    //-- Custom Verification Routes --//
+    Route::post('/verify/attempt', 'App\Http\Controllers\Auth\VerificationController@verify')->name('verification.verify');
+    Route::post('/verify/resend', 'App\Http\Controllers\Auth\VerificationController@resend')->name('verification.resend');
+    Route::get('/verify/{method}/notice', 'App\Http\Controllers\Auth\VerificationController@show')->name('verification.notice');
+
+});
+
+
+// redirect with default locale if no locale is in the url
+Route::get('/', function () {
+    return redirect(app('locale-for-client'));
+});
+\Illuminate\Support\Facades\URL::defaults(['locale' => app('locale-for-client')]);
+
+
+
+
+
+
 
 //$i = imagecreatefrompng('D:\Users\MCS\Downloads\1044147.png');
 //imagewebp($i, "C:\Users\me\Pictures\Camera Roll\out.webp");
-Auth::routes();
+
 
 
 
@@ -34,21 +73,3 @@ Auth::routes();
 //     Log::info('sent message: ' . $message['message-id']);
 // });
 
-
-
-Route::get('/',function(){
-    return "This is the home page you are " . (Auth::guest() ? "not" : "") . " logged in " . (Auth::guest() ? "" : (" and your account is " . (Auth::user()->isVerified() ? "" : "not")." verified"));
-});
-
-//-- Verification Routes --//
-Route::get('/verify/notice', function () {
-    // TODO: create this view
-    return view('auth.verify-test');
-})->middleware('auth')->name('verification.notice');
-Route::post('/verify/attempt', 'VerificationController@verify')->name('verification.verify');
-Route::post('/verify/resend', 'VerificationController@verify')->name('verification.resend');
-
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('message', 'Verification link sent!');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');

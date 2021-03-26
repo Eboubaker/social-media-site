@@ -3,16 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\ProfileImage;
 use App\Models\UserSettings;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Rules\Phone;
 use App\Verify\Service;
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +17,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 
 class RegisterController extends Controller
 {
@@ -51,7 +49,15 @@ class RegisterController extends Controller
      * @var Service
      */
     protected $verify;
-
+    private $validatedPhone;
+    /**
+     * @var string
+     */
+    private $loginMethod;
+    /**
+     * @var PhoneNumberUtil
+     */
+    private $phoneUtil;
     /**
      * Create a new controller instance.
      *
@@ -63,6 +69,9 @@ class RegisterController extends Controller
         $this->loginFieldName = 'login';
         $this->redirectTo = RouteServiceProvider::HOME;
         $this->verify = $verify;
+        $this->phoneUtil = app('phoneNumberUtil');
+        $l = $this->getLoginMethod();
+        $this->validatedPhone = $l === 'phone' ? $this->getValidatedPhone() : '';
     }
 
     /**
@@ -76,14 +85,14 @@ class RegisterController extends Controller
         $rules = [
             'password' => ['required', 'string', 'min:8'],
         ];
-        if($this->getLoginMethod($data) === 'email')
+        if($this->getLoginMethod() === 'email')
         {
             $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:'.User::TABLE.',email'];
             $data['email'] = $data[$this->loginFieldName];
             unset($data['login']);
         }else{
-            $rules['phone'] = ['required', 'string', new Phone, 'max:16', 'unique:'.User::TABLE.',phone'];
-            $data['phone'] = $data[$this->loginFieldName];
+            $rules['phone'] = ['required', 'string', new Phone, 'unique:'.User::TABLE.',phone'];
+            $data['phone'] = $this->getValidatedPhone();
             unset($data[$this->loginFieldName]);
         }
         return Validator::make($data, $rules);
@@ -101,14 +110,11 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'api_token' => Str::random(80),
         ];
-        if($this->getLoginMethod($data) === 'email')
+        if($this->getLoginMethod() === 'email')
         {
             $userData['email'] = $data[$this->loginFieldName];
         }else{
-            $phone = $data[$this->loginFieldName];
-            $phone = app('phoneNumberUtil')->parse($phone, app()->get('country-code-for-client'));
-            $phone = app('phoneNumberUtil')->format($phone, PhoneNumberFormat::INTERNATIONAL);
-            $userData['phone'] = $phone;
+            $userData['phone'] = $this->getValidatedPhone();
         }
         return DB::transaction(function() use ($userData) {
             $user = User::create($userData);
@@ -116,14 +122,36 @@ class RegisterController extends Controller
             return $user;
         });
     }
-
-    private function getLoginMethod(array $data)
+    private function getValidatedPhone():string
     {
-        return preg_match('/[A-Za-z]/', $data[$this->loginFieldName], $matches) ? "email" : "phone";
+        if(!$this->validatedPhone)
+        {
+            try {
+                $phone = $this->phoneUtil->parse(\request($this->loginFieldName), app()->get('country-code-for-client'));
+                if($phone === null)
+                {
+                    throw new \Exception("phoneUtil->parse(" . request($this->loginFieldName) . ") returned null");
+                }
+                $this->validatedPhone = $this->phoneUtil->format($phone, PhoneNumberFormat::INTERNATIONAL);
+            }catch (\Exception $e)
+            {
+                report($e);
+                $this->validatedPhone  = ' ';
+            }
+        }
+        return $this->validatedPhone;
+    }
+    private function getLoginMethod(): string
+    {
+        if(!$this->loginMethod)
+        {
+            $this->loginMethod = preg_match('/[A-Za-z]/', \request($this->loginFieldName), $matches) ? "email" : "phone";
+        }
+        return $this->loginMethod;
     }
     public function showRegistrationForm()
     {
-        return view('auth.register-test');
+        return view('auth.register');
     }
     /**
      * Handle a registration request for the application.
@@ -133,7 +161,13 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $this->validator($request->all())->validate();
+        $validator = $this->validator($request->all());
+        if($validator->fails())
+        {
+            return $request->wantsJson()
+                ? new JsonResponse(['success' => false, 'messages' => $validator->getMessageBag()->all()], 403)
+                : back()->withErrors($validator->errors());
+        }
         $user = $this->create($request->all());
         // event(new Registered($user));
 
@@ -144,9 +178,10 @@ class RegisterController extends Controller
         }
 
         return $request->wantsJson()
-            ? new JsonResponse([], 201)
+            ? new JsonResponse(['success' => true, 'messages' => 'you are registered'], 201)
             : redirect($this->redirectPath());
     }
+
     /**
      * The user has been registered.
      *
@@ -154,33 +189,30 @@ class RegisterController extends Controller
      * @param mixed $user
      * @return mixed
      * @throws AuthenticationException
+     * @throws \Exception
      */
     protected function registered(Request $request,User $user)
     {
-        $method = $this->getLoginMethod($request->all());
-        $messages = new MessageBag();
+        $method = $this->getLoginMethod();
+        $messages = [];
         if($method === 'phone') {
-            // --------- Phone auth can be changed here
-            // $verification = $this->verify->startVerification($user->phoneNumber, 'sms');
-            // if (!$verification->isValid()) {
-            //     $user->delete();
-            //     $errors = new MessageBag();
-            //     foreach ($verification->getErrors() as $error) {
-            //         $errors->add('verification', $error);
-            //     }
-            //     return view('auth.register')->withErrors($errors);
-            // }
-            // ---------
-            $messages->add('verification', "Code sent to {$request->user()->phoneNumber}");
+            $returned = $request->user()->sendPhoneVerificationNotification();
+            if(is_object($returned) && $returned instanceof View)
+            {
+                return $returned;
+            }
+            $messages['login'] = $request->user()->phoneNumber;
         }else if($method === 'email')
         {
             $request->user()->sendEmailVerificationNotification();
-            $messages->add('verification', "Code sent to {$request->user()->email}");
+            $messages['login'] = $request->user()->email;
         }else{
             $user->delete();
             throw new AuthenticationException("invalid verification method was given");
         }
-        return redirect(route('verification.notice'))->with('messages', $messages);
+        $messages['message'] = __("auth.code_sent");
+        return $request->wantsJson() ? new JsonResponse(['success' => true], 200)
+             : redirect(route('verification.notice', ['method' => $method]))->with('messages', $messages);
     }
     /**
      * Get the guard to be used during registration.
