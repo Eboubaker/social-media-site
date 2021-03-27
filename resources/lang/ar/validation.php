@@ -119,6 +119,7 @@ return [
     'url' => 'The :attribute format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+    'phone' => 'the :attribute must be a valid phone number',
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -148,5 +149,6 @@ return [
     */
 
     'attributes' => [],
+
 
 ];

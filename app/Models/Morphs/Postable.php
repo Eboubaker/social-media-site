@@ -17,7 +17,7 @@ class Postable extends BaseModel
     protected $primaryKey = self::PKEY;
     protected $guarded = [];
     // TODO: remove this in production
-    protected $fillable = ['id','content', 'public_id', 'profileable_type', 'profileable_id', 'created_at', 'updated_at'];
+    protected $fillable = ['id','content', 'public_id', 'profileable_type', 'profileable_id', 'created_at', 'updated_at', 'content'];
     // TODO: in production mode check for unnecessary eager loaded relations, exclude them using $model->without(...)
     protected $with = ['videos', 'images', 'profileable'];
 

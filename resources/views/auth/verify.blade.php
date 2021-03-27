@@ -2,6 +2,7 @@
 
 
 @section('content')
+{{--    @error('verification') <div></div> @enderror--}}
     @if ($errors->any())
         <div class="alert alert-danger">
             <ul>

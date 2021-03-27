@@ -36,7 +36,6 @@ class AppServiceProvider extends ServiceProvider
             return 'DZ';
         });
         $this->app->singleton('locale-for-client', function(){
-//            response()->withCookie(cookie('locale', 'ar'));
             $seg = request()->segment(1);
             if(in_array($seg, config('app.locales'), true))
             {
