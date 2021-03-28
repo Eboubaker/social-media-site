@@ -2,7 +2,7 @@ module.exports = {
     purge: [
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
-        "./resources/**/*.vue",
+        "./resources/**/*.vue"
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {
@@ -11,13 +11,16 @@ module.exports = {
                 logo: {
                     red: "#f05454",
                     black: "#222831",
-                    white: "#ffffff",
-                },
+                    white: "#ffffff"
+                }
             },
-        },
+            lineHeight: {
+                "12": "250px"
+            }
+        }
     },
     variants: {
-        extend: {},
+        extend: {}
     },
-    plugins: [],
+    plugins: []
 };

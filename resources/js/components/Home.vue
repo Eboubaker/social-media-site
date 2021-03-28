@@ -3,9 +3,9 @@
     <div
       class="grid grid-cols-1 md:grid md:grid-cols-2 md:text-xl md:gap-8 md:pt-36 md:pb-36 md:ml-12 md:mr-12 lg:grid lg:grid-cols-2 lg:text-xl lg:gap-44 lg:pt-36 lg:pb-36 lg:ml-48 lg:mr-40"
     >
-      <div class="grid w-100 lg:h-72">
+      <div class="grid w-100">
         <img
-          class="w-48 h-24 justify-self-center md:w-56 md:h-32 md:justify-self-start lg:w-2/3 lg:h-56 lg:justify-self-start"
+          class="w-48 justify-self-center md:w-56 md:justify-self-start lg:w-2/3 lg:justify-self-start"
           src="/img/logo.png"
           alt
         />
