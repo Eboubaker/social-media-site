@@ -205,8 +205,7 @@ class RegisterController extends Controller
         $method = $this->getLoginMethod();
         $messages = [];
         if($method === 'phone') {
-//            $returned = $request->user()->sendPhoneVerificationNotification();
-            $returned = null;
+            $returned = $request->user()->sendPhoneVerificationNotification();
             if(is_object($returned) && $returned instanceof View)
             {
                 return $returned;
