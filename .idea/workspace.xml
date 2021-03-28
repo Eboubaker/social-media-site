@@ -25,7 +25,6 @@
     <list default="true" id="65bd1ddc-7596-43e6-98ac-c8f506ba5a12" name="Default Changelist" comment="added localization support, now the registration controllers are working, bugs are unkown...">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,7 +315,7 @@
       <workItem from="1616698593773" duration="12182000" />
       <workItem from="1616753955510" duration="32030000" />
       <workItem from="1616831398905" duration="8769000" />
-      <workItem from="1616923827800" duration="4165000" />
+      <workItem from="1616923827800" duration="4716000" />
     </task>
     <task id="LOCAL-00001" summary="i should stop working on the database this circle won't end">
       <created>1616015972174</created>
