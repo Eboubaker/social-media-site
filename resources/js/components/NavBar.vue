@@ -1,127 +1,239 @@
 <template>
-  <div class="bg-white sm:flex sm:justify-between sm:px-4 border-b-2">
-    <div class="flex items-center justify-between px-4 py-1 sm:p-0 bg-white">
-      <div class="flex items-center">
-        <img class="h-10" src="/img/logo.png" alt />
-        <div class="relative">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <svg class="w-5 h-5 text-gray-500" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </span>
-          <form action="./confirm">
+  <div>
+    <div class="flex items-center justify-between px-4 py-1 bg-white">
+      <div class="flex items-center space-x-2">
+        <a title="Quick Look" href="/" alt="Quick Look">
+          <img
+            :class="!searchOpen ? 'block' : 'hidden'"
+            class="h-10"
+            src="/img/logo.png"
+            alt="Quick Look"
+          />
+        </a>
+        <div class="flex flex-row rounded-full bg-gray-100 space-x-2">
+          <button
+            title="Search"
+            @click="searchOpen=!searchOpen"
+            class="flex items-center p-2 rounded-full cursor-pointer outline-none focus:outline-none hover:bg-gray-200"
+          >
+            <span :class="!searchOpen ? 'block' : 'hidden'" class="material-icons w-6 h-6">search</span>
+            <span :class="!searchOpen ? 'hidden' : 'block'" class="material-icons w-6 h-6">cancel</span>
+          </button>
+          <form v-if="searchOpen" class action="./confirm">
             <input
               type="text"
-              class="w-full py-2 pl-10 pr-4 text-gray-700 bg-white border border-gray-300 outline-none rounded-3xl bg-gray-100"
+              class="px-2 py-1 my-1 rounded-full outline-none focus:outline-none bg-gray-100"
               placeholder="Search"
             />
           </form>
         </div>
       </div>
-      <div class="sm:hidden">
-        <button
-          class="p-1 text-gray-500 hover:bg-gray-100 rounded focus:outline-none"
-          type="button"
-        >
-          <svg
-            class="w-8 h-8 text-gray-500 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+      <div class="flex flex-row space-x-1 justify-evenly items-center">
+        <div class="notifications relative">
+          <button
+            title="Notifications"
+            :class="notificationOpen ? 'bg-gray-200' : 'bg-white'"
+            @click="notificationOpen = !notificationOpen"
+            class="p-1 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-full focus:outline-none"
+            type="button"
           >
-            <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
-            <path
-              d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="sm:hidden">
-        <button
-          class="p-1 text-gray-500 hover:bg-gray-100 rounded focus:outline-none"
-          type="button"
-        >
-          <svg
-            class="w-8 h-8 text-gray-500 fill-current"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
+            <!-- <span class="material-icons">notifications</span> -->
+            <svg
+              class="w-7 h-7"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+              />
+            </svg>
+          </button>
+          <!-- Notifications Block -->
+          <Notifications :class="notificationOpen ? 'block' : 'hidden'" />
+        </div>
+        <div class="messages">
+          <button
+            title="Messages"
+            :class="messageOpen ? 'bg-gray-200' : 'bg-white'"
+            @click="messageOpen = !messageOpen"
+            class="p-1 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-full focus:outline-none"
+            type="button"
           >
-            <path
-              d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="sm:hidden">
-        <button
-          :class="isOpen ? 'bg-gray-100' : 'bg-white'"
-          @click="isOpen = !isOpen"
-          class="p-1 text-gray-500 hover:bg-gray-100 rounded focus:outline-none"
-          type="button"
+            <!-- <span class="material-icons leading-7 inline">question_answer</span> -->
+            <svg
+              class="w-7 h-7"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+          </button>
+          <!-- Messages Block -->
+          <Messages :class="messageOpen ? 'block' : 'hidden'" />
+        </div>
+        <div class="menu sm:hidden">
+          <button
+            title="Menu"
+            :class="isOpen ? 'bg-gray-200' : 'bg-white'"
+            @click="isOpen = !isOpen"
+            class="relative p-1 text-gray-500 hover:bg-gray-200 rounded focus:outline-none"
+            type="button"
+          >
+            <svg
+              class="w-7 h-7"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+        </div>
+        <Menu :class="isOpen ? 'block' : 'hidden'" />
+        <!-- <div
+          :class="isOpen ? 'block' : 'hidden'"
+          class="absolute inset-0 bg-white z-20 px-2 pb-2 my-2 space-y-2 border-b-2 sm:pb-0 sm:hidden"
         >
-          <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
-            <path
-              fill-rule="evenodd"
-              d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
-            />
-          </svg>
-        </button>
+          <div class="flex flex-row justify-evenly items-center space-x-2">
+            <a
+              class="flex flex-auto align-center px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+              href="#"
+            >
+              <span class="material-icons">account_circle</span>
+              <p class>Abd Elhak</p>
+            </a>
+            <div>
+              <button
+                :class="accountOpen ? 'bg-gray-200' : 'bg-gray-100'"
+                @click="accountOpen = !accountOpen"
+                class="flex flex-row justify-between items-center px-2 py-2 space-x-2 hover:bg-gray-200 rounded focus:outline-none"
+              >
+                <p>switch account</p>
+                <span class="material-icons">arrow_drop_down_circle</span>
+              </button>
+            </div>
+          </div>
+          <div
+            :class="accountOpen ? 'block' : 'hidden'"
+            class="bg-gray-200 rounded px-2 py-2 space-y-2"
+          >
+            <a
+              class="flex flex-auto align-center px-2 py-2 space-x-2 hover:bg-gray-300 rounded"
+              href="#"
+            >
+              <span class="material-icons">account_circle</span>
+              <p class>Abd Elhak_2</p>
+            </a>
+            <a
+              class="flex flex-auto align-center px-2 py-2 space-x-2 hover:bg-gray-300 rounded"
+              href="#"
+            >
+              <span class="material-icons">account_circle</span>
+              <p class>Abd Elhak_3</p>
+            </a>
+            <a
+              class="flex flex-auto align-center px-2 py-2 space-x-2 hover:bg-gray-300 rounded"
+              href="#"
+            >
+              <span class="material-icons">account_circle</span>
+              <p class>Abd Elhak_4</p>
+            </a>
+          </div>
+          <hr class="my-2" />
+          <a
+            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+            href="#"
+          >
+            <span class="material-icons">account_circle</span>
+            <p>Home</p>
+          </a>
+          <a
+            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+            href="#"
+          >
+            <span class="material-icons">account_circle</span>
+            <p>Friend Request</p>
+          </a>
+          <hr class="my-2" />
+          <a
+            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+            href="#"
+          >
+            <span class="material-icons">account_circle</span>
+            <p>Quick Food</p>
+          </a>
+          <a
+            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+            href="#"
+          >
+            <span class="material-icons">account_circle</span>
+            <p>Quick Shope</p>
+          </a>
+          <a
+            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+            href="#"
+          >
+            <span class="material-icons">account_circle</span>
+            <p>Quick Move</p>
+          </a>
+        </div>-->
       </div>
     </div>
     <hr />
-
-    <div :class="isOpen ? 'block' : 'hidden'" class="px-2 pb-2 my-2 sm:pb-0 sm:hidden">
-      <div class="flex align-center">
-        <svg
-          class="w-8 h-8 text-gray-500 fill-current"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-            clip-rule="evenodd"
-          />
-        </svg>
-        <a class="block flex-auto hover:bg-gray-100 rounded px-2 mb-2" href="#">Abd Elhak</a>
-      </div>
-      <hr />
-      <a class="mt-1 block hover:bg-gray-100 rounded py-2 px-2 sm:mt-0 sm:ml-2" href="#">Posts</a>
-      <a
-        class="mt-1 mb-2 block hover:bg-gray-100 rounded py-2 px-2 sm:mt-0 sm:ml-2"
-        href="#"
-      >Friend Request</a>
-      <hr />
-      <a
-        class="mt-1 block hover:bg-gray-100 rounded py-2 px-2 sm:mt-0 sm:ml-2 sm:hidden"
-        href="#"
-      >Quick Food</a>
-      <a
-        class="mt-1 block hover:bg-gray-100 rounded py-2 px-2 sm:mt-0 sm:ml-2 sm:hidden"
-        href="#"
-      >Quick Shope</a>
-      <a
-        class="mt-1 block hover:bg-gray-100 rounded py-2 px-2 sm:mt-0 sm:ml-2 sm:hidden"
-        href="#"
-      >Quick Move</a>
-    </div>
   </div>
 </template>
 <script>
+import Post from "./Post";
+import Notifications from "./Notifications";
+import Messages from "./Messages";
+import Menu from "./Menu";
 export default {
+  components: {
+    Post,
+    Menu,
+    Messages,
+    Notifications
+  },
   data() {
     return {
       isOpen: false,
-      searchOpen: false
+      accountOpen: false,
+      searchOpen: false,
+      notificationOpen: false,
+      messageOpen: false,
+      messageSettingOpen: false,
+      notiSettingOpen: false
     };
+  },
+  created() {
+    const handleEscape = e => {
+      if (e.key === "Esc" || e.key === "Escape") {
+        this.isOpen = false;
+        this.searchOpen = false;
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    this.$once("hook:beforeDestroy", () => {
+      document.removeEventListener("keydown", handleEscape);
+    });
   }
 };
 </script>

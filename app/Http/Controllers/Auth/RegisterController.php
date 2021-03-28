@@ -65,6 +65,7 @@ class RegisterController extends Controller
      */
     public function __construct(Service $verify)
     {
+        
         $this->middleware('guest');
         $this->loginFieldName = 'login';
         $this->redirectTo = RouteServiceProvider::HOME;
@@ -169,7 +170,9 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+
         $validator = $this->validator($request->all());
+        
         if($validator->fails())
         {
             return $request->wantsJson()

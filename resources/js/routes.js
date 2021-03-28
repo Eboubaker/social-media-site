@@ -4,6 +4,7 @@ import ConfirmationCode from "./components/ConfirmationCode";
 import SocialBuisnessAccount from "./components/SocialBuisnessAccount";
 import NavBar from "./components/NavBar";
 import Post from "./components/Post";
+import Posts from "./components/Posts";
 import PlayGround from "./components/PlayGround";
 
 export default {
@@ -42,6 +43,11 @@ export default {
             name: "post",
             path: "/post",
             component: Post
+        },
+        {
+            name: "posts",
+            path: "/posts",
+            component: Posts
         }
     ]
 };

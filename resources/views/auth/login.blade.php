@@ -53,7 +53,7 @@
                 </form>
                 <hr class="mt-4 mb-1" />
                 <small class="mb-4">or</small>
-                <a class="justify-self-center items-center w-48 px-1 py-2 font-medium border-transparent lg:w-64 rounded-lg text-white cursor-pointer outline-none bg-logo-black hover:bg-gray-900">Create New Account</a>
+                <a href="{{ route('register')}}" class="justify-self-center items-center w-48 px-1 py-2 font-medium border-transparent lg:w-64 rounded-lg text-white cursor-pointer outline-none bg-logo-black hover:bg-gray-900">Create New Account</a>
             </div>
         </div>
     </div>
