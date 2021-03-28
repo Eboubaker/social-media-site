@@ -31,7 +31,7 @@ class Profileable extends BaseModel
     protected $primaryKey = self::PKEY;
     public const CREATED_AT = "created_at";
     public const UPDATED_AT = "updated_at";
-
+    protected $guarded = [];
     function __construct(array $attributes = [])
     {
         $this->casts['data'] = JsonObject::class;

@@ -73,6 +73,12 @@ class RegisterController extends Controller
         $this->phoneUtil = app('phoneNumberUtil');
         $l = $this->getLoginMethod();
         $this->validatedPhone = $l === 'phone' ? $this->getValidatedPhone() : '';
+
+//        $request = [
+//            "login" => "email_text|phone_text",
+//            "password" => "password"
+//        ];
+//        $response = redirect-to ValidationController@show or back() with errors
     }
 
     /**
@@ -154,11 +160,13 @@ class RegisterController extends Controller
     {
         return view('auth.register');
     }
+
     /**
      * Handle a registration request for the application.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     * @throws AuthenticationException
      */
     public function register(Request $request)
     {
@@ -213,9 +221,11 @@ class RegisterController extends Controller
             $user->delete();
             throw new AuthenticationException("invalid verification method was given");
         }
+
         $messages['message'] = __("auth.code_sent");
         return $request->wantsJson() ? new JsonResponse(['success' => true], 200)
              : redirect(route('verification.notice', ['method' => $method]))->with('messages', $messages);
+
     }
     /**
      * Get the guard to be used during registration.

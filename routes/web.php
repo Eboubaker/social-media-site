@@ -21,10 +21,6 @@ Route::group([
     'prefix' => '{locale}',
     'middleware' => 'setLocale'
 ], function() {
-    //--- AUTH TEST
-    Route::get('/',function(){
-        return "This is the home page you are " . (Auth::guest() ? "not" : "") . " logged in " . (Auth::guest() ? "" : (" and your account is " . (Auth::user()->isVerified() ? "" : "not")." verified"));
-    });
 
     //-- Legal stuff
     Route::get('/terms',function(){
@@ -36,12 +32,18 @@ Route::group([
 
     //-- Authentication Routes --//
     Auth::routes();
-    //-- Custom Verification Routes --//
-    Route::post('/verify/attempt', 'App\Http\Controllers\Auth\VerificationController@verify')->name('verification.verify');
-    Route::post('/verify/resend', 'App\Http\Controllers\Auth\VerificationController@resend')->name('verification.resend');
-    Route::get('/verify/{method}/notice', 'App\Http\Controllers\Auth\VerificationController@show')->name('verification.notice');
 
+    //-- Custom Verification Routes --//
+    Route::post('/verify/attempt', [VerificationController::class, 'verify'])->name('verification.verify');
+    Route::post('/verify/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+    Route::get('/verify/{method}/notice', [VerificationController::class, 'show'])->name('verification.notice');
+
+    //--- AUTH TEST
+    Route::get('/',function(){
+        return view('welcome');
+    });
 });
+Route::post('/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 
 
 // redirect with default locale if no locale is in the url

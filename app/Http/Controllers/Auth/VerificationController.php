@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Verify\Service;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 use Illuminate\Http\JsonResponse;
@@ -50,6 +51,18 @@ class VerificationController extends Controller
 //        $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
         $this->verify = $verify;
+
+//        route = verification.notice
+//        [
+//            "verification?" => "error_text"
+//        ]
+//        [
+//            "method" => "email|phone",
+//            "messages?" => [
+//                "login?" => "email_text|phone_number",
+//                "message?" => "text"
+//            ]
+//        ];
     }
 
     /**
@@ -167,47 +180,30 @@ class VerificationController extends Controller
      * Resend the verification notification using the user's login method (either via phone or email).
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\Foundation\Application|JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      * @throws AuthorizationException
      */
     public function resend(Request $request)
     {
         $method = $this->getLoginMethod($request);
-        $messages = [];
-        if($method === 'email') {
-            if ($request->user()->hasVerifiedEmail()) {
-                return $request->wantsJson()
-                    ? new JsonResponse(['redirect' => $this->redirectPath()], 204)
-                    : redirect($this->redirectPath());
+        if($method === 'phone') {
+            $returned = $request->user()->sendPhoneVerificationNotification();
+            if(is_object($returned) && $returned instanceof \Illuminate\View\View)
+            {
+                return $returned;
             }
+            $messages['login'] = $request->user()->phoneNumber;
+        }else if($method === 'email')
+        {
             $request->user()->sendEmailVerificationNotification();
             $messages['login'] = $request->user()->email;
-        }else if($method === 'phone')
-        {
-            if ($request->user()->hasVerifiedPhone()) {
-                return redirect($this->redirectPath());
-            }
-            $request->user()->sendEmailVerificationNotification();
-            $phone = $request->user()->phoneNumber;
-            $verification = $this->verify->startVerification($phone, 'sms');
-
-            if (!$verification->isValid()) {
-//                $errors = new MessageBag();
-//                foreach($verification->getErrors() as $error) {
-//                    $errors->add('verification', $error);
-//                }
-                return $request->wantsJson()
-                    ? new JsonResponse(['sent' => false, 'message' => "Can't send sms to this number ,ie.number doesn't exist"], 406)
-                    : back()->with('sent', false)->with('messages', ['message' => __('auth.sms_send_fail')]);
-            }
-            $messages['login'] = $phone;
         }else{
-            throw new AuthorizationException("invalid verification method was given");
+            throw new AuthenticationException("invalid verification method was given");
         }
-        $messages['message'] = __('auth.code_resent');
+        $messages['message'] = __("auth.code_sent");
         return $request->wantsJson()
-            ? new JsonResponse(['sent' => true], 202)
-            : back()->with('sent', true)->with('messages', $messages);
+            ? new JsonResponse(['success' => true], 200)
+            : redirect(route('verification.notice', ['method' => $method]))->with('messages', $messages);
     }
     private function getLoginMethod(Request $request)
     {
