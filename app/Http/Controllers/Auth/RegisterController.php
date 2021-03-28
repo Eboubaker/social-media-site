@@ -201,7 +201,6 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request,User $user)
     {
-
         $method = $this->getLoginMethod();
         $messages = [];
         if($method === 'phone') {
