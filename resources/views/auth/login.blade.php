@@ -18,7 +18,7 @@
             <div
                 class="grid grid-cols-1 ml-10 mr-10 pr-1 pl-1 text-center md:bg-white md:p-5 md:border-2 md:rounded-lg md:shadow-2xl md:text-center md:w-80 lg:bg-white lg:p-5 lg:border-2 lg:rounded-lg lg:shadow-2xl lg:w-96 lg:h-96"
             >
-                <form class="grid grid-cols-1 gap-4" action method="post">@csrf
+                <form class="grid grid-cols-1 gap-4" action="{{ route('login') }}" method="post">@csrf
                     {{-- TODO: integrate errors inside the UI --}}
                     {{-- https://laravel.com/docs/8.x/validation#the-at-error-directive --}}
                     @if ($errors->any())
@@ -33,7 +33,7 @@
                     <input
                         class="p-2 font-medium border-2 outline-none rounded-lg"
                         type="text"
-                        name="email_phone"
+                        name="login"
                         placeholder="Email or Phone Number"
                     />
                     <input

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Postable extends BaseModel
 {
     use HasFactory, Commentable;
+
     public const PKEY = 'id';
     protected $primaryKey = self::PKEY;
     protected $guarded = [];

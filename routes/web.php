@@ -40,11 +40,10 @@ Route::group([
 
     //--- AUTH TEST
     Route::get('/',function(){
-        return "This is the home page you are " . (Auth::guest() ? "not" : "") . " logged in " . (Auth::guest() ? "" : (" and your account is " . (Auth::user()->isVerified() ? "" : "not")." verified"));
+        return view('welcome');
     });
-
-    Route::post('/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 });
+Route::post('/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 
 
 // redirect with default locale if no locale is in the url

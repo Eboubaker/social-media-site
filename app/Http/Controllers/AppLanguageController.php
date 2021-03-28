@@ -12,12 +12,16 @@ class AppLanguageController extends Controller
      */
     public function update()
     {
-        if(in_array(request('locale'), config('app.locales'), true))
+        $response = response();
+        $result = in_array(request('locale'), config('app.locales'), true);
+        if($result)
         {
-            response()->cookie(cookie(cookie('locale', request('locale'))));
+            $response->cookie(['locale', request('locale')]);
         }
-        return request()->wantsJson()
-                ? response()->json(['success' => true], 201)
-                : back();
+        return  request()->wantsJson()
+                ? $response->json(['success' => $result], 201)
+                : $response->redirectTo(back()->getTargetUrl());
     }
+
+
 }

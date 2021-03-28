@@ -39,11 +39,16 @@ class AppServiceProvider extends ServiceProvider
             $seg = request()->segment(1);
             if(in_array($seg, config('app.locales'), true))
             {
+                // if the current url already contains a locale return it
                 return $seg;
             }
-            if(!empty(request()->cookie('locale'))) {
+            if(!empty(request()->cookie('locale')))
+            {
+                // if the user's 'locale' cookie is set we want to use it
                 $locale = request()->cookie('locale');
             }else{
+                // most browsers now will send the user's prefered language with the request
+                // so we just read it
                 $locale = request()->server('HTTP_ACCEPT_LANGUAGE');
                 $locale = substr($locale, 0, 2);
             }
@@ -51,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
             {
                 return $locale;
             }
+            // if the cookie or the browser's locale is invalid or unknown we fallback
             return config('app.fallback_locale');
         });
     }

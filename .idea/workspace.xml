@@ -24,13 +24,13 @@
   <component name="ChangeListManager">
     <list default="true" id="65bd1ddc-7596-43e6-98ac-c8f506ba5a12" name="Default Changelist" comment="added localization support, now the registration controllers are working, bugs are unkown...">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AppLanguageController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AppLanguageController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Morphs/Postable.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Morphs/Postable.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Morphs/Profileable.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Morphs/Profileable.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lang/ar/validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/ar/validation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/auth/verify.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/verify.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/login.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/login.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/welcome.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -54,7 +54,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpDebugGeneral" xdebug_force_break_when_no_path_mapping="false" xdebug_force_break_when_outside_project="false" />
+  <component name="PhpDebugGeneral" listening_started="true" xdebug_force_break_when_no_path_mapping="false" xdebug_force_break_when_outside_project="false" />
   <component name="PhpServers">
     <servers>
       <server host="127.0.0.1" id="dc4a6177-791a-4f9b-9f9e-0f86051e2c89" name="127.0.0.1" port="8000" />
@@ -321,7 +321,8 @@
       <workItem from="1616608363094" duration="8665000" />
       <workItem from="1616698593773" duration="12182000" />
       <workItem from="1616753955510" duration="32030000" />
-      <workItem from="1616831398905" duration="510000" />
+      <workItem from="1616831398905" duration="8769000" />
+      <workItem from="1616923827800" duration="3593000" />
     </task>
     <task id="LOCAL-00001" summary="i should stop working on the database this circle won't end">
       <created>1616015972174</created>
@@ -404,14 +405,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="441" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1366.728@0.0.1366.728" timestamp="1616502767767" />
-    <state x="81" y="117" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1616779408538">
+    <state x="81" y="117" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1616924861232">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="81" y="117" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1616779408538" />
-    <state width="645" height="466" key="DebuggerActiveHint" timestamp="1616776693339">
+    <state x="81" y="117" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1616924861232" />
+    <state x="502" y="137" key="#com.jetbrains.php.refactoring.extractMethod.PhpExtractMethodDialog#method0" timestamp="1616841447608">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="645" height="466" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1616776693339" />
+    <state x="502" y="137" key="#com.jetbrains.php.refactoring.extractMethod.PhpExtractMethodDialog#method0/0.0.1366.728@0.0.1366.728" timestamp="1616841447608" />
+    <state x="825" y="99" key="#com.jetbrains.php.refactoring.extractMethod.PhpExtractMethodDialog#method1" timestamp="1616841443486">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="825" y="99" key="#com.jetbrains.php.refactoring.extractMethod.PhpExtractMethodDialog#method1/0.0.1366.728@0.0.1366.728" timestamp="1616841443486" />
+    <state width="645" height="466" key="DebuggerActiveHint" timestamp="1616925367379">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="645" height="466" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1616925367379" />
     <state x="92" y="92" width="1182" height="544" maximized="true" key="DiffContextDialog" timestamp="1615975057625">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -420,38 +429,38 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1616090693209" />
-    <state width="1323" height="351" key="GridCell.Tab.0.bottom" timestamp="1616783591558">
+    <state width="1323" height="190" key="GridCell.Tab.0.bottom" timestamp="1616926584846">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="351" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1616783591558" />
-    <state width="1323" height="351" key="GridCell.Tab.0.center" timestamp="1616783591558">
+    <state width="1323" height="190" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1616926584846" />
+    <state width="1323" height="190" key="GridCell.Tab.0.center" timestamp="1616926584845">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="351" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1616783591558" />
-    <state width="1323" height="351" key="GridCell.Tab.0.left" timestamp="1616783591558">
+    <state width="1323" height="190" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1616926584845" />
+    <state width="1323" height="190" key="GridCell.Tab.0.left" timestamp="1616926584845">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="351" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1616783591558" />
-    <state width="1323" height="351" key="GridCell.Tab.0.right" timestamp="1616783591558">
+    <state width="1323" height="190" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1616926584845" />
+    <state width="1323" height="190" key="GridCell.Tab.0.right" timestamp="1616926584845">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="351" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1616783591558" />
-    <state width="1323" height="351" key="GridCell.Tab.1.bottom" timestamp="1616783591559">
+    <state width="1323" height="190" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1616926584845" />
+    <state width="1323" height="190" key="GridCell.Tab.1.bottom" timestamp="1616926584846">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="351" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1616783591559" />
-    <state width="1323" height="351" key="GridCell.Tab.1.center" timestamp="1616783591559">
+    <state width="1323" height="190" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1616926584846" />
+    <state width="1323" height="190" key="GridCell.Tab.1.center" timestamp="1616926584846">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="351" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1616783591559" />
-    <state width="1323" height="351" key="GridCell.Tab.1.left" timestamp="1616783591559">
+    <state width="1323" height="190" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1616926584846" />
+    <state width="1323" height="190" key="GridCell.Tab.1.left" timestamp="1616926584846">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="351" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1616783591559" />
-    <state width="1323" height="351" key="GridCell.Tab.1.right" timestamp="1616783591559">
+    <state width="1323" height="190" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1616926584846" />
+    <state width="1323" height="190" key="GridCell.Tab.1.right" timestamp="1616926584846">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="351" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1616783591559" />
+    <state width="1323" height="190" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1616926584846" />
     <state x="563" y="94" width="555" height="557" key="NewPhpClassDialog" timestamp="1616525107312">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -500,10 +509,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" width="672" height="677" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1616774015843" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1616793993102">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1616926780814">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1616793993102" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1616926780814" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -542,11 +551,6 @@
           <url>file://$PROJECT_DIR$/app/Http/Controllers/HomeController.php</url>
           <line>25</line>
           <option name="timeStamp" value="63" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/vendor/laravel/ui/auth-backend/AuthenticatesUsers.php</url>
-          <line>20</line>
-          <option name="timeStamp" value="64" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/database/migrations/2021_03_23_131516_create_notifications_table.php</url>
@@ -597,6 +601,36 @@
           <url>file://$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php</url>
           <line>187</line>
           <option name="timeStamp" value="97" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php</url>
+          <line>171</line>
+          <option name="timeStamp" value="98" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php</url>
+          <line>75</line>
+          <option name="timeStamp" value="101" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Auth/SessionGuard.php</url>
+          <line>355</line>
+          <option name="timeStamp" value="103" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php</url>
+          <line>97</line>
+          <option name="timeStamp" value="104" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php</url>
+          <line>110</line>
+          <option name="timeStamp" value="106" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php</url>
+          <line>127</line>
+          <option name="timeStamp" value="108" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
