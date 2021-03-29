@@ -50,8 +50,8 @@
     }
     function viewLoop(viewContainer) {
         let diff = new Date().getTime() - lastInteraction;
+        const view = viewContainer.querySelector(".scroll-view");
         if (diff > 5000) {
-            const view = viewContainer.querySelector(".scroll-view");
             const viewSlide = view.querySelector(".view-slide");
             const dir = parseInt(view.getAttribute('scroll-dir'));
             if (viewSlide.children.length > 0) {
@@ -63,7 +63,7 @@
                 checkButtons(viewContainer, newval);
             }
             setTimeout(viewLoop, view.getAttribute('scroll-interval') ?? 2000, viewContainer);
-        }else{
+        }else if(view.classList.contains('keep-scrolling')){
             setTimeout(viewLoop, diff>0?diff:1000, viewContainer);
         }
     }

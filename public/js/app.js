@@ -1978,11 +1978,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
   function viewLoop(viewContainer) {
     var diff = new Date().getTime() - lastInteraction;
+    var view = viewContainer.querySelector(".scroll-view");
 
     if (diff > 5000) {
       var _view$getAttribute;
 
-      var view = viewContainer.querySelector(".scroll-view");
       var viewSlide = view.querySelector(".view-slide");
       var dir = parseInt(view.getAttribute('scroll-dir'));
 
@@ -1998,7 +1998,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
 
       setTimeout(viewLoop, (_view$getAttribute = view.getAttribute('scroll-interval')) !== null && _view$getAttribute !== void 0 ? _view$getAttribute : 2000, viewContainer);
-    } else {
+    } else if (view.classList.contains('keep-scrolling')) {
       setTimeout(viewLoop, diff > 0 ? diff : 1000, viewContainer);
     }
   }
