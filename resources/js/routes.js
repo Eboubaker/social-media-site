@@ -16,7 +16,7 @@ export default {
             component: Home
         },
         {
-            path: "/about",
+            path: "/about/",
             component: About
         },
         {
@@ -41,7 +41,7 @@ export default {
         },
         {
             name: "post",
-            path: "/post",
+            path: "ar/post",
             component: Post
         },
         {

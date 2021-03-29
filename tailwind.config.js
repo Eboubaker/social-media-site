@@ -12,11 +12,11 @@ module.exports = {
                     red: "#f05454",
                     black: "#222831",
                     white: "#ffffff"
-                }
+                },
             },
             lineHeight: {
                 "12": "250px"
-            }
+            },
         }
     },
     variants: {

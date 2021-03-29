@@ -16,11 +16,12 @@
     {{-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"> --}}
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('css/lightslider.css')}}" />
-    <script src="{{asset('js/jQuery.js')}}"></script>
-    <script src="{{asset('js/lightslider.js')}}"></script>
-    
-{{--    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"--}}
+    {{-- <link rel="stylesheet" href="{{asset('css/lightslider.css')}}" /> --}}
+    @stack('header')
+    {{-- <script src="{{asset('js/jQuery.js')}}"></script> --}}
+    {{-- <script src="{{asset('js/lightslider.js')}}"></script> --}}
+
+    {{--    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"--}}
 {{--          rel="stylesheet">--}}
 </head>
 <body class="text-logo-black">
@@ -28,7 +29,6 @@
         @yield('content')
     </div>
     @stack('scripts')
-    <script src="{{asset('js/script.js')}}"></script>
 </body>
 
 </html>

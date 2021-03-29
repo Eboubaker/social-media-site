@@ -1,6 +1,7 @@
 
 require('./bootstrap.js');
-require('./int-tel-input');
+require('./scroll-view');
+// require('./int-tel-input');
 
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
