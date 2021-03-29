@@ -1922,8 +1922,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   var lastInteraction = 0;
 
   function btnEvent() {
-    var _this = this;
-
     var btnClass;
     this.classList.forEach(function (j) {
       if (j === 'scroll-right' || j === 'scroll-left') btnClass = j;
@@ -1938,18 +1936,43 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var otherBtn = this.parentElement.getElementsByClassName(thisisleft ? 'scroll-right' : 'scroll-left')[0];
       var newval = view.scrollLeft + view.children[0].offsetWidth * (thisisright ? 1 : -1);
       view.scrollLeft = newval;
+      checkButtons(view.parentElement, newval);
+    }
+  }
 
-      if (otherBtn.hidden) {
-        otherBtn.hidden = false;
-        otherBtn.classList.remove('opacity-0');
-      }
+  function constrain(a, mi, ma) {
+    return a > ma ? ma : a < mi ? mi : a;
+  }
 
-      if (thisisleft && newval <= 0 || thisisright && newval + view.offsetWidth >= view.scrollWidth) {
-        this.classList.add('opacity-0');
-        setTimeout(function () {
-          return _this.hidden = true;
-        }, 300);
-      }
+  function checkButtons(viewContainer, scrollVal) {
+    var view = viewContainer.querySelector(".scroll-view");
+    var lbtn = viewContainer.querySelector('.scroll-left');
+    var rbtn = viewContainer.querySelector('.scroll-right');
+    var max = view.scrollWidth - view.offsetWidth;
+    var scale = constrain(scrollVal, 0, max) / max;
+
+    if (scale === 1 && !rbtn.hidden) {
+      rbtn.classList.add('opacity-0');
+      setTimeout(function () {
+        return rbtn.hidden = true;
+      }, 300);
+    }
+
+    if (scale === 0 && !lbtn.hidden) {
+      lbtn.classList.add('opacity-0');
+      setTimeout(function () {
+        return lbtn.hidden = true;
+      }, 300);
+    }
+
+    if (scale > 0 && lbtn.hidden) {
+      lbtn.hidden = false;
+      lbtn.classList.remove('opacity-0');
+    }
+
+    if (scale < 1 && rbtn.hidden) {
+      rbtn.hidden = false;
+      rbtn.classList.remove('opacity-0');
     }
   }
 
@@ -1970,6 +1993,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         if (newval <= 0 && dir === -1 || newval + view.offsetWidth >= view.scrollWidth && dir === 1) {
           view.setAttribute('scroll-dir', dir * -1);
         }
+
+        checkButtons(viewContainer, newval);
       }
 
       setTimeout(viewLoop, (_view$getAttribute = view.getAttribute('scroll-interval')) !== null && _view$getAttribute !== void 0 ? _view$getAttribute : 2000, viewContainer);
@@ -1978,7 +2003,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   }
 
-  window.onload = function () {
+  window.addEventListener('load', function () {
     var _iterator = _createForOfIteratorHelper(document.getElementsByClassName('scroll-view')),
         _step;
 
@@ -2002,7 +2027,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     } finally {
       _iterator.f();
     }
-  };
+  });
 })();
 
 /***/ }),

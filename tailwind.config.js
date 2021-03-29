@@ -2,7 +2,8 @@ module.exports = {
     purge: [
         "./resources/**/*.blade.php",
         "./resources/**/*.js",
-        "./resources/**/*.vue"
+        "./resources/**/*.vue",
+        "/storage/app/framework/views/*.php"
     ],
     darkMode: false, // or 'media' or 'class'
     theme: {

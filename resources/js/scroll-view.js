@@ -15,15 +15,37 @@
             const otherBtn = this.parentElement.getElementsByClassName(thisisleft ? 'scroll-right' : 'scroll-left')[0];
             const newval = view.scrollLeft + view.children[0].offsetWidth * (thisisright ? 1 : -1);
             view.scrollLeft = newval;
-            if (otherBtn.hidden) {
-                otherBtn.hidden = false;
-                otherBtn.classList.remove('opacity-0');
-            }
-            if (thisisleft && newval <= 0
-                || thisisright && newval + view.offsetWidth >= view.scrollWidth) {
-                this.classList.add('opacity-0');
-                setTimeout(() => this.hidden = true, 300);
-            }
+            checkButtons(view.parentElement, newval);
+        }
+    }
+    function constrain(a, mi, ma)
+    {
+        return a > ma ? ma : (a < mi ? mi : a);
+    }
+    function checkButtons(viewContainer, scrollVal)
+    {
+        const view = viewContainer.querySelector(".scroll-view");
+        const lbtn = viewContainer.querySelector('.scroll-left');
+        const rbtn = viewContainer.querySelector('.scroll-right');
+        const max = view.scrollWidth-view.offsetWidth;
+        const scale = constrain(scrollVal, 0, max) / max;
+        if (scale === 1 && !rbtn.hidden) {
+            rbtn.classList.add('opacity-0');
+            setTimeout(() => rbtn.hidden = true, 300);
+        }
+        if (scale === 0 && !lbtn.hidden) {
+            lbtn.classList.add('opacity-0');
+            setTimeout(() => lbtn.hidden = true, 300);
+        }
+        if(scale > 0 && lbtn.hidden)
+        {
+            lbtn.hidden = false;
+            lbtn.classList.remove('opacity-0');
+        }
+        if(scale < 1 && rbtn.hidden)
+        {
+            rbtn.hidden = false;
+            rbtn.classList.remove('opacity-0');
         }
     }
     function viewLoop(viewContainer) {
@@ -38,14 +60,14 @@
                 if (newval <= 0 && dir === -1 || newval + view.offsetWidth >= view.scrollWidth && dir === 1) {
                     view.setAttribute('scroll-dir', dir * -1);
                 }
+                checkButtons(viewContainer, newval);
             }
             setTimeout(viewLoop, view.getAttribute('scroll-interval') ?? 2000, viewContainer);
         }else{
             setTimeout(viewLoop, diff>0?diff:1000, viewContainer);
         }
     }
-
-    window.onload = function () {
+    window.addEventListener('load', function () {
         for (const view of document.getElementsByClassName('scroll-view')) {
             const container = view.parentElement;
             container.getElementsByClassName('scroll-left')[0].onclick = btnEvent;
@@ -56,5 +78,5 @@
                 setTimeout(viewLoop, view.getAttribute('scroll-interval') ?? 3000, view.parentElement);
             }
         }
-    }
+    });
 })();

@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class Button extends Component
+class ScrollView extends Component
 {
     /**
      * Create a new component instance.
@@ -23,6 +23,6 @@ class Button extends Component
      */
     public function render()
     {
-        return view('components.button');
+        return view('components.scroll-view');
     }
 }
