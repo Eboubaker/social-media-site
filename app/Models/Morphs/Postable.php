@@ -39,4 +39,9 @@ class Postable extends BaseModel
     {
         return $this->morphTo('profileable');
     }
+
+    public function taggedProfiles()
+    {
+        return $this->morphTo('profileable');
+    }
 }
