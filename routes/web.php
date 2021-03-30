@@ -42,6 +42,9 @@ Route::group([
     Route::get('/',function(){
         return view('welcome');
     });
+    Route::get('/feed',function(){
+        return view('feed');
+    });
 });
 Route::post('/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 

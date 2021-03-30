@@ -25,6 +25,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "@tailwindcss/forms": "^0.3.2",
         "intl-tel-input": "^17.0.12",
         "laravel-echo": "^1.10.0",
         "laravel-mix-purgecss": "^6.0.0",

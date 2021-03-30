@@ -15,6 +15,41 @@
     {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
     {{-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"> --}}
     <!-- Styles -->
+    
+<style>
+    .content {
+        overflow-y: scroll;
+        -webkit-mask-image: linear-gradient(to top, transparent, gray),
+        linear-gradient(to left, transparent , gray );
+        -webkit-mask-size: 100% 20000px;
+        -webkit-mask-position: left bottom;
+        transition: mask-position 0.3s, -webkit-mask-position 0.3s;
+    }
+  
+    .content:hover {
+        -webkit-mask-position: left top;
+    }
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: white; 
+        border-radius: 5px;
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888; 
+        border-radius: 5px;
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555; 
+    }
+</style>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     {{-- <link rel="stylesheet" href="{{asset('css/lightslider.css')}}" /> --}}
     @stack('header')
@@ -25,6 +60,7 @@
 {{--          rel="stylesheet">--}}
 </head>
 <body class="text-logo-black">
+    @include('layouts.top-nav')
     <div id="app">
         @yield('content')
     </div>
