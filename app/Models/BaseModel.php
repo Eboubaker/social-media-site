@@ -60,4 +60,9 @@ class BaseModel extends Model
     {
         $this->setAttribute('public_id', Str::random(self::PUBLIC_ID_LEN));
     }
+
+    public function joinMe(Builder $query, Model $model)
+    {
+        $query->join($this->getTable(), $this->getKey(), $model->getForeignKey());
+    }
 }

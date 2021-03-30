@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Models\Traits\MustVerifyPhone;
 use App\Notifications\EmailVerificationNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\JsonEncodingException;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -17,8 +19,8 @@ use Illuminate\Support\Str;
 /**
  * @property ProfileImage profileImage
  * @property UserSettings settings
- * @property BusinessProfile businessProfile
- * @property SocialProfile socialProfile
+ * @property Collection businessProfiles
+ * @property Collection socialProfiles
  * @property string lastName
  * @property string firstName
  * @property string public_id
@@ -26,6 +28,7 @@ use Illuminate\Support\Str;
  * @property string email
  * @property \DateTime phone_verified_at
  * @property \DateTime email_verified_at
+ *
  *
  * @method static User create(array $array)
  */
@@ -85,15 +88,14 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(UserSettings::class);
     }
 
-    public function businessProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function businessProfiles(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasOne(BusinessProfile::class);
+        return $this->hasMany(BusinessProfile::class);
     }
-    public function socialProfile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function socialProfiles(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasOne(SocialProfile::class);
+        return $this->hasMany(SocialProfile::class);
     }
-
     //----- ATTRIBUTES -------//
     public function getFirstNameAttribute()
     {
