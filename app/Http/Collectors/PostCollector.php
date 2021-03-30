@@ -10,6 +10,7 @@ use App\Models\Post;
 use App\Models\SocialProfile;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class PostCollector
 {
@@ -28,23 +29,40 @@ class PostCollector
         return $this->query->get();
     }
 
+    /**
+     * @return Builder
+     */
     public function query()
     {
         return $this->query;
     }
 
+    /**
+     * @param Profileable $profile
+     * @return $this
+     */
     public function forProfile(Profileable $profile)
     {
         $this->query->where([['profileable_type', $profile->getMorphClass()],
                              ['profileable_id'  , $profile->getKey()]]);
         return $this;
     }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
     public function forUser(User $user)
     {
         $this->forUserBusinessProfiles($user);
         $this->forUserSocialProfiles($user);
         return $this;
     }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
     public function forUserSocialProfiles(User $user)
     {
         // TODO: eagerLoad socialProfiles into the query itself
@@ -55,6 +73,11 @@ class PostCollector
         }
         return $this;
     }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
     public function forUserBusinessProfiles(User $user)
     {
         // TODO: eagerLoad socialProfiles into the query itself
@@ -65,14 +88,28 @@ class PostCollector
         }
         return $this;
     }
+
+    /**
+     * @param string $hashTag
+     * @return $this
+     */
     public function forHashTag(string $hashTag)
     {
         // TODO: maybe... just maybe.. search in comments of the posts too ???
         $this->query->whereRaw("JSON_SEARCH(content, 'one', ?, '', '$.body')", "%#$hashTag%");
         return $this;
     }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
     public function whereUserTagged(User $user)
     {
-        
+
+    }
+    public function whereProfileTagged(Profile $profile)
+    {
+        $this->query->where();
     }
 }
