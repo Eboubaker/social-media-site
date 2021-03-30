@@ -20,6 +20,9 @@ class PostCollector
         $this->query = Post::query();
     }
 
+    /**
+     * @return Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function get()
     {
         return $this->query->get();
@@ -34,11 +37,13 @@ class PostCollector
     {
         $this->query->where([['profileable_type', $profile->getMorphClass()],
                              ['profileable_id'  , $profile->getKey()]]);
+        return $this;
     }
     public function forUser(User $user)
     {
         $this->forUserBusinessProfiles($user);
         $this->forUserSocialProfiles($user);
+        return $this;
     }
     public function forUserSocialProfiles(User $user)
     {
@@ -48,6 +53,7 @@ class PostCollector
         {
             $this->query->where('profileable_type', $profiles->first()->getMorphClass())->whereIn('profileable_id', $profiles->all());
         }
+        return $this;
     }
     public function forUserBusinessProfiles(User $user)
     {
@@ -57,8 +63,15 @@ class PostCollector
         {
             $this->query->where('profileable_type', $profiles->first()->getMorphClass())->whereIn('profileable_id', $profiles->all());
         }
+        return $this;
     }
     public function forHashTag(string $hashTag)
+    {
+        // TODO: maybe... just maybe.. search in comments of the posts too ???
+        $this->query->whereRaw("JSON_SEARCH(content, 'one', ?, '', '$.body')", "%#$hashTag%");
+        return $this;
+    }
+    public function whereUserTagged(User $user)
     {
         
     }
