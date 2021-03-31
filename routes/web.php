@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\PostController;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Models\Comment;
@@ -47,6 +48,7 @@ Route::group([
     });
 });
 Route::post('/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
+Route::get("/api/test", [PostController::class, "create"]);
 
 
 // redirect with default locale if no locale is in the url
@@ -54,7 +56,6 @@ Route::get('/', function () {
     return redirect(app('locale-for-client'));
 });
 \Illuminate\Support\Facades\URL::defaults(['locale' => app('locale-for-client')]);
-
 
 
 

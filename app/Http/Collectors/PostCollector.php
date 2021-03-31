@@ -24,7 +24,7 @@ class PostCollector
     /**
      * @return Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function get()
+    public function collected()
     {
         return $this->query->get();
     }

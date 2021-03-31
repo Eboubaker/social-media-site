@@ -47,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
                 // if the user's 'locale' cookie is set we want to use it
                 $locale = request()->cookie('locale');
             }else{
-                // most browsers now will send the user's prefered language with the request
+                // most browsers now will send the user's preferred language with the request
                 // so we just read it
                 $locale = request()->server('HTTP_ACCEPT_LANGUAGE');
                 $locale = substr($locale, 0, 2);

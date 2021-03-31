@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 /**
  * @property ProfileImage profileImage
  * @property UserSettings settings
+ * @property SocialProfile|BusinessProfile activeProfile
  * @property Collection|BusinessProfile[] businessProfiles
  * @property Collection|SocialProfile[] socialProfiles
  * @property string lastName

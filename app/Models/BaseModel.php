@@ -27,9 +27,9 @@ use Illuminate\Support\Str;
  * @method static Builder whereHas()
  * @method static Builder whereDoesntHave()
  * @method static self make()
- * @method static self create()
+ * @method static self create(array $data)
  * @method static self first()
- *
+ * @method static self find($id)
  * @method static Collection all()
  * @method static Collection get($columns='*')
  *
