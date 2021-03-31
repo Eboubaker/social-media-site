@@ -1,4 +1,4 @@
-<div class="my-4 px-2 rounded-lg shadow-lg bg-white">
+<div class="my-0 md:my-4 px-2 rounded-lg shadow-lg bg-white">
   <div class="flex flex-row justify-between items-center">
     <div class="flex justify-start items-center pt-2 px-4 space-x-2">
       <a class="" href>
@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="relative items-center">
-      <button class="relative z-10 rounded-full bg-gray-50 hover:bg-red-100 hover:text-red-400 h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer" :class="isOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'" @click="isOpen = !isOpen">
+      <button class="relative z-10 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer" :class="isOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'" @click="isOpen = !isOpen">
         <svg class="w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
         </svg>
@@ -54,7 +54,7 @@
       </div>
     </div>
   </div>
-  <div class="px-4 py-2 h-">
+  <div class="px-4 py-2">
     <p>Accusantium blanditiis quas animi voluptate itaque aspernatur dignissimos, eaque mollitia ullam sit ad corporis, similique minus voluptas earum ipsam facere libero hic fugit rerum, aut fugiat aliquid. Id, unde laudantium. Blanditiis recusandae magnam debitis ad facere. Labore eaque minus, natus sed molestiae dolor tenetur rem at numquam commodi illum tempora hic? Numquam deserunt natus vitae fugiat. Sapiente assumenda rerum odio! Totam, ut. Similique, deserunt? Dolore eligendi voluptatem quae laboriosam accusantium tenetur error quam. A deserunt dolore soluta numquam perferendis enim ducimus quasi laborum, dolorum autem quos rem similique molestiae porro! Maxime sit obcaecati voluptatibus nulla eos et aspernatur rerum accusantium ipsa itaque vel sequi quasi nihil, similique officia quia aliquid dicta odio magnam? Repudiandae recusandae ab unde itaque illum id!</p>
   </div>
   <div class="flex justify-between px-2 text-sm">
@@ -90,11 +90,11 @@
       <p class="ml-1 text-lg">Share</p>
     </button>
   </div>
-  <div class="space-y-2 border-t-2 pt-4">
+  <div class="space-y-2 border-t-2 pt-4 pb-2">
     <div class="flex justify-between items-center space-x-2">
       <img class="rounded-full w-10" src="/img/150x150.png" />
       <form class="flex-auto" action="#" method="#">
-        <input class="bg-gray-100 w-full rounded-r-full rounded-l-full py-2 px-2 outline-none focus:outline-none" type="text" name="comment" id="comment" placeholder="Add a comment..." />
+        <input class="bg-gray-100 w-full rounded-r-full rounded-l-full py-2 px-2 border-none focus:border-logo-black focus:ring-1 focus:ring-logo-black outline-none focus:outline-none" type="text" name="comment" id="comment" placeholder="Add a comment..." />
       </form>
     </div>
     <div class="grid md:grid-cols-12">
