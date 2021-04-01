@@ -55,6 +55,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'phone',
         'password',
+        'api_token'
     ];
     protected $hidden = [
         'password',
@@ -73,7 +74,10 @@ class User extends Authenticatable implements MustVerifyEmail
             if(empty($account->getAttribute('api_token')))
             {
                 // it will be hashed later by the api guard
-                $account->setAttribute('api_token', Str::random(80));
+                $token = Str::random(80);
+                if(config('auth.guards.api.hash'))
+                    $token = hash('sha256', $token);
+                $account->setAttribute('api_token', $token);
             }
         });
     }
@@ -173,4 +177,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return !empty($this->email) ? $this->email : $this->phoneNumber;
     }
 
+    public function singleUseToken()
+    {
+        $send = Str::random(80);
+        $stored = $send;
+        if(config('auth.guards.api.hash'))
+        {
+            $stored = hash('sha256', $stored);
+        }
+        $this->update(['api_token' => $stored]);
+        return $send;
+    }
 }

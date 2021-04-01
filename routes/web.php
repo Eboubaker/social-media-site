@@ -46,9 +46,9 @@ Route::group([
     Route::get('/feed',function(){
         return view('feed');
     });
+    Route::get("/posts/create", [PostController::class, "create"])->name('posts.create');
 });
 Route::post('/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
-Route::get("/api/test", [PostController::class, "create"]);
 
 
 // redirect with default locale if no locale is in the url

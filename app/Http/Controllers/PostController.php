@@ -13,7 +13,15 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
+    public function show(Post $post)
+    {
+        return view('post.show')->with($post);
+    }
     public function create(Request $request)
+    {
+        return view('post.create');
+    }
+    public function store(Request $request)
     {
         $exception = null;
         if(!$request->has('body'))
@@ -29,10 +37,9 @@ class PostController extends Controller
             report($exception);
             return response()->json(["message" => "invalid request"], 400);
         }
-        $post = Auth::user()->activeProfile->posts()->create(["content" => ["body" => $request->get('body')]]);
+        $post = auth('api')->user()->activeProfile->posts()->create(["content" => ["body" => $request->get('body')]]);
         return response()->json((new PostResource($post))->toJson());
     }
-
     public function destroy(Post $post)
     {
         if(DB::transaction(fn()=>$post->delete()))

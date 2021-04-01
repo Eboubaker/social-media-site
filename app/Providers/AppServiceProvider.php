@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Aloha\Twilio\Twilio;
 use App\Http\Middleware\SetLocale;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 use libphonenumber\PhoneNumberUtil;
@@ -68,6 +70,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
+        Blade::directive('apiToken', function () {
+            return "<input hidden name='api_token' value='{{ Auth::user()->singleUseToken() }}'/>";
+        });
     }
 }

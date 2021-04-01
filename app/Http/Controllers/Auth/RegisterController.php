@@ -115,7 +115,7 @@ class RegisterController extends Controller
     {
         $userData = [
             'password' => Hash::make($data['password']),
-            'api_token' => Str::random(80),
+//            'api_token' => Str::random(80),
         ];
         if($this->getLoginMethod() === 'email')
         {

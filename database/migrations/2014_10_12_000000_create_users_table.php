@@ -28,10 +28,9 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
 
             $table->string('password');
-            $table->string('api_token')->unique()->nullable()->default(null);
+            $table->string('api_token')->unique();
 
-            $table->unsignedBigInteger('used_profileable_id')->nullable()->default(null);
-            $table->string('active_profileable_type')->nullable()->default(null);
+            $table->morphs('active_profileable');
 
             $table->rememberToken();
             MigrationHelper::addTimeStamps($table, new User);

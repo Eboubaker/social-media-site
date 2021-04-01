@@ -15,12 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group([
-    'middleware' => 'auth:api'
-], static function(){
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-    Route::resource('post', PostController::class);
+Route::get('/user', function (Request $request) {
+    return $request->user();
 });
-
+Route::post('posts', [PostController::class, 'store'])->name('posts.store');
