@@ -60,7 +60,9 @@
 {{--          rel="stylesheet">--}}
 </head>
 <body class="text-logo-black">
-    @include('layouts.top-nav')
+    @if (Request::is('en/feed'))
+        @include('layouts.top-nav')
+    @endif
     <div id="app">
         @yield('content')
     </div>
