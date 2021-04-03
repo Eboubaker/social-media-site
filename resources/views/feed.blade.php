@@ -42,6 +42,6 @@
     <div class="hidden md:block md:w-96"></div>
 </div>
 <div>
-    @include('Posts.create-new')
+    @include('post.create')
 </div>
 @endsection
