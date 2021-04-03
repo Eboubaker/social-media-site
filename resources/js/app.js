@@ -1,6 +1,7 @@
 
 require('./bootstrap.js');
 require('./scroll-view');
+require('./create-posts');
 // require('./int-tel-input');
 
 // const files = require.context('./', true, /\.vue$/i);
