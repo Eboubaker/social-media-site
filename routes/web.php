@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
@@ -40,9 +41,7 @@ Route::group([
     Route::get('/verify/{method}/notice', [VerificationController::class, 'show'])->name('verification.notice');
 
     //--- AUTH TEST
-    Route::get('/',function(){
-        return view('welcome');
-    });
+    Route::get('/', [HomeController::class, 'index']);
     Route::get('/feed',function(){
         return view('feed');
     });

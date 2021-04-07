@@ -30,7 +30,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('api_token')->unique();
 
-            $table->morphs('active_profileable');
+            $table->unsignedBigInteger('active_profileable_id')->index()->nullable();
+            $table->string('active_profileable_type')->index()->nullable();
 
             $table->rememberToken();
             MigrationHelper::addTimeStamps($table, new User);

@@ -1,8 +1,13 @@
 <?php
 
-namespace Database\Seeders\Seeders;
+namespace Database\Seeders;
 
+use App\Models\SocialProfile;
+use App\Models\User;
+use App\Models\UserSettings;
+use Database\Factories\UserSettingsFactory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,6 +18,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+         $user = User::create([
+             "email" => "test@gmail.com",
+             "email_verified_at" => now(),
+             "password" => Hash::make("password"),
+         ]);
+         $user->socialProfiles()->create([
+             "data" => new \stdClass,
+         ]);
+        $user->businessProfiles()->create([
+            "data" => new \stdClass,
+        ]);
+        $user->settings()->create(UserSettings::factory()->make()->attributesToArray());
+
     }
 }
