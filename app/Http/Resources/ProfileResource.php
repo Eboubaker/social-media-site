@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Morphs\Profileable;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProfileResource extends JsonResource
@@ -15,7 +16,7 @@ class ProfileResource extends JsonResource
     public function toArray($request)
     {
         return [
-
+            "id" => $this->{Profileable::PKEY},
         ];
     }
 }

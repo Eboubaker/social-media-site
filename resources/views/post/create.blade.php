@@ -28,7 +28,7 @@
       <!--Body-->
         <form method="post" action="{{ route('posts.store') }}">
             @csrf
-            {{-- @apiToken --}}
+            @apiToken
             <div class="flex items-center space-x-2 my-4">
                 <a href="#"><img class="w-10 h-10 rounded-full" src="/img/150x150.png" alt=""></a>
                 <div>
