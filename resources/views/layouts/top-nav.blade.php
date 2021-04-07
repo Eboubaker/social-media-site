@@ -1,5 +1,4 @@
-
-<div class="sticky top-0 z-30 w-full mb-auto">
+<div class="sticky z-30 w-full">
     <div class="flex items-center justify-between px-4 py-1 bg-white">
       <div class="flex items-center space-x-2 w-1/3">
         <a title="Quick Look" href="/" alt="Quick Look">

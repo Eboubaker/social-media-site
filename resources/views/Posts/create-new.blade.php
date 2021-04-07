@@ -1,7 +1,3 @@
-{{-- @extends('layouts.app')
-
-
-@section('content') --}}
 <!--Modal-->
 <div class="modal z-20 opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center">
   <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
@@ -26,9 +22,7 @@
         </div>
 
       <!--Body-->
-        <form method="post" action="{{ route('posts.store') }}">
-            @csrf
-            @apiToken
+        <form class="" action="#">
             <div class="flex items-center space-x-2 my-4">
                 <a href="#"><img class="w-10 h-10 rounded-full" src="/img/150x150.png" alt=""></a>
                 <div>
@@ -38,7 +32,7 @@
                     </select>
                 </div>
             </div>
-            <textarea class="w-full h-52 rounded text-lg focus:ring-logo-red focus:border-logo-red"  name="body" id="content" placeholder="Write your post"></textarea>
+            <textarea class="w-full h-52 rounded text-lg focus:ring-logo-red focus:border-logo-red" name="content" id="content" placeholder="Write your post"></textarea>
             <div class="flex items-center justify-center space-x-4">
                 <input type="file" name="image" id="image" hidden>
                 <label title="upload image" class="flex items-center justify-center rounded-md p-2 w-12 cursor-pointer hover:bg-red-50 hover:text-logo-red transition-all ease-in-out" for="image">
@@ -65,4 +59,3 @@
     </div>
   </div>
 </div>
-{{-- @endsection --}}
