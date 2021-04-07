@@ -23,17 +23,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="40e05d06-9645-4292-9eae-e4645de396fb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/ApiTokenController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/post/create.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/css/scroll-design.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/layouts/main-layout.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PostController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/sass/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/resources/sass/app.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/components/scroll-view.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/components/scroll-view.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/feed.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/feed.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/left-side.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/left-side.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/right-side.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/right-side.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/layouts/top-nav.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/top-nav.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/post/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/post/create.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/welcome.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/welcome.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,7 +57,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpDebugGeneral" listening_started="true" />
   <component name="PhpServers">
     <servers>
       <server host="127.0.0.1" id="ab7d66ec-75a8-4d5f-840e-0f877b2f4d68" name="127.0.0.1" port="8000" />
@@ -295,38 +296,38 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="551" height="438" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1617201105109" />
-    <state width="1323" height="198" key="GridCell.Tab.0.bottom" timestamp="1617270478899">
+    <state width="1323" height="270" key="GridCell.Tab.0.bottom" timestamp="1617297534559">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="198" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1617270478899" />
-    <state width="1323" height="198" key="GridCell.Tab.0.center" timestamp="1617270478899">
+    <state width="1323" height="270" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1617297534559" />
+    <state width="1323" height="270" key="GridCell.Tab.0.center" timestamp="1617297534559">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="198" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1617270478899" />
-    <state width="1323" height="198" key="GridCell.Tab.0.left" timestamp="1617270478899">
+    <state width="1323" height="270" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1617297534558" />
+    <state width="1323" height="270" key="GridCell.Tab.0.left" timestamp="1617297534558">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="198" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1617270478899" />
-    <state width="1323" height="198" key="GridCell.Tab.0.right" timestamp="1617270478899">
+    <state width="1323" height="270" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1617297534558" />
+    <state width="1323" height="270" key="GridCell.Tab.0.right" timestamp="1617297534559">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="198" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1617270478899" />
-    <state width="1323" height="198" key="GridCell.Tab.1.bottom" timestamp="1617270478900">
+    <state width="1323" height="270" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1617297534559" />
+    <state width="1323" height="270" key="GridCell.Tab.1.bottom" timestamp="1617297534560">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="198" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1617270478900" />
-    <state width="1323" height="198" key="GridCell.Tab.1.center" timestamp="1617270478899">
+    <state width="1323" height="270" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1617297534560" />
+    <state width="1323" height="270" key="GridCell.Tab.1.center" timestamp="1617297534559">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="198" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1617270478899" />
-    <state width="1323" height="198" key="GridCell.Tab.1.left" timestamp="1617270478899">
+    <state width="1323" height="270" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1617297534559" />
+    <state width="1323" height="270" key="GridCell.Tab.1.left" timestamp="1617297534559">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="198" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1617270478899" />
-    <state width="1323" height="198" key="GridCell.Tab.1.right" timestamp="1617270478899">
+    <state width="1323" height="270" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1617297534559" />
+    <state width="1323" height="270" key="GridCell.Tab.1.right" timestamp="1617297534559">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="198" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1617270478899" />
+    <state width="1323" height="270" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1617297534559" />
     <state x="606" y="94" key="NewPhpClassDialog" timestamp="1617200023317">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

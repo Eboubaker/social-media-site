@@ -20,8 +20,8 @@ use Illuminate\Support\Str;
 
 Route::group([
     'prefix' => '{locale}',
-    'middleware' => 'setLocale'
 ], function() {
+    Route::get("/posts/create", [PostController::class, "create"])->name('posts.create');
 
     //-- Legal stuff
     Route::get('/terms',function(){
@@ -46,7 +46,6 @@ Route::group([
     Route::get('/feed',function(){
         return view('feed');
     });
-    Route::get("/posts/create", [PostController::class, "create"])->name('posts.create');
 });
 Route::post('/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 
