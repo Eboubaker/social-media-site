@@ -1,27 +1,48 @@
-<template>
-  <div class>
-    <div class="m-4 p-2 rounded-lg shadow-lg bg-white">
+<template
+  ><div class="w-11/12 mx-auto md:w-5/6">
+    <div class="my-0 md:my-4 px-2 rounded-lg shadow-lg bg-white">
       <div class="flex flex-row justify-between items-center">
         <div class="flex justify-start items-center pt-2 px-4 space-x-2">
-          <a class="bg-red-300" href>
-            <img class="w-14 rounded-full" src="img/150x150.png" alt="tree" />
+          <a class="" href>
+            <img
+              class="w-14 rounded-full"
+              :src="post.author.profileImage"
+              alt="tree"
+            />
           </a>
           <div class="flex flex-col -space-y-1">
             <a class="text-lg hover:underline" href>
-              <h4>Abdelhak</h4>
+              <h4>{ post.author.name }</h4>
             </a>
             <a class="hover:underline" href>
-              <small>24 m</small>
+              <small>{{ post.createdAt }}</small>
             </a>
           </div>
         </div>
         <div class="relative items-center">
           <button
-            class="relative z-10 rounded-full bg-gray-50 hover:bg-red-100 hover:text-red-400 h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer"
-            :class="isOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'"
+            class="relative z-10 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer"
+            :class="
+              isOpen
+                ? 'bg-red-100 text-logo-red hover:text-logo-red '
+                : 'bg-transparent'
+            "
             @click="isOpen = !isOpen"
           >
-            <span class="material-icons">more_horiz</span>
+            <svg
+              class="w-6"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+              />
+            </svg>
           </button>
           <button
             v-if="isOpen"
@@ -31,7 +52,7 @@
           ></button>
           <div
             :class="isOpen ? 'block' : 'hidden'"
-            class="absolute right-0 w-72 bg-white rounded-lg p-2"
+            class="hidden absolute right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
           >
             <div class="flex flex-col space-y-2">
               <a
@@ -77,15 +98,17 @@
         </div>
       </div>
       <div class="px-4 py-2">
-        <p>Accusantium blanditiis quas animi voluptate itaque aspernatur dignissimos, eaque mollitia ullam sit ad corporis, similique minus voluptas earum ipsam facere libero hic fugit rerum, aut fugiat aliquid. Id, unde laudantium. Blanditiis recusandae magnam debitis ad facere. Labore eaque minus, natus sed molestiae dolor tenetur rem at numquam commodi illum tempora hic? Numquam deserunt natus vitae fugiat. Sapiente assumenda rerum odio! Totam, ut. Similique, deserunt? Dolore eligendi voluptatem quae laboriosam accusantium tenetur error quam. A deserunt dolore soluta numquam perferendis enim ducimus quasi laborum, dolorum autem quos rem similique molestiae porro! Maxime sit obcaecati voluptatibus nulla eos et aspernatur rerum accusantium ipsa itaque vel sequi quasi nihil, similique officia quia aliquid dicta odio magnam? Repudiandae recusandae ab unde itaque illum id!</p>
+        <p>
+          { post.content.body }
+        </p>
       </div>
       <div class="flex justify-between px-2 text-sm">
         <div>
-          <a class="hover:underline" href="#">700 Likes</a>
+          <a class="hover:underline" href="#">{ post.likes }</a>
         </div>
         <div class="flex space-x-2">
           <div>
-            <a class="hover:underline" href="#">70 Comments</a>
+            <a class="hover:underline" href="#">{ post.commentsCount }</a>
           </div>
           <div>
             <a class="hover:underline" href="#">40 Shares</a>
@@ -93,7 +116,9 @@
         </div>
       </div>
       <div class="flex flex-row justify-evenly border-t">
-        <button class="flex items-center justify-center hover:bg-gray-100 rounded h-10 w-1/3 m-1">
+        <button
+          class="flex items-center justify-center hover:bg-gray-100 rounded h-10 w-1/3 m-1"
+        >
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -102,7 +127,9 @@
           </svg>
           <p class="ml-1 text-lg">Like</p>
         </button>
-        <button class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1">
+        <button
+          class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -119,7 +146,9 @@
           </svg>
           <p class="ml-1 text-lg">Comment</p>
         </button>
-        <button class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1">
+        <button
+          class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1"
+        >
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -129,26 +158,51 @@
           <p class="ml-1 text-lg">Share</p>
         </button>
       </div>
+      <div class="space-y-2 border-t-2 pt-4 pb-2">
+        <div class="flex justify-between items-center space-x-2">
+          <img class="rounded-full w-10" src="/img/150x150.png" />
+          <form class="flex-auto" action="#" method="#">
+            <input
+              class="bg-gray-100 w-full rounded-r-full rounded-l-full py-2 px-2 border-none focus:border-logo-black focus:ring-1 focus:ring-logo-black outline-none focus:outline-none"
+              type="text"
+              name="comment"
+              id="comment"
+              placeholder="Add a comment..."
+            />
+          </form>
+        </div>
+        <div class="grid md:grid-cols-12">
+          <a class="w-10 h-10 mr-2 md:mr-0" href="#"
+            ><img class="rounded-full" src="/img/150x150.png"
+          /></a>
+          <div
+            class="col-start-2 col-span-10 bg-gray-100 rounded-2xl px-3 py-1"
+          >
+            <a class="hover:underline font-semibold text-sm" href="#"
+              >Abdelhak</a
+            >
+            <p>
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque,
+              temporibus.
+            </p>
+          </div>
+          <div class="col-start-2 col-span-3 space-x-1 ml-4">
+            <a class="font-semibold text-sm hover:underline" href="#">Like</a>
+            <a class="font-semibold text-sm hover:underline" href="#">Replay</a>
+            <a class="text-sm hover:underline" href="#">1h</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      isOpen: false
-    };
+  props: {
+    post: {
+      type: Object,
+      default: null,
+    },
   },
-  created() {
-    const handleEscape = e => {
-      if (e.key === "Esc" || e.key === "Escape") {
-        this.isOpen = false;
-      }
-    };
-    document.addEventListener("keydown", handleEscape);
-    this.$once("hook:beforeDestroy", () => {
-      document.removeEventListener("keydown", handleEscape);
-    });
-  }
 };
 </script>

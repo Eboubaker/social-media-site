@@ -1,15 +1,14 @@
-
-require('./bootstrap.js');
-require('./scroll-view');
-require('./create-posts');
+require("./bootstrap.js");
+require("./scroll-view");
+require("./create-posts");
 // require('./int-tel-input');
 
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 //
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-import 'alpinejs';
+import Vue from "vue";
+import VueResource from "vue-resource";
+import "alpinejs";
 
 // tell Vue to use the vue-resource plugin
 Vue.use(VueResource);
@@ -21,7 +20,7 @@ window.Vue = Vue;
 // import routes from './routes';
 // Vue.use(VueRouter);
 
-// const app = new Vue({
-//     el: '#app',
-//     router: new VueRouter(routes)
-// });
+Vue.component("feed", require("./components/Feed.vue").default);
+var app = new Vue({
+  el: "#app",
+});

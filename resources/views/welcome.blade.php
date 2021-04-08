@@ -15,44 +15,4 @@
     </svg>
 </button>
 @include('Posts.create-new')
-
-<div x-data="{ open: false }">
-    <button @click="open = true">Open Dropdown</button>
-
-    <ul
-        x-show="open"
-        @click.away="open = false"
-    >
-        Dropdown Body
-    </ul>
-</div>
-<div class="notifications relative"  x-data="{ open: false }">
-    <button title="Notifications" @click="open = true" class="p-1 text-gray-500 bg-gray-100 hover:bg-red-50 hover:text-logo-red rounded-full focus:outline-none" type="button">drop</button>
-    <!-- Notifications Block -->
-      {{-- <div class="relative text-left" x-show="notificationOpen"> --}}
-          <div x-show="open" @click.away="open = false" class="origin-top-right absolute right-0 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="options-menu" >
-          <div class="flex flex-row justify-between items-center" role="none">
-              <p class="block px-4 py-2 text-xl text-gray-700" role="menuitem">Notifications</p>
-              <button class="hover:bg-gray-100 m-2 p-1 w-9 h-9 outline-none focus:outline-none rounded-full" >
-              drop</button>
-
-              <div class="absolute right-2 top-12 py-2 space-y-2 w-64 bg-white rounded-lg shadow-lg ring-1 ring-gray-200">
-                <a class="flex flex-row p-2 hover:bg-gray-100 items-center space-x-2" href="#">
-                    <p>mark all as read</p>
-                </a>
-              </div>
-          </div>
-          <div class="py-1 space-y-1" role="none">
-              <img class="rounded-full" width="50" src="/img/150x150.png" alt />
-              <div>
-                  <p>Abd Elhak</p>
-                  <p>Lorem ipsum dolor sit consectetur...</p>
-                  <p>23 m</p>
-              </div>
-              </a>
-          </div>
-          </div>
-      {{-- </div> --}}
-  </div>          
-      {{-- ````````````````Notifications end/```````````````` --}}
 @endsection
