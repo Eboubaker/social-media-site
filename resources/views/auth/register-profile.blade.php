@@ -13,8 +13,8 @@
                 <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                     <a
                             class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal cursor-pointer"
-                            v-on:click="toggleTabs(1)"
-                            v-bind:class="{'text-logo-black bg-white': openTab !== 1, 'text-white bg-logo-red': openTab === 1}"
+                            v-on:click="toggleTabs('{{ \App\Models\SocialProfile::class }}')"
+                            v-bind:class="{'text-logo-black bg-white': openTab !== '{{ \App\Models\SocialProfile::class }}', 'text-white bg-logo-red': openTab === '{{ \App\Models\SocialProfile::class }}'}"
                     >
                         <i class="fas fa-space-shuttle text-base mr-1"></i> Social Account
                     </a>
@@ -22,8 +22,8 @@
                 <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                     <a
                             class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal cursor-pointer"
-                            v-on:click="toggleTabs(2)"
-                            v-bind:class="{'text-logo-black bg-white': openTab !== 2, 'text-white bg-logo-black': openTab === 2}"
+                            v-on:click="toggleTabs('{{ \App\Models\BusinessProfile::class }}')"
+                            v-bind:class="{'text-logo-black bg-white': openTab !== '{{ \App\Models\BusinessProfile::class }}', 'text-white bg-logo-black': openTab === '{{ \App\Models\BusinessProfile::class }}'}"
                     >
                         <i class="fas fa-cog text-base mr-1"></i> Buisness Account
                     </a>
@@ -34,79 +34,82 @@
             >
                 <div class="px-4 py-5 flex-auto">
                     <div class="tab-content tab-space">
-                        <div v-bind:class="{'hidden': openTab !== 1, 'block': openTab === 1}">
-                            <p class="pb-4 text-center">Social Account for friends and family</p>
-                            <form class="grid grid-cols- gap-4 mx-2" action="./confirm">
-                                <input
-                                        class=""
-                                        type="text"
-                                        name="first-name"
-                                        id="first-name"
-                                        placeholder="First Name"
-                                />
-                                <input
-                                        class=""
-                                        type="text"
-                                        name="last-name"
-                                        id="last-name"
-                                        placeholder="Last Name"
-                                />
-                                <div class="flex space-x-2 justify-start items-center">
-                                    <label for="birth-date">Birhtday:</label>
+                        <form class="grid grid-cols- gap-4 mx-2" method='post' action="{{ route('register') }}">
+                        @csrf
+                            <input hidden v-model="choice" name='profileChoice'/>
+                            <div v-bind:class="{'hidden': openTab !== '{{ \App\Models\SocialProfile::class }}', 'block': openTab === '{{ \App\Models\SocialProfile::class }}'}">
+                                <p class="pb-4 text-center">Social Account for friends and family</p>
                                     <input
-                                        type="date"
-                                        name="birth-date"
-                                        id="birth-date" 
+                                            class=""
+                                            type="text"
+                                            name="first-name"
+                                            id="first-name"
+                                            placeholder="First Name"
                                     />
-                                </div>
-                                
-                                <input
-                                        class="rounded-md border-gray-300 focus:border-red-300 focus:ring-red-300 shadow-sm p-2 text-logo-white bg-logo-red hover:bg-red-500 cursor-pointer sm:mt-8 sm:w-1/2 sm:justify-self-center"
-                                        type="submit"
-                                        value="Next"
-                                />
-                            </form>
-                        </div>
-                        <div v-bind:class="{'hidden': openTab !== 2, 'block': openTab === 2}">
-                            <p class="pb-4 text-center">Buisness Account for colleuges and customers</p>
-                            <form class="grid grid-cols-1 gap-4 mx-2" action="./confirm">
+                                    <input
+                                            class=""
+                                            type="text"
+                                            name="last-name"
+                                            id="last-name"
+                                            placeholder="Last Name"
+                                    />
+                                    <div class="flex space-x-2 justify-start items-center">
+                                        <label for="birth-date">Birhtday:</label>
+                                        <input
+                                            type="date"
+                                            name="birth-date"
+                                            id="birth-date"
+                                        />
+                                    </div>
+                            </div>
+                            <div v-bind:class="{'hidden': openTab !== '{{ \App\Models\BusinessProfile::class }}', 'block': openTab === '{{ \App\Models\BusinessProfile::class }}'}">
+                                <p class="pb-4 text-center">Buisness Account for colleuges and customers</p>
+                                    <input
+                                            class="focus:border-logo-black focus:ring-logo-black"
+                                            type="text"
+                                            name="owner-full-name"
+                                            id="first-name"
+                                            placeholder="Owner full name"
+                                    />
+                                    <input
+                                            class="focus:border-logo-black focus:ring-logo-black"
+                                            type="text"
+                                            name="company-name"
+                                            id="company-name"
+                                            placeholder="Company Name"
+                                    />
+                                    <select
+                                            class="focus:border-logo-black focus:ring-logo-black"
+                                            name="job-category"
+                                            id="job-category"
+                                    >
+                                        <option selected>Business Category</option>
+                                        @foreach(\App\Models\BusinessCategory::all() as $category)
+                                            <option value="{{ $category->getKey() }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
+                            <div v-bind:class="{'hidden': openTab !== 'credentials', 'block': openTab === 'credentials'}">
+                                <p class="pb-4 text-center">Account credentials</p>
                                 <input
                                         class="focus:border-logo-black focus:ring-logo-black"
                                         type="text"
-                                        name="first-name"
-                                        id="first-name"
-                                        placeholder="First Name"
+                                        name="login"
+                                        placeholder="email or phone"
                                 />
                                 <input
                                         class="focus:border-logo-black focus:ring-logo-black"
-                                        type="text"
-                                        name="last-name"
-                                        id="last-name"
-                                        placeholder="Last Name"
+                                        type="password"
+                                        name="password"
+                                        placeholder="password"
                                 />
-                                <input
-                                        class="focus:border-logo-black focus:ring-logo-black"
-                                        type="text"
-                                        name="company-name"
-                                        id="company-name"
-                                        placeholder="Company Name"
-                                />
-                                <select
-                                        class="focus:border-logo-black focus:ring-logo-black"
-                                        name="job-category"
-                                        id="job-category"
-                                >
-                                    <option value="buisness-category" selected>Buisness Category</option>
-                                    <option value="food">Food</option>
-                                    <option value="transport">Transport</option>
-                                </select>
-                                <input
-                                        class="rounded-md border-gray-300 focus:border-red-300 focus:ring-red-300 shadow-sm p-2 text-logo-white bg-logo-black hover:bg-gray-900 cursor-pointer sm:mt-8 sm:w-1/2 sm:justify-self-center"
-                                        type="submit"
-                                        value="Next"
-                                />
-                            </form>
-                        </div>
+                            </div>
+                            <button type="button" v-bind:class="{'hidden': openTab === 'credentials', 'block': openTab !== 'credentials'}" class="rounded-md border-gray-300 focus:border-red-300 focus:ring-red-300 shadow-sm p-2 text-logo-white bg-logo-black hover:bg-gray-900 cursor-pointer sm:mt-8 sm:w-1/2 sm:justify-self-center"
+                            v-on:click="toggleTabs('credentials')">Next</button>
+                            <button v-bind:class="{'hidden': openTab !== 'credentials', 'block': openTab === 'credentials'}" class="rounded-md border-gray-300 focus:border-red-300 focus:ring-red-300 shadow-sm p-2 text-logo-white bg-logo-black hover:bg-gray-900 cursor-pointer sm:mt-8 sm:w-1/2 sm:justify-self-center"
+                                    type="submit">
+                                Register</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -121,20 +124,23 @@
                 el: '#register-component',
                 data() {
                     return {
-                        openTab: 1,
+                        openTab: '{{ \App\Models\SocialProfile::class }}',
                         choice: '{{ \App\Models\SocialProfile::class }}'
                     };
                 },
                 methods: {
-                    toggleTabs: function (tabNumber) {
-                        this.openTab = tabNumber;
-                        if(tabNumber === '{{ \App\Models\SocialProfile::class }}')
+                    toggleTabs: function (tab) {
+                        this.openTab = tab;
+                        if(tab === '{{ \App\Models\SocialProfile::class }}')
+                        {
+                            this.choice = '{{ \App\Models\SocialProfile::class }}';
+                        }else if(tab === '{{ \App\Models\BusinessProfile::class }}'){
+                            this.choice = '{{ \App\Models\BusinessProfile::class }}';
+                        }else if(tab === 'credentials')
                         {
 
-                        }else{
-
                         }
-                    }
+                    },
                 }
             });
         });

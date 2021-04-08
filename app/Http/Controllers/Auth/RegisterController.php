@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\BusinessProfile;
+use App\Models\SocialProfile;
 use App\Models\UserSettings;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -58,6 +60,8 @@ class RegisterController extends Controller
      * @var PhoneNumberUtil
      */
     private $phoneUtil;
+    private $selectedProfile;
+
     /**
      * Create a new controller instance.
      *
@@ -65,7 +69,6 @@ class RegisterController extends Controller
      */
     public function __construct(Service $verify)
     {
-        
         $this->middleware('guest');
         $this->loginFieldName = 'login';
         $this->redirectTo = RouteServiceProvider::HOME;
@@ -123,11 +126,25 @@ class RegisterController extends Controller
         }else{
             $userData['phone'] = $this->getValidatedPhone();
         }
-        return DB::transaction(function() use ($userData) {
+        return DB::transaction(function() use ($userData, $data) {
             $user = User::create($userData);
             $user->settings()->create(UserSettings::getDefault());
+            if()
             return $user;
         });
+    }
+    private function getSelectedProfile()
+    {
+        if(!$this->selectedProfile)
+        {
+            if(request()->get('choice') === str_replace('\\', '', SocialProfile::class))
+            {
+                $this->selectedProfile = new SocialProfile;
+            }else{
+                $this->selectedProfile = new BusinessProfile;
+            }
+        }
+        return $this->selectedProfile;
     }
     private function getValidatedPhone():string
     {
@@ -158,7 +175,7 @@ class RegisterController extends Controller
     }
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        return view('auth.register-profile');
     }
 
     /**
