@@ -9,6 +9,7 @@ require('./create-posts');
 //
 import Vue from 'vue';
 import VueResource from 'vue-resource';
+import 'alpinejs';
 
 // tell Vue to use the vue-resource plugin
 Vue.use(VueResource);

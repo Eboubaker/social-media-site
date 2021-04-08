@@ -33,14 +33,14 @@
       </div>
       <form class="mt-8 space-y-6 bg-white rounded-2xl shadow-lg p-4" action="{{ route('register') }}" method="POST">@csrf
         <input type="hidden" name="remember" value="true">
-        <div class="rounded-md shadow-sm -space-y-px">
+        <div class="rounded-md shadow-sm space-y-4">
           <div>
             <label class="sr-only">Email or Phone Number</label>
-            <input name="login" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm" placeholder="Email or Phone Number">
+            <input name="login" type="text" required placeholder="Email or Phone Number">
           </div>
           <div>
             <label for="password" class="sr-only">Password</label>
-            <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-red-500 focus:border-red-500 focus:z-10 sm:text-sm" placeholder="Password">
+            <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Password">
           </div>
         </div>
   

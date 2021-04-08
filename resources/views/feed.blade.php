@@ -1,13 +1,14 @@
 @extends('layouts.app')     
 
 @section('content')
+@include('layouts.top-nav')
 
-<div class="md:block md:flex bg-gray-100 md:py-4">
+<div class="md:flex bg-gray-100 md:py-4">
     <div class="hidden md:block md:w-96 md:fixed md:left-0 content md:overflow-auto md:h-full md:pl-4 md:pb-20">@include('layouts.left-side')</div>
     <div class="hidden md:block md:w-96"></div>
     <div class="pt-24 md:pt-0 md:w-1/2">
         <div class="md:w-5/6 md:mx-auto"> 
-        <x-scroll-view class="" auto-scroll keep-scrolling chevron-class="w-14" chevron-inner-color="text-red-600">
+        <x-scroll-view class="" auto-scroll keep-scrolling chevron-class="w-14" chevron-inner-color="">
             @for($i = 1; $i < 10; $i++)
                 <div class="mx-1">
                     <a href="#" class="box flex flex-col justify-center items-center w-36 h-44 bg-white divide-y divide-gray-100 shadow-lg rounded-lg overflow-hidden m-8"> 

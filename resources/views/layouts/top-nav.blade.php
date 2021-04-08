@@ -1,4 +1,4 @@
-<div class="sticky z-30 w-full">
+<div class="fixed z-30 w-full">
     <div class="flex items-center justify-between px-4 py-1 bg-white">
       <div class="flex items-center space-x-2 w-1/3">
         <a title="Quick Look" href="/" alt="Quick Look">
@@ -60,10 +60,9 @@
       <div class="flex flex-row space-x-1 justify-evenly items-center">
 
           {{-- ````````````````/Notifications start```````````````` --}}
-        <div class="notifications relative">
+        <div class="notifications relative" x-data="{notificationOpen: false}">
           <button
             title="Notifications"
-            :class="notificationOpen ? 'bg-gray-200' : 'bg-white'"
             @click="notificationOpen = !notificationOpen"
             class="p-1 text-gray-500 bg-gray-100 hover:bg-red-50 hover:text-logo-red rounded-full focus:outline-none"
             type="button"
@@ -85,17 +84,18 @@
             </svg>
           </button>
           <!-- Notifications Block -->
-            <div class="relative text-left hidden">
+            <div class="relative text-left" 
+                 x-show="notificationOpen" 
+                 @click.away="notificationOpen = false">
                 <div
                 class="origin-top-right absolute right-0 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"
                 >
-                <div class="flex flex-row justify-between items-center" role="none">
+                <div class="flex flex-row justify-between items-center" role="none"  x-data="{notiSettingOpen: false}">
                     <p class="block px-4 py-2 text-xl text-gray-700" role="menuitem">Notifications</p>
                     <button
-                    :class="notiSettingOpen ? 'bg-gray-200' : 'bg-white'"
                     @click="notiSettingOpen = !notiSettingOpen"
                     class="hover:bg-gray-100 m-2 p-1 w-9 h-9 outline-none focus:outline-none rounded-full"
                     >
@@ -112,7 +112,8 @@
                     </button>
 
                     <div
-                    :class="notiSettingOpen ? 'block' : 'hidden'"
+                    x-show="notiSettingOpen" 
+                    @click.away="notiSettingOpen = false"
                     class="absolute right-2 top-12 py-2 space-y-2 w-64 bg-white rounded-lg shadow-lg ring-1 ring-gray-200"
                     >
                     <a class="flex flex-row p-2 hover:bg-gray-100 items-center space-x-2" href="#">
@@ -236,10 +237,10 @@
             {{-- ````````````````Notifications end/```````````````` --}}
 
             {{-- ````````````````/Messages start```````````````` --}}
-        <div class="messages">
+        <div class="messages" x-data="{messageOpen: false}">
           <button
             title="Messages"
-            :class="messageOpen ? 'bg-gray-200' : 'bg-white'"
+            {{-- :class="messageOpen ? 'bg-gray-200' : 'bg-white'" --}}
             @click="messageOpen = !messageOpen"
             class="p-1 text-gray-500 bg-gray-100 hover:bg-red-50 hover:text-logo-red rounded-full focus:outline-none"
             type="button"
@@ -261,7 +262,9 @@
             </svg>
           </button>
           <!-- Messages Block -->
-            <div class="hidden relative z-20 text-left ">
+            <div class="relative z-20 text-left" 
+                 x-show="messageOpen" 
+                 @click.away="messageOpen = false">
                 <div
                 class="origin-top-right absolute right-0 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
                 role="menu"
@@ -271,7 +274,7 @@
                 <div class="relative flex flex-row justify-between items-center" role="none">
                     <p class="block px-4 py-2 text-xl text-gray-700" role="menuitem">Messages</p>
                     <button
-                    :class="messageSettingOpen ? 'bg-gray-200' : 'bg-white'"
+                    {{-- :class="messageSettingOpen ? 'bg-gray-200' : 'bg-white'" --}}
                     @click="messageSettingOpen = !messageSettingOpen"
                     class="hover:bg-gray-100 m-2 p-1 w-9 h-9 outline-none focus:outline-none rounded-full"
                     >
@@ -287,7 +290,7 @@
                     </svg>
                     </button>
                     <div
-                    :class="messageSettingOpen ? 'block' : 'hidden'"
+                    {{-- :class="messageSettingOpen ? 'block' : 'hidden'" --}}
                     class="absolute right-2 top-12 py-2 space-y-2 w-64 bg-white rounded-lg shadow-lg ring-1 ring-gray-200"
                     >
                     <a class="flex flex-row p-2 hover:bg-gray-100 items-center space-x-2" href="#">

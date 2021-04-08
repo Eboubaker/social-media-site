@@ -6,6 +6,7 @@
 @import "~tailwindcss/components";
 @import "~tailwindcss/utilities";
 
+
 // google icons
 @import "../css/material-icons.css";
 
@@ -20,3 +21,6 @@
 @import "./settings.scss";
 
 @import '../css/scroll-design.css';
+
+//forms 
+@import './forms.scss'

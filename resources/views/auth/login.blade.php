@@ -31,13 +31,11 @@
                         </div>
                     @endif
                     <input
-                        class="font-medium focus:border-2 focus:border-red-400 focus:outline-none focus:ring-1 focus:ring-red-500 rounded-lg"
                         type="text"
                         name="login"
                         placeholder="Email or Phone Number"
                     />
                     <input
-                        class="font-medium focus:border-2 focus:border-red-400 focus:outline-none focus:ring-1 focus:ring-red-500 rounded-lg"
                         type="password"
                         name="password"
                         placeholder="Password"
