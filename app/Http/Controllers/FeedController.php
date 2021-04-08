@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Collectors\PostCollector;
+use App\Http\Resources\PostResource;
+use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FeedController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        //
+        $parameters = (object)$request->all();
+        $user = Auth::user();
+
+        return new PostResource(Post::all());
     }
 
     /**

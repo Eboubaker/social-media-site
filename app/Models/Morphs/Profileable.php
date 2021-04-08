@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\HasDatabaseNotifications;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Ramsey\Collection\Collection;
 
@@ -56,5 +57,17 @@ class Profileable extends BaseModel
     public function notifications()
     {
         return $this->morphTo();
+    }
+
+
+    public function like($postable)
+    {
+        DB::table('postables_likes')->insert([
+            'postable_id' => $postable->getKey(),
+            'postable_type' => $postable->getMorphClass(),
+            'profileable_id' => $this->getKey(),
+            'profileable_type' => $this->getMorphClass(),
+            'liked_at' => now()
+        ]);
     }
 }

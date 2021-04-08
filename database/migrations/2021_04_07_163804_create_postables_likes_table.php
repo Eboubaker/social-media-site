@@ -1,15 +1,11 @@
 <?php
 
-use App\Models\Comment;
-use App\Models\Morphs\Profileable;
-use App\Models\Post;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommentsTable extends Migration
+class CreatePostablesLikesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,12 +14,10 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Comment::TABLE, function (Blueprint $table) {
-            $table->id();
-            $table->json('content');
+        Schema::create('postables_likes', function (Blueprint $table) {
             $table->morphs('postable');
             $table->morphs('profileable');
-            MigrationHelper::addTimeStamps($table, new Comment());
+            $table->timestamp('liked_at');
         });
     }
 
@@ -34,6 +28,6 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Comment::TABLE);
+        Schema::dropIfExists('postables_likes');
     }
 }

@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 trait Commentable
 {
-    public function comments(): MorphToMany
+    public function comments()
     {
-        return $this->morphToMany(Comment::class, 'postable', 'postables_comments');
+        return $this->morphMany(Comment::class, 'postable');
     }
 }

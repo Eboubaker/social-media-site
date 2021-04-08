@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
@@ -19,6 +20,7 @@ use Illuminate\Support\Str;
 // Group all routes with the locale
 // NOTE: API routes should not be added here instead they should be in ~/routes/api.php
 
+App\Http\Api::routes();
 Route::group([
     'prefix' => '{locale}',
 ], function() {
@@ -48,6 +50,7 @@ Route::group([
     Route::get('/play',function(){
         return view('welcome');
     });
+    Route::get('/profile-form', [RegisterController::class, 'profile-form'])->name('profile-form');
 });
 Route::post('/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 

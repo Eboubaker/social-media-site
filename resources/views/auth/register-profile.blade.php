@@ -121,12 +121,19 @@
                 el: '#register-component',
                 data() {
                     return {
-                        openTab: 1
+                        openTab: 1,
+                        choice: '{{ \App\Models\SocialProfile::class }}'
                     };
                 },
                 methods: {
                     toggleTabs: function (tabNumber) {
                         this.openTab = tabNumber;
+                        if(tabNumber === '{{ \App\Models\SocialProfile::class }}')
+                        {
+
+                        }else{
+
+                        }
                     }
                 }
             });

@@ -17,11 +17,11 @@ class  CreatePostablesCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('postables_comments', function (Blueprint $table) {
-            MigrationHelper::addForeign($table, new Comment());
-            $table->morphs('postable');
-            $table->timestamps();
-        });
+//        Schema::create('postables_comments', function (Blueprint $table) {
+//            MigrationHelper::addForeign($table, new Comment());
+//            $table->morphs('postable');
+//            $table->timestamps();
+//        });
     }
 
     /**

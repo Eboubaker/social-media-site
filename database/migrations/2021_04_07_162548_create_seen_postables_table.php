@@ -1,15 +1,12 @@
 <?php
 
-use App\Models\Comment;
-use App\Models\Morphs\Profileable;
-use App\Models\Post;
+use App\Models\User;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommentsTable extends Migration
+class CreateSeenPostablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -18,12 +15,10 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Comment::TABLE, function (Blueprint $table) {
-            $table->id();
-            $table->json('content');
+        Schema::create('seen_postables', function (Blueprint $table) {
+            MigrationHelper::addForeign($table, new User);
             $table->morphs('postable');
-            $table->morphs('profileable');
-            MigrationHelper::addTimeStamps($table, new Comment());
+            $table->timestamp('seen_at');
         });
     }
 
@@ -34,6 +29,6 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Comment::TABLE);
+        Schema::dropIfExists('seen_postables');
     }
 }

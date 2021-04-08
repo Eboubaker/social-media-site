@@ -5,10 +5,13 @@ namespace App\Models\Morphs;
 use App\Casts\JsonObject;
 use App\Models\BaseModel;
 use App\Models\Image;
+use App\Models\User;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\DB;
 
 class Postable extends BaseModel
 {
@@ -43,5 +46,31 @@ class Postable extends BaseModel
     public function taggedSocialProfiles()
     {
         return $this->morphToMany();
+    }
+
+    public function read(User $user)
+    {
+        DB::table('seen_postables')->insert([
+            'postable_id' => $this->getKey(),
+            'postable_type' => $this->getMorphClass(),
+            'user_id' => $user->getKey(),
+            'seen_at' => now()
+        ]);
+    }
+
+    public function like($profile)
+    {
+        DB::table('postables_likes')->insert([
+            'postable_id' => $this->getKey(),
+            'postable_type' => $this->getMorphClass(),
+            'profileable_id' => $profile->getKey(),
+            'profileable_type' => $profile->getMorphClass(),
+            'liked_at' => now()
+        ]);
+    }
+
+    public function likes()
+    {
+        return $this->morphToMany(Model::class, 'postable', 'postables_likes')->count();
     }
 }
