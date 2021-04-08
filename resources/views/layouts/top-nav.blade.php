@@ -287,7 +287,7 @@
                           />
                       </svg>
                       </button>
-                      <div x-show="messageSettingOpen"
+                      <div x-show="messageSettingOpen" @click.away="messageSettingOpen = false"
                       class="absolute right-2 top-12 py-2 space-y-2 w-64 bg-white rounded-lg shadow-lg ring-1 ring-gray-200"
                       >
                       <a class="flex flex-row p-2 hover:bg-gray-100 items-center space-x-2" href="#">
@@ -449,7 +449,7 @@
               </button>
               <!-- Settings Block -->
                 <div class="relative z-20 text-left">
-                    <div x-show="settingsOpen"
+                    <div x-show="settingsOpen" @click.away="settingsOpen = false"
                     class="origin-top-right absolute right-0 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
                     role="menu"
                     aria-orientation="vertical"

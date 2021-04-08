@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex items-center justify-between px-4 py-1 bg-white">
+    <div class="fixed z-30 w-full flex items-center justify-between px-4 py-1 bg-white">
       <div class="flex items-center space-x-2">
         <a title="Quick Look" href="/" alt="Quick Look">
           <img
@@ -28,13 +28,43 @@
           </form>
         </div>
       </div>
+      <div class="hidden md:flex md:flex-row md:justify-start md:space-x-2 md:w-2/3">
+        <a
+          class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
+          href="#"
+        >
+          <span class="material-icons">public</span>
+          <span>World</span>
+        </a>
+        <a
+          class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
+          href="#"
+        >
+          <span class="material-icons">group</span>
+          <span>Groups</span>
+        </a>
+        <a
+          class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
+          href="#"
+        >
+          <span class="material-icons">video_library</span>
+          <span>Videos</span>
+        </a>
+        <a
+          class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
+          href="#"
+        >
+          <span class="material-icons">trending_up</span>
+          <span class>Following</span>
+        </a>
+      </div>
       <div class="flex flex-row space-x-1 justify-evenly items-center">
-        <div class="notifications relative">
+        <!-- ````````````````/Notifications start````````````````  -->
+        <div class="notifications relative" x-data="{notificationOpen: false}">
           <button
             title="Notifications"
-            :class="notificationOpen ? 'bg-gray-200' : 'bg-white'"
             @click="notificationOpen = !notificationOpen"
-            class="p-1 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-full focus:outline-none"
+            class="p-1 text-gray-500 bg-gray-100 hover:bg-red-50 hover:text-logo-red rounded-full focus:outline-none"
             type="button"
           >
             <!-- <span class="material-icons">notifications</span> -->
@@ -54,17 +84,22 @@
             </svg>
           </button>
           <!-- Notifications Block -->
-          <Notifications :class="notificationOpen ? 'block' : 'hidden'" />
+
+          <Notifications
+            :class="notificationOpen ? 'block' : 'hidden'"
+            v:click.away="notificationOpen"
+          />
         </div>
-        <div class="messages">
+        <!-- ````````````````Notifications end/````````````````  -->
+
+        <!-- ````````````````/Messages start````````````````  -->
+        <div class="messages" x-data="{messageOpen: false}">
           <button
             title="Messages"
-            :class="messageOpen ? 'bg-gray-200' : 'bg-white'"
             @click="messageOpen = !messageOpen"
-            class="p-1 text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-full focus:outline-none"
+            class="p-1 text-gray-500 bg-gray-100 hover:bg-red-50 hover:text-logo-red rounded-full focus:outline-none"
             type="button"
           >
-            <!-- <span class="material-icons leading-7 inline">question_answer</span> -->
             <svg
               class="w-7 h-7"
               xmlns="http://www.w3.org/2000/svg"
@@ -83,6 +118,24 @@
           <!-- Messages Block -->
           <Messages :class="messageOpen ? 'block' : 'hidden'" />
         </div>
+        <!-- ````````````````Messages end/````````````````  -->
+
+        <!-- ````````````````/Settings start````````````````  -->
+        <div class="Settings" x-data="{messageOpen: false}">
+          <button
+            title="Settings"
+            @click="settingOpen = !settingOpen"
+            class="flex justify-center items-center p-1 text-gray-500 bg-gray-100 hover:bg-red-50 hover:text-logo-red rounded-full focus:outline-none"
+            type="button"
+          >
+            <span class="material-icons w-7 h-7">arrow_drop_down_circle</span>
+          </button>
+          <!-- Settings Block -->
+          <Settings :class="settingOpen ? 'block' : 'hidden'" />
+        </div>
+        <!-- ````````````````/Settings end````````````````  -->
+
+        <!-- ````````````````/Menu start````````````````  -->
         <div class="menu sm:hidden">
           <button
             title="Menu"
@@ -108,96 +161,40 @@
           </button>
         </div>
         <Menu :class="isOpen ? 'block' : 'hidden'" />
-        <!-- <div
-          :class="isOpen ? 'block' : 'hidden'"
-          class="absolute inset-0 bg-white z-20 px-2 pb-2 my-2 space-y-2 border-b-2 sm:pb-0 sm:hidden"
-        >
-          <div class="flex flex-row justify-evenly items-center space-x-2">
-            <a
-              class="flex flex-auto align-center px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
-              href="#"
-            >
-              <span class="material-icons">account_circle</span>
-              <p class>Abd Elhak</p>
-            </a>
-            <div>
-              <button
-                :class="accountOpen ? 'bg-gray-200' : 'bg-gray-100'"
-                @click="accountOpen = !accountOpen"
-                class="flex flex-row justify-between items-center px-2 py-2 space-x-2 hover:bg-gray-200 rounded focus:outline-none"
-              >
-                <p>switch account</p>
-                <span class="material-icons">arrow_drop_down_circle</span>
-              </button>
-            </div>
-          </div>
-          <div
-            :class="accountOpen ? 'block' : 'hidden'"
-            class="bg-gray-200 rounded px-2 py-2 space-y-2"
-          >
-            <a
-              class="flex flex-auto align-center px-2 py-2 space-x-2 hover:bg-gray-300 rounded"
-              href="#"
-            >
-              <span class="material-icons">account_circle</span>
-              <p class>Abd Elhak_2</p>
-            </a>
-            <a
-              class="flex flex-auto align-center px-2 py-2 space-x-2 hover:bg-gray-300 rounded"
-              href="#"
-            >
-              <span class="material-icons">account_circle</span>
-              <p class>Abd Elhak_3</p>
-            </a>
-            <a
-              class="flex flex-auto align-center px-2 py-2 space-x-2 hover:bg-gray-300 rounded"
-              href="#"
-            >
-              <span class="material-icons">account_circle</span>
-              <p class>Abd Elhak_4</p>
-            </a>
-          </div>
-          <hr class="my-2" />
-          <a
-            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
-            href="#"
-          >
-            <span class="material-icons">account_circle</span>
-            <p>Home</p>
-          </a>
-          <a
-            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
-            href="#"
-          >
-            <span class="material-icons">account_circle</span>
-            <p>Friend Request</p>
-          </a>
-          <hr class="my-2" />
-          <a
-            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
-            href="#"
-          >
-            <span class="material-icons">account_circle</span>
-            <p>Quick Food</p>
-          </a>
-          <a
-            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
-            href="#"
-          >
-            <span class="material-icons">account_circle</span>
-            <p>Quick Shope</p>
-          </a>
-          <a
-            class="flex flex-auto align-center my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
-            href="#"
-          >
-            <span class="material-icons">account_circle</span>
-            <p>Quick Move</p>
-          </a>
-        </div>-->
+        <!-- ````````````````Menu end/````````````````  -->
       </div>
     </div>
     <hr />
+    <div class="md:hidden flex flex-row justify-evenly bg-white p-2 space-x-2">
+      <a
+        class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
+        href="#"
+      >
+        <span class="material-icons">public</span>
+        <span>World</span>
+      </a>
+      <a
+        class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
+        href="#"
+      >
+        <span class="material-icons">group</span>
+        <span>Groups</span>
+      </a>
+      <a
+        class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
+        href="#"
+      >
+        <span class="material-icons">video_library</span>
+        <span>Videos</span>
+      </a>
+      <a
+        class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
+        href="#"
+      >
+        <span class="material-icons">trending_up</span>
+        <span class>Following</span>
+      </a>
+    </div>
   </div>
 </template>
 <script>
@@ -205,12 +202,14 @@ import Post from "./Post";
 import Notifications from "./Notifications";
 import Messages from "./Messages";
 import Menu from "./Menu";
+import Settings from "./Settings";
 export default {
   components: {
     Post,
     Menu,
     Messages,
-    Notifications
+    Notifications,
+    Settings
   },
   data() {
     return {
@@ -219,8 +218,7 @@ export default {
       searchOpen: false,
       notificationOpen: false,
       messageOpen: false,
-      messageSettingOpen: false,
-      notiSettingOpen: false
+      settingOpen: false
     };
   },
   created() {

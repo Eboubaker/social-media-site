@@ -7,11 +7,9 @@ require("./create-posts");
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 //
 import Vue from "vue";
-import VueResource from "vue-resource";
 import "alpinejs";
 
 // tell Vue to use the vue-resource plugin
-Vue.use(VueResource);
 
 // import FormError component
 // import FormError from './components/FormError.vue';
@@ -21,6 +19,27 @@ window.Vue = Vue;
 // Vue.use(VueRouter);
 
 Vue.component("feed", require("./components/Feed.vue").default);
+Vue.component("navbar", require("./components/NavBar.vue").default);
+Vue.component("post", require("./components/Post.vue").default);
+Vue.component("profile-type", require("./components/SocialBuisnessAccount.vue").default);
+Vue.component("play-ground", require("./components/PlayGround.vue").default);
+
+Vue.directive("clickaway", {
+  bind() {
+    this.event = (event) => this.vm.$emit(this.expression, event);
+    this.el.addEventListener("click", this.stopProp);
+    document.body.addEventListener("click", this.event);
+  },
+  unbind() {
+    this.el.removeEventListener("click", this.stopProp);
+    document.body.removeEventListener("click", this.event);
+  },
+
+  stopProp(event) {
+    event.stopPropagation();
+  },
+});
+
 var app = new Vue({
   el: "#app",
 });

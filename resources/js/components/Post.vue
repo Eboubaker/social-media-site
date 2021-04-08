@@ -1,34 +1,24 @@
 <template
-  ><div class="w-11/12 mx-auto md:w-5/6">
+  >
+  <div class="w-11/12 mx-auto md:w-5/6">
     <div class="my-0 md:my-4 px-2 rounded-lg shadow-lg bg-white">
       <div class="flex flex-row justify-between items-center">
         <div class="flex justify-start items-center pt-2 px-4 space-x-2">
-          <a class="" href>
-            <img
-              class="w-14 rounded-full"
-              :src="post.author.profileImage"
-              alt="tree"
-            />
+          <a class href>
+            <img class="w-14 rounded-full" src="/img/150x150.png" alt="tree" />
           </a>
           <div class="flex flex-col -space-y-1">
             <a class="text-lg hover:underline" href>
-              <h4>{ post.author.name }</h4>
+              <h4>Abdelhak</h4>
             </a>
             <a class="hover:underline" href>
-              <small>{{ post.createdAt }}</small>
+              <small>24 m</small>
             </a>
           </div>
         </div>
         <div class="relative items-center">
-          <button
-            class="relative z-10 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer"
-            :class="
-              isOpen
-                ? 'bg-red-100 text-logo-red hover:text-logo-red '
-                : 'bg-transparent'
-            "
-            @click="isOpen = !isOpen"
-          >
+          <button class="relative z-10 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer" :class="isOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'"
+            @click="isOpen = !isOpen" >
             <svg
               class="w-6"
               xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +42,7 @@
           ></button>
           <div
             :class="isOpen ? 'block' : 'hidden'"
-            class="hidden absolute right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
+            class="absolute right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
           >
             <div class="flex flex-col space-y-2">
               <a
@@ -98,17 +88,17 @@
         </div>
       </div>
       <div class="px-4 py-2">
-        <p>
-          { post.content.body }
-        </p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium commodi cumque laboriosam quos molestiae fugit!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium commodi cumque laboriosam quos molestiae fugit!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium commodi cumque laboriosam quos molestiae fugit!</p>
       </div>
       <div class="flex justify-between px-2 text-sm">
         <div>
-          <a class="hover:underline" href="#">{ post.likes }</a>
+          <a class="hover:underline" href="#">700 likes</a>
         </div>
         <div class="flex space-x-2">
           <div>
-            <a class="hover:underline" href="#">{ post.commentsCount }</a>
+            <a class="hover:underline" href="#">77 comments</a>
           </div>
           <div>
             <a class="hover:underline" href="#">40 Shares</a>
@@ -116,9 +106,7 @@
         </div>
       </div>
       <div class="flex flex-row justify-evenly border-t">
-        <button
-          class="flex items-center justify-center hover:bg-gray-100 rounded h-10 w-1/3 m-1"
-        >
+        <button class="flex items-center justify-center hover:bg-gray-100 rounded h-10 w-1/3 m-1">
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -127,9 +115,7 @@
           </svg>
           <p class="ml-1 text-lg">Like</p>
         </button>
-        <button
-          class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1"
-        >
+        <button class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="24"
@@ -146,9 +132,7 @@
           </svg>
           <p class="ml-1 text-lg">Comment</p>
         </button>
-        <button
-          class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1"
-        >
+        <button class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1">
           <svg style="width:24px;height:24px" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -172,15 +156,11 @@
           </form>
         </div>
         <div class="grid md:grid-cols-12">
-          <a class="w-10 h-10 mr-2 md:mr-0" href="#"
-            ><img class="rounded-full" src="/img/150x150.png"
-          /></a>
-          <div
-            class="col-start-2 col-span-10 bg-gray-100 rounded-2xl px-3 py-1"
-          >
-            <a class="hover:underline font-semibold text-sm" href="#"
-              >Abdelhak</a
-            >
+          <a class="w-10 h-10 mr-2 md:mr-0" href="#">
+            <img class="rounded-full" src="/img/150x150.png" />
+          </a>
+          <div class="col-start-2 col-span-10 bg-gray-100 rounded-2xl px-3 py-1">
+            <a class="hover:underline font-semibold text-sm" href="#">Abdelhak</a>
             <p>
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque,
               temporibus.
@@ -199,10 +179,15 @@
 <script>
 export default {
   props: {
-    post: {
+    posts: {
       type: Object,
-      default: null,
-    },
+      default: null
+    }
   },
+  data() {
+    return {
+      isOpen: false,
+    };
+  }
 };
 </script>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Collectors\PostCollector;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -13,7 +12,7 @@ class FeedController extends Controller
 
     public function index(Request $request)
     {
-        $parameters = (object)$request->all();
+        $parameters = (object) $request->all();
         $user = Auth::user();
 
         return new PostResource(Post::all());

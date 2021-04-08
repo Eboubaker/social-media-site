@@ -87,7 +87,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="img/150x150" alt />
+          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -99,7 +99,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="img/150x150" alt />
+          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -111,7 +111,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="img/150x150" alt />
+          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -123,7 +123,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="img/150x150" alt />
+          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -135,7 +135,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="img/150x150" alt />
+          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -147,7 +147,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="img/150x150" alt />
+          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -159,7 +159,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="img/150x150" alt />
+          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -171,5 +171,11 @@
   </div>
 </template>
     <script>
-export default {};
+export default {
+  data(){
+    return{
+      messageSettingOpen: false,
+    };
+  }
+};
 </script>

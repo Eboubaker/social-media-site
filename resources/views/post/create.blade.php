@@ -8,13 +8,6 @@
   
   <div class="modal-container bg-white w-1/2 mx-auto rounded shadow-lg z-50 overflow-y-auto">
     
-    {{-- <div class="modal-close absolute top-0 right-0 cursor-pointer flex flex-col items-center mt-4 mr-4 text-white text-sm z-50 p-2 mt-16 rounded-md hover:bg-gray-100 hover:text-logo-black">
-      <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-      </svg>
-      <span class="text-sm">(Esc)</span>
-    </div> --}}
-
     <!-- Add margin if you want to see some of the overlay behind the modal-->
     <div class="modal-content px-2 divide-y">
       <!--Title-->

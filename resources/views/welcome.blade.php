@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+
 {{--    This is the home page you are {{ Auth::guest() ? "not" : "" }} logged in {{ Auth::guest() ? "" : (" and your account is " . (Auth::user()->isVerified() ? "" : "not")." verified") }}--}}
 {{--    @auth--}}
 {{--        <form method="post" action="{{ route('logout') }}">@csrf--}}
@@ -15,4 +16,7 @@
     </svg>
 </button>
 @include('Posts.create-new')
+<post></post>
+<profile-type></profile-type>
+<play-ground></play-ground>
 @endsection

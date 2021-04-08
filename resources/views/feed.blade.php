@@ -1,7 +1,7 @@
 @extends('layouts.app')     
 
 @section('content')
-@include('layouts.top-nav')
+<navbar></navbar>
 
 <div class="md:flex bg-gray-100 md:py-4">
     <div class="hidden md:block md:w-96 md:fixed md:left-0 content md:overflow-auto md:h-full md:pl-4 md:pb-20">@include('layouts.left-side')</div>
@@ -36,10 +36,9 @@
                 </svg>
             </button>
         </div>
-        <div id="feed">
-            <feed></feed>
-        </div>
-        
+        <post></post>
+        <post></post>
+        <post></post>
     </div>
     <div class="hidden md:block md:w-96"></div>
 </div>

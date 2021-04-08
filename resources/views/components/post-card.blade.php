@@ -1,4 +1,3 @@
-<div class="w-11/12 mx-auto md:w-5/6">
   <div class="my-0 md:my-4 px-2 rounded-lg shadow-lg bg-white">
     <div class="flex flex-row justify-between items-center">
       <div class="flex justify-start items-center pt-2 px-4 space-x-2">
@@ -14,19 +13,13 @@
           </a>
         </div>
       </div>
-      <div class="relative items-center">
-        <button class="relative z-10 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer" :class="isOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'" @click="isOpen = !isOpen">
+      <div class="relative items-center" x-data="{isOpen:false}">
+        <button @click="isOpen = !isOpen" class="relative z-10 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer" :class="isOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'" @click="isOpen = !isOpen">
           <svg class="w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
           </svg>
         </button>
-        <!-- <button
-            v-if="isOpen"
-            @click="isOpen = false"
-            tabindex="-1"
-            class="fixed top-0 right-0 left-0 bottom-0 w-full h-full bg-black opacity-10 cursor-default"
-          ></button> -->
-        <div :class="isOpen ? 'block' : 'hidden'" class=" absolute right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2">
+        <div x-show="isOpen" @click.away="isOpen = false" class=" absolute right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2">
           <div class="flex flex-col space-y-2">
             <a class="flex flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2" href="#">
               <span class="material-icons">bookmark</span>
@@ -112,4 +105,3 @@
       </div>
     </div>
   </div>
-</div>

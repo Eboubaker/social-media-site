@@ -26,6 +26,7 @@
 </head>
 <body class="text-logo-black">
     <div id="app">
+        
         @yield('content')
     </div>
     @stack('scripts')
