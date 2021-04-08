@@ -3,6 +3,7 @@
 namespace App\Models\Morphs;
 
 use App\Casts\JsonObject;
+use App\Models\PostableLike;
 use App\Models\User;
 use App\Models\BaseModel;
 use App\Models\Comment;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Notifications\HasDatabaseNotifications;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -59,15 +61,15 @@ class Profileable extends BaseModel
         return $this->morphTo();
     }
 
-
-    public function like($postable)
+    public function likes():MorphMany
     {
-        DB::table('postables_likes')->insert([
-            'postable_id' => $postable->getKey(),
-            'postable_type' => $postable->getMorphClass(),
-            'profileable_id' => $this->getKey(),
-            'profileable_type' => $this->getMorphClass(),
-            'liked_at' => now()
-        ]);
+        return $this->morphMany(PostableLike::class, 'profileable');
+    }
+    public function addLike($postable)
+    {
+        $like = new PostableLike;
+        $like->profileable()->associate($this);
+        $like->postable()->associate($postable);
+        $this->likes()->save($like);
     }
 }

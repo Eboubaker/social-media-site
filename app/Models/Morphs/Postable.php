@@ -5,12 +5,15 @@ namespace App\Models\Morphs;
 use App\Casts\JsonObject;
 use App\Models\BaseModel;
 use App\Models\Image;
+use App\Models\PostableLike;
 use App\Models\User;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\DB;
 
 class Postable extends BaseModel
@@ -57,20 +60,15 @@ class Postable extends BaseModel
             'seen_at' => now()
         ]);
     }
-
-    public function like($profile)
+    public function likes():MorphMany
     {
-        DB::table('postables_likes')->insert([
-            'postable_id' => $this->getKey(),
-            'postable_type' => $this->getMorphClass(),
-            'profileable_id' => $profile->getKey(),
-            'profileable_type' => $profile->getMorphClass(),
-            'liked_at' => now()
-        ]);
+        return $this->morphMany(PostableLike::class, 'postable');
     }
-
-    public function likes()
+    public function addLike($profile)
     {
-        return $this->morphToMany(Model::class, 'postable', 'postables_likes')->count();
+        $like = new PostableLike;
+        $like->profileable()->associate($profile);
+        $like->postable()->associate($this);
+        $this->likes()->save($like);
     }
 }
