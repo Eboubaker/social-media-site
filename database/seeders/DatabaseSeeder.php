@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\BusinessCategory;
+use App\Models\SocialProfile;
 use App\Models\User;
 use App\Models\UserSettings;
+use Database\Factories\UserSettingsFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -29,9 +30,6 @@ class DatabaseSeeder extends Seeder
             "data" => new \stdClass,
         ]);
         $user->settings()->create(UserSettings::factory()->make()->attributesToArray());
-
-        BusinessCategory::create(['name' => 'Food']);
-        BusinessCategory::create(['name' => 'Transport']);
 
     }
 }
