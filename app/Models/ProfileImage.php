@@ -34,7 +34,7 @@ class ProfileImage extends Image
      */
     public function postable()
     {
-        throw new Exception("Does not have Postable");
+        throw new Exception("Profile Does not have Postable");
     }
 
     public function profileable()

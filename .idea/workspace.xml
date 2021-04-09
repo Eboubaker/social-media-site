@@ -23,12 +23,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="40e05d06-9645-4292-9eae-e4645de396fb" name="Default Changelist" comment="">
+<<<<<<< Updated upstream
       <change afterPath="$PROJECT_DIR$/app/Models/PostableLike.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/CustomRelationShip/HasCustomRelations.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/CustomRelationShip/Relations/Custom.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Morphs/Postable.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Morphs/Postable.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Morphs/Profileable.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Morphs/Profileable.php" afterDir="false" />
+=======
+      <change afterPath="$PROJECT_DIR$/resources/js/components/ExampleComponent.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FeedController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FeedController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Resources/PostResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/PostResource.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Morphs/PostableAttachement.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Morphs/PostableAttachement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ProfileImage.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ProfileImage.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/ProfileImageFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/ProfileImageFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/DatabaseSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/components/Feed.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Feed.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/auth/register-profile.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/register-profile.blade.php" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,7 +269,13 @@
       <workItem from="1617288617358" duration="115000" />
       <workItem from="1617794811387" duration="4152000" />
       <workItem from="1617806488619" duration="10031000" />
+<<<<<<< Updated upstream
       <workItem from="1617867830433" duration="5837000" />
+=======
+      <workItem from="1617867830433" duration="16287000" />
+      <workItem from="1617962661696" duration="2178000" />
+      <workItem from="1617973658345" duration="280000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
@@ -280,6 +302,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1616946572380" />
+    <state x="413" y="165" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1617890327653">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="165" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1617890327653" />
     <state x="389" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1617036796113">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -288,17 +314,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="110" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.728@0.0.1366.728" timestamp="1617186463057" />
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1617872571044">
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1617964801422">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1617872571044" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1617964801422" />
     <state x="459" y="276" key="ComposerInitDialogKey" timestamp="1617816898334">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="459" y="276" key="ComposerInitDialogKey/0.0.1366.728@0.0.1366.728" timestamp="1617816898334" />
-    <state width="567" height="438" key="DebuggerActiveHint" timestamp="1617871188430">
+    <state width="567" height="438" key="DebuggerActiveHint" timestamp="1617892812309">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
+<<<<<<< Updated upstream
     <state width="567" height="438" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1617871188430" />
     <state width="1323" height="206" key="GridCell.Tab.0.bottom" timestamp="1617871508718">
       <screen x="0" y="0" width="1366" height="728" />
@@ -332,6 +359,41 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1323" height="206" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1617871508719" />
+=======
+    <state width="567" height="438" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1617892812309" />
+    <state width="1323" height="357" key="GridCell.Tab.0.bottom" timestamp="1617897417888">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="357" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1617897417888" />
+    <state width="1323" height="357" key="GridCell.Tab.0.center" timestamp="1617897417888">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="357" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1617897417888" />
+    <state width="1323" height="357" key="GridCell.Tab.0.left" timestamp="1617897417888">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="357" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1617897417888" />
+    <state width="1323" height="357" key="GridCell.Tab.0.right" timestamp="1617897417888">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="357" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1617897417888" />
+    <state width="1323" height="191" key="GridCell.Tab.1.bottom" timestamp="1617897415733">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="191" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1617897415733" />
+    <state width="1323" height="191" key="GridCell.Tab.1.center" timestamp="1617897415732">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="191" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1617897415732" />
+    <state width="1323" height="191" key="GridCell.Tab.1.left" timestamp="1617897415732">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="191" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1617897415732" />
+    <state width="1323" height="191" key="GridCell.Tab.1.right" timestamp="1617897415733">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="191" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1617897415733" />
+>>>>>>> Stashed changes
     <state x="606" y="94" key="NewPhpClassDialog" timestamp="1617869591993">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -344,6 +406,13 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="184" y="8" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1617816887854" />
+<<<<<<< Updated upstream
+=======
+    <state x="390" y="97" width="585" height="534" key="find.popup" timestamp="1617891703858">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="390" y="97" width="585" height="534" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1617891703858" />
+>>>>>>> Stashed changes
     <state width="453" height="461" key="javadoc.popup.new" timestamp="1617056222160">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -352,10 +421,17 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1617204438057" />
+<<<<<<< Updated upstream
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1617872565312">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1617872565312" />
+=======
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1617964887704">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1617964887704" />
+>>>>>>> Stashed changes
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -381,14 +457,49 @@
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/app/Models/User.php</url>
-          <line>187</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/resources/views/auth/register-profile.blade.php</url>
           <line>113</line>
           <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php</url>
+          <line>208</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Controllers/FeedController.php</url>
+          <line>15</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Resources/ProfileResource.php</url>
+          <line>17</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Http/Resources/PostResource.php</url>
+          <line>19</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/database/factories/ProfileImageFactory.php</url>
+          <line>43</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/database/factories/ProfileImageFactory.php</url>
+          <line>28</line>
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Models/Morphs/PostableAttachement.php</url>
+          <line>79</line>
+          <option name="timeStamp" value="21" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Models/Morphs/PostableAttachement.php</url>
+          <line>75</line>
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -39,7 +39,7 @@ class ProfileImageFactory extends Factory
     }
     public function configure()
     {
-        return $this->afterMaking(function(ProfileImage  $image){
+        return $this->afterCreating(function(ProfileImage  $image){
 //            Log::debug("Entering ProfileImageFactory afterMaking");
             copy(self::$image, $image->realPath);
 //            Log::debug("Entering ProfileImageFactory afterMaking");

@@ -102,6 +102,13 @@ class RegisterController extends Controller
             $data['phone'] = $this->getValidatedPhone();
             unset($data[$this->loginFieldName]);
         }
+
+        if($this->getSelectedProfile() instanceof SocialProfile)
+        {
+            $rules['social-name'] = 'required';
+        }else{
+            $rules['business-name'] = 'required';
+        }
         return Validator::make($data, $rules);
     }
 
@@ -126,6 +133,18 @@ class RegisterController extends Controller
         return DB::transaction(function() use ($userData) {
             $user = User::create($userData);
             $user->settings()->create(UserSettings::getDefault());
+            $profile = $this->getSelectedProfile();
+            $jsonData = [];
+            if($profile instanceof SocialProfile)
+            {
+                $jsonData['name'] = $data['social-name'];
+                $profile->setAttribute('data', (object)$jsonData);
+                $user->socialProfiles()->save($profile);
+            }else{
+                $jsonData['name'] = $data['business-name'];
+                $profile->setAttribute('data', (object)$jsonData);
+                $user->businessProfiles()->save($profile);
+            }
             return $user;
         });
     }

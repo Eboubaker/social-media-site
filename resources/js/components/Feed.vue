@@ -18,7 +18,6 @@ export default {
     };
   },
   created() {
-    console.log("feed created");
     this.fetchData();
     document.body.onscroll = function() {
       const perc =
@@ -34,7 +33,7 @@ export default {
       axios
         .post("/api/feed", { parameters: {} })
         .then((res) => {
-          this.posts.push(res.data);
+          this.posts.push(res.data.data);
         })
         .catch((err) => {
           console.log(err);

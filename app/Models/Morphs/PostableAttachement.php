@@ -5,6 +5,7 @@ namespace App\Models\Morphs;
 use App\Casts\JsonObject;
 use App\Models\BaseModel;
 use App\Models\Events\ModelEvents;
+use App\Models\ProfileImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -91,5 +92,24 @@ class PostableAttachement extends BaseModel
     public function getTemp()
     {
         return $this->_tempFile;
+    }
+
+    public function createFake()
+    {
+        $img = new self();
+        $disk = Storage::disk('faker_images');
+        $files = $disk->files();
+        $chosen = $files[random_int(0, count($files)-1)];
+        $temp = stream_get_meta_data(tmpfile())['uri'];
+        copy($chosen, $temp);
+        $img->setTemp($temp);
+        $img->setAttribute('content', new \stdClass);
+        return $img;
+    }
+
+    public function setType($typename)
+    {
+        $this->setAttribute('type', self::getAllowedTypes()->where('fileSuffix', $typename)->keys()->first());
+        return $this;
     }
 }

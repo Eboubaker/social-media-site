@@ -7,17 +7,12 @@ require("./create-posts");
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 //
 import Vue from "vue";
+// import VueResource from "vue-resource";
 import "alpinejs";
 
 // tell Vue to use the vue-resource plugin
-
-// import FormError component
-// import FormError from './components/FormError.vue';
+// Vue.use(VueResource);
 window.Vue = Vue;
-// import VueRouter from 'vue-router';
-// import routes from './routes';
-// Vue.use(VueRouter);
-
 Vue.component("feed", require("./components/Feed.vue").default);
 Vue.component("navbar", require("./components/NavBar.vue").default);
 Vue.component("post", require("./components/Post.vue").default);
@@ -41,5 +36,5 @@ Vue.directive("clickaway", {
 });
 
 var app = new Vue({
-  el: "#app",
+  el: "#app"
 });

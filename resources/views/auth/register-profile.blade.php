@@ -13,8 +13,8 @@
                 <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                     <a
                             class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal cursor-pointer"
-                            v-on:click="toggleTabs(1)"
-                            v-bind:class="{'text-logo-black bg-white': openTab !== 1, 'text-white bg-logo-red': openTab === 1}"
+                            v-on:click="toggleTabs('SocialProfile')"
+                            v-bind:class="{'text-logo-black bg-white': openTab !== 'SocialProfile', 'text-white bg-logo-red': openTab === 'SocialProfile'}"
                     >
                         <i class="fas fa-space-shuttle text-base mr-1"></i> Social Account
                     </a>
@@ -22,8 +22,8 @@
                 <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
                     <a
                             class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal cursor-pointer"
-                            v-on:click="toggleTabs(2)"
-                            v-bind:class="{'text-logo-black bg-white': openTab !== 2, 'text-white bg-logo-black': openTab === 2}"
+                            v-on:click="toggleTabs('BusinessProfile')"
+                            v-bind:class="{'text-logo-black bg-white': openTab !== 'BusinessProfile', 'text-white bg-logo-black': openTab === 'BusinessProfile'}"
                     >
                         <i class="fas fa-cog text-base mr-1"></i> Buisness Account
                     </a>
@@ -34,25 +34,43 @@
             >
                 <div class="px-4 py-5 flex-auto">
                     <div class="tab-content tab-space">
-                        <div v-bind:class="{'hidden': openTab !== 1, 'block': openTab === 1}">
-                            <p class="pb-4 text-center">Social Account for friends and family</p>
-                            <form class="grid grid-cols- gap-4 mx-2" action="./confirm">
-                                <input
-                                        class=""
-                                        type="text"
-                                        name="first-name"
-                                        id="first-name"
-                                        placeholder="First Name"
-                                />
-                                <input
-                                        class=""
-                                        type="text"
-                                        name="last-name"
-                                        id="last-name"
-                                        placeholder="Last Name"
-                                />
-                                <div class="flex space-x-2 justify-start items-center">
-                                    <label for="birth-date">Birhtday:</label>
+                        <form class="grid grid-cols- gap-4 mx-2" method='post' action="{{ route('register') }}">
+                        @csrf
+                            <input hidden v-model="choice" name='profileChoice'/>
+                            <div v-bind:class="{'hidden': openTab !== 'SocialProfile', 'block': openTab === 'SocialProfile'}">
+                                <p class="pb-4 text-center">Social Account for friends and family</p>
+                                    <input
+                                            class=""
+                                            type="text"
+                                            name="social-name"
+                                            id="first-name"
+                                            placeholder="First Name"
+                                    />
+                                    <input
+                                            class=""
+                                            type="text"
+                                            name="last-name"
+                                            id="last-name"
+                                            placeholder="Last Name"
+                                    />
+                                    <div class="flex space-x-2 justify-start items-center">
+                                        <label for="birth-date">BirthDate</label>
+                                        <input
+                                            type="date"
+                                            name="birth-date"
+                                            id="birth-date"
+                                        />
+                                    </div>
+                            </div>
+                            <div v-bind:class="{'hidden': openTab !== 'BusinessProfile', 'block': openTab === 'BusinessProfile'}">
+                                <p class="pb-4 text-center">Buisness Account for colleuges and customers</p>
+                                    <input
+                                            class="focus:border-logo-black focus:ring-logo-black"
+                                            type="text"
+                                            name="business-name"
+                                            id="first-name"
+                                            placeholder="Owner full name"
+                                    />
                                     <input
                                         type="date"
                                         name="birth-date"
@@ -121,14 +139,19 @@
                 el: '#register-component',
                 data() {
                     return {
-                        openTab: 1,
-                        choice: '{{ \App\Models\SocialProfile::class }}'
+                        openTab: 'SocialProfile',
+                        choice: 'SocialProfile'
                     };
                 },
                 methods: {
-                    toggleTabs: function (tabNumber) {
-                        this.openTab = tabNumber;
-                        if(tabNumber === '{{ \App\Models\SocialProfile::class }}')
+                    toggleTabs: function (tab) {
+                        this.openTab = tab;
+                        if(tab === 'SocialProfile')
+                        {
+                            this.choice = 'SocialProfile';
+                        }else if(tab === 'BusinessProfile'){
+                            this.choice = 'BusinessProfile';
+                        }else if(tab === 'credentials')
                         {
 
                         }else{
