@@ -3943,7 +3943,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      form: {
+        visibility: "public",
+        body: "",
+        attachements: []
+      }
+    };
+  },
+  methods: {
+    submit: function submit() {
+      var _this = this;
+
+      axios.post('/api/posts', this.form).then(function (res) {})["catch"](function (e) {}).then(function (e) {
+        _this.close();
+      });
+    },
+    close: function close() {
+      // destroy the vue listeners, etc
+      this.$destroy();
+    }
+  }
+});
 
 /***/ }),
 
@@ -29920,12 +29945,29 @@ var render = function() {
                 _vm._m(1),
                 _vm._v(" "),
                 _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.body,
+                      expression: "form.body"
+                    }
+                  ],
                   staticClass:
                     "w-full h-52 rounded text-lg focus:ring-logo-red focus:border-logo-red",
                   attrs: {
                     name: "content",
                     id: "content",
                     placeholder: "Write your post"
+                  },
+                  domProps: { value: _vm.form.body },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.form, "body", $event.target.value)
+                    }
                   }
                 }),
                 _vm._v(" "),
@@ -30075,7 +30117,12 @@ var render = function() {
                   {
                     staticClass:
                       "w-11/12 mx-7 my-4 py-2 text-center text-white bg-gray-700 hover:bg-logo-black transition-all ease-in-out rounded-md",
-                    attrs: { type: "submit" }
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        return _vm.submit()
+                      }
+                    }
                   },
                   [_vm._v("Post")]
                 )

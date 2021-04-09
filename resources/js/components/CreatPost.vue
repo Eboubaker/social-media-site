@@ -55,6 +55,7 @@
               </div>
             </div>
             <textarea
+              v-model="form.body"
               class="w-full h-52 rounded text-lg focus:ring-logo-red focus:border-logo-red"
               name="content"
               id="content"
@@ -130,7 +131,8 @@
             </div>
             <button
               class="w-11/12 mx-7 my-4 py-2 text-center text-white bg-gray-700 hover:bg-logo-black transition-all ease-in-out rounded-md"
-              type="submit"
+              type="button"
+              v-on:click="submit()"
             >Post</button>
           </form>
         </div>
@@ -139,5 +141,33 @@
   </div>
 </template>
 <script>
-export default {};
+  export default {
+    data(){
+      return{
+        form:{
+          visibility:"public",
+          body:"",
+          attachements:[],
+
+        }
+      };
+    },
+    methods:{
+      submit: function(){
+        axios.post('/api/posts', this.form).then((res)=>{
+
+        })
+        .catch((e)=>{
+
+        }).then((e)=>{
+          this.close();
+        });
+      },
+      close () {
+        // destroy the vue listeners, etc
+        this.$destroy();
+      }
+    }
+  };
 </script>
+

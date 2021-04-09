@@ -37,7 +37,7 @@ class PostController extends Controller
             report($exception);
             return response()->json(["message" => "invalid request"], 400);
         }
-        $post = auth('api')->user()->activeProfile->posts()->create(["content" => ["body" => $request->get('body')]]);
+        $post = auth()->user()->activeProfile->posts()->create(["content" => ["body" => $request->get('body')]]);
         return response()->json((new PostResource($post))->toJson());
     }
     public function destroy(Post $post)

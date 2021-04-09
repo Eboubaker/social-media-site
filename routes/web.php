@@ -21,6 +21,7 @@ use Illuminate\Support\Str;
 // NOTE: API routes should not be added here instead they should be in ~/routes/api.php
 
 App\Http\Api::routes();
+
 Route::group([
     'prefix' => '{locale}',
 ], function() {
