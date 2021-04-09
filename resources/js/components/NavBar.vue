@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="fixed z-30 w-full flex items-center justify-between px-4 py-1 bg-white">
+    <div class="fixed z-40 w-full flex items-center justify-between px-4 py-1 bg-white">
       <div class="flex items-center space-x-2">
         <a title="Quick Look" href="/" alt="Quick Look">
           <img
@@ -10,25 +10,21 @@
             alt="Quick Look"
           />
         </a>
-        <div class="flex flex-row rounded-full bg-gray-100 space-x-2">
+        <div class="flex flex-row justify-start items-center rounded-full space-x-2">
           <button
             title="Search"
             @click="searchOpen=!searchOpen"
-            class="flex items-center p-2 rounded-full cursor-pointer outline-none focus:outline-none hover:bg-gray-200"
+            class="w-10 h-10 px-2 mb-1 bg-white border shadow-2xl rounded-full flex justify-center items-center mt-2 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red"
           >
-            <span :class="!searchOpen ? 'block' : 'hidden'" class="material-icons w-6 h-6">search</span>
-            <span :class="!searchOpen ? 'hidden' : 'block'" class="material-icons w-6 h-6">cancel</span>
+            <span :class="!searchOpen ? 'block' : 'hidden'" class="material-icons w-7 h-7">search</span>
+            <span :class="!searchOpen ? 'hidden' : 'block'" class="material-icons w-7 h-7">cancel</span>
           </button>
           <form v-if="searchOpen" class action="./confirm">
-            <input
-              type="text"
-              class="px-2 py-1 my-1 rounded-full outline-none focus:outline-none bg-gray-100"
-              placeholder="Search"
-            />
+            <input type="text" class placeholder="Search" />
           </form>
         </div>
       </div>
-      <div class="hidden md:flex md:flex-row md:justify-start md:space-x-2 md:w-2/3">
+      <div class="hidden md:flex md:flex-row md:justify-center md:space-x-2 md:w-2/3">
         <a
           class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
           href="#"
@@ -64,7 +60,7 @@
           <button
             title="Notifications"
             @click="notificationOpen = !notificationOpen"
-            class="p-1 text-gray-500 bg-gray-100 hover:bg-red-50 hover:text-logo-red rounded-full focus:outline-none"
+            class="w-10 h-10 px-2 bg-white border shadow-2xl rounded-full flex justify-center items-center mt-2 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red"
             type="button"
           >
             <!-- <span class="material-icons">notifications</span> -->
@@ -93,11 +89,11 @@
         <!-- ````````````````Notifications end/````````````````  -->
 
         <!-- ````````````````/Messages start````````````````  -->
-        <div class="messages" x-data="{messageOpen: false}">
+        <div class="messages">
           <button
             title="Messages"
             @click="messageOpen = !messageOpen"
-            class="p-1 text-gray-500 bg-gray-100 hover:bg-red-50 hover:text-logo-red rounded-full focus:outline-none"
+            class="w-10 h-10 px-2 bg-white border shadow-2xl rounded-full flex justify-center items-center mt-2 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red"
             type="button"
           >
             <svg
@@ -120,12 +116,19 @@
         </div>
         <!-- ````````````````Messages end/````````````````  -->
 
+        <!-- ````````````````/Model start````````````````  -->
+        <div class="Model">
+          <!-- Model Block -->
+          <Creatpost />
+        </div>
+        <!-- ````````````````/Model end````````````````  -->
+
         <!-- ````````````````/Settings start````````````````  -->
-        <div class="Settings" x-data="{messageOpen: false}">
+        <div class="Settings">
           <button
             title="Settings"
             @click="settingOpen = !settingOpen"
-            class="flex justify-center items-center p-1 text-gray-500 bg-gray-100 hover:bg-red-50 hover:text-logo-red rounded-full focus:outline-none"
+            class="w-10 h-10 px-2 bg-white border shadow-2xl rounded-full flex justify-center items-center mt-2 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red"
             type="button"
           >
             <span class="material-icons w-7 h-7">arrow_drop_down_circle</span>
@@ -203,13 +206,15 @@ import Notifications from "./Notifications";
 import Messages from "./Messages";
 import Menu from "./Menu";
 import Settings from "./Settings";
+import Creatpost from "./CreatPost";
 export default {
   components: {
     Post,
     Menu,
     Messages,
     Notifications,
-    Settings
+    Settings,
+    Creatpost
   },
   data() {
     return {
@@ -218,7 +223,8 @@ export default {
       searchOpen: false,
       notificationOpen: false,
       messageOpen: false,
-      settingOpen: false
+      settingOpen: false,
+      modelOpen: false
     };
   },
   created() {

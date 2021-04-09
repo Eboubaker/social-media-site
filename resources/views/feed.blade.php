@@ -30,11 +30,7 @@
     <div class="hidden md:block md:w-96"></div>
     <div class="md:w-1/2 space-y-4 pb-8">
         <div class="w-11/12 mx-auto md:w-5/6">
-            <button title="Add new Post" class="modal-open w-full h-12 px-2 bg-white border shadow-2xl rounded-lg flex justify-center items-center mt-2 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red">
-                <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </button>
+            
         </div>
         <post></post>
         <post></post>
@@ -43,6 +39,7 @@
     <div class="hidden md:block md:w-96"></div>
 </div>
 <div>
-    @include('post.create')
+    
+    {{-- @include('post.create') --}}
 </div>
 @endsection

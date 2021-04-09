@@ -9,6 +9,7 @@ require("./create-posts");
 import Vue from "vue";
 // import VueResource from "vue-resource";
 import "alpinejs";
+import "vue-clickaway";
 
 // tell Vue to use the vue-resource plugin
 // Vue.use(VueResource);
@@ -18,6 +19,7 @@ Vue.component("navbar", require("./components/NavBar.vue").default);
 Vue.component("post", require("./components/Post.vue").default);
 Vue.component("profile-type", require("./components/SocialBuisnessAccount.vue").default);
 Vue.component("play-ground", require("./components/PlayGround.vue").default);
+Vue.component("creat-post", require("./components/CreatPost.vue").default);
 
 Vue.directive("clickaway", {
   bind() {

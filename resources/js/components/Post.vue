@@ -17,8 +17,11 @@
           </div>
         </div>
         <div class="relative items-center">
-          <button class="relative z-10 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer" :class="isOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'"
-            @click="isOpen = !isOpen" >
+          <button
+            class="relative z-30 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer"
+            :class="isOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'"
+            @click="isOpen = !isOpen"
+          >
             <svg
               class="w-6"
               xmlns="http://www.w3.org/2000/svg"
@@ -34,15 +37,15 @@
               />
             </svg>
           </button>
-          <button
+          <div
             v-if="isOpen"
             @click="isOpen = false"
             tabindex="-1"
-            class="fixed top-0 right-0 left-0 bottom-0 w-full h-full bg-black opacity-10 cursor-default"
-          ></button>
+            class="fixed z-20 top-0 right-0 left-0 bottom-0 w-full h-full bg-black opacity-10 cursor-default"
+          ></div>
           <div
             :class="isOpen ? 'block' : 'hidden'"
-            class="absolute right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
+            class="absolute z-30 right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
           >
             <div class="flex flex-col space-y-2">
               <a
@@ -172,21 +175,23 @@
             <a class="text-sm hover:underline" href="#">1h</a>
           </div>
         </div>
+          <a class="hover:underline" href="#">Load more...</a>
       </div>
     </div>
   </div>
 </template>
 <script>
+import PlayGround from "./PlayGround.vue";
 export default {
+  components: { PlayGround },
   props: {
-    posts: {
-      type: Object,
-      default: null
+    post: {
+      type: Object
     }
   },
   data() {
     return {
-      isOpen: false,
+      isOpen: false
     };
   }
 };
