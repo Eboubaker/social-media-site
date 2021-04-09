@@ -52,7 +52,7 @@ class PostController extends Controller
     {
         if(DB::transaction(fn()=>$post->update($request->all())))
         {
-            $post->refresh();
+            // $post->refresh();
             return response()->json((new PostResource($post))->toArray($request));
         }
         return response()->json(["message" => "error"], 500);

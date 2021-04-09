@@ -18,6 +18,7 @@ class ProfileResource extends JsonResource
         return [
             "id" => $this->{Profileable::PKEY},
             "profileImage" => '/img/150x150.png',
+            "name" => $this->first_name
         ];
     }
 }

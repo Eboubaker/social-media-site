@@ -140,7 +140,7 @@ class RegisterController extends Controller
                 'birth_date' => $data['birthDate'],
             ]);
             $user->socialProfiles()->save($profile);
-            $user->activeProfile()->associate($profile);
+            $user->activeProfile()->associate($profile)->save();
             return $user;
         });
     }
