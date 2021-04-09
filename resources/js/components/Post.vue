@@ -4,8 +4,8 @@
     <div class="my-0 md:my-4 px-2 rounded-lg shadow-lg bg-white">
       <div class="flex flex-row justify-between items-center">
         <div class="flex justify-start items-center pt-2 px-4 space-x-2">
-          <a class href>
-            <img class="w-14 rounded-full" src="/img/150x150.png" alt="tree" />
+          <a href>
+            <img class="w-14 h-14 rounded-full" src="/img/150x150.png" alt="tree" />
           </a>
           <div class="flex flex-col -space-y-1">
             <a class="text-lg hover:underline" href>
@@ -145,7 +145,7 @@
       </div>
       <div class="space-y-2 border-t-2 pt-4 pb-2">
         <div class="flex justify-between items-center space-x-2">
-          <img class="rounded-full w-10" src="/img/150x150.png" />
+          <img class="w-10 h-10 rounded-full" src="/img/150x150.png" />
           <form class="flex-auto" action="#" method="#">
             <input
               class="bg-gray-100 w-full rounded-r-full rounded-l-full py-2 px-2 border-none focus:border-logo-black focus:ring-1 focus:ring-logo-black outline-none focus:outline-none"
@@ -158,7 +158,7 @@
         </div>
         <div class="grid md:grid-cols-12">
           <a class="w-10 h-10 mr-2 md:mr-0" href="#">
-            <img class="rounded-full" src="/img/150x150.png" />
+            <img class="w-10 h-10 rounded-full" src="/img/150x150.png" />
           </a>
           <div class="col-start-2 col-span-10 bg-gray-100 rounded-2xl px-3 py-1">
             <a class="hover:underline font-semibold text-sm" href="#">Abdelhak</a>

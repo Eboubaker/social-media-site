@@ -88,7 +88,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
+          <img class="w-14 h-14 rounded-full" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -100,7 +100,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
+          <img class="w-14 h-14 rounded-full" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -112,7 +112,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
+          <img class="w-14 h-14 rounded-full" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -124,7 +124,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
+          <img class="w-14 h-14 rounded-full" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -136,7 +136,7 @@
           class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
+          <img class="w-14 h-14 rounded-full" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>

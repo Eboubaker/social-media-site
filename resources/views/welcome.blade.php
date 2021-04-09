@@ -8,7 +8,8 @@
 {{--        </form>--}}
 {{--    @endauth--}}
 <h1 class="bg-green-200 py-4 text-center text-2xl top-0">Play Ground</h1>
-
+{{-- @include('auth.register') --}}
+@include('auth.login')
     {{-- <creat-post></creat-post> --}}
 
 {{-- <button title="Add new Post" class="modal-open w-full h-12 px-2 bg-white border shadow-2xl rounded-lg flex justify-center items-center mt-2 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red">
@@ -19,5 +20,5 @@
 {{-- @include('Posts.create-new') --}}
 {{-- <post></post> --}}
 {{-- <profile-type></profile-type> --}}
-<play-ground></play-ground> 
+{{-- <play-ground></play-ground>  --}}
 @endsection

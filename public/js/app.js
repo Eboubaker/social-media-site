@@ -5058,7 +5058,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  methods: {
+    logout: function logout() {
+      axios.post("/en/logout").then(function (res) {
+        window.location.href = "/";
+      })["catch"](function (e) {});
+    }
+  }
+});
 
 /***/ }),
 
@@ -30719,8 +30727,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -30742,8 +30750,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -30765,8 +30773,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -30788,8 +30796,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -30811,8 +30819,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -30834,8 +30842,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -30857,8 +30865,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -31537,8 +31545,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -31560,8 +31568,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -31583,8 +31591,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -31606,8 +31614,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -31629,8 +31637,8 @@ var staticRenderFns = [
           },
           [
             _c("img", {
-              staticClass: "rounded-full",
-              attrs: { width: "50", src: "/img/150x150.png", alt: "" }
+              staticClass: "w-14 h-14 rounded-full",
+              attrs: { src: "/img/150x150.png", alt: "" }
             }),
             _vm._v(" "),
             _c("div", [
@@ -31927,7 +31935,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("a", { attrs: { href: "" } }, [
       _c("img", {
-        staticClass: "w-14 rounded-full",
+        staticClass: "w-14 h-14 rounded-full",
         attrs: { src: "/img/150x150.png", alt: "tree" }
       })
     ])
@@ -32040,7 +32048,7 @@ var staticRenderFns = [
         { staticClass: "flex justify-between items-center space-x-2" },
         [
           _c("img", {
-            staticClass: "rounded-full w-10",
+            staticClass: "w-10 h-10 rounded-full",
             attrs: { src: "/img/150x150.png" }
           }),
           _vm._v(" "),
@@ -32069,7 +32077,7 @@ var staticRenderFns = [
           { staticClass: "w-10 h-10 mr-2 md:mr-0", attrs: { href: "#" } },
           [
             _c("img", {
-              staticClass: "rounded-full",
+              staticClass: "w-10 h-10 rounded-full",
               attrs: { src: "/img/150x150.png" }
             })
           ]
@@ -32154,116 +32162,132 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "relative z-20 text-left" }, [
+    _c(
+      "div",
+      {
+        staticClass:
+          "origin-top-right absolute right-0 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none",
+        attrs: {
+          role: "menu",
+          "aria-orientation": "vertical",
+          "aria-labelledby": "options-menu"
+        }
+      },
+      [
+        _c(
+          "p",
+          {
+            staticClass: "block px-4 py-2 text-xl text-gray-700",
+            attrs: { role: "menuitem" }
+          },
+          [_vm._v("Settings")]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "py-1 space-y-1 h-96 overflow-auto overscroll-contain",
+            attrs: { role: "none" }
+          },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._m(1),
+            _vm._v(" "),
+            _vm._m(2),
+            _vm._v(" "),
+            _c("hr", { staticClass: "my-2" }),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "button",
+                {
+                  staticClass:
+                    "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
+                  on: { click: _vm.logout }
+                },
+                [
+                  _c("span", { staticClass: "material-icons" }, [
+                    _vm._v("account_circle")
+                  ]),
+                  _vm._v("\n          Logout\n        ")
+                ]
+              )
+            ])
+          ]
+        )
+      ]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "relative z-20 text-left" }, [
-      _c(
-        "div",
-        {
-          staticClass:
-            "origin-top-right absolute right-0 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none",
-          attrs: {
-            role: "menu",
-            "aria-orientation": "vertical",
-            "aria-labelledby": "options-menu"
-          }
-        },
-        [
-          _c(
-            "p",
-            {
-              staticClass: "block px-4 py-2 text-xl text-gray-700",
-              attrs: { role: "menuitem" }
-            },
-            [_vm._v("Settings")]
-          ),
+    return _c(
+      "a",
+      {
+        staticClass:
+          "flex flex-row items-center border-b space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+        attrs: { href: "#", role: "menuitem" }
+      },
+      [
+        _c("img", {
+          staticClass: "w-14 h-14 rounded-full",
+          attrs: { src: "/img/150x150.png", alt: "" }
+        }),
+        _vm._v(" "),
+        _c("div", [
+          _c("p", [_vm._v("Abd Elhak")]),
           _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass:
-                "py-1 space-y-1 h-96 overflow-auto overscroll-contain",
-              attrs: { role: "none" }
-            },
-            [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900",
-                  attrs: { href: "#", role: "menuitem" }
-                },
-                [
-                  _c("img", {
-                    staticClass: "rounded-full",
-                    attrs: { width: "50", src: "/img/150x150.png", alt: "" }
-                  }),
-                  _vm._v(" "),
-                  _c("div", [
-                    _c("p", [_vm._v("Abd Elhak")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("Lorem ipsum dolor sit consectetur...")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("23 m")])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900",
-                  attrs: { href: "#", role: "menuitem" }
-                },
-                [
-                  _c("img", {
-                    staticClass: "rounded-full",
-                    attrs: { width: "50", src: "/img/150x150.png", alt: "" }
-                  }),
-                  _vm._v(" "),
-                  _c("div", [
-                    _c("p", [_vm._v("Abd Elhak")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("Lorem ipsum dolor sit consectetur...")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("23 m")])
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900",
-                  attrs: { href: "#", role: "menuitem" }
-                },
-                [
-                  _c("img", {
-                    staticClass: "rounded-full",
-                    attrs: { width: "50", src: "/img/150x150.png", alt: "" }
-                  }),
-                  _vm._v(" "),
-                  _c("div", [
-                    _c("p", [_vm._v("Abd Elhak")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("Lorem ipsum dolor sit consectetur...")]),
-                    _vm._v(" "),
-                    _c("p", [_vm._v("23 m")])
-                  ])
-                ]
-              )
-            ]
-          )
-        ]
-      )
-    ])
+          _c("p", [_vm._v("Lorem ipsum dolor sit consectetur...")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("23 m")])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass:
+          "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
+        attrs: { href: "#" }
+      },
+      [
+        _c("span", { staticClass: "material-icons" }, [
+          _vm._v("account_circle")
+        ]),
+        _vm._v(" "),
+        _c("p", [_vm._v("Account Parameter")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass:
+          "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
+        attrs: { href: "#" }
+      },
+      [
+        _c("span", { staticClass: "material-icons" }, [
+          _vm._v("account_circle")
+        ]),
+        _vm._v(" "),
+        _c("p", [_vm._v("Apperance")])
+      ]
+    )
   }
 ]
 render._withStripped = true

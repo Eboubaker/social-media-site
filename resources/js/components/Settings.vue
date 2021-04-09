@@ -10,10 +10,10 @@
       <div class="py-1 space-y-1 h-96 overflow-auto overscroll-contain" role="none">
         <a
           href="#"
-          class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          class="flex flex-row items-center border-b space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
+          <img class="w-14 h-14 rounded-full" src="/img/150x150.png" alt />
           <div>
             <p>Abd Elhak</p>
             <p>Lorem ipsum dolor sit consectetur...</p>
@@ -21,33 +21,44 @@
           </div>
         </a>
         <a
+          class="flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
           href="#"
-          class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          role="menuitem"
         >
-          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
-          <div>
-            <p>Abd Elhak</p>
-            <p>Lorem ipsum dolor sit consectetur...</p>
-            <p>23 m</p>
-          </div>
+          <span class="material-icons">account_circle</span>
+          <p>Account Parameter</p>
         </a>
         <a
+          class="flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
           href="#"
-          class="flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-          role="menuitem"
         >
-          <img class="rounded-full" width="50" src="/img/150x150.png" alt />
-          <div>
-            <p>Abd Elhak</p>
-            <p>Lorem ipsum dolor sit consectetur...</p>
-            <p>23 m</p>
-          </div>
+          <span class="material-icons">account_circle</span>
+          <p>Apperance</p>
         </a>
+        <hr class="my-2" />
+        <div>
+          <button
+            class="flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+            v-on:click="logout"
+          >
+            <span class="material-icons">account_circle</span>
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
     <script>
-export default {};
+export default {
+  methods: {
+    logout: function() {
+      axios
+        .post("/en/logout")
+        .then(res => {
+          window.location.href = "/";
+        })
+        .catch(e => {});
+    }
+  }
+};
 </script>

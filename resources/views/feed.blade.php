@@ -30,8 +30,8 @@
     <div class="hidden md:block md:w-96"></div>
     <div class="md:w-1/2 space-y-4 pb-8">
         <div class="w-11/12 mx-auto md:w-5/6">
-            <feed></feed>
         </div>
+        <feed></feed>
     </div>
     <div class="hidden md:block md:w-96"></div>
 </div>

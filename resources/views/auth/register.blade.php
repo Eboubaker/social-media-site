@@ -2,20 +2,20 @@
 
 @section('content')
 
-<div v-pre class="font-mono bg-gray-400">
+<div v-pre class="overflow-hidden">
     <!-- Container -->
     <div class="container mx-auto">
         <div class="flex justify-center px-6 my-12">
             <!-- Row -->
-            <div class="w-full xl:w-3/4 lg:w-11/12 flex">
+            <div class="w-full{{--  xl:w-3/4 lg:w-11/12 --}} flex">
                 <!-- Col -->
-                <div class="bg-cover h-auto bg-gray-400 hidden lg:block lg:w-5/12 rounded-l-lg"
+                <div class="bg-auto bg-no-repeat bg-center h-auto hidden lg:block lg:w-5/6 rounded-l-lg"
                     style="background-image: url('/img/logo.png')"></div>
                 <!-- Col -->
-                <div class="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
-                  <h3 class="pt-4 text-2xl text-center">Create an Account!</h3>
+                <div class="w-full lg:w-1/2 border p-5 rounded-lg shadow-md">
+                  <h3 class="pt-4 pb-1 text-2xl text-center">Create an Account!</h3>
                   <hr/>
-                  <form class="px-8 pt-6 pb-8 mb-4 bg-white rounded" method="POST" action="{{ route('register') }}">
+                  <form class="px-8 py-4 mb-2 bg-white rounded" method="POST" action="{{ route('register') }}">
                       @csrf
                       <div class="mb-4 md:flex md:justify-between">
                           <div class="mb-4 md:mr-2 md:mb-0">
@@ -54,7 +54,7 @@
                           </label>
                           <input
                               class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('login') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                              id="login" type="email" name="login" placeholder="Email or Phone Number" value="{{ old('login') }}"/>
+                              id="login" type="text" name="login" placeholder="Email or Phone Number" value="{{ old('login') }}"/>
                           @error('login') <p class="text-xs italic text-red-500">{{ $message }}</p> @enderror
                       </div>
                       <div class="mb-4 md:flex md:justify-between">
@@ -81,20 +81,20 @@
                       </div>
                       <div class="mb-6 text-center">
                           <button
-                              class="w-full px-4 py-2 font-bold transition-colors duration-75 border-primary-hard border-2 text-logo-black bg-white rounded-xl hover:bg-primary-hard hover:border-white hover:text-white focus:outline-none focus:shadow-outline"
+                              class="w-full px-4 py-2 font-bold transition-colors duration-75 border-red-500 border-2 text-logo-black bg-white rounded-xl hover:bg-red-500 hover:border-white hover:text-white focus:outline-none focus:shadow-outline"
                               type="submit">
                               Register
                           </button>
                       </div>
                       <hr class="mb-6 border-t" />
                       <div class="text-center">
-                          <a class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                          <a class="inline-block text-sm text-blue-500 align-baseline hover:underline"
                               href="{{ route('login') }}">
                               Already have an account? Login!
                           </a>
                       </div>
                       <div class="text-center">
-                          <a class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                          <a class="inline-block text-sm text-blue-500 align-baseline hover:underline"
                               href="{{ route('password.request') }}">
                               Forgot Password?
                           </a>
