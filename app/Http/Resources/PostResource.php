@@ -19,7 +19,7 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->{Post::PKEY},
-            'author' => new ProfileResource(Post::find($this->{Post::PKEY})->profileable),
+            'author' => new ProfileResource($this->whenLoaded('author')),
             'content' => $this->content,
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'images' => ImageResource::collection($this->whenLoaded('images')),

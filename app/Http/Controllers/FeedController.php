@@ -15,7 +15,7 @@ class FeedController extends Controller
         $parameters = (object) $request->all();
         $user = Auth::user();
 
-        return PostResource::collection(Post::all());
+        return PostResource::collection(Post::with(['comments', 'videos', 'images', 'author'])->get());
     }
 
     /**

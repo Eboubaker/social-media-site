@@ -17,8 +17,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Notifications\HasDatabaseNotifications;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Ramsey\Collection\Collection;
-
 /**
  * @property Collection posts
  * @property Collection comments
@@ -71,5 +69,10 @@ class Profileable extends BaseModel
         $like->profileable()->associate($this);
         $like->postable()->associate($postable);
         $this->likes()->save($like);
+    }
+
+    public function activeProfileRelation()
+    {
+        return $this->morphOne(Users::class, 'active_profileable');
     }
 }
