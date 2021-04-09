@@ -9,10 +9,10 @@
           </a>
           <div class="flex flex-col -space-y-1">
             <a class="text-lg hover:underline" href>
-              <h4>Abdelhak</h4>
+              <h4>{{ post.author.name }}</h4>
             </a>
             <a class="hover:underline" href>
-              <small>24 m</small>
+              <small>{{ post.createdAt }}</small>
             </a>
           </div>
         </div>
@@ -91,17 +91,15 @@
         </div>
       </div>
       <div class="px-4 py-2">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium commodi cumque laboriosam quos molestiae fugit!</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium commodi cumque laboriosam quos molestiae fugit!</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium commodi cumque laboriosam quos molestiae fugit!</p>
+        <p>{{ post.content.body }}</p>
       </div>
       <div class="flex justify-between px-2 text-sm">
         <div>
-          <a class="hover:underline" href="#">700 likes</a>
+          <a class="hover:underline" href="#">{{ post.likes.length }} Likes</a>
         </div>
         <div class="flex space-x-2">
           <div>
-            <a class="hover:underline" href="#">77 comments</a>
+            <a class="hover:underline" href="#">{{ post.commentsCount }} Comments</a>
           </div>
           <div>
             <a class="hover:underline" href="#">40 Shares</a>

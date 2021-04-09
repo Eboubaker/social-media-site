@@ -130,7 +130,7 @@
               </label>
             </div>
             <button
-              class="w-11/12 mx-7 my-4 py-2 text-center text-white bg-gray-700 hover:bg-logo-black transition-all ease-in-out rounded-md"
+              class="modal-close w-11/12 mx-7 my-4 py-2 text-center text-white bg-gray-700 hover:bg-logo-black transition-all ease-in-out rounded-md"
               type="button"
               v-on:click="submit()"
             >Post</button>
@@ -154,8 +154,10 @@
     },
     methods:{
       submit: function(){
-        axios.post('/api/posts', this.form).then((res)=>{
-
+        axios
+        .post('/api/posts', this.form)
+        .then((res)=>{
+          
         })
         .catch((e)=>{
 

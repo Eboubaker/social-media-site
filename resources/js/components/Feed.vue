@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div v-for="post in posts" :key="post.id">
-      <Post :post="post" />
-    </div>
+      <Post v-for="post in posts" :key="post.id" :post="post" />      
   </div>
 </template>
 <script>
@@ -33,7 +31,7 @@ export default {
       axios
         .post("/api/feed", { parameters: {} })
         .then((res) => {
-          this.posts.push(res.data.data);
+          this.posts.push(...res.data.data);
         })
         .catch((err) => {
           console.log(err);

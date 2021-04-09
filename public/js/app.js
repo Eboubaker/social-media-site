@@ -3984,8 +3984,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Post__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Post */ "./resources/js/components/Post.vue");
-//
-//
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -4021,7 +4031,9 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/api/feed", {
         parameters: {}
       }).then(function (res) {
-        _this.posts.push(res.data.data);
+        var _this$posts;
+
+        (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(res.data.data));
       })["catch"](function (err) {
         console.log(err);
       }).then(function () {
@@ -4786,8 +4798,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _PlayGround_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PlayGround.vue */ "./resources/js/components/PlayGround.vue");
-//
-//
 //
 //
 //
@@ -30116,7 +30126,7 @@ var render = function() {
                   "button",
                   {
                     staticClass:
-                      "w-11/12 mx-7 my-4 py-2 text-center text-white bg-gray-700 hover:bg-logo-black transition-all ease-in-out rounded-md",
+                      "modal-close w-11/12 mx-7 my-4 py-2 text-center text-white bg-gray-700 hover:bg-logo-black transition-all ease-in-out rounded-md",
                     attrs: { type: "button" },
                     on: {
                       click: function($event) {
@@ -30212,14 +30222,9 @@ var render = function() {
   return _c(
     "div",
     _vm._l(_vm.posts, function(post) {
-      return _c(
-        "div",
-        { key: post.id },
-        [_c("Post", { attrs: { post: post } })],
-        1
-      )
+      return _c("Post", { key: post.id, attrs: { post: post } })
     }),
-    0
+    1
   )
 }
 var staticRenderFns = []
@@ -31697,7 +31702,33 @@ var render = function() {
           "div",
           { staticClass: "flex flex-row justify-between items-center" },
           [
-            _vm._m(0),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "flex justify-start items-center pt-2 px-4 space-x-2"
+              },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex flex-col -space-y-1" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "text-lg hover:underline",
+                      attrs: { href: "" }
+                    },
+                    [_c("h4", [_vm._v(_vm._s(_vm.post.author.name))])]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    { staticClass: "hover:underline", attrs: { href: "" } },
+                    [_c("small", [_vm._v(_vm._s(_vm.post.createdAt))])]
+                  )
+                ])
+              ]
+            ),
             _vm._v(" "),
             _c("div", { staticClass: "relative items-center" }, [
               _c(
@@ -31767,9 +31798,29 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(3),
+        _c("div", { staticClass: "px-4 py-2" }, [
+          _c("p", [_vm._v(_vm._s(_vm.post.content.body))])
+        ]),
         _vm._v(" "),
-        _vm._m(4),
+        _c("div", { staticClass: "flex justify-between px-2 text-sm" }, [
+          _c("div", [
+            _c("a", { staticClass: "hover:underline", attrs: { href: "#" } }, [
+              _vm._v(_vm._s(_vm.post.likes.length) + " Likes")
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex space-x-2" }, [
+            _c("div", [
+              _c(
+                "a",
+                { staticClass: "hover:underline", attrs: { href: "#" } },
+                [_vm._v(_vm._s(_vm.post.commentsCount) + " Comments")]
+              )
+            ]),
+            _vm._v(" "),
+            _vm._m(3)
+          ])
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "flex flex-row justify-evenly border-t" }, [
           _c(
@@ -31864,7 +31915,7 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _vm._m(5)
+        _vm._m(4)
       ]
     )
   ])
@@ -31874,30 +31925,12 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "flex justify-start items-center pt-2 px-4 space-x-2" },
-      [
-        _c("a", { attrs: { href: "" } }, [
-          _c("img", {
-            staticClass: "w-14 rounded-full",
-            attrs: { src: "/img/150x150.png", alt: "tree" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex flex-col -space-y-1" }, [
-          _c(
-            "a",
-            { staticClass: "text-lg hover:underline", attrs: { href: "" } },
-            [_c("h4", [_vm._v("Abdelhak")])]
-          ),
-          _vm._v(" "),
-          _c("a", { staticClass: "hover:underline", attrs: { href: "" } }, [
-            _c("small", [_vm._v("24 m")])
-          ])
-        ])
-      ]
-    )
+    return _c("a", { attrs: { href: "" } }, [
+      _c("img", {
+        staticClass: "w-14 rounded-full",
+        attrs: { src: "/img/150x150.png", alt: "tree" }
+      })
+    ])
   },
   function() {
     var _vm = this
@@ -31991,49 +32024,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "px-4 py-2" }, [
-      _c("p", [
-        _vm._v(
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium commodi cumque laboriosam quos molestiae fugit!"
-        )
-      ]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v(
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium commodi cumque laboriosam quos molestiae fugit!"
-        )
-      ]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v(
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium commodi cumque laboriosam quos molestiae fugit!"
-        )
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "flex justify-between px-2 text-sm" }, [
-      _c("div", [
-        _c("a", { staticClass: "hover:underline", attrs: { href: "#" } }, [
-          _vm._v("700 likes")
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "flex space-x-2" }, [
-        _c("div", [
-          _c("a", { staticClass: "hover:underline", attrs: { href: "#" } }, [
-            _vm._v("77 comments")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", [
-          _c("a", { staticClass: "hover:underline", attrs: { href: "#" } }, [
-            _vm._v("40 Shares")
-          ])
-        ])
+    return _c("div", [
+      _c("a", { staticClass: "hover:underline", attrs: { href: "#" } }, [
+        _vm._v("40 Shares")
       ])
     ])
   },

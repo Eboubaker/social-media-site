@@ -2,10 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Morphs\Profileable;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProfileResource extends JsonResource
+class LikeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,9 +15,8 @@ class ProfileResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "id" => $this->{Profileable::PKEY},
-            "profileImage" => new ImageResource($this->whenLoaded('profileImage')),
-            "name" => $this->first_name . ' ' . $this->last_name
+            'liker' => new ProfileResource($this->whenLoaded('profileable')),
+            'likedAt' => $this->liked_at->diffForHumans()
         ];
     }
 }

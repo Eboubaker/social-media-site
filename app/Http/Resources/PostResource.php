@@ -19,12 +19,13 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->{Post::PKEY},
-            'author' => new ProfileResource($this->whenLoaded('author')),
+            'author' => new ProfileResource($this->whenLoaded('profileable')),
             'content' => $this->content,
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'videos' => VideoResource::collection($this->whenLoaded('videos')),
             'commentsCount' => $this->comments->count(),
+            'likes' => LikeResource::collection($this->whenLoaded('likes')),
             'createdAt' => $this->created_at->diffForHumans(),
             'updatedAt' => $this->updated_at,
         ];
