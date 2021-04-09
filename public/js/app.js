@@ -4151,7 +4151,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-<<<<<<< Updated upstream
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
@@ -4358,24 +4357,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-=======
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/alpine.js");
-/* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpinejs__WEBPACK_IMPORTED_MODULE_0__);
-__webpack_require__(/*! ./bootstrap.js */ "./resources/js/bootstrap.js");
-
-__webpack_require__(/*! ./scroll-view */ "./resources/js/scroll-view.js");
-
-__webpack_require__(/*! ./create-posts */ "./resources/js/create-posts.js"); // require('./int-tel-input');
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
->>>>>>> Stashed changes
 //
 
 
- // import VueResource from "vue-resource";
 
-<<<<<<< Updated upstream
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -4410,15 +4396,6 @@ __webpack_require__(/*! ./create-posts */ "./resources/js/create-posts.js"); // 
       document.removeEventListener("keydown", handleEscape);
     });
   }
-=======
- // tell Vue to use the vue-resource plugin
-// Vue.use(VueResource);
-
-window.Vue = vue__WEBPACK_IMPORTED_MODULE_1__.default;
-vue__WEBPACK_IMPORTED_MODULE_1__.default.component("feed", __webpack_require__(/*! ./components/Feed.vue */ "./resources/js/components/Feed.vue").default);
-var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-  el: "#app"
->>>>>>> Stashed changes
 });
 
 /***/ }),
@@ -5068,15 +5045,12 @@ __webpack_require__(/*! ./create-posts */ "./resources/js/create-posts.js"); // 
 //
 
 
+ // import VueResource from "vue-resource";
 
  // tell Vue to use the vue-resource plugin
-// import FormError component
-// import FormError from './components/FormError.vue';
+// Vue.use(VueResource);
 
-window.Vue = vue__WEBPACK_IMPORTED_MODULE_1__.default; // import VueRouter from 'vue-router';
-// import routes from './routes';
-// Vue.use(VueRouter);
-
+window.Vue = vue__WEBPACK_IMPORTED_MODULE_1__.default;
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component("feed", __webpack_require__(/*! ./components/Feed.vue */ "./resources/js/components/Feed.vue").default);
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component("navbar", __webpack_require__(/*! ./components/NavBar.vue */ "./resources/js/components/NavBar.vue").default);
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component("post", __webpack_require__(/*! ./components/Post.vue */ "./resources/js/components/Post.vue").default);
@@ -30991,7 +30965,6 @@ render._withStripped = true
 
 /***/ }),
 
-<<<<<<< Updated upstream
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/PlayGround.vue?vue&type=template&id=066a6106&":
 /*!**********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/PlayGround.vue?vue&type=template&id=066a6106& ***!
@@ -32039,8 +32012,6 @@ function normalizeComponent (
 
 /***/ }),
 
-=======
->>>>>>> Stashed changes
 /***/ "./node_modules/vue/dist/vue.esm.js":
 /*!******************************************!*\
   !*** ./node_modules/vue/dist/vue.esm.js ***!

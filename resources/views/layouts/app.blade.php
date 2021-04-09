@@ -23,6 +23,7 @@
 
     {{--    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"--}}
 {{--          rel="stylesheet">--}}
+
 </head>
 <body class="text-logo-black">
     <div id="app">
@@ -30,6 +31,7 @@
         @yield('content')
     </div>
     @stack('scripts')
+
 </body>
 
 </html>

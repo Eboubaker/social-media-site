@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\BusinessProfile;
+use App\Models\SocialProfile;
 use App\Models\UserSettings;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -20,6 +22,7 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
+use stdClass;
 
 class RegisterController extends Controller
 {
@@ -58,6 +61,7 @@ class RegisterController extends Controller
      * @var PhoneNumberUtil
      */
     private $phoneUtil;
+
     /**
      * Create a new controller instance.
      *
@@ -90,7 +94,10 @@ class RegisterController extends Controller
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'firstName' => ['required', 'min:3'],
+            'lastName' => ['required', 'min:3'],
+            'birthDate' => ['required', 'date']
         ];
         if($this->getLoginMethod() === 'email')
         {
@@ -101,13 +108,6 @@ class RegisterController extends Controller
             $rules['phone'] = ['required', 'string', new Phone, 'unique:'.User::TABLE.',phone'];
             $data['phone'] = $this->getValidatedPhone();
             unset($data[$this->loginFieldName]);
-        }
-
-        if($this->getSelectedProfile() instanceof SocialProfile)
-        {
-            $rules['social-name'] = 'required';
-        }else{
-            $rules['business-name'] = 'required';
         }
         return Validator::make($data, $rules);
     }
@@ -130,21 +130,17 @@ class RegisterController extends Controller
         }else{
             $userData['phone'] = $this->getValidatedPhone();
         }
-        return DB::transaction(function() use ($userData) {
+        return DB::transaction(function() use ($userData, $data) {
             $user = User::create($userData);
             $user->settings()->create(UserSettings::getDefault());
-            $profile = $this->getSelectedProfile();
-            $jsonData = [];
-            if($profile instanceof SocialProfile)
-            {
-                $jsonData['name'] = $data['social-name'];
-                $profile->setAttribute('data', (object)$jsonData);
-                $user->socialProfiles()->save($profile);
-            }else{
-                $jsonData['name'] = $data['business-name'];
-                $profile->setAttribute('data', (object)$jsonData);
-                $user->businessProfiles()->save($profile);
-            }
+            $profile = SocialProfile::make([
+                'data' => new stdClass,
+                'first_name' => $data['firstName'],
+                'last_name' => $data['lastName'],
+                'birth_date' => $data['birthDate'],
+            ]);
+            $user->socialProfiles()->save($profile);
+            $user->activeProfile()->associate($profile);
             return $user;
         });
     }
@@ -268,4 +264,5 @@ class RegisterController extends Controller
 
         return property_exists($this, 'redirectTo') ? $this->redirectTo : '/';
     }
+
 }

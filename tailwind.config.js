@@ -14,6 +14,10 @@ module.exports = {
                     black: "#222831",
                     white: "#ffffff"
                 },
+                primary:{
+                    light: "#848ccf",
+                    hard: "#648ccf"
+                }
             },
             lineHeight: {
                 "12": "250px"

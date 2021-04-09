@@ -1,58 +1,67 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="lg:bg-gray-100 h-screen">
-        <div
-            class="grid grid-cols-1 md:grid md:grid-cols-2 md:text-xl md:gap-8 md:pt-36 md:pb-36 md:ml-12 md:mr-12 lg:grid lg:grid-cols-2 lg:text-xl lg:gap-44 lg:pt-36 lg:pb-36 lg:ml-48 lg:mr-40"
-        >
-            <div class="grid w-100 lg:h-72">
-                <img
-                    class="w-48 justify-self-center md:w-56 md:justify-self-start lg:w-2/3 lg:justify-self-start"
-                    src="{{asset("img/logo.png")}}"
-                    alt
-                />
-                <h3
-                    class="opacity-0 md:-mt-20 md:opacity-100 lg:opacity-100 lg:mt-1 lg:text-3xl"
-                >Connect with friends and expand your buisness</h3>
-            </div>
-            <div
-                class="grid grid-cols-1 ml-10 mr-10 pr-1 pl-1 text-center md:bg-white md:p-5 md:border-2 md:rounded-lg md:shadow-2xl md:text-center md:w-80 lg:bg-white lg:p-5 lg:border-2 lg:rounded-lg lg:shadow-2xl lg:w-96 lg:h-96"
-            >
-                <form class="grid grid-cols-1 gap-4" action="{{ route('login') }}" method="post">@csrf
-                    {{-- TODO: integrate errors inside the UI --}}
-                    {{-- https://laravel.com/docs/8.x/validation#the-at-error-directive --}}
-                    @if ($errors->any())
-                        <div class="bg-red-700">
-                            <ul class="text-white">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+
+<div v-pre id="register" class="font-mono bg-gray-400">
+    <!-- Container -->
+    <div class="container mx-auto">
+        <div class="flex justify-center px-6 my-12">
+            <!-- Row -->
+            <div class="w-full xl:w-3/4 lg:w-11/12 flex">
+                <!-- Col -->
+                <div class="bg-cover h-auto bg-gray-400 hidden lg:block lg:w-5/12 rounded-l-lg"
+                    style="background-image: url('/img/logo.png')"></div>
+                <!-- Col -->
+                <div class="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
+                    <h3 class="pt-4 text-2xl text-center">Login</h3>
+                    <hr />
+                    <form class="px-8 pt-6 pb-8 mb-4 bg-white rounded" method="POST" action="{{ route('login') }}">
+                        @csrf
+                        <div class="mb-4">
+                            <label class="block mb-2 text-sm font-bold text-gray-700" for="login">
+                                Email or Phone Number
+                            </label>
+                            <input
+                                class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('login') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                id="login" type="email" name="login" placeholder="Email or Phone Number" />
+                            @error('login') <p class="text-xs italic text-red-500">{{ $message }}</p> @enderror
                         </div>
-                    @endif
-                    <input
-                        type="text"
-                        name="login"
-                        placeholder="Email or Phone Number"
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                    />
-                    <button type="submit"
-                        class="p-2 font-medium border-2 outline-none focus:outline-none border-transparent rounded-lg text-white bg-logo-red hover:bg-red-500"
-                    >Log In</button>
-                    @if(Route::has('password.request'))
-                        <a class="text-sm text-red-500 hover:underline" href="{{route('password.request')}}">
-                            Forgot password?
-                        </a>
-                    @endif
-                </form>
-                <hr class="mt-4 mb-1" />
-                <small class="mb-4">or</small>
-                <a href="{{ route('register')}}" class="justify-self-center items-center w-48 px-1 py-2 font-medium border-transparent lg:w-64 rounded-lg text-white cursor-pointer outline-none bg-logo-black hover:bg-gray-900">Create New Account</a>
+                        <div class="mb-4">
+                            <div class="mb-4 md:mr-2 md:mb-0">
+                                <label class="block mb-2 text-sm font-bold text-gray-700" for="password">
+                                    Password
+                                </label>
+                                <input
+                                    class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('password') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                    id="password" name="password" type="password" placeholder="******************" />
+                                @error('password') <p class="text-xs italic text-red-500">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="mb-6 text-center">
+                            <button
+                                class="w-full px-4 py-2 font-bold transition-colors duration-75 border-primary-hard border-2 text-logo-black bg-white rounded-xl hover:bg-primary-hard hover:border-white hover:text-white focus:outline-none focus:shadow-outline"
+                                type="submit">
+                                Login
+                            </button>
+                        </div>
+                        <hr class="mb-6 border-t" />
+                        <div class="text-center">
+                            <a class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800" 
+                            href="{{ route('register') }}">
+                                Don't have an account? Register!
+                            </a>
+                        </div>
+                        <div class="text-center">
+                            <a class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                                href="{{ route('password.request') }}">
+                                Forgot Password?
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+</div>
 @endsection

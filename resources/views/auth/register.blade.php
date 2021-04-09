@@ -1,93 +1,108 @@
 @extends('layouts.app')
 
 @section('content')
-<!--
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ]
-  }
-  ```
--->
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-      <div>
-        <img class="mx-auto h-22 w-auto" src="/img/logo.png" alt="Quick Look">
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Register new account
-        </h2>
-        <p class="mt-2 text-center text-sm text-gray-600">
-          Already have one ?
-          <a href="#" class="font-medium text-red-600 hover:text-red-500">
-            login
-          </a>
-        </p>
-      </div>
-      <form class="mt-8 space-y-6 bg-white rounded-2xl shadow-lg p-4" action="{{ route('register') }}" method="POST">@csrf
-        <input type="hidden" name="remember" value="true">
-        <div class="rounded-md shadow-sm space-y-4">
-          <div>
-            <label class="sr-only">Email or Phone Number</label>
-            <input name="login" type="text" required placeholder="Email or Phone Number">
-          </div>
-          <div>
-            <label for="password" class="sr-only">Password</label>
-            <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Password">
-          </div>
-        </div>
-  
-        <div class="flex items-center justify-center">
-           @if ($errors->any())
-                <div class=" flex-auto px-4 py-2 rounded-md bg-red-100 text-red-500">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+
+<div v-pre class="font-mono bg-gray-400">
+    <!-- Container -->
+    <div class="container mx-auto">
+        <div class="flex justify-center px-6 my-12">
+            <!-- Row -->
+            <div class="w-full xl:w-3/4 lg:w-11/12 flex">
+                <!-- Col -->
+                <div class="bg-cover h-auto bg-gray-400 hidden lg:block lg:w-5/12 rounded-l-lg"
+                    style="background-image: url('/img/logo.png')"></div>
+                <!-- Col -->
+                <div class="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
+                  <h3 class="pt-4 text-2xl text-center">Create an Account!</h3>
+                  <hr/>
+                  <form class="px-8 pt-6 pb-8 mb-4 bg-white rounded" method="POST" action="{{ route('register') }}">
+                      @csrf
+                      <div class="mb-4 md:flex md:justify-between">
+                          <div class="mb-4 md:mr-2 md:mb-0">
+                              <label class="block mb-2 text-sm font-bold text-gray-700" for="firstName">
+                                  First Name
+                              </label>
+                              <input
+                                  class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border @error('firstName') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                  id="firstName" name="firstName" type="text" placeholder="First Name" value="{{ old('firstName') }}"/>
+                              @error('firstName') <p class="text-xs italic text-red-500">{{ $message }}</p>
+                              @enderror
+                          </div>
+                          <div class="md:ml-2">
+                              <label class="block mb-2 text-sm font-bold text-gray-700" for="lastName">
+                                  Last Name
+                              </label>
+                              <input
+                                  class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border @error('lastName') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                  id="lastName" name="lastName" type="text" placeholder="Last Name" value="{{ old('lastName') }}"/>
+                              @error('lastName') <p class="text-xs italic text-red-500">{{ $message }}</p>
+                              @enderror
+                          </div>
+                      </div>
+                      <div class="mb-4">
+                        <label class="block mb-2 text-sm font-bold text-gray-700" for="login">
+                            Birth Date
+                        </label>
+                        <input
+                            class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('birthDate') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                            id="birthDate" type="date" name="birthDate" value="{{ old('birthDate') }}"/>
+                        @error('birthDate') <p class="text-xs italic text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                      <div class="mb-4">
+                          <label class="block mb-2 text-sm font-bold text-gray-700" for="login">
+                              Email or Phone Number
+                          </label>
+                          <input
+                              class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('login') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              id="login" type="email" name="login" placeholder="Email or Phone Number" value="{{ old('login') }}"/>
+                          @error('login') <p class="text-xs italic text-red-500">{{ $message }}</p> @enderror
+                      </div>
+                      <div class="mb-4 md:flex md:justify-between">
+                          <div class="mb-4 md:mr-2 md:mb-0">
+                              <label class="block mb-2 text-sm font-bold text-gray-700" for="password">
+                                  Password
+                              </label>
+                              <input
+                                  class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('password') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                  id="password" name="password" type="password"
+                                  placeholder="******************" />
+                              @error('password') <p class="text-xs italic text-red-500">{{ $message }}</p>
+                              @enderror
+                          </div>
+                          <div class="md:ml-2">
+                              <label class="block mb-2 text-sm font-bold text-gray-700" for="c_password">
+                                  Confirm Password
+                              </label>
+                              <input
+                                  class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('password') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                                  id="c_password" type="password" name="password_confirmation"
+                                  placeholder="******************" />
+                          </div>
+                      </div>
+                      <div class="mb-6 text-center">
+                          <button
+                              class="w-full px-4 py-2 font-bold transition-colors duration-75 border-primary-hard border-2 text-logo-black bg-white rounded-xl hover:bg-primary-hard hover:border-white hover:text-white focus:outline-none focus:shadow-outline"
+                              type="submit">
+                              Register
+                          </button>
+                      </div>
+                      <hr class="mb-6 border-t" />
+                      <div class="text-center">
+                          <a class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                              href="{{ route('login') }}">
+                              Already have an account? Login!
+                          </a>
+                      </div>
+                      <div class="text-center">
+                          <a class="inline-block text-sm text-blue-500 align-baseline hover:text-blue-800"
+                              href="{{ route('password.request') }}">
+                              Forgot Password?
+                          </a>
+                      </div>
+                  </form>
                 </div>
-            @endif
+            </div>
         </div>
-  
-        <div>
-          <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-            Sign up
-          </button>
-        </div>
-      </form>
     </div>
-  </div>
-  
-{{-- <div class="flex justify-between w-full bg-gray-100">
-    <div></div>
-    <div>
-        @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    <form class="flex flex-col justify-between items-center space-y-4 bg-green-100" method="post" action="{{ route('register', app()->getLocale()) }}">@csrf
-        <label>
-            Phone or Email : <input name="login"/>
-        </label>
-        <label>
-            Password : <input name="password"/>
-        </label>
-        <button class="" type="submit">{{ __("submit") }}</button>
-    </form>
 </div>
-    <div></div>
-</div> --}}
-    
 @endsection

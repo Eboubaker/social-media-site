@@ -21,6 +21,11 @@ class CreateSocialProfilesTable extends Migration
             $table->id();
             MigrationHelper::addForeign($table, new User);
             $table->json('data');
+
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->date('birth_date');
+            
             MigrationHelper::addTimeStamps($table, new SocialProfile());
         });
     }

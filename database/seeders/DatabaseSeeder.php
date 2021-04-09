@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             ]);
             $user->socialProfiles()->create([
                 "data" => new \stdClass,
-            ])->profileImage()->create(ProfileImage::factory()->make()->attributesToArray());
+            ])->profileImage();
             $user->businessProfiles()->create([
                 "data" => new \stdClass,
             ])->profileImage()->create(ProfileImage::factory()->make()->attributesToArray());

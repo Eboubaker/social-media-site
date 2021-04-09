@@ -29,8 +29,8 @@ class SocialProfile extends Profileable
         return $this->morphOne(Image::class, 'profileable');
     }
 
-    public function getLastNameAttribute()
+    public function getFullNameAttribute()
     {
-        return $this->getAttribute('last_name');
+        return $this->attributes['first_name'].' '.$this->attributes['last_name'];
     }
 }

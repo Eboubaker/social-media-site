@@ -159,7 +159,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         if($this->socialProfiles()->count())
         {
-            return $this->socialProfiles->first->lastName;
+            return $this->socialProfiles->first->fullName;
         }
         $this->businessProfile;// loading the magic attribute
         if(isset($this->businessProfile->data->businessOwner->lastName))
