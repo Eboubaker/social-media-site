@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div v-pre class="overflow-hidden">
     <!-- Container -->
     <div class="container mx-auto">
@@ -50,12 +49,12 @@
                     </div>
                       <div class="mb-4">
                           <label class="block mb-2 text-sm font-bold text-gray-700" for="login">
-                              Email or Phone Number
+                              Phone Number
                           </label>
                           <input
-                              class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('login') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                              id="login" type="text" name="login" placeholder="Email or Phone Number" value="{{ old('login') }}"/>
-                          @error('login') <p class="text-xs italic text-red-500">{{ $message }}</p> @enderror
+                              class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('phone_number') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                              id="phone_number" type="text" name="phone_number" placeholder="Phone Number" value="{{ old('phone_number') }}"/>
+                          @error('phone_number') <p class="text-xs italic text-red-500">{{ $message }}</p> @enderror
                       </div>
                       <div class="mb-4 md:flex md:justify-between">
                           <div class="mb-4 md:mr-2 md:mb-0">
@@ -64,7 +63,7 @@
                               </label>
                               <input
                                   class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('password') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                  id="password" name="password" type="password"
+                                  id="password" name="password" type="password" value="{{ old('password') }}"
                                   placeholder="******************" />
                               @error('password') <p class="text-xs italic text-red-500">{{ $message }}</p>
                               @enderror
@@ -75,7 +74,7 @@
                               </label>
                               <input
                                   class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('password') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                                  id="c_password" type="password" name="password_confirmation"
+                                  id="c_password" type="password" name="password_confirmation" value="{{ old('password_confirmation') }}"
                                   placeholder="******************" />
                           </div>
                       </div>

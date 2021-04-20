@@ -56,6 +56,7 @@ class LoginController extends Controller
 
     private function getLoginMethod(): string
     {
+        return "phone";
         if(!$this->loginMethod)
         {
             $this->loginMethod = preg_match('/[A-Za-z]/', \request($this->loginFieldName), $matches) ? "email" : "phone";

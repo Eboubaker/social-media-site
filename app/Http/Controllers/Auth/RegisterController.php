@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
@@ -72,7 +73,7 @@ class RegisterController extends Controller
     {
         
         $this->middleware('guest');
-        $this->loginFieldName = 'login';
+        $this->loginFieldName = 'phone_number';
         $this->redirectTo = RouteServiceProvider::HOME;
         $this->verify = $verify;
         $this->phoneUtil = app('phoneNumberUtil');
@@ -95,21 +96,13 @@ class RegisterController extends Controller
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
+            'phone_number' => ['required', 'string', new Phone, Rule::unique(User::class, 'phone')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'firstName' => ['required', 'min:3'],
             'lastName' => ['required', 'min:3'],
             'birthDate' => ['required', 'date']
         ];
-        if($this->getLoginMethod() === 'email')
-        {
-            $rules['email'] = ['required', 'string', 'email', 'max:255', 'unique:'.User::TABLE.',email'];
-            $data['email'] = $data[$this->loginFieldName];
-            unset($data['login']);
-        }else{
-            $rules['phone'] = ['required', 'string', new Phone, 'unique:'.User::TABLE.',phone'];
-            $data['phone'] = $this->getValidatedPhone();
-            unset($data[$this->loginFieldName]);
-        }
+        $data['phone_number'] = $this->getValidatedPhone();
         return Validator::make($data, $rules);
     }
 
@@ -123,14 +116,9 @@ class RegisterController extends Controller
     {
         $userData = [
             'password' => Hash::make($data['password']),
+            'phone' => $this->getValidatedPhone(),
 //            'api_token' => Str::random(80),
         ];
-        if($this->getLoginMethod() === 'email')
-        {
-            $userData['email'] = $data[$this->loginFieldName];
-        }else{
-            $userData['phone'] = $this->getValidatedPhone();
-        }
         return DB::transaction(function() use ($userData, $data) {
             $user = User::create($userData);
             $user->settings()->create(UserSettings::getDefault());
@@ -193,13 +181,13 @@ class RegisterController extends Controller
     {
 
         $validator = $this->validator($request->all());
-        
-        if($validator->fails())
-        {
-            return $request->wantsJson()
-                ? new JsonResponse(['success' => false, 'messages' => $validator->getMessageBag()->all()], 403)
-                : back()->withErrors($validator->errors());
-        }
+        $validated = $validator->validate();
+        // if($validator->fails())
+        // {
+        //     return $request->wantsJson()
+        //         ? new JsonResponse(['success' => false, 'messages' => $validator->getMessageBag()->all()], 403)
+        //         : back()->withErrors($validator->getMessageBag()->all());
+        // }
         $user = $this->create($request->all());
         // event(new Registered($user));
 
@@ -229,7 +217,7 @@ class RegisterController extends Controller
         $messages = [];
         if($method === 'phone') {
             $returned = $request->user()->sendPhoneVerificationNotification();
-            if(is_object($returned) && $returned instanceof View)
+            if($returned instanceof View)
             {
                 return $returned;
             }
