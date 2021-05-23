@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.4",
+        "php": ">=7.4",
         "ext-gd": "*",
         "ext-json": "*",
         "aloha/twilio": "^4.0",
@@ -21,6 +21,7 @@
         "laravel/ui": "^3.2"
     },
     "require-dev": {
+        "andyabih/laravel-to-uml": "^1.0",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",

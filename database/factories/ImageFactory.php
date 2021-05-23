@@ -2,14 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Comment;
 use App\Models\Image;
-use App\Models\Morphs\Postable;
-use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Mockery\Exception;
 
 class ImageFactory extends Factory
@@ -20,8 +15,8 @@ class ImageFactory extends Factory
      * @var string
      */
     protected $model = Image::class;
-    private static $image;
-
+    private static $temp;
+    private static $allImages;
     /**
      * Define the model's default state.
      *
@@ -31,25 +26,31 @@ class ImageFactory extends Factory
      */
     public function definition()
     {
-//        Log::debug("Entering ImageFactory definition");
-        $disk = Storage::disk('faker_images');
-        $files = $disk->files();
-        $chosen = $files[random_int(0, count($files)-1)];
-        self::$image = $disk->path($chosen);
-        $atts = [
-            'meta' => (object)["with" => 1024, "height" => 1280],
-            'type' => Image::getAllowedTypes()->where('fileSuffix', 'png')->keys()->first(),
+        if(empty(self::$allImages))
+        {
+            self::$allImages = collect(Storage::disk('faker_images')->files());
+        }
+        $chosen = Storage::disk('faker_images')->path(self::$allImages->random());
+        $temp = Storage::disk('temp')->path("tmp");
+        if(file_exists($temp))
+            unlink($temp);
+        copy($chosen, $temp);
+        self::$temp = $temp;
+        list(0 => $width, 1 => $height, 2 => $type, 'mime' => $mime) = getimagesize(self::$temp);
+        return [
+            "width" => $width,
+            "height" => $height,
+            "size" => filesize(self::$temp),
+            "mime" => $mime,
+            'type' => $type,
+            "extension" => mimetoextension($mime),
         ];
-//        Log::debug("Leaving ImageFactory definition");
-        return $atts;
     }
 
     public function configure()
     {
         return $this->afterMaking(function(Image $image){
-//            Log::debug("Entering ImageFactory AfterMaking");
-            copy(self::$image, $image->realPath);
-//            Log::debug("Leaving ImageFactory AfterMaking");
+            $image->temporaryFileLocation = self::$temp;
         });
     }
 }

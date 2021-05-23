@@ -3,6 +3,7 @@
 use App\Models\Comment;
 use App\Models\Morphs\Profileable;
 use App\Models\Post;
+use App\Models\Profile;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,12 +19,13 @@ class CreateCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Comment::TABLE, function (Blueprint $table) {
+        Schema::create(Comment::tablename(), function (Blueprint $table) {
             $table->id();
-            $table->json('content');
-            $table->morphs('postable');
-            $table->morphs('profileable');
-            MigrationHelper::addTimeStamps($table, new Comment());
+            $table->foreignIdFor(Profile::class, 'commentor_id')->on(Profile::tablename())->constained();
+            $table->morphs('commentable');
+            $table->text('body')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -34,6 +36,6 @@ class CreateCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Comment::TABLE);
+        Schema::dropIfExists(Comment::tablename());
     }
 }

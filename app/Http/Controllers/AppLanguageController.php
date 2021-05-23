@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class AppLanguageController extends Controller
 {
@@ -12,15 +13,14 @@ class AppLanguageController extends Controller
      */
     public function update()
     {
-        $response = response();
-        $result = in_array(request('locale'), config('app.locales'), true);
-        if($result)
+        if(in_array(request('locale'), config('app.locales'), true))
         {
-            $response->cookie(['locale', request('locale')]);
+            // using cookie('locale', request('locale')) will encrypt the cookie
+            // manually set the cookie
+            header("Set-Cookie:locale=".request('locale').";Max-Age=300000;path=/");
+            return redirect(url('/'));
         }
-        return  request()->wantsJson()
-                ? $response->json(['success' => $result], 201)
-                : $response->redirectTo(back()->getTargetUrl());
+        abort(501);
     }
 
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Profile;
 use App\Models\User;
 use App\Models\UserSettings;
 use App\Models\ProfileImage;
@@ -18,7 +19,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create(User::TABLE, function (Blueprint $table) {
+        Schema::create(User::tablename(), function (Blueprint $table) {
             $table->id();
 
             $table->string('email')->index()->nullable()->unique();
@@ -30,10 +31,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('api_token')->unique();
 
-            $table->unsignedBigInteger('active_profileable_id')->index()->nullable();
-            $table->string('active_profileable_type')->index()->nullable();
-
             $table->rememberToken();
+            $table->softDeletes();
             MigrationHelper::addTimeStamps($table, new User);
         });
     }

@@ -22,7 +22,8 @@ class VideoFactory extends Factory
     /**
      * @var string
      */
-    private static $video;
+    private static $temp;
+    private static $allVideos;
 
     /**
      * Define the model's default state.
@@ -32,7 +33,26 @@ class VideoFactory extends Factory
      */
     public function definition()
     {
-//        Log::debug("Entering VideoFactory definition");
+        if(empty(self::$allVideos))
+        {
+            self::$allVideos = collect(Storage::disk('faker_videos')->files());
+        }
+        $chosen = Storage::disk('faker_videos')->path(self::$allVideos->random());
+        $temp = Storage::disk('temp')->path("tmp");
+        if(file_exists($temp))
+            unlink($temp);
+        copy($chosen, $temp);
+        self::$temp = $temp;
+        list(0 => $width, 1 => $height, 2 => $type, 'mime' => $mime) = getimagesize(self::$temp);
+        return [
+            "width" => $width, 
+            "height" => $height,
+            "size" => filesize(self::$temp),
+            "mime" => $mime,
+            'type' => $type,
+            "seconds" => 20,
+            "extension" => mimetoextension($mime),
+        ];
         $disk = Storage::disk('faker_videos');
         $files = $disk->files();
         $chosen = $files[random_int(0, count($files)-1)];
@@ -41,16 +61,13 @@ class VideoFactory extends Factory
             'meta' => (object)["with" => 1024, "height" => 1280],
             'type' => Video::getAllowedTypes()->keys()->first()
         ];
-//        Log::debug("Leaving VideoFactory definition");
         return $atts;
     }
 
     public function configure()
     {
         return $this->afterMaking(function(Video $video){
-//            Log::debug("Entering VideoFactory afterMaking");
             copy(self::$video, $video->realPath);
-//            Log::debug("Leaving VideoFactory afterMaking");
         });
     }
 }

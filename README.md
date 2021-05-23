@@ -1,5 +1,6 @@
 # Quick Look
 
+## Functionality
 - Users
     - Users can register and login to the website
     - The user can update his profile informations (name, email …etc).
@@ -28,5 +29,5 @@
     - Users can join communities
     - When the user joins a community, posts of this community might appear in his feed.
     - Roles can be created for  the community each role can have a collection of permissions (“can ban users”, “can remove posts”, “can modify community” …etc).
-    - The admin of the community can create “moderator roles”, each role has permissions.
-The admin of the community can add “moderators” to the community and give the
+    - The admin of the community can create **moderator roles**, each role has permissions.
+    - The admin of the community can add **moderators** to the community and give the

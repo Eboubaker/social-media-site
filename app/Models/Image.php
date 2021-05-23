@@ -2,54 +2,34 @@
 
 namespace App\Models;
 
-use App\Casts\JsonObject;
-use App\Models\Morphs\PostableAttachement;
+use App\Models\Traits\HasStorageUrl;
+use App\Models\Traits\ModelTraits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 
-class Image extends PostableAttachement
+class Image extends Model
 {
-    use HasFactory;
+    use HasFactory, ModelTraits, HasStorageUrl;
 
-    public const TABLE = "images";
-    public const TABLE_DOT_KEY = self::TABLE . "." . self::PKEY;
-    public const FKEY = "image_id";
-    public const CREATED_AT = "created_at";
-    public const UPDATED_AT = null;
-
-    protected $table = self::TABLE;
-    protected $primaryKey = self::PKEY;
-    public static $Storage = 'images';
     public $storage = 'images';
-    public static $morphClass = 'App\Models\\' . self::class;
+    protected $guarded = [];
+    
 
-    public static $allowedTypes = [
-        [
-            'typeId' => 1,
-            'mime' => 'image/jpeg',
-            'format' => 'jpg'
-        ],
-        [
-            'typeId' => 2,
-            'mime' => 'image/jpeg',
-            'format' => 'jpeg'
-        ],
-        [
-            'typeId' => 3,
-            'mime' => 'image/png',
-            'format' => 'png',
-        ],
-        [
-            'typeId' => 4,
-            'mime' => 'image/webp',
-            'format' => 'webp',
-        ]
-    ];
-
-    function __construct(array $attributes = [], $pass = false)
+    public function imageable()
     {
-        parent::__construct($attributes);
+        return $this->morphTo();
     }
 
-
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function(Image $image)
+        {
+            $image->reCalculateSha256Attribute();
+        });
+        static::created(function(Image $image)
+        {
+            $image->copyTemporaryFileToStorage();
+        });
+    }
 }

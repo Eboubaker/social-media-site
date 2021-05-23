@@ -3,24 +3,29 @@
 namespace App\Models;
 
 use App\Models\Morphs\Postable;
+use App\Models\Traits\Authorable;
+use App\Models\Traits\Commentable;
+use App\Models\Traits\HasAuthor;
+use App\Models\Traits\Imageable;
+use App\Models\Traits\ModelTraits;
+use App\Models\Traits\Videoable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class Comment extends Postable
+class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory, ModelTraits, Commentable, Videoable, Imageable, HasAuthor;
 
-    public const TABLE = "comments";
-    public const TABLE_DOT_KEY = self::TABLE . "." . self::PKEY;
-    public const FKEY = "comment_id";
+    public $table = 'comments';
     public const CREATED_AT = "created_at";
     public const UPDATED_AT = "updated_at";
+    protected $guarded = [];
 
-
-    protected $table = self::TABLE;
-    protected $primaryKey = self::PKEY;
-
-    protected $guarded = [
-        self::PKEY
-    ];
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }

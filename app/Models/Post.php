@@ -2,30 +2,52 @@
 
 namespace App\Models;
 
-use App\Models\Morphs\Postable;
+use App\Exceptions\FileNotDeletedException;
+use App\Models\Traits\Commentable;
+use App\Models\Traits\HasAttachements;
+use App\Models\Traits\HasAuthor;
+use App\Models\Traits\HasViews;
+use App\Models\Traits\Imageable;
+use App\Models\Traits\Likeable;
+use App\Models\Traits\ModelTraits;
+use App\Models\Traits\Videoable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Post extends Postable
+class Post extends Model implements HasAttachements
 {
-    use HasFactory;
+    use HasFactory, HasAuthor, HasViews, Commentable, Imageable, Videoable, ModelTraits, SoftDeletes, Likeable;
+    protected $guarded = [];
+    public $table = 'posts';
 
-    public const TABLE = "posts";
-    public const TABLE_DOT_KEY = self::TABLE . "." . self::PKEY;
-    public const FKEY = "post_id";
-    public const CREATED_AT = "created_at";
-    public const UPDATED_AT = "updated_at";
 
-    protected $table = self::TABLE;
-    protected $primaryKey = self::PKEY;
-
-    protected $guarded = [
-        self::PKEY
-    ];
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function(Post $post){
+            $post->deleteAttachements();
+        });
+    }
     public function __construct(array $attributes = [], $pass = false)
     {
         parent::__construct($attributes, $pass);
     }
 
+    public function pageable()
+    {
+        return $this->morphTo('pageable');
+    }
 
+    public function deleteAttachements()
+    {
+        if(!unlink($this->realPath))
+        {
+            throw new FileNotDeletedException("file: " . $this->realpath);
+        }
+    }
+    public function getAttachementsAttribute()
+    {
+        $this->videos->merge($this->images);
+    }
 }

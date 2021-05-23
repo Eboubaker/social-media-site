@@ -22,11 +22,8 @@ class UserSettingsFactory extends Factory
      */
     public function definition()
     {
-//        Log::debug("Entering AccountSettingsFactory definition");
-        $atts = [
-            'data' => new \stdClass()
+        return [
+            
         ];
-//        Log::debug("Leaving AccountSettingsFactory definition");
-        return $atts;
     }
 }

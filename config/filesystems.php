@@ -57,6 +57,12 @@ return [
             'url' => env('APP_URL').'/storage/images/',
             'visibility' => 'public',
         ],
+        'temp' => [
+            'driver' => 'local',
+            'root' => storage_path('app\temp\\'),
+            'url' => env('APP_URL').'/storage/temp/',
+            'visibility' => 'local',
+        ],
         'faker_videos' => [
             'driver' => 'local',
             'root' => storage_path('faker\videos\\'),

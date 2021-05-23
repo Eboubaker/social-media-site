@@ -15,7 +15,7 @@ class AddBeforeUserInsertTrigger extends Migration
     private $triggerName = "users_before_insert_assert_email_or_phone_exists";
     public function up()
     {
-        DB::unprepared("CREATE TRIGGER sms.".$this->triggerName."
+        DB::unprepared("CREATE TRIGGER ".$this->triggerName."
     BEFORE INSERT
     ON users FOR EACH ROW
 BEGIN

@@ -18,14 +18,21 @@ class CreateVideosTable extends Migration
      */
     public function up()
     {
-        Schema::create(Video::TABLE, function (Blueprint $table) {
+        Schema::create(Video::tablename(), function (Blueprint $table) {
             $table->id();
+            $table->morphs('videoable');
             $table->char('sha256', 64)->index('videos_by_sha256');
-            $table->morphs('postable');
-            $table->string('storage_id', 36)->index('videos_by_storage_id');
-            $table->tinyInteger('type');
-            $table->json('meta');
-            MigrationHelper::addTimeStamps($table, new Video());
+
+            $table->tinyInteger('type', unsigned:true);
+            $table->smallInteger('width', unsigned:true);
+            $table->smallInteger('height', unsigned:true);
+            $table->mediumInteger('seconds', unsigned:true);
+            $table->unsignedBigInteger('size');
+            $table->string('origin_name')->nullable();
+            $table->string('extension', 4);
+            $table->float('sfw_score', total:2, places:1, unsigned:true)->nullable()->default(.5);
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -41,6 +48,6 @@ class CreateVideosTable extends Migration
                 $model->delete();
             });
         });
-        Schema::dropIfExists(Video::TABLE);
+        Schema::dropIfExists(Video::tablename());
     }
 }

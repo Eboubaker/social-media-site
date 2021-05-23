@@ -4,13 +4,13 @@ namespace App\Providers;
 
 use Aloha\Twilio\Twilio;
 use App\Http\Middleware\SetLocale;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 use libphonenumber\PhoneNumberUtil;
 use App\Verify\Service;
 use App\Services\Twilio\Verification;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -72,6 +72,13 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::directive('apiToken', function () {
             return "<input hidden name='api_token' value='{{ Auth::user()->singleUseToken() }}'/>";
+        });
+        Auth::macro('profile', function(){
+            if(Auth::user())
+            {
+                return Auth::user()->activeProfile;
+            }
+            return null;
         });
     }
 }

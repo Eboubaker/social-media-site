@@ -10,6 +10,7 @@ use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
@@ -21,6 +22,7 @@ use Illuminate\Support\Str;
 // NOTE: API routes should not be added here instead they should be in ~/routes/api.php
 
 App\Http\Api::routes();
+
 
 Route::group([
     'prefix' => '{locale}',
@@ -52,8 +54,12 @@ Route::group([
         return view('welcome');
     });
     Route::get('/profile-form', [RegisterController::class, 'profile-form'])->name('profile-form');
+    Route::get('/test', function()
+    {
+        return view('test');
+    });
 });
-Route::post('/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
+Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 
 
 // redirect with default locale if no locale is in the url

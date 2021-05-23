@@ -5,16 +5,16 @@ namespace App\Models;
 use App\Models\Traits\MustVerifyPhone;
 use App\Notifications\EmailVerificationNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\JsonEncodingException;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\Traits\ModelTraits;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\HasDatabaseNotifications;
 
 /**
  * @property ProfileImage profileImage
@@ -35,28 +35,10 @@ use Illuminate\Support\Str;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, MustVerifyPhone;
+    use HasFactory, Notifiable, HasDatabaseNotifications, MustVerifyPhone, ModelTraits, SoftDeletes;
 
-    public const TABLE = "users";
-    public const PKEY = "id";
-    public const PUPLIC_ID_LEN = 8;
-    public const TABLE_DOT_KEY = self::TABLE . "." . self::PKEY;
-    public const FKEY = "user_id";
-    public const CREATED_AT = "created_at";
-    public const UPDATED_AT = "updated_at";
 
-    protected $table = self::TABLE;
-    protected $primaryKey = self::PKEY;
-
-    protected $guarded = [
-        self::PKEY
-    ];
-    protected $fillable = [
-        'email',
-        'phone',
-        'password',
-        'api_token'
-    ];
+    protected $guarded = [];
     protected $hidden = [
         'password',
         'remember_token',
@@ -83,23 +65,17 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     //----- RELATIONS -------//
-    public function activeProfile(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    public function activeProfile(): HasOne
     {
-        return $this->morphTo('active_profileable');
+        return $this->hasOne(Profile::class)->ofMany();
     }
-
+    public function profiles(): HasMany
+    {
+        return $this->hasMany(Profile::class);
+    }
     public function settings(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(UserSettings::class);
-    }
-
-    public function businessProfiles(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(BusinessProfile::class);
-    }
-    public function socialProfiles(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(SocialProfile::class);
     }
     //----- ATTRIBUTES -------//
     public function getFirstNameAttribute()

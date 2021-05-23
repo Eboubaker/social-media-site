@@ -16,11 +16,9 @@ class CreateUserSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create(UserSettings::TABLE, function (Blueprint $table) {
+        Schema::create(UserSettings::tablename(), function (Blueprint $table) {
             $table->id();
-            MigrationHelper::addForeign($table, new User);
-            $table->json('data');
-            MigrationHelper::addTimeStamps($table, new UserSettings());
+            $table->foreignIdFor(User::class)->constrained();
         });
     }
 
@@ -31,6 +29,6 @@ class CreateUserSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(UserSettings::TABLE);
+        Schema::dropIfExists(UserSettings::tablename());
     }
 }

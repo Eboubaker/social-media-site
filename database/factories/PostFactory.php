@@ -30,52 +30,9 @@ class PostFactory extends Factory
      */
     public function definition(): array
     {
-//        Log::debug("Entering PostFactory definition");
-        $content = new stdClass();
-        $content->body = implode(' ', $this->faker->sentences(FactoryHelper::nestedRandomStep(20, 5, 1, 1)));
-        $atts = [
-            'content' => $content,
+        return [
+            'title' => $this->faker->sentence(),
+            'body' => $this->faker->paragraph()
         ];
-//        Log::debug("Leaving PostFactory definition");
-        return $atts;
-    }
-
-    public function configure()
-    {
-        return $this->afterMaking(static function(Post $post){
-//            Log::debug("Entering PostFactory AfterMaking");
-            $profile = FactoryHelper::randc(.5) ? new BusinessProfile() : new SocialProfile();
-            $author = $profile::inRandomOrder()->first();
-            if(!$author || !$author->exists()  || FactoryHelper::randc(.9))
-            {
-//                Log::debug("Creating a ". $profile->getMorphClass() ." profile for the post " . $post->getKey());
-                $author = $profile::factory()->create();
-            }
-            $post->profileable()->associate($author);
-//            Log::debug("Leaving PostFactory AfterMaking");
-        })->afterCreating(function(Post $post){
-            DB::transaction(function() use ($post) {
-                $created = 0;
-                for ($i = FactoryHelper::nestedRandom(3, 4); $i > 0; $i--) {
-//                    Log::debug("Creating an image for the post " . $post->getKey());
-                    $post->images()->save(Image::factory()->make());
-                    $created++;
-                }
-                for ($i = FactoryHelper::nestedRandom(3, 4); $i > 0; $i--) {
-//                    Log::debug("Creating a video for the post " . $post->getKey());
-                    $post->videos()->save(Video::factory()->make());
-                    $created++;
-                }
-                for($i = FactoryHelper::nestedRandom(20, 4); $i > 0; $i--)
-                {
-//                    Log::debug("Creating a comment for the post " . $post->getKey());
-                    $post->comments()->attach(Comment::factory()->create());
-                }
-                if($created === 0)
-                {
-                    $post->images()->save(Image::factory()->make());
-                }
-            });
-        });
     }
 }

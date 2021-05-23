@@ -2,6 +2,7 @@
 
 use App\Models\Morphs\Profileable;
 use App\Models\Post;
+use App\Models\Profile;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,11 +18,14 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Post::TABLE, function (Blueprint $table) {
+        Schema::create(Post::tablename(), function (Blueprint $table) {
             $table->id();
-            $table->json('content');
-            $table->morphs('profileable');
-            MigrationHelper::addTimeStamps($table, new Post());
+            $table->string('title');
+            $table->text('body')->nullable();
+            $table->morphs('pageable');
+            $table->foreignIdFor(Profile::class, 'author_id')->references('id')->on(Profile::tablename())->constrained();
+            $table->softDeletes();
+            $table->timestamps();
         });
     }
 

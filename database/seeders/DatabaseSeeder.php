@@ -20,23 +20,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::transaction(function(){
-            $user = User::create([
-                "email" => "test@gmail.com",
-                "email_verified_at" => now(),
-                "password" => Hash::make("password"),
-            ]);
-            $user->socialProfiles()->create([
-                "data" => new \stdClass,
-            ])->profileImage();
-            $user->businessProfiles()->create([
-                "data" => new \stdClass,
-            ])->profileImage()->create(ProfileImage::factory()->make()->attributesToArray());
-
-            $user->settings()->create(UserSettings::factory()->make()->attributesToArray());
-
-            BusinessCategory::create(['name' => 'Food']);
-            BusinessCategory::create(['name' => 'Transport']);
-        });
-    }
+        $this->call(UsersSeeder::class)
+            ->call(CommunityPermissionsSeeder::class)
+            ->call(CommunityRolesSeeder::class)
+            ->call(ProfilesSeeder::class)
+            ->call(CommunitiesSeeder::class)
+            ->call(CommunityMembersSeeder::class)
+            ->call(PostsSeeder::class)
+    ;
+    }   
 }
