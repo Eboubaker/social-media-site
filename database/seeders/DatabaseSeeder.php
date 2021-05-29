@@ -20,13 +20,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UsersSeeder::class)
+        DB::transaction(function () {
+            $this
+            ->call(UsersSeeder::class)
             ->call(CommunityPermissionsSeeder::class)
             ->call(CommunityRolesSeeder::class)
             ->call(ProfilesSeeder::class)
+            ->call(ProfileFollowersSeeder::class)
             ->call(CommunitiesSeeder::class)
             ->call(CommunityMembersSeeder::class)
             ->call(PostsSeeder::class)
-    ;
+            ->call(PostViewsSeeder::class)
+            ->call(CommentsSeeder::class)
+            ->call(LikesSeeder::class)
+        ;
+        });
+        
     }   
 }

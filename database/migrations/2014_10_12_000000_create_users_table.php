@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
 
             $table->rememberToken();
             $table->softDeletes();
-            MigrationHelper::addTimeStamps($table, new User);
+            $table->timestamps();
         });
     }
 
@@ -44,6 +44,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(User::TABLE);
+        Schema::dropIfExists(User::tablename());
     }
 }

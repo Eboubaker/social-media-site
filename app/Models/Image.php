@@ -31,5 +31,8 @@ class Image extends Model
         {
             $image->copyTemporaryFileToStorage();
         });
+        static::deleted(function(Image $image){
+            unlink($image->realPath);
+        });
     }
 }

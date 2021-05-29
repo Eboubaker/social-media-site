@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use App\Models\Community;
+use App\Models\Post;
+use App\Models\Profile;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +50,18 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+        });
+        Route::pattern('post', '\d+-.*');
+        Route::bind('post', function($value){
+            preg_match('/\d+/', $value, $match);
+            $match[0] = $match[0] ?? null;
+            return Post::find($match[0]);
+        });
+        Route::bind('community', function($value){
+            return Community::where('name', $value);
+        });
+        Route::bind('user', function($value){
+            return Profile::where('username', $value);
         });
     }
 

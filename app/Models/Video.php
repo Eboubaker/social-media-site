@@ -29,5 +29,8 @@ class Video extends Model
         {
             $video->copyTemporaryFileToStorage();
         });
+        static::deleted(function(Video $video){
+            unlink($video->realPath);
+        });
     }
 }

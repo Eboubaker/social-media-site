@@ -18,13 +18,13 @@ class CreateCommunitiesTable extends Migration
     {
         Schema::create(Community::tablename(), function (Blueprint $table) {
             $table->id();
-            $table->foreignId('author_id')->references('id')->on(Profile::tablename())->constrained();
+            $table->foreignId('owner_id')->constrained(Profile::tablename());
             $table->string('name')->unique('communities_unique_name');
             $table->foreignId('default_role_id')
                   ->nullable()
                   ->default(CommunityRole::DEFAULT_ROLE_ID)
                   ->constrained(CommunityRole::tablename());
-            $table->unsignedBigInteger('joined_members_count')->nullable()->default(0);
+            $table->unsignedBigInteger('members_count')->nullable()->default(0);
             $table->softDeletes();
             $table->timestamp('created_at');
             $table->timestamp('updated_at')->nullable();

@@ -13,9 +13,9 @@ class CommunityRole extends Model
 {
     use HasFactory, ModelTraits;
     
-    protected $table = 'community_roles';
     public const UPDATED_AT = null;
     public const CREATED_AT = null;
+    
     protected $guraded = [];
     
     public const DEFAULT_ROLE_ID = 1;

@@ -47,13 +47,22 @@
                             id="birthDate" type="date" name="birthDate" value="{{ old('birthDate') }}"/>
                         @error('birthDate') <p class="text-xs italic text-red-500">{{ $message }}</p> @enderror
                     </div>
+                    <div class="mb-4">
+                        <label class="block mb-2 text-sm font-bold text-gray-700" for="login">
+                            User Name
+                        </label>
+                        <input
+                            class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('username') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
+                            id="username" type="username" name="username" placeholder="Phone Number" value="{{ old('username') }}"/>
+                        @error('username') <p class="text-xs italic text-red-500">{{ $message }}</p> @enderror
+                    </div>
                       <div class="mb-4">
                           <label class="block mb-2 text-sm font-bold text-gray-700" for="login">
                               Phone Number
                           </label>
                           <input
                               class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border @error('phone_number') border-red-500 @enderror rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                              id="phone_number" type="text" name="phone_number" placeholder="Phone Number" value="{{ old('phone_number') }}"/>
+                              id="phone_number" type="phone" name="phone_number" placeholder="Phone Number" value="{{ old('phone_number') }}"/>
                           @error('phone_number') <p class="text-xs italic text-red-500">{{ $message }}</p> @enderror
                       </div>
                       <div class="mb-4 md:flex md:justify-between">

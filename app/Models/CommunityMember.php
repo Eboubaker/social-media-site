@@ -2,26 +2,23 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasCompositePrimaryKey;
 use App\Models\Traits\ModelTraits;
-use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class CommunityMember extends Model
 {
-    use SoftDeletes, ModelTraits, AsPivot;
+    use ModelTraits, AsPivot;
 
     protected $table = 'communities_members';
     public const CREATED_AT = 'joined_at';
     public const UPDATED_AT = 'updated_at';
 
     
+    protected $guarded = [];
 
     public function can($permissionId): bool
     {
@@ -51,13 +48,12 @@ class CommunityMember extends Model
     {
         return $this->belongsTo(CommunityRole::class, 'role_id');
     }
-    public function posts()
+    public function posts():HasMany
     {
-        return $this->hasMany(Post::class, 'author_id', 'member_id')
+        return $this->hasMany(Post::class, 'author_id', 'profile_id')
         ->whereHasMorph('pageable', Community::class)
         ->where('pageable_id', $this->getAttribute(Community::getForegin()));
     }
-
     public function community()
     {
         return $this->belongsTo(Community::class, 'community_id');
@@ -65,7 +61,7 @@ class CommunityMember extends Model
 
     public function profile()
     {
-        return $this->belongsTo(Profile::class, 'member_id');
+        return $this->belongsTo(Profile::class, 'profile_id');
     }
     #endregion
 

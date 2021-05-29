@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\BusinessProfile;
+use App\Models\Image;
+use App\Models\Profile;
 use App\Models\ProfileImage;
 use App\Models\SocialProfile;
 use App\Models\UserSettings;
@@ -100,6 +102,7 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'firstName' => ['required', 'min:3'],
             'lastName' => ['required', 'min:3'],
+            'username' => ['required', 'min:4', Rule::unique(Profile::class, 'username')],
             'birthDate' => ['required', 'date']
         ];
         $data['phone_number'] = $this->getValidatedPhone();
@@ -121,20 +124,17 @@ class RegisterController extends Controller
         ];
         return DB::transaction(function() use ($userData, $data) {
             $user = User::create($userData);
-            $user->settings()->create(UserSettings::getDefault());
-            $profile = SocialProfile::make([
-                'data' => new stdClass,
-                'first_name' => $data['firstName'],
-                'last_name' => $data['lastName'],
-                'birth_date' => $data['birthDate'],
-            ]);
-            $user->socialProfiles()->save($profile);
-            $user->activeProfile()->associate($profile)->save();
-            // $profileImage = ProfileImage::make([
-
+            $user->settings()->create();
+            // $profile = SocialProfile::make([
+            //     'data' => new stdClass,
+            //     'first_name' => $data['firstName'],
+            //     'last_name' => $data['lastName'],
+            //     'birth_date' => $data['birthDate'],
             // ]);
-            // $profileImage->setTemp();
-            // $profile->profileImage()->associate()
+            // $user->socialProfiles()->save($profile);
+            // $user->activeProfile()->associate($profile)->save();
+            $profile = $user->profiles()->save(Profile::make(['active' => true, 'username' => $data['username']]));
+            $profile->profileImage()->save(Image::factory()->make());
             return $user;
         });
     }

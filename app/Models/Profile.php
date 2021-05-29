@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Traits\HasPosts;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -25,7 +24,19 @@ class Profile extends Model
     
     protected $guarded = [];
 
+    protected $casts = [
+        'active' => 'boolean',
+    ];
 
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
 
     #region RELATIONS
 
@@ -52,7 +63,7 @@ class Profile extends Model
         return $this->hasMany(PostView::class, 'viewer_id');
     }
 
-    public function createdComments():HasMany
+    public function comments():HasMany
     {
         return $this->hasMany(Comment::class, 'commentor_id');
     }
@@ -73,20 +84,23 @@ class Profile extends Model
         return $this->morphTo();
     }
 
-    public function likedLikeables()
+    public function likes()
     {
         return $this->hasMany(Like::class, 'liker_id');
     }
+
     public function likedPosts()
     {
         return $this->hasMany(Like::class, 'liker_id')
                     ->whereHasMorph('likeable', Post::class);
     }
+
     public function likedComments()
     {
         return $this->hasMany(Like::class, 'liker_id')
                     ->whereHasMorph('likeable', Comment::class);
     }
+
     public function profileImage():MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
@@ -94,13 +108,22 @@ class Profile extends Model
 
     public function createdCommunities():HasMany
     {
-        return $this->hasMany(Community::class, 'author_id');
+        return $this->hasMany(Community::class, 'owner_id');
     }
 
     public function communities():BelongsToMany
     {
-        return $this->belongsToMany(Community::class, 'communities_members', 'member_id');
+        return $this->belongsToMany(Community::class, 'communities_members', 'profile_id');
     }
 
+    public function getMemberOf(Community $community):CommunityMember|null
+    {
+        return CommunityMember::where('community_id', $community->getKey())->where('profile_id', $this->getKey())->first();
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(Profile::class, 'profiles_followers', 'follower_id');
+    }
     #endregion
 }

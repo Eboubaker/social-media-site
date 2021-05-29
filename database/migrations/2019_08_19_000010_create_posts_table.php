@@ -18,12 +18,14 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
+        
         Schema::create(Post::tablename(), function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('body')->nullable();
             $table->morphs('pageable');
-            $table->foreignIdFor(Profile::class, 'author_id')->references('id')->on(Profile::tablename())->constrained();
+            $table->foreignId('author_id')->nullable()->constrained(Profile::tablename());
+            $table->string('slug')->unique()->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -36,6 +38,6 @@ class CreatePostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(Post::TABLE);
+        Schema::dropIfExists(Post::tablename());
     }
 }

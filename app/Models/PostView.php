@@ -13,9 +13,11 @@ class PostView extends Model
     public const CREATED_AT = 'seen_at';
     public const UPDATED_AT = null;
 
-    public function profile()
+    protected $guarded = [];
+
+    public function viewer()
     {
-        return $this->hasOne(Profile::class, 'viewer_id');
+        return $this->belongsTo(Profile::class, 'viewer_id');
     }
     public function post()
     {

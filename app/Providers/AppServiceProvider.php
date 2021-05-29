@@ -11,6 +11,8 @@ use libphonenumber\PhoneNumberUtil;
 use App\Verify\Service;
 use App\Services\Twilio\Verification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {

@@ -12,6 +12,7 @@
         "ext-gd": "*",
         "ext-json": "*",
         "aloha/twilio": "^4.0",
+        "cviebrock/eloquent-sluggable": "^8.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "giggsey/libphonenumber-for-php": "^8.12",

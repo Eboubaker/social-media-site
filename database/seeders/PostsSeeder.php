@@ -23,9 +23,11 @@ class PostsSeeder extends Seeder
             $comunities = Community::all();
             foreach (range(0, 600) as  $i) {
                 $author = $profiles->random();
-                $post = Post::factory()->make()->author()->associate($author);
-                $post->pageable()->associate(random_int(0, 1) == 1 ? $author : $comunities->random());
-                $post->save();
+                Post::factory()->make([
+                    'author_id' => $author->getKey()
+                ])->pageable()
+                ->associate(random_int(0, 1) == 1 ? $author : $comunities->random())
+                ->save();
             }
         });
     }
