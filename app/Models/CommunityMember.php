@@ -20,6 +20,19 @@ class CommunityMember extends Model
     
     protected $guarded = [];
 
+    /**
+     * @return CommunityMember|null
+     */
+    public function current(int|Community $community):CommunityMember|null
+    {
+        if($community  instanceof Community)
+        {
+            $community_id = $community->getKey();
+        }else{
+            $community_id = $community;
+        }
+        return CommunityMember::where('profile_id', Profile::current_id())->where('community_id', $community_id)->first();
+    }
     public function can($permissionId): bool
     {
         if (empty($permissionId)) 

@@ -51,18 +51,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
-        Route::pattern('post', '\d+-.*');
-        Route::bind('post', function($value){
-            preg_match('/\d+/', $value, $match);
-            $match[0] = $match[0] ?? null;
-            return Post::find($match[0]);
-        });
-        Route::bind('community', function($value){
-            return Community::where('name', $value);
-        });
-        Route::bind('user', function($value){
-            return Profile::where('username', $value);
-        });
     }
 
     /**

@@ -87,4 +87,11 @@ trait ModelTraits
             self::$instance = new self;
         return self::$instance->getForeignKey();
     }
+
+    public static function random($count = 0):static
+    {
+        return $count <= 0
+                        ? self::orderByRaw('rand()')->first()
+                        : self::orderByRaw('rand()')->limit($count)->get();
+    }
 }

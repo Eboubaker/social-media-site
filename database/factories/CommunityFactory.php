@@ -22,7 +22,8 @@ class CommunityFactory extends Factory
     public function definition()
     {
         return [
-            'name' => str_replace(' ', '_', $this->faker->unique()->sentence(rand(1, 6)))
+            'name' => str_replace(' ', '-', $this->faker->unique()->sentence(rand(1, 6))),
+            'description' => $this->faker->realText
         ];
     }
 }

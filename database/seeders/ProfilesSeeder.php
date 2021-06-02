@@ -20,8 +20,10 @@ class ProfilesSeeder extends Seeder
         DB::transaction(function () {
             $users = User::all();
             Profile::factory()->count(2000)->make()->each(function(Profile $profile)use($users){
+                $profile->active = true;
                 $profile->account()->associate($users->random())->save();
-                Image::factory()->make()->imageable()->associate($profile)->save();
+                Image::factory()->make(['purpose' => 'profileImage'])->imageable()->associate($profile)->save();
+                Image::factory()->make(['purpose' => 'coverImage'])->imageable()->associate($profile)->save();
             });
         });
     }

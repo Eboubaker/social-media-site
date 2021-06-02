@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Community;
+use App\Models\CommunityMember;
+use App\Models\CommunityRole;
+use App\Models\Image;
 use App\Models\Profile;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +23,16 @@ class CommunitiesSeeder extends Seeder
             $profiles = Profile::all();
             foreach(range(0, 20) as $_)
             {
-                Community::factory()->make()->owner()->associate($profiles->random())->save();
+                $profile = $profiles->random();
+                $community = Community::factory()->make();
+
+                $community->owner()->associate($profile)->save();
+                $community->members()->save(CommunityMember::make([
+                    'profile_id' => $profile->getKey(),
+                    'role_id' => CommunityRole::OWNER_ROLE_ID
+                ]));
+                Image::factory()->make(['purpose' => 'iconImage'])->imageable()->associate($community)->save();
+                Image::factory()->make(['purpose' => 'coverImage'])->imageable()->associate($community)->save();
             }
         });
     }

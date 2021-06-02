@@ -20,15 +20,17 @@ class LikesSeeder extends Seeder
     public function run()
     {
         DB::transaction(function () {
-            $likeables = Comment::all()->merge(Post::all());
+            $likeables = Comment::all()->merge(Post::all())->shuffle();
             $profiles = Profile::all();
             $combinations = [];
 
-            foreach(range(1, $likeables) as $i)
+            foreach(range(1, $likeables->count()) as $i)
             {
                 $likeable = $likeables->random();
+                info($likeable);
                 $profile = $profiles->random();
-                $combo = $likeable->getKey(). Model::getActualClassNameForMorph($likeable). $profile->getKey();
+                $combo = "" . $likeable->getKey() . get_class($likeable) . $profile->getKey();
+                
                 if(empty($combinations[$combo]))
                 {
                     $likeable->likes()->save(Like::make([

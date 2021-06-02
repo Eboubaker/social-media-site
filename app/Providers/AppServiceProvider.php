@@ -40,16 +40,10 @@ class AppServiceProvider extends ServiceProvider
             return 'DZ';
         });
         $this->app->singleton('locale-for-client', function(){
-            $seg = request()->segment(1);
-            if(in_array($seg, config('app.locales'), true))
-            {
-                // if the current url already contains a locale return it
-                return $seg;
-            }
-            if(!empty(request()->cookie('locale')))
+            if(!empty(session('locale')))
             {
                 // if the user's 'locale' cookie is set we want to use it
-                $locale = request()->cookie('locale');
+                $locale = session('locale');
             }else{
                 // most browsers now will send the user's preferred language with the request
                 // so we just read it

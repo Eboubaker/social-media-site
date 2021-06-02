@@ -17,6 +17,7 @@ class CreateImagesTable extends Migration
         Schema::create(Image::tablename(), function (Blueprint $table) {
             $table->id();
             $table->morphs('imageable');
+            $table->string('purpose')->nullable()->index('images_by_purpose');
             $table->char('sha256', 64)->index('images_by_sha256');
 
             $table->tinyInteger('type', unsigned:true);

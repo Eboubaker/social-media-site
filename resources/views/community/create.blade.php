@@ -1,0 +1,1 @@
+resources/views/community/create.blade.php

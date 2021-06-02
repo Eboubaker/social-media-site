@@ -22,7 +22,7 @@ class CommunityRolesSeeder extends Seeder
              */
             $role = CommunityRole::create([
                 'id' => CommunityRole::DEFAULT_ROLE_ID,
-                'name' => 'default_communities_role'
+                'name' => 'default_role'
             ]);
             $role->permissions()->saveMany([
                 CommunityPermission::find(config('permissions.can-comment-on-comments')),
@@ -35,6 +35,12 @@ class CommunityRolesSeeder extends Seeder
                 CommunityPermission::find(config('permissions.can-attach-images-to-own-post')),
                 CommunityPermission::find(config('permissions.can-attach-videos-to-own-post')),
             ]);
+
+            $role = CommunityRole::create([
+                'id' => CommunityRole::OWNER_ROLE_ID,
+                'name' => 'community_owner_role'
+            ]);
+            $role->permissions()->saveMany(CommunityPermission::all());
         });
     }
 }

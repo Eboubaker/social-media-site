@@ -14,6 +14,11 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @property string lastName
@@ -27,17 +32,6 @@ class Profile extends Model
     protected $casts = [
         'active' => 'boolean',
     ];
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName()
-    {
-        return 'username';
-    }
-
     #region RELATIONS
 
     /**
@@ -103,9 +97,16 @@ class Profile extends Model
 
     public function profileImage():MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphOne(Image::class, 'imageable')->ofMany(relation:function($query){
+            $query->where('purpose', 'profileImage');
+        });
     }
-
+    public function coverImage():MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable')->ofMany(relation:function($query){
+            $query->where('purpose', 'coverImage');
+        });
+    }
     public function createdCommunities():HasMany
     {
         return $this->hasMany(Community::class, 'owner_id');
@@ -115,7 +116,13 @@ class Profile extends Model
     {
         return $this->belongsToMany(Community::class, 'communities_members', 'profile_id');
     }
-
+    /**
+     * @return Collection<CommunityMember>
+     */
+    public function getSubscriptionsAttribute()
+    {
+        return CommunityMember::where('profile_id', $this->getKey())->get();
+    }
     public function getMemberOf(Community $community):CommunityMember|null
     {
         return CommunityMember::where('community_id', $community->getKey())->where('profile_id', $this->getKey())->first();
@@ -126,4 +133,35 @@ class Profile extends Model
         return $this->belongsToMany(Profile::class, 'profiles_followers', 'follower_id');
     }
     #endregion
+
+    /**
+     * returns the currently logged-in user's active profile
+     *
+     * @return Profile|null
+     */
+    public static function current():Profile|null
+    {
+        try{
+            return Auth::user()->activeProfile;
+        }catch(\Throwable $e)
+        {
+            Log::error($e->getMessage());
+            return null;
+        }
+    }
+    /**
+     * returns the id of the currently logged-in user's active profile
+     *
+     * @return int|null
+     */
+    public static function current_id():int|null
+    {
+        try{
+            return Auth::user()->activeProfile->getKey();
+        }catch(\Throwable $e)
+        {
+            Log::error($e->getMessage());
+            return null;
+        }
+    }
 }

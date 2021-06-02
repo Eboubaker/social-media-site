@@ -1,21 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\PostController;
-use App\Http\Resources\CommentResource;
-use App\Http\Resources\PostResource;
-use App\Models\Comment;
-use App\Models\Post;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Str;
 
 // set default locale
 // Group all routes with the locale
@@ -24,49 +13,52 @@ use Illuminate\Support\Str;
 App\Http\Api::routes();
 
 
-Route::group([
-    'prefix' => '{locale}',
-], function() {
-    Route::get("/posts/create", [PostController::class, "create"])->name('posts.create');
+Route::get("/posts/create", [PostController::class, "create"])->name('posts.create');
 
-    //-- Legal stuff
-    Route::get('/terms',function(){
-        return "The terms blade-view";
-    })->name('legal.terms');
-    Route::get('/privacy',function(){
-        return "The privacy blade-view";
-    })->name('legal.privacy');
+//-- Legal stuff
+Route::get('/terms',function(){
+    return "The terms blade-view";
+})->name('legal.terms');
+Route::get('/privacy',function(){
+    return "The privacy blade-view";
+})->name('legal.privacy');
 
-    //-- Authentication Routes --//
-    Auth::routes();
+//-- Authentication Routes --//
+Auth::routes();
 
-    //-- Custom Verification Routes --//
-    Route::post('/verify/attempt', [VerificationController::class, 'verify'])->name('verification.verify');
-    Route::post('/verify/resend', [VerificationController::class, 'resend'])->name('verification.resend');
-    Route::get('/verify/{method}/notice', [VerificationController::class, 'show'])->name('verification.notice');
+//-- Custom Verification Routes --//
+Route::post('/verify/attempt', [VerificationController::class, 'verify'])->name('verification.verify');
+Route::post('/verify/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+Route::get('/verify/{method}/notice', [VerificationController::class, 'show'])->name('verification.notice');
 
-    //--- AUTH TEST
-    Route::get('/', [HomeController::class, 'index']);
-    Route::get('/feed',function(){
-        return view('feed');
-    });
-    Route::get('/play',function(){
-        return view('welcome');
-    });
-    Route::get('/profile-form', [RegisterController::class, 'profile-form'])->name('profile-form');
-    Route::get('/test', function()
-    {
-        return view('test');
-    });
-});
+
+
+#region browser urls
+Route::get('/c/{community:name}', [CommunityController::class, 'show'])->name('community.show');
+Route::get('/p/{post:slug}', [PostController::class, 'redirectToPage'])->name('post.show');
+Route::get('/c/{community:name}/p/{post:slug}', [PostController::class, 'show'])->name('community-post.show');
+Route::get('/u/{profile:username}/p/{post:slug}', [PostController::class, 'show'])->name('profile-post.show');
+#endregion
+
+#region form requests
+Route::get('/community/create', [CommunityController::class, 'create'])->name('community.create');
+
+Route::get('/c/{community:name}/edit', [CommunityController::class, 'edit'])->name('community.edit');
+#endregion
+
+#region backend submits
+Route::post('/community', [CommunityController::class, 'store'])->name('community.store');
+Route::put('/community/{community}', [CommunityController::class, 'update'])->name('community.update');
+Route::delete('/community/{community}', [CommunityController::class, 'destroy'])->name('community.destory');
+#endregion
+
 Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 
 
 // redirect with default locale if no locale is in the url
 Route::get('/', function () {
-    return redirect(app('locale-for-client'));
-});
-\Illuminate\Support\Facades\URL::defaults(['locale' => app('locale-for-client')]);
+    return view('landing');
+})->name('landing');
 
 
 

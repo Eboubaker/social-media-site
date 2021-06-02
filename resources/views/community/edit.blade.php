@@ -1,0 +1,1 @@
+resources/views/community/edit.blade.php

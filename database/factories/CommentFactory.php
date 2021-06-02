@@ -33,7 +33,6 @@ class CommentFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->sentence(),
             'body' => $this->faker->paragraph()
         ];
     }

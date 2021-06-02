@@ -76,9 +76,10 @@ class Post extends Model implements HasAttachements
     {
         return [
             'slug' => [
-                'source' => ['id', 'title']
+                'source' => ['id', 'title'],
+                'maxLengthKeepWords' => 80
             ],
-            'maxLengthKeepWords' => 80
+            
         ];
     }
     public function sluggableEvent(): string
