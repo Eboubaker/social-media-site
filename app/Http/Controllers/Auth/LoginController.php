@@ -110,7 +110,7 @@ class LoginController extends Controller
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required'],
         ];
         if($this->getLoginMethod() === 'email')
         {
