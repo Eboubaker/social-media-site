@@ -1,0 +1,1 @@
+resources/views/profile/show.blade.php
