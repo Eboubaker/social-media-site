@@ -18,10 +18,8 @@ use Illuminate\Notifications\HasDatabaseNotifications;
 
 /**
  * @property ProfileImage profileImage
- * @property UserSettings settings
- * @property SocialProfile|BusinessProfile activeProfile
- * @property Collection|BusinessProfile[] businessProfiles
- * @property Collection|SocialProfile[] socialProfiles
+ * @property Collection<Profile> profiles
+ * @property Profile activeProfile
  * @property string lastName
  * @property string firstName
  * @property string public_id

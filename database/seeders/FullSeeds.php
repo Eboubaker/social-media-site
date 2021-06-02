@@ -17,10 +17,10 @@ class FullSeeds extends Seeder
         DB::transaction(function () {
             $this
             ->call(UsersSeeder::class)
-            ->call(CommunityPermissionsSeeder::class)
-            ->call(CommunityRolesSeeder::class)
             ->call(ProfilesSeeder::class)
             ->call(ProfileFollowersSeeder::class)
+            ->call(CommunityPermissionsSeeder::class)
+            ->call(CommunityRolesSeeder::class)
             ->call(CommunitiesSeeder::class)
             ->call(CommunityMembersSeeder::class)
             ->call(PostsSeeder::class)
