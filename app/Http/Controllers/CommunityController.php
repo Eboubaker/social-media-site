@@ -51,11 +51,6 @@ class CommunityController extends Controller
     public function update(Community $community)
     {
         $member = $community->currentMember();
-        info("uppdating communtiy " . $community->name);
-        info($member);
-        info(Profile::current_id());
-        info($community);
-        info($member->exists);
         if($member && $member->exists)
         {
             $validated = $this->validated();

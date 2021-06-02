@@ -17,10 +17,9 @@ class CommunityManagementTest extends TestCase
     use DatabaseTransactions;
 
 
-    private function actas():Profile
+    private function loginWithProfile():Profile
     {
-        $user = User::factory()->create();
-        $user->profiles()->save(Profile::factory()->make(['active' => true]));
+        $user = User::factory()->hasProfiles(1)->create();
         $this->actingAs($user);
         return $user->profiles->first();
     }
@@ -31,7 +30,8 @@ class CommunityManagementTest extends TestCase
      */
     public function test_community_can_be_created()
     {
-        $profile = $this->actas();
+        $profile = $this->loginWithProfile();
+        
         $response = $this->post(route('community.store'), [
             'name' => 'test',
             'description' => 'a good community'
@@ -44,7 +44,7 @@ class CommunityManagementTest extends TestCase
     }
     public function test_community_can_be_shown()
     {
-        $profile = $this->actas();
+        $profile = $this->loginWithProfile();
         $response = $this->post('/community', [
             'name' => 'test',
             'description' => 'a good community'
@@ -54,7 +54,7 @@ class CommunityManagementTest extends TestCase
     }
     public function test_community_can_be_updated_by_owner()
     {
-        $profile = $this->actas();
+        $profile = $this->loginWithProfile();
         $response = $this->post('/community', [
             'name' => 'test',
             'description' => 'a good community'
