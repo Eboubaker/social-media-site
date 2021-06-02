@@ -26,5 +26,10 @@ class ProfilesSeeder extends Seeder
                 Image::factory()->make(['purpose' => 'coverImage'])->imageable()->associate($profile)->save();
             });
         });
+        DB::transaction(function () {
+            foreach (User::withCount('profiles')->get() as $user) {
+                $user->profiles()->limit($user->profiles_count-1)->update(['active' => false]);
+            }
+        });
     }
 }
