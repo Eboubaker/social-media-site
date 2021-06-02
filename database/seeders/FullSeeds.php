@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class FullSeeds extends Seeder
 {
@@ -13,7 +14,8 @@ class FullSeeds extends Seeder
      */
     public function run()
     {
-        $this
+        DB::transaction(function () {
+            $this
             ->call(UsersSeeder::class)
             ->call(CommunityPermissionsSeeder::class)
             ->call(CommunityRolesSeeder::class)
@@ -26,5 +28,6 @@ class FullSeeds extends Seeder
             ->call(CommentsSeeder::class)
             ->call(LikesSeeder::class)
         ;
+        });
     }
 }

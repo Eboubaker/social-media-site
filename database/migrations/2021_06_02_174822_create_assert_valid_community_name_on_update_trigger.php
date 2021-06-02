@@ -15,7 +15,7 @@ class CreateAssertValidCommunityNameOnUpdateTrigger extends Migration
         Schema::create('assert_valid_community_name_on_update_trigger')
             ->on('communities')
             ->statement(function () {
-                return "IF NEW.name not REGEXP '^[A-Za-z0-9\-]$' then SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = ' community name is not valid.';end if;";
+                return "IF NEW.name not REGEXP '^[A-Za-z0-9\-]{2,}$' then SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = ' community name is not valid.';end if;";
             })
             ->before()
             ->update();

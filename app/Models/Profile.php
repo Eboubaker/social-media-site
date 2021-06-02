@@ -107,7 +107,7 @@ class Profile extends Model
             $query->where('purpose', 'coverImage');
         });
     }
-    public function createdCommunities():HasMany
+    public function ownedCommunities():HasMany
     {
         return $this->hasMany(Community::class, 'owner_id');
     }
