@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Notifications\HasDatabaseNotifications;
 use App\Models\Traits\ModelTraits;
+use App\Models\Traits\Urlable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -22,18 +23,50 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * @property string lastName
+ * @property User $account
  */
 class Profile extends Model
 {
-    use HasFactory, Notifiable, HasDatabaseNotifications, ModelTraits, SoftDeletes;
+    use HasFactory, Notifiable, HasDatabaseNotifications, ModelTraits, SoftDeletes, Urlable;
     
     protected $guarded = [];
 
     protected $casts = [
         'active' => 'boolean',
     ];
-    #region RELATIONS
 
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function(Profile $profile){
+            $profile->setAttribute('active', true);
+        });
+        static::created(function(Profile $profile){
+            $user = $profile->account;
+            $user->refresh();
+            if($user->profiles()->count() > 1)
+            {
+                $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->update(["active" => false]);
+            }
+        });
+        static::updating(function(Profile $profile){
+            $user = $profile->account;
+            if((bool)$profile->active !== (bool)$profile->getOriginal('active') && (bool)$profile->active === true)
+            {
+                if ($user->profiles()->count() <= 1) 
+                {
+                    throw new \Exception("attempting to deactivate profile while the user only has one profile");
+                }
+                $other = $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->first();
+                $other->update(["active" => false]);
+                // TODO: make sure all model updates are put in a transaction so if an error occurs
+                // after this pointthe state of the model will be restored
+            }
+        });
+    }
+
+    #region RELATIONS
     /**
      * Should not be used for creating
      *
@@ -163,5 +196,11 @@ class Profile extends Model
             Log::error($e->getMessage());
             return null;
         }
+    }
+
+
+    public function getUrlAttribute(): string
+    {
+        return route('profile.show', $this->getAttribute('username'));
     }
 }
