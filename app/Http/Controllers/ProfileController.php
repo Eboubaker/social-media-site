@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\UnauthorizedException;
 
 class ProfileController extends Controller
 {
+
+
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -28,7 +36,9 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // this profile will be active others will be unactive automatically.
+        Auth::user()->profiles()->create($this->validated());
+        return redirect('/');
     }
 
     /**
@@ -88,6 +98,15 @@ class ProfileController extends Controller
     }
 
 
+    public function switch(Profile $profile)
+    {
+        if(Auth::user()->owns($profile))
+        {
+            $profile->update(["active" => true]);
+            return redirect('/');
+        }
+        throw new UnauthorizedException("you don't own this profile");
+    }
 
     public function validated()
     {

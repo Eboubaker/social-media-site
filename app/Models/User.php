@@ -162,4 +162,20 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->update(['api_token' => $stored]);
         return $send;
     }
+    /**
+     * returns weather this user owns this profile or not.
+     *
+     * @param Profile|int $profile
+     * @return bool
+     */
+    public function owns($profile)
+    {
+        if($profile instanceof Profile)
+        {
+            $profile_id = $profile->getKey();
+        }else{
+            $profile_id = $profile;
+        }
+        return $this->profiles()->whereId($profile_id)->exists();
+    }
 }
