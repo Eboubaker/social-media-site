@@ -17,6 +17,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Post extends Model implements HasAttachements
 {
@@ -54,15 +55,15 @@ class Post extends Model implements HasAttachements
 
     public function deleteAttachements()
     {
-        try{
-            if(!unlink($this->realPath))
-            {
-                throw new Exception();
-            }
-        }catch(\Throwable $e)
-        {
-            throw new FileNotDeletedException("not deleted: " . $this->realpath);
-        }
+        $post = $this;
+        DB::transaction(function() use ($post){
+            $post->videos()->cursor()->each(function(Video $video){
+                $video->delete();
+            });
+            $post->images()->cursor()->each(function(Image $image){
+                $image->delete();
+            });
+        });
     }
     public function getAttachementsAttribute()
     {
@@ -76,10 +77,9 @@ class Post extends Model implements HasAttachements
     {
         return [
             'slug' => [
-                'source' => ['id', 'title'],
+                'source' => ['title'],
                 'maxLengthKeepWords' => 80
             ],
-            
         ];
     }
     public function sluggableEvent(): string
@@ -87,12 +87,12 @@ class Post extends Model implements HasAttachements
         // /**
         //  * Default behaviour -- generate slug before model is saved.
         //  */
-        // return SluggableObserver::SAVING;
+        return SluggableObserver::SAVING;
 
         /**
          * Optional behaviour -- generate slug after model is saved.
          * This will likely become the new default in the next major release.
          */
-        return SluggableObserver::SAVED;
+        // return SluggableObserver::SAVED;
     }
 }
