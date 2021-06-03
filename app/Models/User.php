@@ -57,27 +57,23 @@ class User extends Authenticatable implements MustVerifyEmail
     public function bootHasProfiles()
     {
         static::deleting(function(User $user){
-            if($this->forceDeleting)
-            {
-                if(DB::connection()->transactionLevel() === 0)
-                {
-                    throw new NotInTransactionException();
-                }
-                $user->profiles->each(fn($profile) => $profile->forceDelete());
-            }
+            assertInTransaction();
+            $user->profiles()->cursor()->each(fn($profile) => $profile->forceDelete());
         });
     }
 
     //----- RELATIONS -------//
     public function activeProfile(): HasOne
     {
-        return $this->hasOne(Profile::class)->ofMany();
+        return $this->hasOne(Profile::class)->ofMany(relation:function($query){
+            $query->where('active', true);
+        });
     }
     public function profiles(): HasMany
     {
         return $this->hasMany(Profile::class);
     }
-    public function settings(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function settings(): HasOne
     {
         return $this->hasOne(UserSettings::class);
     }
