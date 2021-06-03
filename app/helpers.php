@@ -1,5 +1,7 @@
 <?php
 
+use App\Exceptions\NotInTransactionException;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('mimetoextension'))
 {
@@ -13,5 +15,15 @@ if (!function_exists('array_rename_key')) {
     {
         $array[$new_key] = $array[$old_key];
         unset($array[$old_key]);
+    }
+}
+
+if (!function_exists('assertInTransaction')) {
+    function assertInTransaction()
+    {
+        if(DB::connection()->transactionLevel() === 0)
+        {
+            throw new NotInTransactionException();
+        }
     }
 }
