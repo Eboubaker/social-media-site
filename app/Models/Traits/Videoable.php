@@ -2,12 +2,26 @@
 
 namespace App\Models\Traits;
 
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use App\Exceptions\NotInTransactionException;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\DB;
 
 trait Videoable
 {
-    public function videos():MorphMany
+    public function video():MorphOne
     {
-        return $this->morphMany(Video::class, 'videoable');
+        return $this->morphOne(Video::class, 'videoable');
+    }
+
+    public function bootVideoable()
+    {
+        static::deleting(function(Model $videoable){
+            assertInTransaction();
+            if($videoable->video()->exists())
+            {
+                $videoable->video->delete();
+            }
+        });
     }
 }
