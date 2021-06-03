@@ -20,7 +20,7 @@ class ProfileFactory extends Factory
     public function definition()
     {
         return [
-            'username' => $this->faker->unique()->userName(),
+            'username' => str_replace('.', '', $this->faker->unique()->userName()),
         ];
     }
 }
