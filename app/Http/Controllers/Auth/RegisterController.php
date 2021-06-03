@@ -75,7 +75,7 @@ class RegisterController extends Controller
     {
         
         $this->middleware('guest');
-        $this->loginFieldName = 'phone_number';
+        $this->loginFieldName = 'login';
         $this->redirectTo = RouteServiceProvider::HOME;
         $this->verify = $verify;
         $this->phoneUtil = app('phoneNumberUtil');
@@ -98,15 +98,22 @@ class RegisterController extends Controller
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
-            'phone_number' => ['required', 'string', new Phone, Rule::unique(User::class, 'phone')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'firstName' => ['required', 'min:3'],
             'lastName' => ['required', 'min:3'],
             'username' => ['required', 'min:4', Rule::unique(Profile::class, 'username')],
             'birthDate' => ['required', 'date']
         ];
-        $data['phone_number'] = $this->getValidatedPhone();
-        return Validator::make($data, $rules);
+        if($this->getLoginMethod() === 'phone')
+        {
+            $rules['login'] = ['required', 'string', new Phone, Rule::unique(User::class, 'phone')];
+            $data['login'] = $this->getValidatedPhone();
+        }else{
+            $rules['login'] = ['required', 'email', Rule::unique(User::class, 'email')];
+        }
+        return Validator::make($data, $rules, [
+            'username.unique' => "this username is already taken"
+        ]);
     }
 
     /**
@@ -119,21 +126,15 @@ class RegisterController extends Controller
     {
         $userData = [
             'password' => Hash::make($data['password']),
-            'phone' => $this->getValidatedPhone(),
+            $this->getLoginMethod() => $data['login'],
+            'first_name' => $data['firstName'],
+            'last_name' => $data['lastName']
 //            'api_token' => Str::random(80),
         ];
         return DB::transaction(function() use ($userData, $data) {
             $user = User::create($userData);
             $user->settings()->create();
-            // $profile = SocialProfile::make([
-            //     'data' => new stdClass,
-            //     'first_name' => $data['firstName'],
-            //     'last_name' => $data['lastName'],
-            //     'birth_date' => $data['birthDate'],
-            // ]);
-            // $user->socialProfiles()->save($profile);
-            // $user->activeProfile()->associate($profile)->save();
-            $profile = $user->profiles()->save(Profile::make(['active' => true, 'username' => $data['username']]));
+            $profile = $user->profiles()->save(Profile::make(['username' => $data['username']]));
             $profile->profileImage()->save(Image::factory()->make());
             return $user;
         });
@@ -161,7 +162,7 @@ class RegisterController extends Controller
     {
         if(!$this->loginMethod)
         {
-            $this->loginMethod = preg_match('/[A-Za-z]/', \request($this->loginFieldName), $matches) ? "email" : "phone";
+            $this->loginMethod = preg_match('/^\+?\d{2,}$/', \request($this->loginFieldName), $matches) ? "phone" : "email";
         }
         return $this->loginMethod;
     }
@@ -179,7 +180,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-
+        info($request->all());
         $validator = $this->validator($request->all());
         $validated = $validator->validate();
         // if($validator->fails())
@@ -188,18 +189,23 @@ class RegisterController extends Controller
         //         ? new JsonResponse(['success' => false, 'messages' => $validator->getMessageBag()->all()], 403)
         //         : back()->withErrors($validator->getMessageBag()->all());
         // }
-        $user = $this->create($request->all());
+        return DB::transaction(function() use ($validated, $request){
+            info("lolezz");
+            info($validated);
+            $user = $this->create($validated);
+            $this->guard()->login($user);
+
+            if ($response = $this->registered($request, $user)) {
+                return $response;
+            }
+
+            return $request->wantsJson()
+                ? new JsonResponse(['success' => true, 'messages' => 'you are registered'], 201)
+                : redirect($this->redirectPath());
+        });
         // event(new Registered($user));
 
-        $this->guard()->login($user);
-
-        if ($response = $this->registered($request, $user)) {
-            return $response;
-        }
-
-        return $request->wantsJson()
-            ? new JsonResponse(['success' => true, 'messages' => 'you are registered'], 201)
-            : redirect($this->redirectPath());
+        
     }
 
     /**
@@ -227,7 +233,7 @@ class RegisterController extends Controller
             $request->user()->sendEmailVerificationNotification();
             $messages['login'] = $request->user()->email;
         }else{
-            $user->delete();
+            $user->forceDelete();
             throw new AuthenticationException("invalid verification method was given");
         }
 
