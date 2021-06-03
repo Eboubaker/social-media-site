@@ -29,13 +29,10 @@ class CommunityController extends Controller
     {
         return view('community.show', compact('community'));
     }
-    public function store()
+    public function store(Request $request)
     {
-        $validated = $this->validated();
-        $validated['owner_id'] = Profile::current_id();
-        $validated['default_role_id'] = CommunityRole::DEFAULT_ROLE_ID;
-        $community = DB::transaction(function () use ($validated) {
-            $community = Community::create($validated);
+        $community = DB::transaction(function () use ($request) {
+            $community = Profile::current()->ownedCommunities()->create($request->all());
             $community->members()->save(CommunityMember::make([
                 'profile_id' => Profile::current_id(),
                 'role_id' => CommunityRole::OWNER_ROLE_ID,
@@ -53,7 +50,8 @@ class CommunityController extends Controller
         $member = $community->currentMember();
         if($member && $member->exists)
         {
-            $validated = $this->validated();
+            $validated = request()->all();
+            Community::make($validated)->isValidOrFail();
             if($validated['name'] !== $community->name)
             {
                 if($member->can(config('permissions.can-modify-community-name')))
@@ -73,23 +71,9 @@ class CommunityController extends Controller
                 }
             }
             $community->save();
-            info("uppdated communtiy");
             return redirect($community->url);
         }
         forbidden:
-            info("failed to updated community ");
-        abort(403, "Forbidden");
-    }
-    public function validated()
-    {
-        $dirty = request()->all();
-        return Validator::make($dirty, [
-            'name' => ['required', Rule::unique(Community::tablename(), 'name')->ignore(request('current_name'), 'name'), 'min:2', 'max:255', 'regex:/^[A-Za-z0-9-]+$/'],
-            "description" => ['required', 'max:255']
-        ], [// messages
-            'name.regex' => 'name may only contain alpha numeric letters and dashes(-)'
-        ], [// custom attributes
-
-        ])->validate();
+            abort(403, "Forbidden");
     }
 }
