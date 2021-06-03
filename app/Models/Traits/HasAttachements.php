@@ -3,8 +3,13 @@ namespace App\Models\Traits;
 
 use Illuminate\Database\Eloquent\Model;
 
-interface HasAttachements
+trait HasAttachements
 {
-    public function deleteAttachements();
-    public function getAttachementsAttribute();
+    public function bootHasAttachements()
+    {
+        static::deleting(function(Model $attacheable){
+            assertInTransaction();
+            $attacheable->deleteAttachements();
+        });
+    }
 }

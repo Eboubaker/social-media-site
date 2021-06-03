@@ -4,45 +4,39 @@ namespace App\Models;
 
 use App\Exceptions\FileNotDeletedException;
 use App\Models\Traits\Commentable;
+use App\Models\HasAttachements as HasAttachementsInterface;
 use App\Models\Traits\HasAttachements;
 use App\Models\Traits\HasAuthor;
+use App\Models\Traits\HasImages;
+use App\Models\Traits\HasVideos;
 use App\Models\Traits\HasViews;
 use App\Models\Traits\Imageable;
 use App\Models\Traits\Likeable;
 use App\Models\Traits\ModelTraits;
-use App\Models\Traits\Videoable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableObserver;
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
-class Post extends Model implements HasAttachements
+class Post extends Model implements HasAttachementsInterface
 {
     use HasFactory, 
     HasAuthor, 
     HasViews, 
     Commentable, 
-    Imageable, 
-    Videoable, 
+    HasImages, 
+    HasVideos, 
     ModelTraits, 
     SoftDeletes, 
     Likeable, 
-    Sluggable;
+    Sluggable,
+    HasAttachements;
 
     protected $guarded = [];
     public $table = 'posts';
 
-
-    public static function boot()
-    {
-        parent::boot();
-        static::deleting(function(Post $post){
-            $post->deleteAttachements();
-        });
-    }
     public function __construct(array $attributes = [], $pass = false)
     {
         parent::__construct($attributes, $pass);
