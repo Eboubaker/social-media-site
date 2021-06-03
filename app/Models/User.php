@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Exceptions\NotInTransactionException;
+use App\Models\Traits\HasApiToken;
 use App\Models\Traits\MustVerifyPhone;
 use App\Notifications\EmailVerificationNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -15,6 +17,7 @@ use Illuminate\Support\Str;
 use App\Models\Traits\ModelTraits;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\HasDatabaseNotifications;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property ProfileImage profileImage
@@ -33,7 +36,12 @@ use Illuminate\Notifications\HasDatabaseNotifications;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasDatabaseNotifications, MustVerifyPhone, ModelTraits, SoftDeletes;
+    use HasFactory, 
+    Notifiable, 
+    HasDatabaseNotifications, 
+    MustVerifyPhone,
+    ModelTraits,
+    HasApiToken;
 
 
     protected $guarded = [];
@@ -45,19 +53,17 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
     ];
-
-
-    public function __construct(array $attributes = [])
+    
+    public function bootHasProfiles()
     {
-        parent::__construct($attributes);
-        self::creating(static function(User $account){
-            if(empty($account->getAttribute('api_token')))
+        static::deleting(function(User $user){
+            if($this->forceDeleting)
             {
-                // it will be hashed later by the api guard
-                $token = Str::random(80);
-                if(config('auth.guards.api.hash'))
-                    $token = hash('sha256', $token);
-                $account->setAttribute('api_token', $token);
+                if(DB::connection()->transactionLevel() === 0)
+                {
+                    throw new NotInTransactionException();
+                }
+                $user->profiles->each(fn($profile) => $profile->forceDelete());
             }
         });
     }
@@ -131,24 +137,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getUserName($prefer='email')
     {
-        if($this->socialProfiles()->count())
-        {
-            return $this->socialProfiles->first->fullName;
-        }
-        $this->businessProfile;// loading the magic attribute
-        if(isset($this->businessProfile->data->businessOwner->lastName))
-        {
-            return $this->businessProfile->data->businessOwner->lastName;
-        }
-        if($prefer === 'email' && !empty($this->email))
-        {
-            return $this->email;
-        }
-        if($prefer === 'phone' && !empty($this->phoneNumber))
-        {
-            return $this->phoneNumber;
-        }
-        return !empty($this->email) ? $this->email : $this->phoneNumber;
+        return $this->getAttribute('first_name');
     }
 
     public function singleUseToken()
