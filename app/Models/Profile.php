@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\NotInTransactionException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -20,6 +21,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Watson\Validating\ValidatingTrait;
 
 /**
  * @property string lastName
@@ -27,7 +30,13 @@ use Illuminate\Support\Facades\Log;
  */
 class Profile extends Model
 {
-    use HasFactory, Notifiable, HasDatabaseNotifications, ModelTraits, SoftDeletes, Urlable;
+    use HasFactory, 
+    Notifiable, 
+    HasDatabaseNotifications, 
+    ModelTraits, 
+    SoftDeletes, 
+    Urlable,
+    ValidatingTrait;
     
     protected $guarded = [];
 
@@ -35,13 +44,35 @@ class Profile extends Model
         'active' => 'boolean',
     ];
 
+    protected $rules = [
+        'username' => ['required', 'unique:profiles,username', 'min:3', 'max:255', 'regex:/^[A-Za-z0-9_]+$/']
+    ];
+    protected $validationMessages = [
+        'username.unique' => "Another user is using that username already.",
+        'username.regex' => "username may only contain alpha numeric letters and lowdashes(_), no spaces allowed"
+    ];
+    protected $throwValidationExceptions = true;
 
-    public static function boot()
+    public function bootHasPosts()
     {
-        parent::boot();
-        static::creating(function(Profile $profile){
-            $profile->setAttribute('active', true);
+        static::deleting(function(Profile $profile){
+            if($profile->forceDeleting)
+            {
+                if(DB::connection()->transactionLevel() === 0)
+                {
+                    throw new NotInTransactionException();
+                }
+                $profile->posts()->cursor()->each(function(Post $post){
+                    $post->forceDelete();
+                });
+                $profile->profilePosts()->cursor()->each(function(Post $post){
+                    $post->forceDelete();
+                });
+            }
         });
+    }
+    public function bootRefreshesOtherProfiles()
+    {
         static::created(function(Profile $profile){
             $user = $profile->account;
             $user->refresh();
@@ -50,6 +81,13 @@ class Profile extends Model
                 $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->update(["active" => false]);
             }
         });
+    }
+    public function initializeForceActive()
+    {
+        $this->setAttribute('active', true);
+    }
+    public function bootAssertsOnlyOneActiveProfileForAccount()
+    {
         static::updating(function(Profile $profile){
             $user = $profile->account;
             if((bool)$profile->active !== (bool)$profile->getOriginal('active') && (bool)$profile->active === true)
@@ -203,4 +241,22 @@ class Profile extends Model
     {
         return route('profile.show', $this->getAttribute('username'));
     }
+
+
+    // public static function generateUniqueUserNamesLike($exsisting_username)
+    // {
+    //     // TODO: make this function give better results
+    //     $suggestions = [];
+    //     while(count($suggestions) < 3)
+    //     {
+    //         $r = random_int(0, 100) / 100.0;
+    //         if($r > .9)
+    //         {
+    //             $new = $exsisting_username . '_' . preg_replace('/[^A-Za-z0-9]/', '', Str::random(10));
+    //         }else if($r > .8)
+    //         {
+    //             $new = $exsisting_username . '_' . preg_replace('/[^A-Za-z0-9]/', '', Str::random(10));
+    //         }
+    //     }
+    // }
 }

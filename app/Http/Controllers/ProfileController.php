@@ -37,7 +37,7 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         // this profile will be active others will be unactive automatically.
-        Auth::user()->profiles()->create($this->validated());
+        Auth::user()->profiles()->create($request->all());
         return redirect('/');
     }
 
@@ -72,7 +72,7 @@ class ProfileController extends Controller
      */
     public function update(Request $request, Profile $profile)
     {
-        $profile->update($this->validated);
+        $profile->update($request->all());
         return redirect($profile->url);
     }
 
@@ -106,21 +106,5 @@ class ProfileController extends Controller
             return redirect('/');
         }
         throw new UnauthorizedException("you don't own this profile");
-    }
-
-    public function validated()
-    {
-        $dirty = request()->all();
-        $rules = [];
-        if(request()->method() === 'POST')
-        {
-            $rules['username'] = ['required', Rule::unique(Profile::tablename(), 'username'), 'min:3', 'max:255', 'regex:/^[A-Za-z0-9_]+$/'];
-        }
-        
-        return Validator::make($dirty, $rules, [// messages
-            'username.regex' => 'username may only contain alpha numeric letters and dashes(_)'
-        ], [// custom attributes
-
-        ])->validate();
     }
 }
