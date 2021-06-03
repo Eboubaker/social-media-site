@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\DB;
+use Watson\Validating\ValidatingTrait;
 
 /**
  * @property string $name
@@ -17,10 +18,24 @@ use Illuminate\Support\Facades\DB;
  */
 class Community extends Model
 {
-    use HasFactory, ModelTraits, Urlable;
+    use HasFactory, 
+    ModelTraits, 
+    Urlable,
+    ValidatingTrait;
 
     protected $guarded = [];
-    
+    protected $rules = [
+        'owner_id' => ['exists:App\Models\Profile,id'],
+        'name' => ['required', 'unique:App\Models\Community,name', 'min:2', 'max:255', 'regex:/^[A-Za-z0-9\-]+$/'],
+        'description' => ['max:255']
+    ];
+    protected $validationMessages = [
+        
+        'username.unique' => "Another user is using that username already.",
+        'name.regex' => "name may only contain alpha numeric letters and dashes(-), no spaces allowed."
+    ];
+    protected $throwValidationExceptions = true;
+
 
     public function members()
     {
