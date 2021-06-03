@@ -3,10 +3,12 @@
 
 namespace App\Models\Traits;
 
+use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
+use Throwable;
 
 trait HasStorageFile
 {
@@ -14,9 +16,15 @@ trait HasStorageFile
     
     private string $att_fileName;
     private string $att_realPath;
-    private string $att_sha256;
     private string $att_temp;
     
+    private bool $fileTrashed = false;
+    private string $trashName;
+
+    public function fileTrashed()
+    {
+        return $this->fileTrashed;
+    }
     public function getFileNameAttribute(): string
     {
         if(empty($att_fileName))
@@ -29,27 +37,84 @@ trait HasStorageFile
             $this->att_realPath = Storage::disk($this->storage)->path($this->fileName);
         return $this->att_realPath;
     }
-    public function removeFile(): bool
+    private function getTrashName():string
+    {
+        if(empty($this->trashName))
+        {
+            $this->trashName = str_replace('\\', '.', $this::class) . "." . $this->getKey();
+        }
+        return $this->trashName;
+    }
+    public function trashFile(): bool
     {
         $disk = Storage::disk($this->storage);
         if ($disk->exists($this->fileName)) {
-            return $disk->delete($this->fileName);
+            $this->fileTrashed = Storage::move($disk->path($this->fileName), Storage::disk('trash')->path($this->getTrashName()));
+            return $this->fileTrashed;
         }
         return false;
     }
-    public function reCalculateSha256Attribute()
+    public function deleteTrashed():bool
     {
-        if(empty($this->getAttribute('sha256')))
+        try {
+            return Storage::disk('trash')->delete($this->getTrashName());
+        }catch(\Throwable $e)
         {
-            $location = null;
-            if(empty($this->getKey) && !empty($this->att_temp))
-            {
-                $location = $this->att_temp;
-            }else{
-                $location = Storage::disk($this->storage)->get($this->fileName);
-            }
-            $this->setAttribute('sha256', hash('sha256',  $location));
+            report($e);
+            return false;
         }
+    }
+    public function restoreFile():bool
+    {
+        $trashedFile = Storage::disk('trash')->path($this->getTrashName());
+        if(file_exists($trashedFile))
+        {
+            try{
+                if(Storage::move($trashedFile, Storage::disk($this->storage)->path($this->fileName)))
+                {
+                    $this->fileTrashed = false;
+                    $this->trashName = null;
+                    return true;
+                }else{
+                    throw new Exception("File Not Restored");
+                }
+            }catch(\Throwable $e)
+            {
+                report($e);
+                return false;
+            }
+        }
+    }
+    public function bootRestorable()
+    {
+        static::deleting(function($storable){
+            $storable->trashFile();
+        });
+        static::restored(function($storable){
+            $storable->restoreFile();
+        });
+    }
+    public function bootHasTempFile()
+    {
+        static::creating(function($storable){
+            $storable->copyTemporaryFileToStorage();
+        });
+    }
+    public function bootHasSha256()
+    {
+        static::creating(function($storable){
+            if(empty($storable->getAttribute('sha256')))
+            {
+                $location = null;
+                if(empty($storable->getKey) && !empty($storable->att_temp))
+                {
+                    $location = $storable->att_temp;
+                }else{
+                    $location = Storage::disk($storable->storage)->get($storable->fileName);
+                }
+                $storable->setAttribute('sha256', hash('sha256',  $location));
+            }
+        });
     }
     public function setTemporaryFileLocationAttribute($fullPath)
     {
