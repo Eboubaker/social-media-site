@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Exceptions\FileNotDeletedException;
 use App\Models\Traits\Commentable;
 use App\Models\HasAttachements as HasAttachementsInterface;
 use App\Models\Traits\HasAttachements;
@@ -10,9 +9,9 @@ use App\Models\Traits\HasAuthor;
 use App\Models\Traits\HasImages;
 use App\Models\Traits\HasVideos;
 use App\Models\Traits\HasViews;
-use App\Models\Traits\Imageable;
 use App\Models\Traits\Likeable;
 use App\Models\Traits\ModelTraits;
+use App\Models\Traits\Viewable;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,18 +23,16 @@ class Post extends Model implements HasAttachementsInterface
 {
     use HasFactory, 
     HasAuthor, 
-    HasViews, 
     Commentable, 
     HasImages, 
     HasVideos, 
     ModelTraits, 
     SoftDeletes, 
-    Likeable, 
-    Sluggable,
-    HasAttachements;
+    Likeable,
+    Viewable, 
+    Sluggable;
 
     protected $guarded = [];
-    public $table = 'posts';
 
     public function __construct(array $attributes = [], $pass = false)
     {
@@ -59,9 +56,10 @@ class Post extends Model implements HasAttachementsInterface
             });
         });
     }
+
     public function getAttachementsAttribute()
     {
-        $this->videos->merge($this->images);
+        $this->images->merge($this->videos);
     }
     public function getUrlAtrribute(): string
     {

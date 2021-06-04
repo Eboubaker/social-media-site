@@ -6,21 +6,29 @@ use App\Exceptions\NotInTransactionException;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 trait Imageable
 {
+    use SoftDeletes;
+
     public function image():MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
     }
-    public function bootImageable()
+    public static function bootImageable()
     {
         static::deleting(function(Model $imageable){
             assertInTransaction();
             if($imageable->image()->exists())
             {
-                $imageable->image->delete();
+                if($imageable->isForceDeleting())
+                {
+                    $imageable->image->forceDelete();
+                }else{
+                    $imageable->image->delete();
+                };
             }
         });
     }

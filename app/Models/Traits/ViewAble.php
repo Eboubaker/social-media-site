@@ -3,24 +3,25 @@
 
 namespace App\Models\Traits;
 
-
 use App\Models\PostView;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-trait HasViews
+trait Viewable
 {
     public function views():HasMany
     {
         return $this->hasMany(PostView::class);
     }
 
-    public function bootHasViews()
+    public static function bootViewable()
     {
         static::deleting(function(Model $viewable){
             assertInTransaction();
-            $viewable->views()->delete();
+            if($viewable->forceDeleting())
+            {
+                $viewable->views()->delete();
+            }
         });
     }
 }

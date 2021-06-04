@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasImages;
 use App\Models\Traits\ModelTraits;
 use App\Models\Traits\Urlable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,7 +22,8 @@ class Community extends Model
     use HasFactory, 
     ModelTraits, 
     Urlable,
-    ValidatingTrait;
+    ValidatingTrait,
+    HasImages;
 
     protected $guarded = [];
     protected $rules = [
@@ -30,7 +32,6 @@ class Community extends Model
         'description' => ['max:255']
     ];
     protected $validationMessages = [
-        
         'username.unique' => "Another user is using that username already.",
         'name.regex' => "name may only contain alpha numeric letters and dashes(-), no spaces allowed."
     ];
@@ -78,14 +79,10 @@ class Community extends Model
 
     public function coverImage()
     {
-        return $this->morphOne(Image::class, 'imageable')->ofMany(relation:function($query){
-            $query->where('purpose', 'coverImage');
-        });
+        return $this->morphOne(Image::class, 'imageable')->where('purpose', 'coverImage');
     }
     public function iconImage()
     {
-        return $this->morphOne(Image::class, 'imageable')->ofMany(relation:function($query){
-            $query->where('purpose', 'iconImage');
-        });
+        return $this->morphOne(Image::class, 'imageable')->where('purpose', 'iconImage');
     }
 }

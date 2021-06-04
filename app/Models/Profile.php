@@ -2,7 +2,12 @@
 
 namespace App\Models;
 
-use App\Exceptions\NotInTransactionException;
+use App\Models\Traits\CanFollow;
+use App\Models\Traits\CanLike;
+use App\Models\Traits\CanView;
+use App\Models\Traits\CreatesPosts;
+use App\Models\Traits\HasFollowers;
+use App\Models\Traits\HasImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -16,12 +21,9 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Watson\Validating\ValidatingTrait;
 
 /**
@@ -36,7 +38,13 @@ class Profile extends Model
     ModelTraits, 
     SoftDeletes, 
     Urlable,
-    ValidatingTrait;
+    ValidatingTrait,
+    HasImages,
+    CreatesPosts,
+    CanView,
+    CanLike,
+    HasFollowers,
+    CanFollow;
     
     protected $guarded = [];
 
@@ -53,15 +61,20 @@ class Profile extends Model
     ];
     protected $throwValidationExceptions = true;
 
-    public function bootHasPosts()
+
+    public function __construct($attributes = [])
     {
+        parent::__construct($attributes);
+        $this->setAttribute('active', $attributes['active'] ?? 1);
+    }
+    public static function boot()
+    {
+        parent::boot();
+        // delete posts when deleting
         static::deleting(function(Profile $profile){
-            if($profile->forceDeleting)
+            if($profile->forceDeleting())
             {
-                if(DB::connection()->transactionLevel() === 0)
-                {
-                    throw new NotInTransactionException();
-                }
+                assertInTransaction();
                 $profile->posts()->cursor()->each(function(Post $post){
                     $post->forceDelete();
                 });
@@ -70,31 +83,23 @@ class Profile extends Model
                 });
             }
         });
-    }
-    public function bootRefreshesOtherProfiles()
-    {
+        // set other profiles active state to false when a new profile is created.
         static::created(function(Profile $profile){
             $user = $profile->account;
-            $user->refresh();
             if($user->profiles()->count() > 1)
             {
                 $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->update(["active" => false]);
             }
         });
-    }
-    public function initializeForceActive()
-    {
-        $this->setAttribute('active', true);
-    }
-    public function bootAssertsOnlyOneActiveProfileForAccount()
-    {
+        // assert only one active profile per account
         static::updating(function(Profile $profile){
+            
             $user = $profile->account;
             if((bool)$profile->active !== (bool)$profile->getOriginal('active') && (bool)$profile->active === true)
             {
                 if ($user->profiles()->count() <= 1) 
                 {
-                    throw new \Exception("attempting to deactivate profile while the user only has one profile");
+                    throw new \Exception("attempting to deactivate profile but the user only has one profile");
                 }
                 $other = $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->first();
                 $other->update(["active" => false]);
@@ -103,7 +108,7 @@ class Profile extends Model
             }
         });
     }
-
+    
     #region RELATIONS
     /**
      * Should not be used for creating
@@ -168,15 +173,11 @@ class Profile extends Model
 
     public function profileImage():MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable')->ofMany(relation:function($query){
-            $query->where('purpose', 'profileImage');
-        });
+        return $this->morphOne(Image::class, 'imageable')->where('purpose', 'profileImage');
     }
     public function coverImage():MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable')->ofMany(relation:function($query){
-            $query->where('purpose', 'coverImage');
-        });
+        return $this->morphOne(Image::class, 'imageable')->where('purpose', 'coverImage');
     }
     public function ownedCommunities():HasMany
     {
@@ -199,10 +200,6 @@ class Profile extends Model
         return CommunityMember::where('community_id', $community->getKey())->where('profile_id', $this->getKey())->first();
     }
 
-    public function followers()
-    {
-        return $this->belongsToMany(Profile::class, 'profiles_followers', 'follower_id');
-    }
     #endregion
 
     /**

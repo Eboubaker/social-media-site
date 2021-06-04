@@ -22,7 +22,7 @@ class CreatePostViewsTable extends Migration
             $table->foreignId('post_id')->constrained(Post::tablename());
 
             $table->unique(['viewer_id', 'post_id']);
-            $table->timestamp('seen_at');
+            $table->timestamp('viewed_at');
         });
     }
 

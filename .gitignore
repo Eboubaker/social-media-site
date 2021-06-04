@@ -1,5 +1,4 @@
 /node_modules
-/public/hot
 /public/storage
 /storage/*.key
 /storage/app/public/*
@@ -16,8 +15,5 @@ yarn-error.log
 .idea/*
 .editorconfig
 *.tmp
-social-media-site.zip
+*.zip
 .idea/workspace.xml
-public/js/app.js
-public/js/app.js
-public/js/app.js

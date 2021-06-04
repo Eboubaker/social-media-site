@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Exceptions\NotInTransactionException;
 use App\Models\Traits\HasApiToken;
+use App\Models\Traits\HasProfiles;
 use App\Models\Traits\MustVerifyPhone;
 use App\Notifications\EmailVerificationNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,7 +19,7 @@ use Illuminate\Notifications\HasDatabaseNotifications;
 use Illuminate\Support\Facades\DB;
 
 /**
- * @property ProfileImage profileImage
+ * @property Image profileImage
  * @property Collection<Profile> profiles
  * @property Profile activeProfile
  * @property string lastName
@@ -41,7 +40,8 @@ class User extends Authenticatable implements MustVerifyEmail
     HasDatabaseNotifications, 
     MustVerifyPhone,
     ModelTraits,
-    HasApiToken;
+    HasApiToken,
+    HasProfiles;
 
 
     protected $guarded = [];
@@ -54,14 +54,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone_verified_at' => 'datetime',
     ];
     
-    public function bootHasProfiles()
-    {
-        static::deleting(function(User $user){
-            assertInTransaction();
-            $user->profiles()->cursor()->each(fn($profile) => $profile->forceDelete());
-        });
-    }
-
     //----- RELATIONS -------//
     public function activeProfile(): HasOne
     {
@@ -69,10 +61,7 @@ class User extends Authenticatable implements MustVerifyEmail
             $query->where('active', true);
         });
     }
-    public function profiles(): HasMany
-    {
-        return $this->hasMany(Profile::class);
-    }
+    
     public function settings(): HasOne
     {
         return $this->hasOne(UserSettings::class);
@@ -107,7 +96,7 @@ class User extends Authenticatable implements MustVerifyEmail
     //---- HELPERS -----//
     public function isVerified(): bool
     {
-        return $this->hasVerifiedPhone() || $this->hasVerifiedEmail();
+        return $this->hasVerifiedEmail() || $this->hasVerifiedPhone();
     }
 
     public function getEmailForVerification(): string
@@ -131,7 +120,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @param string $prefer "email" or "phone"
      * @return string
      */
-    public function getUserName($prefer='email')
+    public function getUserName()
     {
         return $this->getAttribute('first_name');
     }
@@ -161,6 +150,6 @@ class User extends Authenticatable implements MustVerifyEmail
         }else{
             $profile_id = $profile;
         }
-        return $this->profiles()->whereId($profile_id)->exists();
+        return DB::table('profiles')->where('id', $profile_id)->where('user_id', $this->getKey())->exists();
     }
 }

@@ -6,6 +6,7 @@ namespace App\Models\Traits;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
 use Throwable;
@@ -47,10 +48,18 @@ trait HasStorageFile
     }
     public function trashFile(): bool
     {
-        $disk = Storage::disk($this->storage);
-        if ($disk->exists($this->fileName)) {
-            $this->fileTrashed = Storage::move($disk->path($this->fileName), Storage::disk('trash')->path($this->getTrashName()));
-            return $this->fileTrashed;
+        try {
+            $disk = Storage::disk($this->storage);
+            $file = $disk->path($this->fileName);
+            $trashFullName = Storage::disk('trash')->path($this->getTrashName());
+            if(file_exists($file))
+            {
+                $this->fileTrashed = File::move($file, $trashFullName);
+                return $this->fileTrashed;
+            }
+        }catch(\Throwable $e)
+        {
+            report($e);
         }
         return false;
     }
@@ -61,8 +70,8 @@ trait HasStorageFile
         }catch(\Throwable $e)
         {
             report($e);
-            return false;
         }
+        return false;
     }
     public function restoreFile():bool
     {
@@ -70,7 +79,7 @@ trait HasStorageFile
         if(file_exists($trashedFile))
         {
             try{
-                if(Storage::move($trashedFile, Storage::disk($this->storage)->path($this->fileName)))
+                if(File::move($trashedFile, $this->realPath))
                 {
                     $this->fileTrashed = false;
                     $this->trashName = null;
@@ -85,23 +94,28 @@ trait HasStorageFile
             }
         }
     }
-    public function bootRestorable()
+    public static function bootHasStorageFile()
     {
         static::deleting(function($storable){
-            $storable->trashFile();
+            try
+            {
+                $storable->trashFile();
+                if($storable->isForceDeleting())
+                {
+                    $storable->deleteTrashed();
+                }
+            }catch(\Throwable $e)
+            {
+                report($e);
+            }
+            
         });
         static::restored(function($storable){
             $storable->restoreFile();
         });
-    }
-    public function bootHasTempFile()
-    {
-        static::creating(function($storable){
+        static::created(function($storable){
             $storable->copyTemporaryFileToStorage();
         });
-    }
-    public function bootHasSha256()
-    {
         static::creating(function($storable){
             if(empty($storable->getAttribute('sha256')))
             {

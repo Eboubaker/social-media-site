@@ -6,6 +6,7 @@ use App\Exceptions\NotInTransactionException;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 trait HasImages
@@ -15,13 +16,20 @@ trait HasImages
         return $this->morphMany(Image::class, 'imageable');
     }
 
-    public function bootHasImages()
+    public static function bootHasImages()
     {
         static::deleting(function(Model $imageable){
             assertInTransaction();
-            $imageable->images->cursor()->each(function(Image $image){
-                $image->delete();
-            });
+            if($imageable->forceDeleting())
+            {
+                $imageable->images()->cursor()->each(function($image){
+                    $image->forceDelete();
+                });
+            }else{
+                $imageable->images()->cursor()->each(function ($image) {
+                    $image->delete();
+                });
+            }
         });
     }
 }

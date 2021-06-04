@@ -2,26 +2,36 @@
 
 namespace App\Models\Traits;
 
-use App\Exceptions\NotInTransactionException;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasVideos
 {
+
+    use SoftDeletes;
+
+    
     public function videos():MorphMany
     {
         return $this->morphMany(Video::class, 'videoable');
     }
 
-    public function bootHasVideos()
+    public static function bootHasVideos()
     {
         static::deleting(function(Model $videoable){
             assertInTransaction();
-            $videoable->videos->cursor()->each(function(Video $video){
-                $video->delete();
-            });
+            if($videoable->forceDeleting())
+            {
+                $videoable->videos()->cursor()->each(function(Video $video){
+                    $video->forceDelete();
+                });
+            }else{
+                $videoable->videos()->cursor()->each(function (Video $video) {
+                    $video->delete();
+                });
+            }
         });
     }
 }

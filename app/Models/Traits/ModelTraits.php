@@ -12,6 +12,20 @@ use Illuminate\Support\Str;
 trait ModelTraits
 {
     protected static $instance;
+    protected static $forceDeletez = null;
+    
+
+    public function forceDeleting()
+    {
+        if(is_null(self::$forceDeletez))
+        {
+            // if the model uses SoftDeletes trait we check if forceDelete() was called otherwise just return true
+            self::$forceDeletez = array_key_exists(Illuminate\Database\Eloquent\SoftDeletes::class, class_uses_recursive($this::class)) 
+                                    ? $this->isForceDeleting() 
+                                    : true;
+        }
+        return self::$forceDeletez;
+    }
 
     public function getCreatedAttribute()
     {

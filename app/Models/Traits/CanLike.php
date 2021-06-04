@@ -7,20 +7,20 @@ use App\Models\Like;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-trait Likeable
+trait CanLike
 {
     public function likes():MorphMany
     {
-        return $this->morphMany(Like::class, 'likeable');
+        return $this->hasMany(Like::class, 'liker_id');
     }
 
-    public static function bootLikeable()
+    public static function bootCanLike()
     {
-        static::deleting(function(Model $likeable){
+        static::deleting(function(Model $liker){
             assertInTransaction();
-            if($likeable->forceDeleting())
+            if($liker->forceDeleting())
             {
-                $likeable->likes()->delete();
+                $liker->likes()->delete();
             }
         });
     }

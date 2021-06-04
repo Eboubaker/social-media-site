@@ -10,7 +10,7 @@ class PostView extends Model
 {
     use HasFactory, ModelTraits;
 
-    public const CREATED_AT = 'seen_at';
+    public const CREATED_AT = 'viewed_at';
     public const UPDATED_AT = null;
 
     protected $guarded = [];
