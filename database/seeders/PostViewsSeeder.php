@@ -21,7 +21,7 @@ class PostViewsSeeder extends Seeder
             $posts = Post::all();
             $profiles = Profile::all();
             $combinations = [];
-            foreach (range(1, 1000) as $i) {
+            foreach (range(1, 500) as $i) {
                 $post = $posts->random();
                 $profile = $profiles->random();
                 $combo = $post->getKey() . '|' . $profile->getKey();

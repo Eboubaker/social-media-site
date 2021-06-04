@@ -24,7 +24,7 @@ class CommunityMembersSeeder extends Seeder
             foreach (CommunityMember::all() as $member) {
                 $combosites[$member->community->getKey() . "|" . $member->profile->getKey()] = true;
             }
-            foreach (range(0, 1000) as $i) {
+            foreach (range(0, 100) as $i) {
                 /** @var Community $community */
                 $community = $communities->random();
                 $profile = $profiles->random();
