@@ -31,7 +31,6 @@ class CommunityManagementTest extends TestCase
     public function test_community_can_be_created()
     {
         $profile = $this->loginWithProfile();
-        
         $response = $this->post(route('community.store'), [
             'name' => 'test',
             'description' => 'a good community'

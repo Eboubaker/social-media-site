@@ -57,9 +57,7 @@ class User extends Authenticatable implements MustVerifyEmail
     //----- RELATIONS -------//
     public function activeProfile(): HasOne
     {
-        return $this->hasOne(Profile::class)->ofMany(relation:function($query){
-            $query->where('active', true);
-        });
+        return $this->hasOne(Profile::class)->where('active', true);
     }
     
     public function settings(): HasOne
