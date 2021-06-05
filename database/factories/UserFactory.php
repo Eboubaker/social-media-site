@@ -28,6 +28,8 @@ class UserFactory extends Factory
     {
         $email = random_int(0, 100) > 50;
         return [
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'phone' => $email ? null : $this->faker->unique()->phoneNumber(),
             'email' => $email? $this->faker->unique()->safeEmail() : null,
             'email_verified_at' => $email ? (FactoryHelper::randc(.5) ? now() : null) : null,
