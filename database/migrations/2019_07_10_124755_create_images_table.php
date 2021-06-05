@@ -28,8 +28,7 @@ class CreateImagesTable extends Migration
             $table->string('mime');
             $table->string('extension', 4);
             $table->float('sfw_score', total:2, places:1, unsigned:true)->nullable()->default(.5);
-            $table->softDeletes();
-            $table->timestamps();
+            MigrationHelper::addTimeStamps($table, Image::class);
         });
     }
 

@@ -24,8 +24,7 @@ class CreateCommentsTable extends Migration
             $table->foreignIdFor(Profile::class, 'commentor_id')->on(Profile::tablename())->constained();
             $table->morphs('commentable');
             $table->text('body')->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+            MigrationHelper::addTimeStamps($table, Comment::class);
         });
     }
 

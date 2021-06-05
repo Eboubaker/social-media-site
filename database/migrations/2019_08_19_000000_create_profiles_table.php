@@ -25,8 +25,7 @@ class CreateProfilesTable extends Migration
             // $table->json('data');
             $table->string('username')->unique();
             $table->boolean('active')->nullable()->default(false);
-            $table->softDeletes();
-            $table->timestamps();
+            MigrationHelper::addTimeStamps($table, Profile::class);
         });
     }
 

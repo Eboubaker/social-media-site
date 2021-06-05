@@ -31,11 +31,21 @@ class MigrationHelper
             $keydef->cascadeOnUpdate();
         return [$column, $keydef];
     }
-    public static function addTimeStamps(Blueprint $table, Model $target)
+    public static function addTimeStamps(Blueprint $table, $target)
     {
         if(!empty($target::CREATED_AT))
-            $table->timestamp($target::CREATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp($target::CREATED_AT)->nullable();
         if(!empty($target::UPDATED_AT))
-            $table->timestamp($target::UPDATED_AT)->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp($target::UPDATED_AT)->nullable();
+        if($target::canBeForceDeleted())
+        {
+            if(defined((is_object($target) ? get_class($target) : $target) ."::DELETED_AT"))
+            {
+                $table->timestamp($target::DELETED_AT);
+            }else{
+                $table->softDeletes();
+            }
+            $table->string('reason_deleted')->nullable();
+        }
     }
 }

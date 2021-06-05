@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Community;
+use App\Models\CommunityMember;
 use App\Models\CommunityRole;
 use App\Models\Profile;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,13 +20,12 @@ class CreateCommunitiesMembersTable extends Migration
     {
         Schema::create('communities_members', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('profile_id')->constrained(Profile::tablename())->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId(Community::getForegin())->constrained(Community::tablename())->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignId('profile_id')->constrained(Profile::tablename())->cascadeOnDelete();
+            $table->foreignId(Community::getForegin())->constrained(Community::tablename())->cascadeOnDelete();
             $table->foreignId('role_id')->nullable()->default(CommunityRole::DEFAULT_ROLE_ID)->constrained(CommunityRole::tablename());
 
-            $table->unique(['profile_id', Community::getForegin()], 'unique_composite_of_community_member');
-            $table->timestamp('joined_at')->nullable();
-            $table->timestamp('updated_at')->nullable();
+            $table->unique(['profile_id', Community::getForegin()], 'unique_composite_of_community_id_x_profile_id');
+            MigrationHelper::addTimeStamps($table, CommunityMember::class);
         });
     }
 

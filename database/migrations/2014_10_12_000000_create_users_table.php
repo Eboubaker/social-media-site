@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
 
             $table->string('first_name');
             $table->string('last_name');
-            
+
             $table->timestamp('phone_verified_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
 
@@ -35,8 +35,7 @@ class CreateUsersTable extends Migration
             $table->string('api_token')->unique();
 
             $table->rememberToken();
-            $table->softDeletes();
-            $table->timestamps();
+            MigrationHelper::addTimeStamps($table, User::class);
         });
     }
 

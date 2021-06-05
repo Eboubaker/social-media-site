@@ -26,8 +26,7 @@ class CreatePostsTable extends Migration
             $table->morphs('pageable');
             $table->foreignId('author_id')->nullable()->constrained(Profile::tablename());
             $table->string('slug')->unique()->nullable();
-            $table->softDeletes();
-            $table->timestamps();
+            MigrationHelper::addTimeStamps($table, Post::class);
         });
     }
 
