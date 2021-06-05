@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 
@@ -38,6 +39,7 @@ class DataBaseHardReset extends Command
      */
     public function handle()
     {
+        User::all()->forceDelete();
         $this->call("db:wipe");
         $this->call("migrate");
         $this->call("db:seed", ['class' => 'FullSeeds']);

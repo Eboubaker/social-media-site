@@ -9,12 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait Videoable
 {
-    use SoftDeletes;
-
-    public function video():MorphOne
-    {
-        return $this->morphOne(Video::class, 'videoable');
-    }
 
     public static function bootVideoable()
     {
@@ -25,10 +19,18 @@ trait Videoable
                 if($videoable->isForceDeleting())
                 {
                     $videoable->video->forceDelete();
-                }else{
+                }else if(Video::canBeForceDeleted())
+                {
                     $videoable->video->delete();
                 };
             }
         });
     }
+    
+    public function video():MorphOne
+    {
+        return $this->morphOne(Video::class, 'videoable');
+    }
+
+    
 }

@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 trait HasImages
 {
-    public function images():MorphMany
-    {
-        return $this->morphMany(Image::class, 'imageable');
-    }
-
     public static function bootHasImages()
     {
         static::deleting(function(Model $imageable){
@@ -25,11 +20,17 @@ trait HasImages
                 $imageable->images()->cursor()->each(function($image){
                     $image->forceDelete();
                 });
-            }else{
-                $imageable->images()->cursor()->each(function ($image) {
-                    $image->delete();
-                });
+            }else if(Image::canBeForceDeleted())
+            {
+                // $imageable->images()->cursor()->each(function ($image) {
+                //     $image->delete();
+                // });
+                $imageable->images()->update(["deleted_at" => now()]);
             }
         });
+    }
+    public function images():MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

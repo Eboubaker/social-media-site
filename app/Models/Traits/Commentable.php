@@ -7,15 +7,9 @@ namespace App\Models\Traits;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Arr;
 
 trait Commentable
 {
-    public function comments():MorphMany
-    {
-        return $this->morphMany(Comment::class, 'commentable');
-    }
 
     public static function bootCommentable()
     {
@@ -32,5 +26,10 @@ trait Commentable
                 });
             }
         });
+    }
+
+    public function comments():MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

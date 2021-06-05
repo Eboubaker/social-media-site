@@ -3,24 +3,57 @@
 
 namespace App\Models\Traits;
 
-use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
-use Throwable;
 
 trait HasStorageFile
 {
-    use SoftDeletes;
-    
     private string $att_fileName;
     private string $att_realPath;
     private string $att_temp;
     
     private bool $fileTrashed = false;
     private string $trashName;
+
+
+    public static function bootHasStorageFile()
+    {
+        static::deleting(function($storable){
+            try
+            {
+                $storable->trashFile();
+                if($storable->isForceDeleting())
+                {
+                    $storable->deleteTrashed();
+                }
+            }catch(\Throwable $e)
+            {
+                report($e);
+            }
+            
+        });
+        static::restored(function($storable){
+            $storable->restoreFile();
+        });
+        static::created(function($storable){
+            $storable->copyTemporaryFileToStorage();
+        });
+        static::creating(function($storable){
+            if(empty($storable->getAttribute('sha256')))
+            {
+                $location = null;
+                if(empty($storable->getKey) && !empty($storable->att_temp))
+                {
+                    $location = $storable->att_temp;
+                }else{
+                    $location = Storage::disk($storable->storage)->get($storable->fileName);
+                }
+                $storable->setAttribute('sha256', hash('sha256',  $location));
+            }
+        });
+    }
 
     public function fileTrashed()
     {
@@ -85,7 +118,7 @@ trait HasStorageFile
                     $this->trashName = null;
                     return true;
                 }else{
-                    throw new Exception("File Not Restored");
+                    throw new \Exception("File Not Restored");
                 }
             }catch(\Throwable $e)
             {
@@ -93,42 +126,6 @@ trait HasStorageFile
                 return false;
             }
         }
-    }
-    public static function bootHasStorageFile()
-    {
-        static::deleting(function($storable){
-            try
-            {
-                $storable->trashFile();
-                if($storable->isForceDeleting())
-                {
-                    $storable->deleteTrashed();
-                }
-            }catch(\Throwable $e)
-            {
-                report($e);
-            }
-            
-        });
-        static::restored(function($storable){
-            $storable->restoreFile();
-        });
-        static::created(function($storable){
-            $storable->copyTemporaryFileToStorage();
-        });
-        static::creating(function($storable){
-            if(empty($storable->getAttribute('sha256')))
-            {
-                $location = null;
-                if(empty($storable->getKey) && !empty($storable->att_temp))
-                {
-                    $location = $storable->att_temp;
-                }else{
-                    $location = Storage::disk($storable->storage)->get($storable->fileName);
-                }
-                $storable->setAttribute('sha256', hash('sha256',  $location));
-            }
-        });
     }
     public function setTemporaryFileLocationAttribute($fullPath)
     {

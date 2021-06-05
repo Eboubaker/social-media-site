@@ -11,10 +11,18 @@ use Illuminate\Support\Str;
 
 trait ModelTraits
 {
-    protected static $instance;
+    protected static $instance = null;
     protected static $forceDeletez = null;
-    
+    protected static $deletedAtColumnName = null;
 
+    public static function canBeForceDeleted()
+    {
+        if (is_null(self::$forceDeletez)) 
+        {
+            self::$forceDeletez = array_key_exists(Illuminate\Database\Eloquent\SoftDeletes::class, class_uses_recursive(self::class));
+        }
+        return self::$forceDeletez;
+    }
     public function forceDeleting()
     {
         if(is_null(self::$forceDeletez))
@@ -26,7 +34,24 @@ trait ModelTraits
         }
         return self::$forceDeletez;
     }
-
+    public static function getDeletedAtName()
+    {
+        if(is_null(self::$deletedAtColumnName))
+        {
+            $instance = new self;
+            if($instance->canBeForceDeleted())
+            {
+                self::$deletedAtColumnName = $instance->getDeletedAtColumn();
+            }else{
+                self::$deletedAtColumnName = 'deleted_at';
+            }
+        }
+        return self::$deletedAtColumnName;
+    }
+    public function softDeleting()
+    {
+        return ! $this->forceDeleting();
+    }
     public function getCreatedAttribute()
     {
         return Carbon::parse($this->attributes[$this->getCreatedAtColumn()]);

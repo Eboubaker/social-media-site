@@ -10,11 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait CanView
 {
-    public function views():HasMany
-    {
-        return $this->hasMany(PostView::class, 'viewer_id');
-    }
-
     public static function bootCanView()
     {
         static::deleting(function(Model $viewer){
@@ -25,4 +20,11 @@ trait CanView
             }
         });
     }
+    
+    public function views():HasMany
+    {
+        return $this->hasMany(PostView::class, 'viewer_id');
+    }
+
+    
 }

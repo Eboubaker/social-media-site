@@ -9,11 +9,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait Likeable
 {
-    public function likes():MorphMany
-    {
-        return $this->morphMany(Like::class, 'likeable');
-    }
-
     public static function bootLikeable()
     {
         static::deleting(function(Model $likeable){
@@ -23,5 +18,9 @@ trait Likeable
                 $likeable->likes()->delete();
             }
         });
+    }
+    public function likes():MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeable');
     }
 }

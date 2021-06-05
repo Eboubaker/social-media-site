@@ -190,8 +190,6 @@ class RegisterController extends Controller
         //         : back()->withErrors($validator->getMessageBag()->all());
         // }
         return DB::transaction(function() use ($validated, $request){
-            info("lolezz");
-            info($validated);
             $user = $this->create($validated);
             $this->guard()->login($user);
 

@@ -9,11 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait Viewable
 {
-    public function views():HasMany
-    {
-        return $this->hasMany(PostView::class);
-    }
-
     public static function bootViewable()
     {
         static::deleting(function(Model $viewable){
@@ -23,5 +18,10 @@ trait Viewable
                 $viewable->views()->delete();
             }
         });
+    }
+
+    public function views():HasMany
+    {
+        return $this->hasMany(PostView::class);
     }
 }

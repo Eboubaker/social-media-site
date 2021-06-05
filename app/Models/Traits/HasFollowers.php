@@ -8,19 +8,18 @@ use Illuminate\Support\Facades\DB;
 
 trait HasFollowers
 {
-
-    public function followers():BelongsToMany
-    {
-        return $this->belongsToMany(Profile::class, 'profiles_followers', 'profile_id', 'follower_id');
-    }
     public static function bootHasFollowers()
     {
         static::deleting(function(Model $profile){
             assertInTransaction();
             if($profile->forceDeleting())
             {
-                DB::table('profiles_followers')->where('profile_id', $profile->getKey())->delete();
+                $this->followers()->delete();
             }
         });
+    }
+    public function followers():BelongsToMany
+    {
+        return $this->belongsToMany(Profile::class, 'profiles_followers', 'profile_id', 'follower_id');
     }
 }

@@ -13,11 +13,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 trait HasProfiles
 {
-    public function profiles():HasMany
-    {
-        return $this->hasMany(Profile::class);
-    }
-
     public static function bootHasProfiles()
     {
         static::deleting(function($owner){
@@ -31,5 +26,9 @@ trait HasProfiles
                 $owner->profiles()->cursor()->each(fn($profile) => $profile->delete());
             }
         });
+    }
+    public function profiles():HasMany
+    {
+        return $this->hasMany(Profile::class);
     }
 }

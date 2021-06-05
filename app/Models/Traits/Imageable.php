@@ -11,12 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 trait Imageable
 {
-    use SoftDeletes;
-
-    public function image():MorphOne
-    {
-        return $this->morphOne(Image::class, 'imageable');
-    }
     public static function bootImageable()
     {
         static::deleting(function(Model $imageable){
@@ -26,11 +20,15 @@ trait Imageable
                 if($imageable->isForceDeleting())
                 {
                     $imageable->image->forceDelete();
-                }else{
+                }else if(Image::canBeForceDeleted())
+                {
                     $imageable->image->delete();
-                };
+                }
             }
         });
     }
-    
+    public function image():MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }

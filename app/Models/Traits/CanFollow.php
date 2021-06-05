@@ -10,10 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 trait CanFollow
 {
-    public function followings():BelongsToMany
-    {
-        return $this->belongsToMany(Profile::class, 'profiles_followers', 'follower_id');
-    }
     public static function bootCanFollow()
     {
         static::deleting(function(Model $profile){
@@ -25,4 +21,9 @@ trait CanFollow
             }
         });
     }
+    public function followings():BelongsToMany
+    {
+        return $this->belongsToMany(Profile::class, 'profiles_followers', 'follower_id');
+    }
+    
 }

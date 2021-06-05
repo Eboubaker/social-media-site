@@ -9,11 +9,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait CanLike
 {
-    public function likes():MorphMany
-    {
-        return $this->hasMany(Like::class, 'liker_id');
-    }
-
     public static function bootCanLike()
     {
         static::deleting(function(Model $liker){
@@ -23,5 +18,10 @@ trait CanLike
                 $liker->likes()->delete();
             }
         });
+    }
+
+    public function likes():MorphMany
+    {
+        return $this->hasMany(Like::class, 'liker_id');
     }
 }

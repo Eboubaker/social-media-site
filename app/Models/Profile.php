@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Traits\CanComment;
 use App\Models\Traits\CanFollow;
+use App\Models\Traits\CanJoinCommunities;
 use App\Models\Traits\CanLike;
 use App\Models\Traits\CanView;
+use App\Models\Traits\CreatesCommunities;
 use App\Models\Traits\CreatesPosts;
 use App\Models\Traits\HasFollowers;
 use App\Models\Traits\HasImages;
+use App\Models\Traits\HasPosts;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -21,9 +25,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Watson\Validating\ValidatingTrait;
 
 /**
@@ -41,10 +43,14 @@ class Profile extends Model
     ValidatingTrait,
     HasImages,
     CreatesPosts,
+    CreatesCommunities,
     CanView,
     CanLike,
     HasFollowers,
-    CanFollow;
+    CanComment,
+    CanFollow,
+    HasPosts,
+    CanJoinCommunities;
     
     protected $guarded = [];
 
@@ -70,19 +76,6 @@ class Profile extends Model
     public static function boot()
     {
         parent::boot();
-        // delete posts when deleting
-        static::deleting(function(Profile $profile){
-            if($profile->forceDeleting())
-            {
-                assertInTransaction();
-                $profile->posts()->cursor()->each(function(Post $post){
-                    $post->forceDelete();
-                });
-                $profile->profilePosts()->cursor()->each(function(Post $post){
-                    $post->forceDelete();
-                });
-            }
-        });
         // set other profiles active state to false when a new profile is created.
         static::created(function(Profile $profile){
             $user = $profile->account;
@@ -93,7 +86,7 @@ class Profile extends Model
         });
         // assert only one active profile per account
         static::updating(function(Profile $profile){
-            
+            assertInTransaction();
             $user = $profile->account;
             if((bool)$profile->active !== (bool)$profile->getOriginal('active') && (bool)$profile->active === true)
             {
@@ -101,10 +94,11 @@ class Profile extends Model
                 {
                     throw new \Exception("attempting to deactivate profile but the user only has one profile");
                 }
-                $other = $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->first();
-                $other->update(["active" => false]);
-                // TODO: make sure all model updates are put in a transaction so if an error occurs
-                // after this pointthe state of the model will be restored
+                $oldActive = $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->first();
+                if ( ! is_null($oldActive)) 
+                {
+                    $oldActive->update(["active" => false]);
+                }
             }
         });
     }
@@ -117,88 +111,51 @@ class Profile extends Model
      */
     public function communitiesPosts():HasMany
     {
-        return $this->hasMany(Post::class, 'author_id')
-                     ->whereHasMorph('pageable', Community::class);
+        return $this->createdPosts()->whereHasMorph('pageable', Community::class);
     }
     public function profilePosts():MorphMany
     {
-        return $this->morphMany(Post::class, 'pageable');
+        return $this->posts();
     }
-    public function posts()
+    public function viewedPosts():HasMany
     {
-        return $this->hasMany(Post::class, 'author_id');
+        return $this->views();
     }
-    public function seenPosts():HasMany
-    {
-        return $this->hasMany(PostView::class, 'viewer_id');
-    }
-
-    public function comments():HasMany
-    {
-        return $this->hasMany(Comment::class, 'commentor_id');
-    }
-
     public function replies():HasMany
     {
-        return $this->hasMany(Comment::class, 'commentor_id')
-                    ->whereHasMorph('commentable', Comment::class);
+        return $this->comments()->whereHasMorph('commentable', Comment::class);
     }
-
     public function account():BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
     public function notifications():MorphTo
     {
         return $this->morphTo();
     }
-
-    public function likes()
-    {
-        return $this->hasMany(Like::class, 'liker_id');
-    }
-
     public function likedPosts()
     {
-        return $this->hasMany(Like::class, 'liker_id')
-                    ->whereHasMorph('likeable', Post::class);
+        return $this->likes()->whereHasMorph('likeable', Post::class);
     }
-
     public function likedComments()
     {
-        return $this->hasMany(Like::class, 'liker_id')
-                    ->whereHasMorph('likeable', Comment::class);
+        return $this->likes()->whereHasMorph('likeable', Comment::class);
     }
 
     public function profileImage():MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable')->where('purpose', 'profileImage');
+        return $this->images()->where('purpose', 'profileImage');
     }
     public function coverImage():MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable')->where('purpose', 'coverImage');
+        return $this->images()->where('purpose', 'coverImage');
     }
-    public function ownedCommunities():HasMany
-    {
-        return $this->hasMany(Community::class, 'owner_id');
-    }
-
     public function communities():BelongsToMany
     {
         return $this->belongsToMany(Community::class, 'communities_members', 'profile_id');
     }
-    /**
-     * @return Collection<CommunityMember>
-     */
-    public function getSubscriptionsAttribute()
-    {
-        return CommunityMember::where('profile_id', $this->getKey())->get();
-    }
-    public function getMemberOf(Community $community):CommunityMember|null
-    {
-        return CommunityMember::where('community_id', $community->getKey())->where('profile_id', $this->getKey())->first();
-    }
+    
+    
 
     #endregion
 
@@ -213,9 +170,9 @@ class Profile extends Model
             return Auth::user()->activeProfile;
         }catch(\Throwable $e)
         {
-            Log::error($e->getMessage());
-            return null;
+            report($e);
         }
+        return null;
     }
     /**
      * returns the id of the currently logged-in user's active profile
@@ -225,12 +182,12 @@ class Profile extends Model
     public static function current_id():int|null
     {
         try{
-            return Auth::user()->activeProfile->getKey();
+            return Auth::user()->activeProfile()->select('id')->first()->id;
         }catch(\Throwable $e)
         {
-            Log::error($e->getMessage());
-            return null;
+            report($e);
         }
+        return null;
     }
 
 
