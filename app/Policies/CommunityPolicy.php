@@ -58,7 +58,7 @@ class CommunityPolicy
 
         }catch(\Throwable $e)
         {
-            Log::error($e->getMessage());
+            report($e);
             return false;
         }
         if($user->profiles()->where('id', $community->owner->getKey())->exists())

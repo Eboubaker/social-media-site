@@ -18,7 +18,6 @@ trait CanComment
         if(self::canBeSoftDeleted())
         {
             static::restored(function(Model $commentor){
-                Log::debug("Fired Event CanComment.restored");
                 $commentor->restoreCascadedRelation('comments');
             });
         }

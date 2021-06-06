@@ -60,7 +60,6 @@ class CustomScopes implements Scope
             return $builder
                 ->cursor()
                 ->each(function($model){
-                    info("calling delete on " . get_class($model));
                     $model->delete();
                 });
         });
@@ -86,7 +85,6 @@ class CustomScopes implements Scope
     {
         $builder->macro('cascadeDeleteRelation', function (Builder $builder, $relatedInstance, string $relation) {
             $parent = $builder->getModel();
-            Log::debug("Cascading deleting of relation $relation with ".get_class($builder->getModel()));
             if($parent->forceDeleting())
             {
                 return $parent->{$relation}()->includeTrashed()->treeForceDelete();
@@ -121,7 +119,6 @@ class CustomScopes implements Scope
     protected function addTreeRestore(Builder $builder)
     {
         $builder->macro('treeRestore', function (Builder $builder) {
-            info("Tree restore called for model query " . $builder->getModel()->identifyYourself());
             if($builder->getModel()->canBeSoftDeleted())
             {
                 return $builder
@@ -129,7 +126,6 @@ class CustomScopes implements Scope
                 ->cursor()
                 ->each(function($model){
                     $model->restore();
-                    info("restore was commited for model query " . $model->identifyYourself());
                     $model->update(["reason_deleted" => null]);
                 });
             }

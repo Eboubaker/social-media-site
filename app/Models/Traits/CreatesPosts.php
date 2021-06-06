@@ -10,7 +10,6 @@ trait CreatesPosts
 {
     public static function bootCreatesPosts()
     {
-        info("booting CreatesPosts");
         static::deleting(function(Model $author){
             $author->cascadeDeleteRelation(Post::make(), 'createdPosts');
         });

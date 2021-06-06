@@ -14,7 +14,6 @@ trait CanFollow
 {
     public static function bootCanFollow()
     {
-        info("booting CanFollow");
         static::deleting(function(Model $follower){
             $follower->cascadeDeleteRelation(Follow::make(), 'followingsModels');
         });

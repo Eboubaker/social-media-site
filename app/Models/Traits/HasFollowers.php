@@ -11,7 +11,6 @@ trait HasFollowers
 {
     public static function bootHasFollowers()
     {
-        info("booting CreatesPosts");
         static::deleting(function(Model $followable){
             $followable->cascadeDeleteRelation(Follow::make(), 'followersModels');
         });

@@ -39,7 +39,7 @@ class CommunityRole extends Model
                         ->exists();
         }catch(\Throwable $e)
         {
-            Log::error($e->getMessage());
+            report($e);
             return false;
         }
     }
