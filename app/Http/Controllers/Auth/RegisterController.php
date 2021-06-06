@@ -180,7 +180,6 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        info($request->all());
         $validator = $this->validator($request->all());
         $validated = $validator->validate();
         // if($validator->fails())
@@ -231,7 +230,7 @@ class RegisterController extends Controller
             $request->user()->sendEmailVerificationNotification();
             $messages['login'] = $request->user()->email;
         }else{
-            $user->forceDelete();
+            $user->doForceDelete();
             throw new AuthenticationException("invalid verification method was given");
         }
 
