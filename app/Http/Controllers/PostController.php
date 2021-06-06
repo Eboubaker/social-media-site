@@ -23,24 +23,12 @@ class PostController extends Controller
     {
         return view('post.create');
     }
-    public function store(Request $request)
+    public function storeProfilePost(Request $request, Post $post)
     {
-        $exception = null;
-        if(!$request->has('body'))
-        {
-            $exception = new RequestParameterNotFoundException("body parameter does not exist");
-        }
-        if(empty($request->get('body')))
-        {
-            $exception = new EmptyRequestParameterException("empty body parameter");
-        }
-        if($exception)
-        {
-            report($exception);
-            return response()->json(["message" => "invalid request"], 400);
-        }
-        $post = auth()->user()->activeProfile->posts()->create(["content" => ["body" => $request->get('body')]]);
-        return response()->json((new PostResource($post))->toJson());
+        $post->author()->associate(Profile::current());
+        $post->pageable()->associate(Profile::current());
+        $post->save();
+        return response()->redirectTo($post->url);
     }
     public function destroy(Post $post)
     {

@@ -51,6 +51,8 @@ Route::get('/c/{community:name}/edit', [CommunityController::class, 'edit'])->na
 #endregion
 
 #region backend submits
+Route::post('/c/{community}/posts', [PostController::class, 'storeCommunityPost'])->name('community.posts.store');
+Route::post('/u/posts', [PostController::class, 'storeProfilePost'])->name('profile.posts.store');
 Route::post('/community', [CommunityController::class, 'store'])->name('community.store');
 Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
 Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->name('profile.switch');
