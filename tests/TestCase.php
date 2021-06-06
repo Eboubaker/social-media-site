@@ -10,11 +10,24 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    
+    public User $loggedInUser;
+    public Profile $currentProfile;
+
     public function loginWithProfile():Profile
     {
-        $user = User::factory()->hasProfiles(1)->create();
-        $this->actingAs($user);
-        return $user->profiles->first();
+        $this->loggedInUser = User::factory()->hasProfiles(1)->create();
+        $this->actingAs($this->loggedInUser);
+        $this->currentProfile = $this->loggedInUser->profiles->first();
+        return $this->currentProfile;
+    }
+
+
+
+    public function __construct(...$atts)
+    {
+        parent::__construct(...$atts);
+        $this->afterApplicationCreated(function(){
+            $this->loginWithProfile();
+        });
     }
 }
