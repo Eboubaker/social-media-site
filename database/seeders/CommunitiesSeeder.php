@@ -21,7 +21,7 @@ class CommunitiesSeeder extends Seeder
     {
         DB::transaction(function () {
             $profiles = Profile::all();
-            foreach(range(0, 20) as $_)
+            foreach(range(0, 10) as $_)
             {
                 $profile = $profiles->random();
                 $community = Community::factory()->make();

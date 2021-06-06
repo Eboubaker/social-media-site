@@ -27,7 +27,6 @@ class LikesSeeder extends Seeder
             foreach(range(1, $likeables->count()) as $i)
             {
                 $likeable = $likeables->random();
-                info($likeable);
                 $profile = $profiles->random();
                 $combo = "" . $likeable->getKey() . get_class($likeable) . $profile->getKey();
                 

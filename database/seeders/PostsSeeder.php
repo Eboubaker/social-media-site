@@ -21,7 +21,7 @@ class PostsSeeder extends Seeder
         DB::transaction(function () {
             $profiles = Profile::all();
             $comunities = Community::all();
-            foreach (range(0, 400) as  $i) {
+            foreach (range(0, $profiles->count()*2) as  $i) {
                 $author = $profiles->random();
                 Post::factory()->make([
                     'author_id' => $author->getKey()

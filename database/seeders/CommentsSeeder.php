@@ -28,17 +28,6 @@ class CommentsSeeder extends Seeder
                     $commentable->comments()->save($comment);
                 }
             });
-            $comments = Comment::all();
-            DB::transaction(function () use($posts, $comments, $profiles) {
-                foreach(range(1, $posts->count()) as $i)
-                {
-                    $commentable = $comments->random();
-                    $comment = Comment::factory()->make(['commentor_id' => $profiles->random()->getKey()]);
-                    
-                    $commentable->comments()->save($comment);
-                    $comments->add($comment);
-                }
-            });
         });
     }
 }

@@ -14,6 +14,6 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        return User::factory()->count(50)->create();
+        return User::factory()->count(10)->create();
     }
 }
