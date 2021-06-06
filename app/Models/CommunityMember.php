@@ -38,7 +38,6 @@ class CommunityMember extends Model
     {
         if (empty($permissionId)) 
         {
-            Log::error("Empty permission id");
             return false;
         }
         try {
@@ -48,7 +47,7 @@ class CommunityMember extends Model
                         ->exists();
         }catch(\Throwable $e)
         {
-            Log::error($e->getMessage());
+            report($e);
             return false;
         }
     }
