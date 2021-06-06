@@ -27,10 +27,7 @@ class PageAbleExists implements Rule
      */
     public function passes($attribute, $value)
     {
-        return DB::table($this->post->tablename())
-        ->where('pageable_type', $this->post->getAttribute('pageable_type'))
-        ->where('pageable_id', $this->post->getAttribute('pageable_id'))
-        ->exists();
+        return $this->post->getAttribute('pageable_type')::where('id', $this->post->pageable_id)->exists();
     }
 
     /**
@@ -40,6 +37,6 @@ class PageAbleExists implements Rule
      */
     public function message()
     {
-        return 'the post location does not exist';
+        return 'the post page does not exist';
     }
 }
