@@ -27,3 +27,12 @@ if (!function_exists('assertInTransaction')) {
         }
     }
 }
+
+if(!defined("REASON_CASCADE"))
+{
+    define("REASON_CASCADE", "CASCADE");
+}
+if(!defined("REASON_DELETED_BY_OWNER"))
+{
+    define("REASON_DELETED_BY_OWNER", "DELETED_BY_OWNER");
+}
