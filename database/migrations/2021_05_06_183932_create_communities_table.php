@@ -22,7 +22,8 @@ class CreateCommunitiesTable extends Migration
             $table->foreignId('owner_id')->constrained(Profile::tablename());
             $table->string('name')->unique('communities_unique_name');
             $table->string('description');
-            $table->foreignId('visitor_default_role_id')
+            $table->boolean('is_private')->nullable()->default(false);
+            $table->foreignId('visitor_role_id')
                   ->nullable()
                   ->default(CommunityRole::VISITOR_DEFAULT_ROLE_ID)
                   ->constrained(CommunityRole::tablename());
