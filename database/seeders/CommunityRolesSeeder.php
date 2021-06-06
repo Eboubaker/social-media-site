@@ -21,7 +21,7 @@ class CommunityRolesSeeder extends Seeder
              * @var CommunityRole $role
              */
             $role = CommunityRole::create([
-                'id' => CommunityRole::DEFAULT_ROLE_ID,
+                'id' => CommunityRole::MEMBER_DEFAULT_ROLE_ID,
                 'name' => 'default_role'
             ]);
             $role->permissions()->saveMany([
