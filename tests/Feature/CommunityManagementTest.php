@@ -17,12 +17,7 @@ class CommunityManagementTest extends TestCase
     use DatabaseTransactions;
 
 
-    private function loginWithProfile():Profile
-    {
-        $user = User::factory()->hasProfiles(1)->create();
-        $this->actingAs($user);
-        return $user->profiles->first();
-    }
+    
     /**
      * A basic feature test example.
      *
@@ -59,8 +54,7 @@ class CommunityManagementTest extends TestCase
             'description' => 'a good community'
         ]);
         $c = Community::factory()->create([
-            'owner_id' => $profile->id,
-            'default_role_id' => 1
+            'owner_id' => $profile->id
         ]);
         $m = $c->members()->save(CommunityMember::make([
             'profile_id' => $profile->id,
