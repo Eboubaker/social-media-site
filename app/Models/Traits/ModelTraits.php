@@ -2,44 +2,61 @@
 
 namespace App\Models\Traits;
 
+use App\CustomScopes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 
-
+/**
+ * @method static void doForceDelete()
+ * @method static void includeTrashed()
+ * @method static void onlyIncludeTrashed()
+ * @method static void cascadeTrash()
+ * @method static void restoreCascadedTrashes()
+ * @method static void restoreCascadedTrashes()
+ */
 trait ModelTraits
 {
     protected static $instance = null;
-    protected static $forceDeletez = null;
+    public static $usesSoftDeletes = null;
     protected static $deletedAtColumnName = null;
 
-    public static function canBeForceDeleted()
+
+
+    public static function bootModelTraits()
     {
-        if (is_null(self::$forceDeletez)) 
-        {
-            self::$forceDeletez = array_key_exists(Illuminate\Database\Eloquent\SoftDeletes::class, class_uses_recursive(self::class));
-        }
-        return self::$forceDeletez;
+        static::addGlobalScope(new CustomScopes);
     }
-    public function forceDeleting()
+
+    public function doForceDelete()
     {
-        if(is_null(self::$forceDeletez))
+        if($this->canBeSoftDeleted())
         {
-            // if the model uses SoftDeletes trait we check if forceDelete() was called otherwise just return true
-            self::$forceDeletez = array_key_exists(Illuminate\Database\Eloquent\SoftDeletes::class, class_uses_recursive($this::class)) 
-                                    ? $this->isForceDeleting() 
-                                    : true;
+            return $this->forceDelete();
+        }else{
+            return $this->delete();
         }
-        return self::$forceDeletez;
     }
-    public static function getDeletedAtName()
+    public static function canBeSoftDeleted():bool
+    {
+        if (is_null(self::$usesSoftDeletes)) 
+        {
+            self::$usesSoftDeletes = in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses_recursive(self::class));
+        }
+        return self::$usesSoftDeletes;
+    }
+    public function forceDeleting():bool
+    {
+        return $this->canBeSoftDeleted() ? $this->isForceDeleting() : true;
+    }
+    public static function getDeletedAtName():string
     {
         if(is_null(self::$deletedAtColumnName))
         {
             $instance = new self;
-            if($instance->canBeForceDeleted())
+            if($instance->canBeSoftDeleted())
             {
                 self::$deletedAtColumnName = $instance->getDeletedAtColumn();
             }else{
@@ -132,5 +149,10 @@ trait ModelTraits
         return $count <= 0
                         ? self::orderByRaw('rand()')->first()
                         : self::orderByRaw('rand()')->limit($count)->get();
+    }
+
+    public function identifyYourSelf():string
+    {
+        return (string)(get_class($this)."#".$this->getKey());
     }
 }
