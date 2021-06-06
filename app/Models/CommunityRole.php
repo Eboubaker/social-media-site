@@ -18,9 +18,10 @@ class CommunityRole extends Model
     
     protected $guraded = [];
     
-    public const DEFAULT_ROLE_ID = 1;
+    public const MEMBER_DEFAULT_ROLE_ID = 1;
     public const OWNER_ROLE_ID = 2;
-    
+    public const VISITOR_DEFAULT_ROLE_ID = 3;
+
     public function permissions(): BelongsToMany
     {
         return $this->belongsToMany(CommunityPermission::class, 'community_roles_permissions', foreignPivotKey:'role_id', relatedPivotKey:'permission_id');

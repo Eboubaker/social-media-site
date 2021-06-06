@@ -30,7 +30,10 @@ class CommunityMembersSeeder extends Seeder
                 $profile = $profiles->random();
                 $combosite = $community->getKey() . "|" . $profile->getKey();
                 if (!isset($combosites[$combosite])) {
-                    $community->members()->create(['profile_id' => $profile->getKey()]);
+                    $community->members()->create([
+                        'profile_id' => $profile->getKey(),
+                        'role_id' => $community->member_default_role_id
+                    ]);
                     $combosites[$combosite] = true;
                 }
             } 

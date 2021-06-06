@@ -22,9 +22,13 @@ class CreateCommunitiesTable extends Migration
             $table->foreignId('owner_id')->constrained(Profile::tablename());
             $table->string('name')->unique('communities_unique_name');
             $table->string('description');
-            $table->foreignId('default_role_id')
+            $table->foreignId('visitor_default_role_id')
                   ->nullable()
-                  ->default(CommunityRole::DEFAULT_ROLE_ID)
+                  ->default(CommunityRole::VISITOR_DEFAULT_ROLE_ID)
+                  ->constrained(CommunityRole::tablename());
+            $table->foreignId('member_default_role_id')
+                  ->nullable()
+                  ->default(CommunityRole::MEMBER_DEFAULT_ROLE_ID)
                   ->constrained(CommunityRole::tablename());
             $table->unsignedBigInteger('members_count')->nullable()->default(0);
             MigrationHelper::addTimeStamps($table, Community::class);

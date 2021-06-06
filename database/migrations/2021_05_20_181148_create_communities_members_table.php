@@ -22,7 +22,7 @@ class CreateCommunitiesMembersTable extends Migration
             $table->id();
             $table->foreignId('profile_id')->constrained(Profile::tablename())->cascadeOnDelete();
             $table->foreignId(Community::getForegin())->constrained(Community::tablename())->cascadeOnDelete();
-            $table->foreignId('role_id')->nullable()->default(CommunityRole::DEFAULT_ROLE_ID)->constrained(CommunityRole::tablename());
+            $table->foreignId('role_id')->constrained(CommunityRole::tablename());
 
             $table->unique(['profile_id', Community::getForegin()], 'unique_composite_of_community_id_x_profile_id');
             MigrationHelper::addTimeStamps($table, CommunityMember::class);
