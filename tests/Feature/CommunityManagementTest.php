@@ -30,11 +30,12 @@ class CommunityManagementTest extends TestCase
             'name' => 'test',
             'description' => 'a good community'
         ]);
-        $response->assertRedirect(route('community.show', 'test'));
         $this->assertDatabaseHas('communities', [
             'name' => 'test',
             'description' => 'a good community'
         ]);
+        $response->assertRedirect(route('community.show', 'test'));
+        
     }
     public function test_community_can_be_shown()
     {
