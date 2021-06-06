@@ -3,6 +3,7 @@
 use App\Models\Post;
 use App\Models\PostView;
 use App\Models\Profile;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,11 +19,11 @@ class CreatePostViewsTable extends Migration
     {
         Schema::create(PostView::tablename(), function (Blueprint $table) {
             $table->id();
-            $table->foreignId('viewer_id')->constrained(Profile::tablename());
-            $table->foreignId('post_id')->constrained(Post::tablename());
+            $table->foreignId('viewer_id')->constrained(Profile::tablename())->cascadeOnDelete();
+            $table->foreignId('post_id')->constrained(Post::tablename())->cascadeOnDelete();
 
             $table->unique(['viewer_id', 'post_id']);
-            $table->timestamp('viewed_at');
+            MigrationHelper::addTimeStamps($table, PostView::class);
         });
     }
 

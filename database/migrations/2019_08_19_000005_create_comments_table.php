@@ -21,7 +21,7 @@ class CreateCommentsTable extends Migration
     {
         Schema::create(Comment::tablename(), function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Profile::class, 'commentor_id')->on(Profile::tablename())->constained();
+            $table->foreignId('commentor_id')->constained(Profile::tablename());
             $table->morphs('commentable');
             $table->text('body')->nullable();
             MigrationHelper::addTimeStamps($table, Comment::class);

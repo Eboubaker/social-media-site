@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Like;
 use App\Models\Profile;
+use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,8 +19,8 @@ class CreateLikesTable extends Migration
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
             $table->morphs('likeable');
-            $table->foreignId('liker_id')->references('id')->on(Profile::tablename())->constrained();
-            $table->timestamp('liked_at');
+            $table->foreignId('liker_id')->references('id')->on(Profile::tablename())->constrained()->cascadeOnDelete();
+            MigrationHelper::addTimeStamps($table, Like::class);
         });
     }
 

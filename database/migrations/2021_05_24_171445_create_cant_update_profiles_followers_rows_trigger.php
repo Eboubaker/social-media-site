@@ -15,7 +15,12 @@ class CreateCantUpdateProfilesFollowersRowsTrigger extends Migration
         Schema::create('cant_update_profiles_followers_rows')
             ->on('profiles_followers')
             ->statement(function () {
-                return "SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'updating profiles_followers rows is forbidden.';";
+                return "
+                IF old.profile_id != new.profile_id or old.follower_id != new.follower_id
+                then
+                    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'updating profiles_followers rows is forbidden.';
+                end if;
+                ";
             })
             ->before()
             ->update();
