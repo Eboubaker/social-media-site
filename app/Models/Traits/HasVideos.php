@@ -11,20 +11,14 @@ trait HasVideos
     public static function bootHasVideos()
     {
         static::deleting(function(Model $videoable){
-            assertInTransaction();
-            if($videoable->forceDeleting())
-            {
-                $videoable->videos()->cursor()->each(function(Video $video){
-                    $video->forceDelete();
-                });
-            }elseif(Video::canBeForceDeleted())
-            {
-                // $videoable->videos()->cursor()->each(function (Video $video) {
-                //     $video->delete();
-                // });
-                $videoable->videos()->update(["deleted_at" => now()]);
-            }
+            $videoable->cascadeDeleteRelation(Video::make(), 'videos');
         });
+        if(self::canBeSoftDeleted())
+        {
+            static::restored(function(Model $videoable){
+                $videoable->restoreCascadedRelation('videos');
+            });
+        }
     }
 
 

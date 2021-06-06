@@ -22,15 +22,17 @@ use Illuminate\Support\Facades\DB;
 class Post extends Model implements HasAttachementsInterface
 {
     use HasFactory, 
+    SoftDeletes,
+    Sluggable,
+
+    ModelTraits,
     HasAuthor, 
-    Commentable, 
-    HasImages, 
-    HasVideos, 
-    ModelTraits, 
-    SoftDeletes, 
-    Likeable,
-    Viewable, 
-    Sluggable;
+    HasImages,
+    HasVideos,
+    Commentable,
+    Viewable,
+    Likeable;
+
 
     protected $guarded = [];
 

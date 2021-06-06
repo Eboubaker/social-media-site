@@ -15,19 +15,16 @@ trait CanJoinCommunities
 
     public static function bootCanJoinCommunities()
     {
-        static::deleting(function(Model $profile){
-            assertInTransaction();
-            if($profile->forceDeleting())
-            {
-                $profile->communitiesSubscriptions()->cursor()->each(fn($m)=>$m->forceDelete());
-            }else if(CommunityMember::canBeForceDeleted())
-            {
-                $profile->communitiesSubscriptions()->update([CommunityMember::getDeletedAtName() => now()]);
-            }
+        static::deleting(function(Model $profileable){
+            $profileable->cascadeDeleteRelation(CommunityMember::make(), 'communitiesSubscriptions');
         });
+        if(self::canBeSoftDeleted())
+        {
+            static::restored(function(Model $profileable){
+                $profileable->restoreCascadedRelation('communitiesSubscriptions');
+            });
+        }
     }
-
-    
     public function communitiesSubscriptions():HasMany
     {
         return $this->hasMany(CommunityMember::class, 'profile_id');

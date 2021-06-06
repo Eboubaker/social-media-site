@@ -115,7 +115,7 @@ trait HasStorageFile
                 if(File::move($trashedFile, $this->realPath))
                 {
                     $this->fileTrashed = false;
-                    $this->trashName = null;
+                    $this->trashName = "";
                     return true;
                 }else{
                     throw new \Exception("File Not Restored");
@@ -123,9 +123,9 @@ trait HasStorageFile
             }catch(\Throwable $e)
             {
                 report($e);
-                return false;
             }
         }
+        return false;
     }
     public function setTemporaryFileLocationAttribute($fullPath)
     {

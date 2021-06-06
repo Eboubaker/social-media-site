@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Watson\Validating\ValidatingTrait;
 
@@ -20,9 +21,11 @@ use Watson\Validating\ValidatingTrait;
 class Community extends Model
 {
     use HasFactory, 
-    ModelTraits, 
-    Urlable,
+    SoftDeletes,
     ValidatingTrait,
+    Urlable,
+
+    ModelTraits,
     HasImages;
 
     protected $guarded = [];

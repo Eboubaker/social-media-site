@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Log;
 
 class CommunityMember extends Model
 {
-    use ModelTraits, AsPivot;
+    use ModelTraits, 
+    AsPivot;
 
     protected $table = 'communities_members';
     public const CREATED_AT = 'joined_at';

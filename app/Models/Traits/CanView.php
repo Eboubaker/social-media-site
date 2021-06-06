@@ -13,18 +13,18 @@ trait CanView
     public static function bootCanView()
     {
         static::deleting(function(Model $viewer){
-            assertInTransaction();
-            if($viewer->forceDeleting())
-            {
-                $viewer->views()->delete();
-            }
+            $viewer->cascadeDeleteRelation(PostView::make(), 'views');
         });
+        if(self::canBeSoftDeleted())
+        {
+            static::restored(function(Model $viewer){
+                $viewer->restoreCascadedRelation('views');
+            });
+        }
     }
     
     public function views():HasMany
     {
         return $this->hasMany(PostView::class, 'viewer_id');
     }
-
-    
 }

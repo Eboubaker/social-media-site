@@ -2,24 +2,28 @@
 
 namespace App\Models;
 
-use App\Models\Morphs\Postable;
-use App\Models\Traits\Authorable;
 use App\Models\Traits\Commentable;
-use App\Models\Traits\HasAuthor;
+use App\Models\Traits\HasImages;
+use App\Models\Traits\HasVideos;
 use App\Models\Traits\Imageable;
 use App\Models\Traits\Likeable;
 use App\Models\Traits\ModelTraits;
-use App\Models\Traits\Videoable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Comment extends Model
 {
-    use HasFactory, ModelTraits, 
-    Commentable, 
-    Videoable, 
-    Imageable, 
+    use HasFactory, 
+    SoftDeletes,
+
+    ModelTraits,
+    HasImages,
+    HasVideos,
+    Commentable,
     Likeable;
 
+    
     public $table = 'comments';
     public const CREATED_AT = "created_at";
     public const UPDATED_AT = "updated_at";

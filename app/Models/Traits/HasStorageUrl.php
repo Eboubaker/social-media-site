@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 
 trait HasStorageUrl
 {
-    use HasStorageFile;
+    use HasStorageFile, Urlable;
     
     public function getUrlAttribute(): string
     {

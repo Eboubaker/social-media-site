@@ -6,22 +6,24 @@ namespace App\Models\Traits;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
 
 trait CanComment
 {
     public static function bootCanComment()
     {
         static::deleting(function(Model $commentor){
-            assertInTransaction();
-            if($commentor->forceDeleting())
-            {
-                $commentor->ownedCommunities()->cursor()->each(function(Comment $comment){
-                    $comment->forceDelete();
-                });
-            }
+            $commentor->cascadeDeleteRelation(Comment::make(), 'comments');
         });
+        if(self::canBeSoftDeleted())
+        {
+            static::restored(function(Model $commentor){
+                Log::debug("Fired Event CanComment.restored");
+                $commentor->restoreCascadedRelation('comments');
+            });
+        }
     }
-    
+
     public function comments():HasMany
     {
         return $this->hasMany(Comment::class, 'commentor_id');

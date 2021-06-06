@@ -14,20 +14,14 @@ trait HasImages
     public static function bootHasImages()
     {
         static::deleting(function(Model $imageable){
-            assertInTransaction();
-            if($imageable->forceDeleting())
-            {
-                $imageable->images()->cursor()->each(function($image){
-                    $image->forceDelete();
-                });
-            }else if(Image::canBeForceDeleted())
-            {
-                // $imageable->images()->cursor()->each(function ($image) {
-                //     $image->delete();
-                // });
-                $imageable->images()->update(["deleted_at" => now()]);
-            }
+            $imageable->cascadeDeleteRelation(Image::make(), 'images');
         });
+        if(self::canBeSoftDeleted())
+        {
+            static::restored(function(Model $imageable){
+                $imageable->restoreCascadedRelation('images');
+            });
+        }
     }
     public function images():MorphMany
     {

@@ -37,20 +37,26 @@ class Profile extends Model
     use HasFactory, 
     Notifiable, 
     HasDatabaseNotifications, 
-    ModelTraits, 
     SoftDeletes, 
-    Urlable,
     ValidatingTrait,
-    HasImages,
+    ModelTraits, 
+
     CreatesPosts,
     CreatesCommunities,
+
+    HasPosts,
+    HasImages,
+    HasFollowers,
+
     CanView,
     CanLike,
-    HasFollowers,
     CanComment,
     CanFollow,
-    HasPosts,
-    CanJoinCommunities;
+    CanJoinCommunities,
+
+    Urlable
+
+    ;
     
     protected $guarded = [];
 
@@ -86,7 +92,6 @@ class Profile extends Model
         });
         // assert only one active profile per account
         static::updating(function(Profile $profile){
-            assertInTransaction();
             $user = $profile->account;
             if((bool)$profile->active !== (bool)$profile->getOriginal('active') && (bool)$profile->active === true)
             {

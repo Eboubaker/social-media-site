@@ -14,18 +14,14 @@ trait Commentable
     public static function bootCommentable()
     {
         static::deleting(function(Model $commentable){
-            assertInTransaction();
-            if($commentable->forceDeleting())
-            {
-                $commentable->comments()->cursor()->each(function(Comment $post){
-                    $post->forceDelete();
-                });
-            }else{
-                $commentable->comments()->cursor()->each(function(Comment $post){
-                    $post->delete();
-                });
-            }
+            $commentable->cascadeDeleteRelation(Comment::make(), 'comments');
         });
+        if(self::canBeSoftDeleted())
+        {
+            static::restored(function(Model $commentable){
+                $commentable->restoreCascadedRelation('comments');
+            });
+        }
     }
 
     public function comments():MorphMany

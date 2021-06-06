@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models\Traits;
 
 use App\Models\Post;
@@ -11,15 +12,16 @@ trait HasPosts
     public static function bootHasPosts()
     {
         static::deleting(function(Model $pageable){
-            assertInTransaction();
-            if($pageable->forceDeleting())
-            {
-                $pageable->posts()->cursor()->each(function(Post $post){
-                    $post->forceDelete();
-                });
-            }
+            $pageable->cascadeDeleteRelation(Post::make(), 'posts');
         });
+        if(self::canBeSoftDeleted())
+        {
+            static::restored(function(Model $pageable){
+                $pageable->restoreCascadedRelation('posts');
+            });
+        }
     }
+
     public function posts():MorphMany
     {
         return $this->morphMany(Post::class, 'pageable');

@@ -4,7 +4,9 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 // set default locale

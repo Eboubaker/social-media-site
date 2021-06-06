@@ -39,6 +39,8 @@ class User extends Authenticatable implements MustVerifyEmail
     Notifiable, 
     HasDatabaseNotifications, 
     MustVerifyPhone,
+    SoftDeletes,
+
     ModelTraits,
     HasApiToken,
     HasProfiles;
