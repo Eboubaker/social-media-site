@@ -11,21 +11,30 @@ use App\Models\Traits\HasVideos;
 use App\Models\Traits\HasViews;
 use App\Models\Traits\Likeable;
 use App\Models\Traits\ModelTraits;
+use App\Models\Traits\Urlable;
 use App\Models\Traits\Viewable;
+use App\Rules\PageAbleExists;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableObserver;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
+use Watson\Validating\ValidatingTrait;
 
 class Post extends Model implements HasAttachementsInterface
 {
     use HasFactory, 
     SoftDeletes,
     Sluggable,
+    ValidatingTrait,
 
     ModelTraits,
+    Urlable,
     HasAuthor, 
     HasImages,
     HasVideos,
@@ -33,13 +42,23 @@ class Post extends Model implements HasAttachementsInterface
     Viewable,
     Likeable;
 
+    protected $rules = [
+        'author_id' => ['exists:App\Models\Profile,id'],
+        'pageable_id' => [], // in constructor
+        'title' => ['required', 'min:3', 'max:255'],
+        'body' => ['max:10000'],
+    ];
+    protected $validationMessages = [
+        'author_id.exists' => "post author not found.",
+    ];
+    protected $throwValidationExceptions = true;
 
-    protected $guarded = [];
-
-    public function __construct(array $attributes = [], $pass = false)
+    public function __construct(...$atts)
     {
-        parent::__construct($attributes, $pass);
+        parent::__construct(...$atts);
+        $this->rules['pageable_id'][] = new PageAbleExists($this);
     }
+    protected $guarded = [];
 
     public function pageable()
     {
@@ -63,10 +82,6 @@ class Post extends Model implements HasAttachementsInterface
     {
         $this->images->merge($this->videos);
     }
-    public function getUrlAtrribute(): string
-    {
-        return route('posts.show', $this->slug);
-    }
     public function sluggable(): array
     {
         return [
@@ -88,5 +103,16 @@ class Post extends Model implements HasAttachementsInterface
          * This will likely become the new default in the next major release.
          */
         // return SluggableObserver::SAVED;
+    }
+
+    public function getUrlAttribute():string
+    {
+        if($this->pageable instanceof Community)
+        {
+            return route('community-post.show', [$this->pageable->name, $this->slug]);
+        }else if($this->pageable_type instanceof Profile){
+            return route('profile-post.show', [$this->pageable->username, $this->slug]);
+        }
+        return '';
     }
 }
