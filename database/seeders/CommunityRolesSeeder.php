@@ -22,7 +22,23 @@ class CommunityRolesSeeder extends Seeder
              */
             $role = CommunityRole::create([
                 'id' => CommunityRole::MEMBER_DEFAULT_ROLE_ID,
-                'name' => 'default_role'
+                'name' => 'community_member_default_role_id'
+            ]);
+            $role->permissions()->saveMany([
+                CommunityPermission::find(config('permissions.can-comment-on-comments')),
+                CommunityPermission::find(config('permissions.can-create-posts')),
+                CommunityPermission::find(config('permissions.can-comment-on-posts')),
+                CommunityPermission::find(config('permissions.can-mention-members')),
+                CommunityPermission::find(config('permissions.can-mention-non-members')),
+                CommunityPermission::find(config('permissions.can-attach-images-to-own-comment')),
+                CommunityPermission::find(config('permissions.can-attach-videos-to-own-comment')),
+                CommunityPermission::find(config('permissions.can-attach-images-to-own-post')),
+                CommunityPermission::find(config('permissions.can-attach-videos-to-own-post')),
+            ]);
+
+            $role = CommunityRole::create([
+                'id' => CommunityRole::VISITOR_DEFAULT_ROLE_ID,
+                'name' => 'community_visitor_default_role_id'
             ]);
             $role->permissions()->saveMany([
                 CommunityPermission::find(config('permissions.can-comment-on-comments')),
@@ -40,6 +56,7 @@ class CommunityRolesSeeder extends Seeder
                 'id' => CommunityRole::OWNER_ROLE_ID,
                 'name' => 'community_owner_role'
             ]);
+            
             $role->permissions()->saveMany(CommunityPermission::all());
         });
     }
