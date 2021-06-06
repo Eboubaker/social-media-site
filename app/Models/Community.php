@@ -88,4 +88,37 @@ class Community extends Model
     {
         return $this->morphOne(Image::class, 'imageable')->where('purpose', 'iconImage');
     }
+
+    
+    /**
+     * 
+     * Does this community allow this action?
+     * 
+     * @param int|Profile $profile a profile model or a profile_id 
+     * @return true if this community allows the action for the given profile 
+     * @return false if this community does not allow the profile to do the action
+     */
+    public function allows(int|Profile $profile, int $permission_id): bool
+    {
+        if(empty($profile) || empty($permission_id))
+            return false;
+        $profile_id = $profile instanceof Profile ? $profile->getKey() : $profile;
+        $role_id = object_get(DB::table(CommunityMember::tablename())
+        ->where('profile_id', $profile_id)
+        ->where('community_id', $this->getKey())
+        ->first('role_id'), 'role_id');
+
+        if( ! is_null($role_id))
+        {
+            return DB::table('community_roles_permissions')
+            ->where('role_id', $role_id)
+            ->where('permission_id', $permission_id)
+            ->exists();
+        }else{
+            return DB::table('community_roles_permissions')
+            ->where('role_id', $this->visitor_role_id)
+            ->where('permission_id', $permission_id)
+            ->exists();
+        }
+    }
 }
