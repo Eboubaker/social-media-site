@@ -36,8 +36,8 @@ class MigrationHelper
         if(!empty($target::CREATED_AT))
             $table->timestamp($target::CREATED_AT)->nullable();
         if(!empty($target::UPDATED_AT))
-            $table->timestamp($target::UPDATED_AT)->nullable();
-        if($target::canBeForceDeleted())
+            $table->timestamp($target   ::UPDATED_AT)->nullable();
+        if($target::canBeSoftDeleted())
         {
             if(defined((is_object($target) ? get_class($target) : $target) ."::DELETED_AT"))
             {
@@ -48,4 +48,6 @@ class MigrationHelper
             $table->string('reason_deleted')->nullable();
         }
     }
+
+
 }
