@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\StatusCodes;
 use App\Models\Community;
 use App\Models\CommunityMember;
 use App\Models\Profile;
@@ -57,16 +58,14 @@ class CommunityManagementTest extends TestCase
         $c = Community::factory()->create([
             'owner_id' => $profile->id
         ]);
-        $m = $c->members()->save(CommunityMember::make([
+        $m = $c->members()->create([
             'profile_id' => $profile->id,
             'role_id' => 2
-        ]));
-        $response = $this->put(route('community.update', $c->getKey()),[
-            'current_name' => $c->name,
-            'name' => 'i-changed-it',
-            'description' => $c->description
         ]);
-        $response->assertRedirect(route('community.show', 'i-changed-it'));
+        $response = $this->put(route('community.update', $c->getKey()),[
+            'name' => 'iChangedIt',
+        ]);
+        $response->assertRedirect(route('community.show', 'iChangedIt'));
     }
     public function test_community_can_not_be_updated_by_non_owner()
     {
@@ -74,10 +73,11 @@ class CommunityManagementTest extends TestCase
         $profile = Profile::where('id', '!=', $community->owner->getKey())->first();
         $this->actingAs($profile->account);
         $response = $this->put(route('community.update', $community->getKey()), [
-            'current_name' => $community->name,
-            'name' => 'i-changed-it',
-            'description' => $community->description
+            'name' => 'iChangedIt'
         ]);
-        $response->assertStatus(403);
+        $this->assertDatabaseMissing('communities',[
+            'name' => 'iChangedIt'
+        ]);
+        $response->assertStatus(StatusCodes::HTTP_FORBIDDEN);
     }
 }

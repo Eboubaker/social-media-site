@@ -17,7 +17,6 @@ class ProfileManagementTest extends TestCase
     
     public function test_user_can_create_new_profile()
     {
-        $this->withoutExceptionHandling();
         $user = User::factory()->hasProfiles(1)->create();
         $this->actingAs($user);
 
@@ -31,7 +30,6 @@ class ProfileManagementTest extends TestCase
     }
     public function test_user_can_switch_profile()
     {
-        $this->withoutExceptionHandling();
         $user = User::factory()->hasProfiles(2)->create();
         $this->actingAs($user);
 
