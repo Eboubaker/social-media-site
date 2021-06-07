@@ -21,11 +21,12 @@ class CreatePostsTable extends Migration
         
         Schema::create(Post::tablename(), function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('body')->nullable();
-            $table->morphs('pageable');
             $table->foreignId('author_id')->nullable()->constrained(Profile::tablename());
-            $table->string('slug')->unique()->nullable();
+            $table->string('title');
+            $table->string('uuid62')->unique()->index('posts_by_slug');
+            $table->morphs('pageable');
+            $table->text('body')->nullable();
+            $table->string('slug')->unique()->nullable()->index('posts_by_slug');
             MigrationHelper::addTimeStamps($table, Post::class);
         });
     }
