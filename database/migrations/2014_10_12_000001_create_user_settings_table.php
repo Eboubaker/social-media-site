@@ -2,7 +2,6 @@
 
 use App\Models\User;
 use App\Models\UserSettings;
-use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +17,7 @@ class CreateUserSettingsTable extends Migration
     {
         Schema::create(UserSettings::tablename(), function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained();
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
         });
     }
 
