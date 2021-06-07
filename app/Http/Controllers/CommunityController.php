@@ -2,23 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\HttpPermissionException;
 use App\Models\Community;
 use App\Models\CommunityMember;
 use App\Models\CommunityRole;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class CommunityController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth')->only([
-            'create',
-            'update',
-            'destroy'
+        $this->middleware('auth')->except([
+            'show',
         ]);
     }
     public function create()
@@ -45,35 +42,51 @@ class CommunityController extends Controller
     {
         return view('community.edit', compact('community'));
     }
-    public function update(Community $community)
+    public function update(Request $request, Community $community)
     {
-        $member = $community->currentMember();
-        if($member && $member->exists)
+        if($community->currentIsMember())
         {
-            $validated = request()->all();
-            Community::make($validated)->isValidOrFail();
-            if($validated['name'] !== $community->name)
+            $new = Community::make(request()->all() + $community->attributesToArray());
+            $new->isValidOrFail();
+            if($new->name !== $community->name)
             {
-                if($member->can(config('permissions.can-modify-community-name')))
+                if($community->allowsCurrent(config('permissions.can-modify-community-name')))
                 {
-                    $community->setAttribute('name', $validated['name']);
+                    $community->update(['name' => request('name')]);
                 }else{
                     goto forbidden;
                 }
             }
-            if($validated['description'] !== $community->description)
+            if($new->description !== $community->description)
             {
-                if($member->can(config('permissions.can-modify-community_description')))
+                if($community->allowsCurrent(config('permissions.can-modify-community-description')))
                 {
-                    $community->setAttribute('description', $validated['description']);
+                    $community->update(['description' => request('description')]);
                 }else{
                     goto forbidden;
                 }
             }
-            $community->save();
+            if(request()->file('iconImage'))
+            {
+                if($community->allowsCurrent(config('permissions.can-modify-community-icon-image')))
+                {
+                    // TODO: 
+                }else{
+                    goto forbidden;
+                }
+            }
+            if(request()->file('coverImage'))
+            {
+                if($community->allowsCurrent(config('permissions.can-modify-community-cover-image')))
+                {
+                    // TODO:
+                }else{
+                    goto forbidden;
+                }
+            }
             return redirect($community->url);
         }
         forbidden:
-            abort(403, "Forbidden");
+            throw new HttpPermissionException;
     }
 }
