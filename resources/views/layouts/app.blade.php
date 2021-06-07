@@ -25,7 +25,7 @@
 {{--          rel="stylesheet">--}}
 
 </head>
-<body class="text-logo-black">
+<body class="text-logo-black bg-gray-100">
     <div id="app">
         
         @yield('content')

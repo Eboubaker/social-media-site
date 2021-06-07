@@ -1,18 +1,18 @@
 <template>
   <div>
-      <Post v-for="post in posts" :key="post.id" :post="post" />      
+    <Post class="hidden sm:block" v-for="post in posts" :key="post.id" :post="post" />
   </div>
 </template>
 <script>
 import Post from "./Post";
 export default {
   components: {
-    Post,
+    Post
   },
   data() {
     return {
       posts: [],
-      loading: false,
+      loading: false
     };
   },
   created() {
@@ -30,14 +30,14 @@ export default {
     fetchData() {
       axios
         .post("/api/feed", { parameters: {} })
-        .then((res) => {
+        .then(res => {
           this.posts.push(...res.data.data);
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         })
         .then(() => (this.loading = false));
-    },
-  },
+    }
+  }
 };
 </script>

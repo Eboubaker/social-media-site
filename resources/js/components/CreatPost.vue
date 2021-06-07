@@ -2,7 +2,7 @@
   <div>
     <button
       title="Add new Post"
-      class="modal-open w-10 h-10 px-2 bg-white border shadow-2xl rounded-full flex justify-center items-center mt-2 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red"
+      class="modal-open w-10 h-10 px-2 bg-white border shadow-2xl rounded-full flex justify-center items-center my-1 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red"
     >
       <svg
         class="w-7 h-7"

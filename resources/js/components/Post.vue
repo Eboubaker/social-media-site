@@ -1,7 +1,6 @@
-<template
-  >
-  <div class="w-11/12 mx-auto md:w-5/6">
-    <div class="my-0 md:my-4 px-2 rounded-lg shadow-lg bg-white">
+<template>
+  <div class="w-11/12 mx-auto md:w-3/4">
+    <div class="my-0 rounded-lg shadow-lg bg-white">
       <div class="flex flex-row justify-between items-center">
         <div class="flex justify-start items-center pt-2 px-4 space-x-2">
           <a href>
@@ -37,14 +36,15 @@
               />
             </svg>
           </button>
-          <div
+          <!-- <div
             v-if="isOpen"
             @click="isOpen = false"
             tabindex="-1"
             class="fixed z-20 top-0 right-0 left-0 bottom-0 w-full h-full bg-black opacity-10 cursor-default"
-          ></div>
+          ></div>-->
           <div
-            :class="isOpen ? 'block' : 'hidden'"
+            v-if="isOpen"
+            v-on-clickaway="hide"
             class="absolute z-30 right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
           >
             <div class="flex flex-col space-y-2">
@@ -93,7 +93,7 @@
       <div class="px-4 py-2">
         <p>{{ post.content.body }}</p>
       </div>
-      <div class="flex justify-between px-2 text-sm">
+      <!-- <div class="flex justify-between px-2 text-sm">
         <div>
           <a class="hover:underline" href="#">{{ post.likes.length }} Likes</a>
         </div>
@@ -105,45 +105,58 @@
             <a class="hover:underline" href="#">40 Shares</a>
           </div>
         </div>
-      </div>
+      </div>-->
       <div class="flex flex-row justify-evenly border-t">
-        <button class="flex items-center justify-center hover:bg-gray-100 rounded h-10 w-1/3 m-1">
-          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-            <path
-              fill="currentColor"
-              d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
-            />
-          </svg>
-          <p class="ml-1 text-lg">Like</p>
-        </button>
-        <button class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
+        <div class="flex place-items-center">
+          <button
+            class="flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-            />
-          </svg>
-          <p class="ml-1 text-lg">Comment</p>
-        </button>
-        <button class="flex justify-center items-center hover:bg-gray-100 rounded h-10 w-1/3 m-1">
-          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-            <path
-              fill="currentColor"
-              d="M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z"
-            />
-          </svg>
-          <p class="ml-1 text-lg">Share</p>
-        </button>
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path
+                fill="currentColor"
+                d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
+              />
+            </svg>
+          </button>
+          <p class="ml-1 text-lg">{{ post.likes.length }}</p>
+        </div>
+        <div class="flex place-items-center">
+          <button
+            class="flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+              />
+            </svg>
+          </button>
+          <p class="ml-1 text-lg">{{ post.commentsCount }}</p>
+        </div>
+        <div class="flex place-items-center">
+          <button
+            class="flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
+          >
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path
+                fill="currentColor"
+                d="M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z"
+              />
+            </svg>
+          </button>
+          <p class="ml-1 text-lg">0</p>
+        </div>
       </div>
-      <div class="space-y-2 border-t-2 pt-4 pb-2">
+
+      <div class="hidden space-y-2 border-t-2 pt-4 pb-2">
         <div class="flex justify-between items-center space-x-2">
           <img class="w-10 h-10 rounded-full" src="/img/150x150.png" />
           <form class="flex-auto" action="#" method="#">
@@ -173,15 +186,17 @@
             <a class="text-sm hover:underline" href="#">1h</a>
           </div>
         </div>
-          <a class="hover:underline" href="#">Load more...</a>
+        <a class="hover:underline" href="#">Load more...</a>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mixin as clickaway } from "vue-clickaway";
 import PlayGround from "./PlayGround.vue";
 export default {
-  components: { PlayGround },
+  mixins: [clickaway],
+  // components: { PlayGround },
   props: {
     post: {
       type: Object
@@ -191,6 +206,11 @@ export default {
     return {
       isOpen: false
     };
+  },
+  methods: {
+    hide: function() {
+      this.isOpen = false;
+    }
   }
 };
 </script>
