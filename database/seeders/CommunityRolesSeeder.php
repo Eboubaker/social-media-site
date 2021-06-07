@@ -17,47 +17,32 @@ class CommunityRolesSeeder extends Seeder
     public function run()
     {
         DB::transaction(function () {
-            /**
-             * @var CommunityRole $role
-             */
-            $role = CommunityRole::create([
+            $visitor_permissions = [
+                CommunityPermission::find(config('permissions.can-comment-on-comments')),
+                CommunityPermission::find(config('permissions.can-create-posts')),
+                CommunityPermission::find(config('permissions.can-comment-on-posts')),
+                CommunityPermission::find(config('permissions.can-mention-members')),
+                CommunityPermission::find(config('permissions.can-mention-non-members')),
+                CommunityPermission::find(config('permissions.can-attach-images-to-own-comment')),
+                CommunityPermission::find(config('permissions.can-attach-videos-to-own-comment')),
+                CommunityPermission::find(config('permissions.can-attach-images-to-own-post')),
+                CommunityPermission::find(config('permissions.can-attach-videos-to-own-post')),
+            ];
+            CommunityRole::create([
                 'id' => CommunityRole::MEMBER_DEFAULT_ROLE_ID,
                 'name' => 'community_member_default_role_id'
+            ])->permissions()->saveMany($visitor_permissions + [
+                // member-only permission go here
             ]);
-            $role->permissions()->saveMany([
-                CommunityPermission::find(config('permissions.can-comment-on-comments')),
-                CommunityPermission::find(config('permissions.can-create-posts')),
-                CommunityPermission::find(config('permissions.can-comment-on-posts')),
-                CommunityPermission::find(config('permissions.can-mention-members')),
-                CommunityPermission::find(config('permissions.can-mention-non-members')),
-                CommunityPermission::find(config('permissions.can-attach-images-to-own-comment')),
-                CommunityPermission::find(config('permissions.can-attach-videos-to-own-comment')),
-                CommunityPermission::find(config('permissions.can-attach-images-to-own-post')),
-                CommunityPermission::find(config('permissions.can-attach-videos-to-own-post')),
-            ]);
-
-            $role = CommunityRole::create([
+            CommunityRole::create([
                 'id' => CommunityRole::VISITOR_DEFAULT_ROLE_ID,
                 'name' => 'community_visitor_default_role_id'
-            ]);
-            $role->permissions()->saveMany([
-                CommunityPermission::find(config('permissions.can-comment-on-comments')),
-                CommunityPermission::find(config('permissions.can-create-posts')),
-                CommunityPermission::find(config('permissions.can-comment-on-posts')),
-                CommunityPermission::find(config('permissions.can-mention-members')),
-                CommunityPermission::find(config('permissions.can-mention-non-members')),
-                CommunityPermission::find(config('permissions.can-attach-images-to-own-comment')),
-                CommunityPermission::find(config('permissions.can-attach-videos-to-own-comment')),
-                CommunityPermission::find(config('permissions.can-attach-images-to-own-post')),
-                CommunityPermission::find(config('permissions.can-attach-videos-to-own-post')),
-            ]);
+            ])->permissions()->saveMany($visitor_permissions);
 
-            $role = CommunityRole::create([
+            CommunityRole::create([
                 'id' => CommunityRole::OWNER_ROLE_ID,
                 'name' => 'community_owner_role'
-            ]);
-            
-            $role->permissions()->saveMany(CommunityPermission::all());
+            ])->permissions()->saveMany(CommunityPermission::all());
         });
     }
 }
