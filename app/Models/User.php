@@ -55,7 +55,14 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'phone_verified_at' => 'datetime',
     ];
-    
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['activeProfile'];
+
     //----- RELATIONS -------//
     public function activeProfile(): HasOne
     {

@@ -16,6 +16,9 @@ use Illuminate\Support\Str;
  * @method static void cascadeTrash()
  * @method static void restoreCascadedTrashes()
  * @method static void restoreCascadedTrashes()
+ * @method static $this create(array $attributes)
+ * 
+ * @mixin Illuminate\Database\Eloquent\Builder;
  */
 trait ModelTraits
 {
@@ -154,5 +157,13 @@ trait ModelTraits
     public function identifyYourSelf():string
     {
         return (string)(get_class($this)."#".$this->getKey());
+    }
+
+    public function getMorphConstraints($relation)
+    {
+        return [
+            $relation."_id" => $this->getKey(),
+            $relation."_type" => $this->getMorphClass()
+        ];
     }
 }

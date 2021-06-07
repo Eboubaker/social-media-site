@@ -6,6 +6,7 @@ use App\Models\BusinessProfile;
 use App\Models\Comment;
 use App\Models\Image;
 use App\Models\Post;
+use App\Models\Profile;
 use App\Models\SocialProfile;
 use App\Models\Video;
 use Exception;
@@ -34,5 +35,14 @@ class PostFactory extends Factory
             'title' => $this->faker->sentence(),
             'body' => $this->faker->paragraph()
         ];
+    }
+
+    public function withAuthor(Profile $profile)
+    {
+        return $this->state(function (array $attributes) use($profile){
+            return [
+                'author_id' => $profile->getKey(),
+            ];
+        });
     }
 }

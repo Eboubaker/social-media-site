@@ -7,28 +7,25 @@ use App\Models\HasAttachements as HasAttachementsInterface;
 use App\Models\Traits\HasAttachements;
 use App\Models\Traits\HasAuthor;
 use App\Models\Traits\HasImages;
+use App\Models\Traits\HasUUid62;
 use App\Models\Traits\HasVideos;
-use App\Models\Traits\HasViews;
 use App\Models\Traits\Likeable;
 use App\Models\Traits\ModelTraits;
 use App\Models\Traits\Urlable;
 use App\Models\Traits\Viewable;
-use App\Rules\PageAbleExists;
+use App\Rules\PolymorphicRelationExists;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableObserver;
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 use Watson\Validating\ValidatingTrait;
 
 class Post extends Model implements HasAttachementsInterface
 {
     use HasFactory, 
+    HasUUid62,
     SoftDeletes,
     Sluggable,
     ValidatingTrait,
@@ -44,19 +41,21 @@ class Post extends Model implements HasAttachementsInterface
 
     protected $rules = [
         'author_id' => ['exists:App\Models\Profile,id'],
-        'pageable_id' => [], // in constructor
         'title' => ['required', 'min:3', 'max:255'],
         'body' => ['max:10000'],
     ];
     protected $validationMessages = [
         'author_id.exists' => "post author not found.",
     ];
+    protected $validationAttributeNames = [
+        'pageable_id' => 'liker'
+    ];
     protected $throwValidationExceptions = true;
 
-    public function __construct(...$atts)
+    public function __construct($atts=[])
     {
-        parent::__construct(...$atts);
-        $this->rules['pageable_id'][] = new PageAbleExists($this);
+        parent::__construct($atts);
+        $this->rules['pageable_id'][] = new PolymorphicRelationExists($this, 'pageable');
     }
     protected $guarded = [];
 
@@ -107,11 +106,11 @@ class Post extends Model implements HasAttachementsInterface
 
     public function getUrlAttribute():string
     {
-        if($this->pageable instanceof Community)
+        if($this->pageable_type === Community::make()->getMorphClass())
         {
-            return route('community-post.show', [$this->pageable->name, $this->slug]);
-        }else if($this->pageable_type instanceof Profile){
-            return route('profile-post.show', [$this->pageable->username, $this->slug]);
+            return route('community-post.show', [$this->pageable->name, $this->uuid62, $this->slug]);
+        }else if($this->pageable_type  === Profile::make()->getMorphClass()){
+            return route('profile-post.show', [$this->pageable->username, $this->uuid62, $this->slug]);
         }
         return '';
     }

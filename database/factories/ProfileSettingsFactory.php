@@ -2,18 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Community;
+use App\Models\ProfileSettings;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
-class CommunityFactory extends Factory
+class ProfileSettingsFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Community::class;
+    protected $model = ProfileSettings::class;
 
     /**
      * Define the model's default state.
@@ -23,8 +22,7 @@ class CommunityFactory extends Factory
     public function definition()
     {
         return [
-            'name' => Str::camel(substr(str_replace('.', '', str_replace(' ', '_', $this->faker->unique()->sentence(rand(1, 6)))), 0, 20)),
-            'description' => $this->faker->realText()
+            //
         ];
     }
 }
