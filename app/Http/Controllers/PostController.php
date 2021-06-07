@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\EmptyRequestParameterException;
-use App\Exceptions\RequestParameterNotFoundException;
-use App\Http\Collectors\PostCollector;
+use App\Exceptions\HttpPermissionException;
 use App\Http\Resources\PostResource;
+use App\Http\StatusCodes;
 use App\Models\Community;
 use App\Models\Post;
 use App\Models\Profile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
@@ -23,12 +21,26 @@ class PostController extends Controller
     {
         return view('post.create');
     }
-    public function storeProfilePost(Request $request, Post $post)
+    public function storeProfilePost(Request $request)
     {
+        $post = Post::make($request->all());
         $post->author()->associate(Profile::current());
         $post->pageable()->associate(Profile::current());
         $post->save();
         return response()->redirectTo($post->url);
+    }
+    public function storeCommunityPost(Request $request, Community $community)
+    {
+        if($community->allowsCurrent(config('permissions.can-create-posts')))
+        {
+            $post = Post::make($request->all());
+            
+            $post->author()->associate(Profile::current());
+            $post->pageable()->associate($community);
+            $post->save();
+            return response()->redirectTo($post->url);
+        }
+        throw new HttpPermissionException;
     }
     public function destroy(Post $post)
     {
@@ -36,7 +48,7 @@ class PostController extends Controller
         {
             return response()->json(["message" => "post was deleted"]);
         }
-        return response()->json(["message" => "error"], 500);
+        return response()->json(["message" => "Unkown error occured"], StatusCodes::HTTP_EXPECTATION_FAILED);
     }
     public function update(Request $request, Post $post)
     {
@@ -50,11 +62,6 @@ class PostController extends Controller
 
     public function redirectToPage(Post $post)
     {
-        if($post->pageable instanceof Community)
-        {
-            return redirect(route('community-post.show', [$post->pageable->name, $post->slug]));
-        }else if($post->pageable instanceof Profile){
-            return redirect(route('profile-post.show', [$post->pageable->username, $post->slug]));
-        }
+        return redirect($post->url);
     }
 }

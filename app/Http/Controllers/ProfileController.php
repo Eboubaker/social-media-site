@@ -49,7 +49,7 @@ class ProfileController extends Controller
      */
     public function show(Profile $profile)
     {
-        return view('profile.edit', compact('profile'));
+        return view('profile.show', compact('profile'));
     }
 
     /**

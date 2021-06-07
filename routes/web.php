@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
@@ -38,12 +39,16 @@ Route::get('/verify/{method}/notice', [VerificationController::class, 'show'])->
 
 #region browser urls
 Route::get('/c/{community:name}', [CommunityController::class, 'show'])->name('community.show');
-Route::get('/p/{post:slug}', [PostController::class, 'redirectToPage'])->name('post.show');
-Route::get('/c/{community:name}/p/{post:slug}', [PostController::class, 'show'])->name('community-post.show');
-Route::get('/u/{profile:username}/p/{post:slug}', [PostController::class, 'show'])->name('profile-post.show');
+Route::get('/c/{community:name}/p/{post:uuid62}/{post:slug}', [PostController::class, 'show'])->name('community-post.show');
+Route::get('/u/{profile:username}/p/{post:uuid62}/{post:slug}', [PostController::class, 'show'])->name('profile-post.show');
 Route::get('/u/{profile:username}', [ProfileController::class, 'show'])->name('profile.show');
 #endregion
 
+#region browser redirections
+Route::get('/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage'])->name('post.show');
+Route::get('/c/{community:name}/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage']);
+Route::get('/u/{profile:username}/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage']);
+#endregion
 
 #region form requests
 Route::get('/community/create', [CommunityController::class, 'create'])->name('community.create');
@@ -51,6 +56,12 @@ Route::get('/c/{community:name}/edit', [CommunityController::class, 'edit'])->na
 #endregion
 
 #region backend submits
+Route::post('/p/{post}/like', [LikeController::class, 'likePost'])->name('post.like');
+Route::post('/p/{post}/unlike', [LikeController::class, 'unlikePost'])->name('post.unlike');
+
+Route::post('/r/{comment}/like', [LikeController::class, 'likeComment'])->name('comment.like');
+Route::post('/r/{comment}/unlike', [LikeController::class, 'unlikeComment'])->name('comment.unlike');
+
 Route::post('/c/{community}/posts', [PostController::class, 'storeCommunityPost'])->name('community.posts.store');
 Route::post('/u/posts', [PostController::class, 'storeProfilePost'])->name('profile.posts.store');
 Route::post('/community', [CommunityController::class, 'store'])->name('community.store');
@@ -59,6 +70,9 @@ Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->
 Route::put('/community/{community}', [CommunityController::class, 'update'])->name('community.update');
 Route::delete('/community/{community}', [CommunityController::class, 'destroy'])->name('community.destory');
 Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
+
+Route::post('/c/{community}/posts', [PostController::class, 'storeCommunityPost'])->name('community.posts.store');
+Route::post('/u/posts', [PostController::class, 'storeProfilePost'])->name('profile.posts.store');
 #endregion
 
 
