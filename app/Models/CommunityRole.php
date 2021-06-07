@@ -16,7 +16,7 @@ class CommunityRole extends Model
     public const UPDATED_AT = null;
     public const CREATED_AT = null;
     
-    protected $guraded = [];
+    protected $guarded = [];
     
     public const MEMBER_DEFAULT_ROLE_ID = 1;
     public const OWNER_ROLE_ID = 2;
