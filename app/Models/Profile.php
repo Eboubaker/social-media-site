@@ -21,6 +21,7 @@ use App\Models\Traits\Urlable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -65,11 +66,16 @@ class Profile extends Model
     ];
 
     protected $rules = [
-        'username' => ['required', 'unique:profiles,username', 'min:3', 'max:255', 'regex:/^[A-Za-z0-9_]+$/']
+        'username' => ['required', 'unique:profiles,username', 'min:3', 'max:255', 'regex:/^[A-Za-z0-9_]+$/'],
+        'user_id' => ['exists:App\Models\User,id']
     ];
     protected $validationMessages = [
+        'user_id.exists' => "the linked account does not exist",
         'username.unique' => "Another user is using that username already.",
         'username.regex' => "username may only contain alpha numeric letters and lowdashes(_), no spaces allowed"
+    ];
+    protected $validationAttributeNames = [
+        'user_id' => 'The Account'
     ];
     protected $throwValidationExceptions = true;
 
@@ -160,7 +166,10 @@ class Profile extends Model
         return $this->belongsToMany(Community::class, 'communities_members', 'profile_id');
     }
     
-    
+    public function settings():HasOne
+    {
+        return $this->hasOne(ProfileSettings::class);
+    }
 
     #endregion
 
@@ -187,7 +196,7 @@ class Profile extends Model
     public static function current_id():int|null
     {
         try{
-            return Auth::user()->activeProfile()->select('id')->first()->id;
+            return Auth::user()->activeProfile->id;
         }catch(\Throwable $e)
         {
             report($e);
@@ -195,7 +204,10 @@ class Profile extends Model
         return null;
     }
 
-
+    public function reloadCurrent():void
+    {
+        Auth::user()->load('activeProfile');
+    }
     public function getUrlAttribute(): string
     {
         return route('profile.show', $this->getAttribute('username'));
