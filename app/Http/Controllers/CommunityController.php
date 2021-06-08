@@ -50,7 +50,7 @@ class CommunityController extends Controller
             $new->isValidOrFail();
             if($new->name !== $community->name)
             {
-                if($community->allowsCurrent(config('permissions.can-modify-community-name')))
+                if($community->allowsCurrent(config('permissions.communities.can-modify-community-name')))
                 {
                     $community->update(['name' => request('name')]);
                 }else{
@@ -59,7 +59,7 @@ class CommunityController extends Controller
             }
             if($new->description !== $community->description)
             {
-                if($community->allowsCurrent(config('permissions.can-modify-community-description')))
+                if($community->allowsCurrent(config('permissions.communities.can-modify-community-description')))
                 {
                     $community->update(['description' => request('description')]);
                 }else{
@@ -68,7 +68,7 @@ class CommunityController extends Controller
             }
             if(request()->file('iconImage'))
             {
-                if($community->allowsCurrent(config('permissions.can-modify-community-icon-image')))
+                if($community->allowsCurrent(config('permissions.communities.can-modify-community-icon-image')))
                 {
                     // TODO: 
                 }else{
@@ -77,7 +77,7 @@ class CommunityController extends Controller
             }
             if(request()->file('coverImage'))
             {
-                if($community->allowsCurrent(config('permissions.can-modify-community-cover-image')))
+                if($community->allowsCurrent(config('permissions.communities.can-modify-community-cover-image')))
                 {
                     // TODO:
                 }else{

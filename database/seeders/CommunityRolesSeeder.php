@@ -18,16 +18,17 @@ class CommunityRolesSeeder extends Seeder
     {
         DB::transaction(function () {
             $visitor_permissions = [
-                CommunityPermission::find(config('permissions.can-comment-on-comments')),
-                CommunityPermission::find(config('permissions.can-create-posts')),
-                CommunityPermission::find(config('permissions.can-comment-on-posts')),
-                CommunityPermission::find(config('permissions.can-mention-members')),
-                CommunityPermission::find(config('permissions.can-mention-non-members')),
-                CommunityPermission::find(config('permissions.can-attach-images-to-own-comment')),
-                CommunityPermission::find(config('permissions.can-attach-videos-to-own-comment')),
-                CommunityPermission::find(config('permissions.can-attach-images-to-own-post')),
-                CommunityPermission::find(config('permissions.can-attach-videos-to-own-post')),
+                CommunityPermission::find(config('permissions.communities.can-reply-to-comments')),
+                CommunityPermission::find(config('permissions.communities.can-create-posts')),
+                CommunityPermission::find(config('permissions.communities.can-comment-on-posts')),
+                CommunityPermission::find(config('permissions.communities.can-mention-members')),
+                CommunityPermission::find(config('permissions.communities.can-mention-non-members')),
+                CommunityPermission::find(config('permissions.communities.can-attach-images-to-own-comment')),
+                CommunityPermission::find(config('permissions.communities.can-attach-videos-to-own-comment')),
+                CommunityPermission::find(config('permissions.communities.can-attach-images-to-own-post')),
+                CommunityPermission::find(config('permissions.communities.can-attach-videos-to-own-post')),
             ];
+            
             CommunityRole::create([
                 'id' => CommunityRole::MEMBER_DEFAULT_ROLE_ID,
                 'name' => 'community_member_default_role_id'

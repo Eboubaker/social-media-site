@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Profile;
+use App\Models\ProfileSettings;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,11 @@ class CreateProfileSettingsTable extends Migration
         Schema::create('profiles_settings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profile_id')->constrained('profiles')->cascadeOnDelete();
+
+            foreach(ProfileSettings::permsList() as $perm => $default)
+            {
+                $table->boolean($perm)->nullable()->default($default);
+            }
         });
     }
 

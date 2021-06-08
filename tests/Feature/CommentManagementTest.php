@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Http\StatusCodes;
 use App\Models\Comment;
 use App\Models\Community;
 use App\Models\CommunityPermission;
@@ -25,14 +26,13 @@ class CommentManagementTest extends TestCase
         $community = $profile->ownedCommunities()->save(Community::factory()->make());
         $role = CommunityRole::create(['name' => __FUNCTION__]);
         $role->permissions()->saveMany([
-            CommunityPermission::find(config('permissions.can-create-posts'))
+            CommunityPermission::find(config('permissions.communities.can-create-posts'))
         ]);
         $community->visitorRole()->associate($role);
         $post = $community->posts()->save(Post::factory()->withAuthor($profile)->make());
         
-        
-        $response = $this->post(route('post.createComment', $post->getKey()),[
-            'body' => 'i am a good comment'
+        $response = $this->post(route('post.storeComment', $post->getKey()),[
+            'body' => __FUNCTION__
         ]);
         $this->assertDatabaseHas('comments', 
             ['body' => __FUNCTION__] + 
@@ -46,5 +46,13 @@ class CommentManagementTest extends TestCase
     {
         $comment = $this->test_non_member_can_comment_on_community_posts_when_community_gives_permissions();
         $this->actingAs($comment->commentor->account);
+        $response = $this->post(route('comments.update', $comment->getKey()),[
+            'body' => 'he changed me :('
+        ]);
+        $this->assertDatabaseHas('comments', [
+            'id' => $comment->getKey(),
+            'body' => 'he changed me :('
+        ]);
+        $response->assertStatus(StatusCodes::HTTP_NO_CONTENT);
     }
 }

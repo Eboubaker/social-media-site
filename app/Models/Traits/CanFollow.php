@@ -7,6 +7,7 @@ use App\Models\Follow;
 use App\Models\Profile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -25,7 +26,7 @@ trait CanFollow
         }
     }
 
-    public function followingsModels()
+    public function followingsModels():HasMany
     {
         return $this->hasMany(Follow::class, 'follower_id');
     }

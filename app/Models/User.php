@@ -63,6 +63,16 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $with = ['activeProfile'];
 
+
+
+
+    public static function boot()
+    {
+        parent::boot();
+        static::created(function(User $user){
+            $user->settings()->create();
+        });
+    }
     //----- RELATIONS -------//
     public function activeProfile(): HasOne
     {

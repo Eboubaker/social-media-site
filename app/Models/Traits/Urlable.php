@@ -4,7 +4,7 @@
 namespace App\Models\Traits;
 
 /**
- * @property string $url
+ * @property string $url the client browser url to this item
  */
 trait Urlable
 {

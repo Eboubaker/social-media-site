@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PostController;
@@ -38,6 +39,9 @@ Route::get('/verify/{method}/notice', [VerificationController::class, 'show'])->
 
 
 #region browser urls
+Route::get('/c/{community:name}/p/{post:uuid62}/r/{comment:uuid62}', [CommentController::class, 'show'])->name('community.posts.comments.show');
+Route::get('/u/{profile:username}/p/{post:uuid62}/r/{comment:uuid62}', [CommentController::class, 'show'])->name('community.posts.comments.show');
+
 Route::get('/c/{community:name}', [CommunityController::class, 'show'])->name('community.show');
 Route::get('/c/{community:name}/p/{post:uuid62}/{post:slug}', [PostController::class, 'show'])->name('community-post.show');
 Route::get('/u/{profile:username}/p/{post:uuid62}/{post:slug}', [PostController::class, 'show'])->name('profile-post.show');
@@ -45,6 +49,9 @@ Route::get('/u/{profile:username}', [ProfileController::class, 'show'])->name('p
 #endregion
 
 #region browser redirections
+Route::get('/r/{comment:uuid62}', [CommentController::class, 'redirectToPage']);
+Route::get('/r/{comment}', [CommentController::class, 'redirectToPage']);
+
 Route::get('/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage'])->name('post.show');
 Route::get('/c/{community:name}/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage']);
 Route::get('/u/{profile:username}/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage']);
@@ -56,11 +63,17 @@ Route::get('/c/{community:name}/edit', [CommunityController::class, 'edit'])->na
 #endregion
 
 #region backend submits
+Route::post('/c/{comment}/update', [CommentController::class, 'update'])->name('comments.update');
+
 Route::post('/p/{post}/like', [LikeController::class, 'likePost'])->name('post.like');
 Route::post('/p/{post}/unlike', [LikeController::class, 'unlikePost'])->name('post.unlike');
 
 Route::post('/r/{comment}/like', [LikeController::class, 'likeComment'])->name('comment.like');
 Route::post('/r/{comment}/unlike', [LikeController::class, 'unlikeComment'])->name('comment.unlike');
+
+Route::post('/p/{post}/comment', [CommentController::class, 'storeComment'])->name('post.storeComment');
+Route::post('/r/{comment}/comment', [CommentController::class, 'storeReply'])->name('comment.storeComment');
+Route::post('/r/{comment}/update', [CommentController::class, 'update'])->name('comment.update');
 
 Route::post('/c/{community}/posts', [PostController::class, 'storeCommunityPost'])->name('community.posts.store');
 Route::post('/u/posts', [PostController::class, 'storeProfilePost'])->name('profile.posts.store');

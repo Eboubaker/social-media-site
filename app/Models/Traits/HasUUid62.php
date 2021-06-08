@@ -2,14 +2,12 @@
 
 namespace App\Models\Traits;
 
-use App\Exceptions\NotInTransactionException;
-use App\Models\Image;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+/**
+ * @property string $uuid62
+ */
 trait HasUUid62
 {
     public static function bootHasUUid62()

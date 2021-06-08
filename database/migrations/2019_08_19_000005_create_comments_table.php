@@ -21,6 +21,7 @@ class CreateCommentsTable extends Migration
     {
         Schema::create(Comment::tablename(), function (Blueprint $table) {
             $table->id();
+            $table->string('uuid62')->index('comments_by_uuid62');
             $table->foreignId('commentor_id')->constained(Profile::tablename());
             $table->morphs('commentable');
             $table->text('body')->nullable();

@@ -32,6 +32,7 @@ use Watson\Validating\ValidatingTrait;
 /**
  * @property string lastName
  * @property User $account
+ * @property ProfileSettings $settings
  */
 class Profile extends Model
 {
@@ -95,6 +96,7 @@ class Profile extends Model
             {
                 $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->update(["active" => false]);
             }
+            $profile->settings()->create();
         });
         // assert only one active profile per account
         static::updating(function(Profile $profile){
@@ -214,20 +216,88 @@ class Profile extends Model
     }
 
 
-    // public static function generateUniqueUserNamesLike($exsisting_username)
-    // {
-    //     // TODO: make this function give better results
-    //     $suggestions = [];
-    //     while(count($suggestions) < 3)
-    //     {
-    //         $r = random_int(0, 100) / 100.0;
-    //         if($r > .9)
-    //         {
-    //             $new = $exsisting_username . '_' . preg_replace('/[^A-Za-z0-9]/', '', Str::random(10));
-    //         }else if($r > .8)
-    //         {
-    //             $new = $exsisting_username . '_' . preg_replace('/[^A-Za-z0-9]/', '', Str::random(10));
-    //         }
-    //     }
-    // }
+    public function allows($permission_id, $profile): bool
+    {
+        if(empty($permission_id) || empty($profile))
+            return false;
+        if($profile instanceof Profile)
+        {
+            if( ! $profile->exists)
+            {
+                return false;
+            }
+            $profile_id = $profile->getKey();
+        }else{
+            if( ! Profile::where('id', $profile)->exists())
+            {
+                return false;
+            }
+            $profile_id = $profile;
+        }
+        $he_follow_me = $this->followersModels()->where('follower_id', $profile_id)->exists();
+        $i_follow_him = $this->followingsModels()->where('profile_id', $profile_id)->exists();
+        $we_are_friends = $he_follow_me && $i_follow_him;
+
+        $settings = $this->settings;
+        if($permission_id === config('permissions.profiles.can-comment'))
+        {
+            if($settings->allow_non_followers_to_comment_on_my_profile_posts)
+            {
+                return true;
+            }
+            if($he_follow_me && $settings->allow_followers_to_comment_on_my_profile_posts)
+            {
+                return true;
+            }
+            if($i_follow_him && $settings->allow_followings_to_comment_on_my_profile_posts)
+            {
+                return true;
+            }
+            if($we_are_friends && $settings->allow_friends_to_comment_on_my_profile_posts)
+            {
+                return true;
+            }
+        }else if($permission_id === config('permissions.profiles.can-view-posts'))
+        {
+            if($settings->allow_non_followers_to_view_my_profile_posts)
+            {
+                return true;
+            }
+            if($he_follow_me && $settings->allow_followers_to_view_my_profile_posts)
+            {
+                return true;
+            }
+            if($i_follow_him && $settings->allow_followings_to_view_my_profile_posts)
+            {
+                return true;
+            }
+            if($we_are_friends && $settings->allow_friends_to_view_my_profile_posts)
+            {
+                return true;
+            }
+        }else if($permission_id === config('permissions.profiles.can-follow'))
+        {
+            if($settings->allow_others_to_follow_me)
+            {
+                return true;
+            }
+            if($i_follow_him && $settings->allow_followings_to_follow_me_back)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    /**
+     * 
+     * Does this community allow this action for the current profile?
+     * 
+     * @param int $permission_id if of the permission
+     * @return true if this community allows the action for the current profile 
+     * @return false if this community does not allow the current profile to do the action
+     */
+    public function allowsCurrent(int $permission_id): bool
+    {
+        return $this->allows($permission_id, Profile::current_id());
+    }
 }

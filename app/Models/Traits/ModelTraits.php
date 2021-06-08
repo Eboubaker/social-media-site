@@ -17,6 +17,7 @@ use Illuminate\Support\Str;
  * @method static void restoreCascadedTrashes()
  * @method static void restoreCascadedTrashes()
  * @method static $this create(array $attributes)
+ * @method static $this make(array $attributes)
  * 
  * @mixin Illuminate\Database\Eloquent\Builder;
  */

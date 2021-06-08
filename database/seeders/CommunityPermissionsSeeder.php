@@ -14,7 +14,7 @@ class CommunityPermissionsSeeder extends Seeder
      */
     public function run()
     {
-        foreach (config('permissions') as $name => $id) {
+        foreach (config('permissions.communities') as $name => $id) {
             CommunityPermission::create([
                 CommunityPermission::getId() => $id,
                 'name' => $name

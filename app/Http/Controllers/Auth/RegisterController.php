@@ -133,7 +133,6 @@ class RegisterController extends Controller
         ];
         return DB::transaction(function() use ($userData, $data) {
             $user = User::create($userData);
-            $user->settings()->create();
             $profile = $user->profiles()->save(Profile::make(['username' => $data['username']]));
             $profile->profileImage()->save(Image::factory()->make());
             return $user;

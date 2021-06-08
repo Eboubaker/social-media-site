@@ -5,8 +5,12 @@ use App\Models\Follow;
 use App\Models\Profile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @property Collection<Profile> $followers
+ */
 trait HasFollowers
 {
     public static function bootHasFollowers()
@@ -22,7 +26,7 @@ trait HasFollowers
         }
     }
 
-    public function followersModels()
+    public function followersModels():HasMany
     {
         return $this->hasMany(Follow::class, 'profile_id');
     }

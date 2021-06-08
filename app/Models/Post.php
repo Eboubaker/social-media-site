@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Watson\Validating\ValidatingTrait;
 
+/**
+ * @property Community|Profile $pageable
+ */
 class Post extends Model implements HasAttachementsInterface
 {
     use HasFactory, 

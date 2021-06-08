@@ -31,7 +31,7 @@ class PostController extends Controller
     }
     public function storeCommunityPost(Request $request, Community $community)
     {
-        if($community->allowsCurrent(config('permissions.can-create-posts')))
+        if($community->allowsCurrent(config('permissions.communities.can-create-posts')))
         {
             $post = Post::make($request->all());
             
