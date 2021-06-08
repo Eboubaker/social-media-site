@@ -26,7 +26,8 @@
         </button>
 
         <div
-          :class="notiSettingOpen ? 'block' : 'hidden'"
+          v-if="notiSettingOpen"
+          v-on-clickaway="hide"
           class="absolute right-2 top-12 py-2 space-y-2 w-64 bg-white rounded-lg shadow-lg ring-1 ring-gray-200"
         >
           <a class="flex flex-row p-2 hover:bg-gray-100 items-center space-x-2" href="#">
@@ -148,11 +149,18 @@
   </div>
 </template>
 <script>
+import { mixin as clickaway } from "vue-clickaway";
 export default {
-  data(){
-    return{
-      notiSettingOpen: false,
+  mixins: [clickaway],
+  data() {
+    return {
+      notiSettingOpen: false
     };
+  },
+  methods: {
+    hide: function() {
+      this.notiSettingOpen = false;
+    }
   }
 };
 </script>
