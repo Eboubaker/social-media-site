@@ -11,7 +11,9 @@ use App\Models\Profile;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class PostManagementTest extends TestCase
@@ -21,25 +23,43 @@ class PostManagementTest extends TestCase
      *
      * @return void
      */
-    public function test_visitor_can_post_on_community_with_permissions()
+    public function test_visitor_can_post_without_attachements_on_community_with_permissions()
     {
-        $this->withoutExceptionHandling();
         $community = $this->currentProfile->ownedCommunities()->save(Community::factory()->make());
-        $community->refresh();
-        // dd($community->exists);
-        $this->loginWithProfile();
         $response = $this->post(route('community.posts.store', [$community->getKey()]), [
-            'title' => "he cant handle it",
+            'title' => "sample title",
             "body" => "blaaa blaaaa"
         ]);
         
         $this->assertDatabaseHas('posts', [
-            'title' => "he cant handle it"
+            'title' => "sample title"
         ]);
-        $post = Post::where('title', "he cant handle it")->first();
+        $post = Post::where('title', "sample title")->first();
         $response->assertRedirect($post->url);
     }
-
+    public function test_visitor_can_post_with_image_on_community_with_permissions()
+    {
+        $community = $this->currentProfile->ownedCommunities()->save(Community::factory()->make());
+        $path = Storage::disk('faker_images')->path(collect(Storage::disk('faker_images')->files())->random());
+        $tmp = sys_get_temp_dir() . '\upload.png';
+        copy($path, $tmp);
+        $response = $this->post(route('community.posts.store', [$community->getKey()]), [
+            'title' => "sample title",
+            "body" => "this is a body sample",
+            "attachements" => [
+                new UploadedFile($tmp, "my best image.png", "image/png")
+            ]
+        ]);
+        $this->assertDatabaseHas('posts', [
+            'title' => "sample title"
+        ]);
+        $post = Post::where('title', "sample title")->first();
+        $this->assertDatabaseHas('images',
+            $post->getMorphConstraints('imageable')
+        );
+        
+        $response->assertRedirect($post->url);
+    }
     public function test_visitor_cant_post_on_community_with_private_permissions()
     {
         $role = CommunityRole::create([
@@ -54,11 +74,11 @@ class PostManagementTest extends TestCase
         $this->loginWithProfile();
         
         $response = $this->post(route('community.posts.store', [$community->getKey()]), [
-            'title' => "he cant handle it",
-            "body" => "blaaa blaaaa"
+            'title' => "sample title",
+            "body" => "this is a body sample"
         ]);
         $this->assertDatabaseMissing('posts', [
-            'title' => "he cant handle it"
+            'title' => "sample title"
         ]);
         $response->assertStatus(StatusCodes::HTTP_FORBIDDEN);
     }
@@ -78,14 +98,14 @@ class PostManagementTest extends TestCase
             "community_id" => $community->getKey()
         ]);
         $response = $this->post(route('community.posts.store', [$community->getKey()]), [
-            'title' => "he cant handle it",
-            "body" => "blaaa blaaaa"
+            'title' => "sample title",
+            "body" => "this is a body sample"
         ]);
         
         $this->assertDatabaseHas('posts', [
-            'title' => "he cant handle it"
+            'title' => "sample title"
         ]);
-        $post = Post::where('title', "he cant handle it")->first();
+        $post = Post::where('title', "sample title")->first();
         $response->assertRedirect($post->url);
     }
 
@@ -94,7 +114,7 @@ class PostManagementTest extends TestCase
         $this->withoutExceptionHandling();
         $this->post(route('profile.posts.store'), [
             'title' => "profile post is created",
-            "body" => "blaaa blaaaa"
+            "body" => "this is a body sample"
         ]);
         
         $this->assertDatabaseHas('posts', [

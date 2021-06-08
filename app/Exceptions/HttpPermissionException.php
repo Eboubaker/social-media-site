@@ -7,8 +7,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class HttpPermissionException extends HttpException
 {
-    public function __construct()
+    public function __construct($message = "You don't have the permission to do this action!")
     {
-        parent::__construct(StatusCodes::HTTP_FORBIDDEN, "You don't have the permission to do this action!");
+        parent::__construct(StatusCodes::HTTP_FORBIDDEN, $message);
     }
 }

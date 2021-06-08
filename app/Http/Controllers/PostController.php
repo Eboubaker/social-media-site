@@ -6,10 +6,15 @@ use App\Exceptions\HttpPermissionException;
 use App\Http\Resources\PostResource;
 use App\Http\StatusCodes;
 use App\Models\Community;
+use App\Models\Image;
 use App\Models\Post;
 use App\Models\Profile;
+use App\Models\Video;
+use App\Rules\AttachementRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
 {
@@ -31,13 +36,47 @@ class PostController extends Controller
     }
     public function storeCommunityPost(Request $request, Community $community)
     {
+        $attachementsParser = new AttachementRule;
+        $v = Validator::make($request->all(), [
+            'attachements.*' => [$attachementsParser] 
+        ])->validate();
+        $parsedFiles = $attachementsParser->getParsed();
         if($community->allowsCurrent(config('permissions.communities.can-create-posts')))
         {
-            $post = Post::make($request->all());
-            
+            $post = Post::make([
+                'title' => $request->get('title'),
+                'body' => $request->get('body'),
+            ]);
             $post->author()->associate(Profile::current());
             $post->pageable()->associate($community);
-            $post->save();
+            DB::beginTransaction();
+            try{
+                $post->save();
+                foreach($parsedFiles as $attachement)
+                {
+                    if($attachement['model'] === Image::class && ! $community->allowsCurrent(config('permissions.communities.can-attach-images-to-own-post')))
+                    {
+                        throw new HttpPermissionException("You dont have permission to post Images");
+                    }else if($attachement['model'] === Video::class && ! $community->allowsCurrent(config('permissions.communities.can-attach-videos-to-own-post')))
+                    {
+                        throw new HttpPermissionException("You dont have permission to post Videos");
+                    }
+                    /**
+                     * @var Image|Video $instance
+                     */
+                    $instance = $attachement['model']::make(
+                        collect($attachement)->forget(['model', 'path'])->all()
+                    );
+                    $instance->temporaryFileLocation = $attachement['path'];
+                    $instance->imageable()->associate($post);
+                    $instance->save();
+                }
+                DB::commit();
+            }catch(\Throwable $e)
+            {
+                DB::rollBack();
+                throw $e;
+            }
             return response()->redirectTo($post->url);
         }
         throw new HttpPermissionException;

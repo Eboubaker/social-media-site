@@ -1,13 +1,11 @@
 <?php
 
 use App\Models\Image;
-use App\Models\Morphs\Postable;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Storage;
 
 class CreateImagesTable extends Migration
 {
@@ -19,7 +17,7 @@ class CreateImagesTable extends Migration
             $table->morphs('imageable');
             $table->string('purpose')->nullable()->index('images_by_purpose');
             $table->char('sha256', 64)->index('images_by_sha256');
-
+            
             $table->tinyInteger('type', unsigned:true);
             $table->smallInteger('width', unsigned:true);
             $table->smallInteger('height', unsigned:true);
@@ -36,7 +34,7 @@ class CreateImagesTable extends Migration
     {
         DB::transaction(function(){
             Image::all()->each(function($model){
-                $model->delete();
+                $model->doForceDelete();
             });
         });
         Schema::dropIfExists(Image::tablename());

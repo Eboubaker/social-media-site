@@ -13,6 +13,7 @@ use App\Services\Twilio\Verification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -75,6 +76,26 @@ class AppServiceProvider extends ServiceProvider
                 return Auth::user()->activeProfile;
             }
             return null;
+        });
+        Validator::extendImplicit('allowed_attributes', function ($attribute, $value, $parameters, $validator) {
+            // If the attribute to validate request top level
+            if (strpos($attribute, '.') === false) {
+                return in_array($attribute, $parameters);
+            }
+        
+            // If the attribute under validation is an array
+            if (is_array($value)) {
+                return empty(array_diff_key($value, array_flip($parameters)));
+            }
+        
+            // If the attribute under validation is an object
+            foreach ($parameters as $parameter) {
+                if (substr_compare($attribute, $parameter, -strlen($parameter)) === 0) {
+                    return true;
+                }
+            }
+        
+            return false;
         });
     }
 }

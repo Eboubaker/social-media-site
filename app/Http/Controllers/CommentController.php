@@ -26,6 +26,7 @@ class CommentController extends Controller
         $comment = Comment::make($request->all())
         ->commentor()
         ->associate(Profile::current());
+        
         if($post->pageable instanceof Community)
         {
             $community = $post->pageable;

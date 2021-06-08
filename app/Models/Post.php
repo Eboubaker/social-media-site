@@ -21,9 +21,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Watson\Validating\ValidatingTrait;
-
 /**
  * @property Community|Profile $pageable
+ * 
+ * @mixin \Eloquent
  */
 class Post extends Model implements HasAttachementsInterface
 {
@@ -43,6 +44,7 @@ class Post extends Model implements HasAttachementsInterface
     Likeable;
 
     protected $rules = [
+        '*' => 'allowed_attributes:slug,uuid62,author_id,title,body,pageable_id,pageable_type',
         'author_id' => ['exists:App\Models\Profile,id'],
         'title' => ['required', 'min:3', 'max:255'],
         'body' => ['max:10000'],
