@@ -29,7 +29,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::__construct(...$atts);
         $this->afterApplicationCreated(function(){
-            $this->withoutExceptionHandling();
+            // $this->withoutExceptionHandling();
             $this->loginWithProfile();
         });
     }

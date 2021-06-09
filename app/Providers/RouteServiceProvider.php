@@ -39,6 +39,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Route::bind('post-by-slug', function ($value) {
+            return Post::where('slug', $value)->firstOrFail();
+        });
+
         $this->configureRateLimiting();
 
         $this->routes(function () {
@@ -51,6 +55,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
+
+        
     }
 
     /**

@@ -176,7 +176,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        TriggerServiceProvider::class
+        TriggerServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
     ],
 
     /*
@@ -229,6 +230,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Twilio' => Aloha\Twilio\Support\Laravel\Facade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
     'twilio' => [
         'account_sid' => env('TWILIO_SID'),
