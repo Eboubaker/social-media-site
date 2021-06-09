@@ -139,7 +139,7 @@ class VerificationController extends Controller
 
         if($method === 'email')
         {
-            if(request('code') && \request('code') !== $request->user()->getCodeForVerification())
+            if(request('code') && strtoupper(\request('code')) !== $request->user()->getCodeForVerification())
             {
                 $errors->add('result', __("verification code does not match"));
                 return \request()->wantsJson()

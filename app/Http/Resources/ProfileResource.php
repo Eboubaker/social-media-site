@@ -16,9 +16,11 @@ class ProfileResource extends JsonResource
     public function toArray($request)
     {
         return [
-            "id" => $this->{Profileable::PKEY},
+            "id" => $this->id,
             "profileImage" => new ImageResource($this->whenLoaded('profileImage')),
-            "name" => $this->first_name . ' ' . $this->last_name
+            "coverImage" => new ImageResource($this->whenLoaded('coverImage')),
+            "firstName" => $this->first_name,
+            "lastName" => $this->last_name
         ];
     }
 }

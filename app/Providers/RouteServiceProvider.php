@@ -39,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::bind('post-by-slug', function ($value) {
+        Route::bind('post_by_slug', function ($value) {
             return Post::where('slug', $value)->firstOrFail();
         });
 

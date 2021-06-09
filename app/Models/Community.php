@@ -18,11 +18,55 @@ use Illuminate\Support\Facades\DB;
 use Watson\Validating\ValidatingTrait;
 
 /**
+ * App\Models\Community
+ *
  * @property string $name
  * @property string $description
  * @property CommunityRole $visitorRole
  * @property CommunityMember $currentMember
  * @property CommunityRole $memberDefaultRole
+ * @property int $id
+ * @property int $owner_id
+ * @property int|null $is_private
+ * @property int|null $visitor_role_id
+ * @property int|null $member_default_role_id
+ * @property-read int|null $members_count
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $reason_deleted
+ * @property-read mixed $created
+ * @property-read string $url
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
+ * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CommunityMember[] $members
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $membersPosts
+ * @property-read int|null $members_posts_count
+ * @property-read \App\Models\Profile $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $posts
+ * @property-read int|null $posts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $visitorsPosts
+ * @property-read int|null $visitors_posts_count
+ * @method static \Database\Factories\CommunityFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Community newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Community onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Community query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereIsPrivate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereMemberDefaultRoleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereMembersCount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereReasonDeleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Community whereVisitorRoleId($value)
+ * @method static \Illuminate\Database\Query\Builder|Community withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Community withoutTrashed()
+ * @mixin \Eloquent
  */
 class Community extends Model
 {

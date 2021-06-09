@@ -91,7 +91,9 @@
         </div>
       </div>
       <div class="px-4 py-2">
+        <p>{{ post.content.title }}</p>
         <p>{{ post.content.body }}</p>
+        
       </div>
       <!-- <div class="flex justify-between px-2 text-sm">
         <div>

@@ -15,7 +15,7 @@ class LikeResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'liker' => new ProfileResource($this->whenLoaded('profileable')),
+            'liker' => new ProfileResource($this->whenLoaded('liker')),
             'likedAt' => $this->liked_at->diffForHumans()
         ];
     }

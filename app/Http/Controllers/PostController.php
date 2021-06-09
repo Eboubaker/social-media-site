@@ -11,13 +11,14 @@ use App\Models\Post;
 use App\Models\Profile;
 use App\Models\Video;
 use App\Rules\AttachementRule;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
-    public function show(Post $post)
+    public function show($pageable, Post $post)
     {
         return view('post.show')->with($post);
     }
@@ -33,16 +34,41 @@ class PostController extends Controller
         ]);
         $post->author()->associate(Profile::current());
         $post->pageable()->associate(Profile::current());
-        $post->save();
+        $post = $this->storeWithAttachements($request, $post, Profile::current());
         return response()->redirectTo($post->url);
     }
-    public function storeCommunityPost(Request $request, Community $community)
+    private function storeWithAttachements(Request $request, Post $post, Model $pageable)
     {
-        $attachementsParser = new AttachementRule;
-        $v = Validator::make($request->all(), [
+        $attachementsParser = new AttachementRule($pageable);
+        Validator::make($request->all(), [
             'attachements.*' => [$attachementsParser] 
         ])->validate();
         $parsedFiles = $attachementsParser->getParsed();
+        DB::beginTransaction();
+        try{
+            $post->save();
+            foreach($parsedFiles as $attachement)
+            {
+                /**
+                 * @var Image|Video $instance
+                 */
+                $instance = $attachement['model']::make(
+                    collect($attachement)->forget(['model', 'path'])->all()
+                );
+                $instance->temporaryFileLocation = $attachement['path'];
+                $instance->imageable()->associate($post);
+                $instance->save();
+            }
+            DB::commit();
+        }catch(\Throwable $e)
+        {
+            DB::rollBack();
+            throw $e;
+        }
+        return $post;
+    }
+    public function storeCommunityPost(Request $request, Community $community)
+    {
         if($community->allowsCurrent(config('permissions.communities.can-create-posts')))
         {
             $post = Post::make([
@@ -51,34 +77,7 @@ class PostController extends Controller
             ]);
             $post->author()->associate(Profile::current());
             $post->pageable()->associate($community);
-            DB::beginTransaction();
-            try{
-                $post->save();
-                foreach($parsedFiles as $attachement)
-                {
-                    if($attachement['model'] === Image::class && ! $community->allowsCurrent(config('permissions.communities.can-attach-images-to-own-post')))
-                    {
-                        throw new HttpPermissionException("You dont have permission to post images");
-                    }else if($attachement['model'] === Video::class && ! $community->allowsCurrent(config('permissions.communities.can-attach-videos-to-own-post')))
-                    {
-                        throw new HttpPermissionException("You dont have permission to post videos");
-                    }
-                    /**
-                     * @var Image|Video $instance
-                     */
-                    $instance = $attachement['model']::make(
-                        collect($attachement)->forget(['model', 'path'])->all()
-                    );
-                    $instance->temporaryFileLocation = $attachement['path'];
-                    $instance->imageable()->associate($post);
-                    $instance->save();
-                }
-                DB::commit();
-            }catch(\Throwable $e)
-            {
-                DB::rollBack();
-                throw $e;
-            }
+            $post = $this->storeWithAttachements($request, $post, $community);
             return response()->redirectTo($post->url);
         }
         throw new HttpPermissionException;
@@ -105,4 +104,5 @@ class PostController extends Controller
     {
         return redirect($post->url);
     }
+    
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Browser;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Dusk\Browser;
@@ -9,10 +10,10 @@ use Tests\DuskTestCase;
 
 class RegistrationSystemTest extends DuskTestCase
 {
-    use DatabaseTransactions;
     
     public function test_visitor_can_register_with_email()
     {
+        User::where('email', 'testing@gmail.com')->firstOrNew()->doForceDelete();
         $this->browse(function (Browser $browser) {
             $browser->visit(route('register'))
             ->type('firstName', "Ahmed")
@@ -27,7 +28,7 @@ class RegistrationSystemTest extends DuskTestCase
             ->assertUrlIs(route('verification.notice', 'email'));
         });
         $this->assertDatabaseHas('users', [
-            "phone" => '+213797921307'
+            "email" => 'testing@gmail.com'
         ]);
     }
 }

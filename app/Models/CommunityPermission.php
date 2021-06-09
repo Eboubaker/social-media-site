@@ -6,6 +6,23 @@ use App\Models\Traits\ModelTraits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\CommunityPermission
+ *
+ * @property int $id
+ * @property string $name
+ * @property-read mixed $created
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CommunityMember[] $members
+ * @property-read int|null $members_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CommunityRole[] $roles
+ * @property-read int|null $roles_count
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityPermission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityPermission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityPermission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityPermission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityPermission whereName($value)
+ * @mixin \Eloquent
+ */
 class CommunityPermission extends Model
 {
     use HasFactory, ModelTraits;

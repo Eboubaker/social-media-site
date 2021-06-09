@@ -3803,6 +3803,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3951,15 +3970,31 @@ __webpack_require__.r(__webpack_exports__);
       form: {
         visibility: "public",
         body: "",
+        title: "",
         attachements: []
       }
     };
   },
   methods: {
+    refreshAttachements: function refreshAttachements(e) {
+      var _this$form$attachemen;
+
+      var files = e.target.files || e.dataTransfer.files;
+
+      (_this$form$attachemen = this.form.attachements).push.apply(_this$form$attachemen, _toConsumableArray(files));
+    },
     submit: function submit() {
       var _this = this;
 
-      axios.post('/api/posts', this.form).then(function (res) {})["catch"](function (e) {}).then(function (e) {
+      var formData = new FormData();
+      formData.append("attachements", this.form.attachements);
+      formData.append('body', this.form.body);
+      formData.append('title', this.form.title);
+      axios.post('/u/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (res) {})["catch"](function (e) {}).then(function (e) {
         _this.close();
       });
     },
@@ -4936,6 +4971,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue_clickaway__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-clickaway */ "./node_modules/vue-clickaway/dist/vue-clickaway.common.js");
 /* harmony import */ var _PlayGround_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlayGround.vue */ "./resources/js/components/PlayGround.vue");
+//
+//
 //
 //
 //
@@ -30557,6 +30594,34 @@ var render = function() {
               _c("form", { attrs: { action: "#" } }, [
                 _vm._m(1),
                 _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.form.title,
+                      expression: "form.title"
+                    }
+                  ],
+                  staticClass:
+                    "w-full rounded text-lg focus:ring-logo-red focus:border-logo-red",
+                  attrs: {
+                    type: "text",
+                    name: "title",
+                    id: "title",
+                    placeholder: "Post title"
+                  },
+                  domProps: { value: _vm.form.title },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.form, "title", $event.target.value)
+                    }
+                  }
+                }),
+                _vm._v(" "),
                 _c("textarea", {
                   directives: [
                     {
@@ -30569,8 +30634,8 @@ var render = function() {
                   staticClass:
                     "w-full h-52 rounded text-lg focus:ring-logo-red focus:border-logo-red",
                   attrs: {
-                    name: "content",
-                    id: "content",
+                    name: "body",
+                    id: "body",
                     placeholder: "Write your post"
                   },
                   domProps: { value: _vm.form.body },
@@ -30591,10 +30656,12 @@ var render = function() {
                     _c("input", {
                       attrs: {
                         type: "file",
-                        name: "image",
+                        multiple: "",
+                        name: "attachements[]",
                         id: "image",
                         hidden: ""
-                      }
+                      },
+                      on: { change: _vm.refreshAttachements }
                     }),
                     _vm._v(" "),
                     _c(
@@ -30642,7 +30709,8 @@ var render = function() {
                     _c("input", {
                       attrs: {
                         type: "file",
-                        name: "video",
+                        multiple: "",
+                        name: "attachements[]",
                         id: "video",
                         hidden: ""
                       }
@@ -30684,7 +30752,7 @@ var render = function() {
                     _c("input", {
                       attrs: {
                         type: "file",
-                        name: "audio",
+                        name: "attachements[]",
                         id: "audio",
                         hidden: ""
                       }
@@ -30786,7 +30854,7 @@ var staticRenderFns = [
           "select",
           {
             staticClass: "p-0 w-16 h-5 rounded-none text-xs",
-            attrs: { name: "", id: "" }
+            attrs: { id: "" }
           },
           [
             _c("option", { attrs: { value: "" } }, [_vm._v("public")]),
@@ -32570,6 +32638,8 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "px-4 py-2" }, [
+        _c("p", [_vm._v(_vm._s(_vm.post.content.title))]),
+        _vm._v(" "),
         _c("p", [_vm._v(_vm._s(_vm.post.content.body))])
       ]),
       _vm._v(" "),

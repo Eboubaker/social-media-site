@@ -1,35 +1,147 @@
-@extends('layouts.app')
+@extends('layouts.app')     
+
 @section('content')
-
-   {{-- This is the home page you are {{ Auth::guest() ? "not" : "" }} logged in {{ Auth::guest() ? "" : (" and your account is " . (Auth::user()->isVerified() ? "" : "not")." verified") }} --}}
-   {{-- @auth
-       <form method="post" action="{{ route('logout') }}">@csrf
-           <button type="submit">Logout</button>
-       </form>
-   @endauth --}}
-{{-- <h1 class="bg-green-200 py-4 text-center text-2xl top-0">Play Ground</h1> --}}
-{{-- @include('auth.register') --}}
-{{-- @include('auth.login') --}}
-    {{-- <creat-post></creat-post> --}}
-
-{{-- <button title="Add new Post" class="modal-open w-full h-12 px-2 bg-white border shadow-2xl rounded-lg flex justify-center items-center mt-2 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red">
-    <svg class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-</button> --}}
-{{-- @include('Posts.create-new') --}}
-{{-- <posts-component></posts-component>
-<posts-component></posts-component>
-<posts-component></posts-component>
-<posts-component></posts-component>
-<posts-component></posts-component> --}}
-{{-- <post></post>
-<post></post>
-<post></post> --}}
-{{-- <profile-type></profile-type> --}}
-<play-ground></play-ground> 
-{{-- <script src="https://cdn.rawgit.com/vuejs/vue/v2.1.10/dist/vue.js"></script> --}}
-{{-- <script src="https://cdn.rawgit.com/simplesmiler/vue-clickaway/2.1.0/dist/vue-clickaway.js"></script> --}}
-
-
+<nav-bar class="hidden sm:block"></nav-bar>
+<nav-mobile class="block sm:hidden"></nav-mobile>
+<div
+    class="flex flex-col pt-20 mx-auto max-w-4xl lg:max-w-5xl xl:max-w-6xl"
+  >
+    <div class="grid grid-cols-1 gap-y-4">
+      <!-- trending today -->
+      <div class="flex flex-col space-y-2">
+        <div class="font-2xl font-medium">Trending Today</div>
+        <div class="flex space-x-4">
+          <div>
+            <div class="relative">
+              <img src="/images/01.png" alt class="rounded-xl object-cover h-36 xl:h-48 shadow" />
+              <div
+                class="absolute top-0 w-full h-full rounded-xl bg-gradient-to-b from-transparent to-black"
+              ></div>
+              <div class="absolute bottom-4 left-4 right-4 text-white z-0">
+                <div class="text-sm xl:text-lg font-bold">@SuboptimalEng</div>
+                <div
+                  class="text-sm xl:text-base font-bold overflow-hidden"
+                >Vue CLI Setup Guide with Tailwind CSS</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="relative">
+              <img src="/images/02.png" alt class="rounded-xl object-cover h-36 xl:h-48 shadow" />
+              <div
+                class="absolute top-0 w-full h-full rounded-xl bg-gradient-to-b from-transparent to-black"
+              ></div>
+              <div class="absolute bottom-4 left-4 right-4 text-white z-0">
+                <div class="text-sm xl:text-lg font-bold">@SuboptimalEng</div>
+                <div
+                  class="text-sm xl:text-base font-bold overflow-hidden"
+                >Getting Started with Vim and VS Code</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="relative">
+              <img src="/images/03.png" alt class="rounded-xl object-cover h-36 xl:h-48 shadow" />
+              <div
+                class="absolute top-0 w-full h-full rounded-xl bg-gradient-to-b from-transparent to-black"
+              ></div>
+              <div class="absolute bottom-4 left-4 right-4 text-white z-0">
+                <div class="text-sm xl:text-lg font-bold">@SuboptimalEng</div>
+                <div
+                  class="text-sm xl:text-base font-bold overflow-hidden"
+                >Productive Mac OS Setup with Vim, iTerm2, and Oh My Zsh</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="relative">
+              <img src="/images/04.png" alt class="rounded-xl object-cover h-36 xl:h-48 shadow" />
+              <div
+                class="absolute top-0 w-full h-full rounded-xl bg-gradient-to-b from-transparent to-black"
+              ></div>
+              <div class="absolute bottom-4 left-4 right-4 text-white z-0">
+                <div class="text-sm xl:text-lg font-bold">@SuboptimalEng</div>
+                <div
+                  class="text-sm xl:text-base font-bold overflow-hidden"
+                >Vue.js Setup Guide in VS Code with Vetur &amp; Airbnb ESLint</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div class="md:flex bg-gray-100 h-full mt-20">
+    {{-- <div class="hidden md:block md:w-96"></div> --}}
+    <div class="flex-auto pb-8">
+        <div class="flex flex-col space-y-2">
+        <div class="font-2xl font-medium pl-32">Popular Posts</div>
+        <feed class="space-y-4"></feed>
+        </div>
+    </div>
+    <div class="hidden md:block mr-12 flex-none md:w-1/3">
+    <!-- trending today -->
+      <div class="flex flex-col space-y-2">
+        <div class="font-2xl font-medium">Trending Videos</div>
+        <div class="flex flex-col space-y-4">
+          <div>
+            <div class="relative">
+              <img src="/images/01.png" alt class="rounded-xl object-cover h-52 xl:h-72 shadow" />
+              <div
+                class="absolute top-0 w-full h-full rounded-xl bg-gradient-to-b from-transparent to-black"
+              ></div>
+              <div class="absolute bottom-4 left-4 right-4 text-white z-0">
+                <div class="text-sm xl:text-lg font-bold">@SuboptimalEng</div>
+                <div
+                  class="text-sm xl:text-base font-bold overflow-hidden"
+                >Vue CLI Setup Guide with Tailwind CSS</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="relative">
+              <img src="/images/02.png" alt class="rounded-xl object-cover h-52 xl:h-72 shadow" />
+              <div
+                class="absolute top-0 w-full h-full rounded-xl bg-gradient-to-b from-transparent to-black"
+              ></div>
+              <div class="absolute bottom-4 left-4 right-4 text-white z-0">
+                <div class="text-sm xl:text-lg font-bold">@SuboptimalEng</div>
+                <div
+                  class="text-sm xl:text-base font-bold overflow-hidden"
+                >Getting Started with Vim and VS Code</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="relative">
+              <img src="/images/03.png" alt class="rounded-xl object-cover h-52 xl:h-72 shadow" />
+              <div
+                class="absolute top-0 w-full h-full rounded-xl bg-gradient-to-b from-transparent to-black"
+              ></div>
+              <div class="absolute bottom-4 left-4 right-4 text-white z-0">
+                <div class="text-sm xl:text-lg font-bold">@SuboptimalEng</div>
+                <div
+                  class="text-sm xl:text-base font-bold overflow-hidden"
+                >Productive Mac OS Setup with Vim, iTerm2, and Oh My Zsh</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="relative">
+              <img src="/images/04.png" alt class="rounded-xl object-cover h-52 xl:h-72 shadow" />
+              <div
+                class="absolute top-0 w-full h-full rounded-xl bg-gradient-to-b from-transparent to-black"
+              ></div>
+              <div class="absolute bottom-4 left-4 right-4 text-white z-0">
+                <div class="text-sm xl:text-lg font-bold">@SuboptimalEng</div>
+                <div
+                  class="text-sm xl:text-base font-bold overflow-hidden"
+                >Vue.js Setup Guide in VS Code with Vetur &amp; Airbnb ESLint</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
 @endsection

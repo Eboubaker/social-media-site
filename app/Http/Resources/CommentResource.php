@@ -16,15 +16,15 @@ class CommentResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->{Comment::PKEY},
-            'author' => new AccountResource($this->profileable->account),
+            'id' => $this->id,
+            'author' => new ProfileResource($this->whenLoaded('author')),
             'comments' => self::collection($this->whenLoaded('comments')),
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'videos' => VideoResource::collection($this->whenLoaded('videos')),
             'commentsCount' => $this->comments->count(),
-            'content' => $this->content,
-            'createdAt' => $this->created_at,
-            'updatedAt' => $this->updated_at,
+            'body' => $this->body,
+            'createdAt' => $this->created_at->diffForHumans(),
+            'updatedAt' => $this->updated_at->diffForHumans(),
         ];
     }
 }

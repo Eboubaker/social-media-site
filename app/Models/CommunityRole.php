@@ -9,6 +9,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * App\Models\CommunityRole
+ *
+ * @property int $id
+ * @property string $name
+ * @property-read mixed $created
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CommunityMember[] $members
+ * @property-read int|null $members_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CommunityPermission[] $permissions
+ * @property-read int|null $permissions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityRole newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityRole newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityRole query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityRole whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityRole whereName($value)
+ * @mixin \Eloquent
+ */
 class CommunityRole extends Model
 {
     use HasFactory, ModelTraits;

@@ -16,7 +16,7 @@ class VideoResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->{Video::PKEY},
+            'id' => $this->id,
             'url' => $this->url,
             'meta' => $this->meta,
             'createdAt' => $this->created_at,

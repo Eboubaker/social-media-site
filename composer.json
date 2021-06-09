@@ -25,6 +25,7 @@
     "require-dev": {
         "andyabih/laravel-to-uml": "^1.0",
         "barryvdh/laravel-debugbar": "^3.6",
+        "barryvdh/laravel-ide-helper": "^2.10",
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/dusk": "^6.15",

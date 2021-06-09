@@ -18,14 +18,15 @@ class PostResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->{Post::PKEY},
-            'author' => new ProfileResource($this->whenLoaded('profileable')),
-            'content' => $this->content,
+            'id' => $this->id,
+            'author' => new ProfileResource($this->whenLoaded('author')),
+            'title' => $this->title,
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'videos' => VideoResource::collection($this->whenLoaded('videos')),
             'commentsCount' => $this->comments->count(),
             'likes' => LikeResource::collection($this->whenLoaded('likes')),
+            'views' => LikeResource::collection($this->whenLoaded('likes')),
             'createdAt' => $this->created_at->diffForHumans(),
             'updatedAt' => $this->updated_at,
         ];

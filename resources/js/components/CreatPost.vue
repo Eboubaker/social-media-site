@@ -47,22 +47,29 @@
               </a>
               <div>
                 <p class="text-sm">Abdelhak</p>
-                <select name id class="p-0 w-16 h-5 rounded-none text-xs">
+                <select id class="p-0 w-16 h-5 rounded-none text-xs">
                   <option value>public</option>
                   <option value>friends</option>
                   <option value>private</option>
                 </select>
               </div>
-            </div>
+            </div> 
+            <input
+              v-model="form.title"
+              type="text"
+              class="w-full rounded text-lg focus:ring-logo-red focus:border-logo-red"
+              name="title"
+              id="title"
+              placeholder="Post title" />
             <textarea
               v-model="form.body"
               class="w-full h-52 rounded text-lg focus:ring-logo-red focus:border-logo-red"
-              name="content"
-              id="content"
+              name="body"
+              id="body"
               placeholder="Write your post"
             ></textarea>
             <div class="flex items-center justify-center space-x-4">
-              <input type="file" name="image" id="image" hidden />
+              <input type="file" multiple name="attachements[]" v-on:change="refreshAttachements" id="image" hidden />
               <label
                 title="upload image"
                 class="flex items-center justify-center rounded-md p-2 w-12 cursor-pointer hover:bg-red-50 hover:text-logo-red transition-all ease-in-out"
@@ -88,7 +95,7 @@
                   />
                 </svg>
               </label>
-              <input type="file" name="video" id="video" hidden />
+              <input type="file" multiple name="attachements[]" id="video" hidden />
               <label
                 title="upload video"
                 class="flex items-center justify-center rounded-md p-2 w-12 cursor-pointer hover:bg-red-50 hover:text-logo-red transition-all ease-in-out"
@@ -108,7 +115,7 @@
                   />
                 </svg>
               </label>
-              <input type="file" name="audio" id="audio" hidden />
+              <input type="file" name="attachements[]" id="audio" hidden />
               <label
                 title="upload audio"
                 class="flex items-center justify-center rounded-md p-2 w-12 cursor-pointer hover:bg-red-50 hover:text-logo-red transition-all ease-in-out"
@@ -147,16 +154,26 @@
         form:{
           visibility:"public",
           body:"",
+          title:"",
           attachements:[],
-
         }
       };
     },
     methods:{
+      refreshAttachements(e) {
+        var files = e.target.files || e.dataTransfer.files;
+        this.form.attachements.push(...files);
+      },
       submit: function(){
-        axios
-        .post('/api/posts', this.form)
-        .then((res)=>{
+        var formData = new FormData();
+        formData.append("attachements", this.form.attachements);
+        formData.append('body', this.form.body);
+        formData.append('title', this.form.title);
+        axios.post('/u/posts', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+        }).then((res)=>{
           
         })
         .catch((e)=>{

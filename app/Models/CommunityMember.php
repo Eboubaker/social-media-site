@@ -12,6 +12,33 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * App\Models\CommunityMember
+ *
+ * @property int $id
+ * @property int $profile_id
+ * @property int $community_id
+ * @property int $role_id
+ * @property \Illuminate\Support\Carbon|null $joined_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Community $community
+ * @property-read mixed $created
+ * @property-read mixed $permissions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $posts
+ * @property-read int|null $posts_count
+ * @property-read \App\Models\Profile $profile
+ * @property-read \App\Models\CommunityRole $role
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityMember newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityMember newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityMember query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityMember whereCommunityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityMember whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityMember whereJoinedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityMember whereProfileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityMember whereRoleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CommunityMember whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class CommunityMember extends Model
 {
     use ModelTraits, 

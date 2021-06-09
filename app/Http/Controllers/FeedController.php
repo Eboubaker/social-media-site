@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Models\PostView;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,8 +16,15 @@ class FeedController extends Controller
     {
         $parameters = (object) $request->all();
         $user = Auth::user();
+        $posts = Post::query()
+        ->with(['comments', 'videos', 'images', 'pageable'])
+        ->whereDoesntHave('views', function($query){
+            $query->where('viewer_id', Profile::current_id());
+        })
+        ->limit(10)
+        ->get();
 
-        return PostResource::collection(Post::with(['comments', 'videos', 'images', 'profileable'])->orderByDesc('created_at')->get());
+        return PostResource::collection($posts);
     }
 
     /**

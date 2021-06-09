@@ -2,10 +2,14 @@
 
 namespace App\Rules;
 
+use App\Exceptions\HttpPermissionException;
+use App\Models\Community;
 use App\Models\Image;
+use App\Models\Profile;
 use App\Models\Video;
 use Exception;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 
 class AttachementRule implements Rule
@@ -18,9 +22,10 @@ class AttachementRule implements Rule
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Model $pageable)
     {
         $this->parsedFiles = [];
+        $this->pageable = $pageable;
         $this->message = "this attachement is not allowed";
     }
 
@@ -40,6 +45,10 @@ class AttachementRule implements Rule
             
             if($type === 'video')
             {
+                if($this->pageable instanceof Community && ! $this->pageable->allowsCurrent(config('permissions.communities.can-attach-videos-to-own-comment')))
+                {
+                    throw new HttpPermissionException("You don't have permissions to post images");
+                }
                 if($extension !== 'mp4'
                     || $file->getSize() > 1024 * 1024 * 300
                     
@@ -57,6 +66,10 @@ class AttachementRule implements Rule
                 ];
             }else if($type === 'image')
             {
+                if($this->pageable instanceof Community && ! $this->pageable->allowsCurrent(config('permissions.communities.can-attach-images-to-own-comment')))
+                {
+                    throw new HttpPermissionException("You don't have permissions to post images");
+                }
                 if(!in_array($extension, ['png', 'jpg'])
                     || $file->getSize() > 1024 * 1024 * 30
                 )
@@ -125,6 +138,10 @@ class AttachementRule implements Rule
             }
         }catch(\Throwable $e)
         {
+            if($e instanceof HttpPermissionException)
+            {
+                throw $e;
+            }
             report($e);
         }
         return false;
