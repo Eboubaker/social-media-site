@@ -24,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        if ($this->app->isLocal()) {
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+        }
         // TODO: are you sure about how you will manage different timezones for different geo-users ??
         if(strtolower(date_default_timezone_get()) !== "africa/algiers")
         {

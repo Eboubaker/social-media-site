@@ -17,9 +17,50 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ * App\Models\Comment
+ *
  * @property Comment|Post $commentable
  * @property Comment|Post $ancestor_commentable
  * @property Comment|Post $ancestorCommentable
+ * @property int $id
+ * @property string $uuid62
+ * @property int $commentor_id
+ * @property string $commentable_type
+ * @property int $commentable_id
+ * @property string|null $body
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $reason_deleted
+ * @property-read \App\Models\Profile $commentor
+ * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $comments
+ * @property-read int|null $comments_count
+ * @property-read mixed $created
+ * @property-read string $url
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
+ * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Like[] $likes
+ * @property-read int|null $likes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Video[] $videos
+ * @property-read int|null $videos_count
+ * @method static \Database\Factories\CommentFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Comment onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereBody($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereCommentableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereCommentableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereCommentorId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereReasonDeleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment whereUuid62($value)
+ * @method static \Illuminate\Database\Query\Builder|Comment withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Comment withoutTrashed()
+ * @mixin \Eloquent
  */
 class Comment extends Model
 {

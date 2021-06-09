@@ -9,10 +9,28 @@ use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
+ * App\Models\Follow
+ *
  * @property int $profile_id
  * @property int $follower_id
  * @property Profile $follower
  * @property Profile $following
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $reason_deleted
+ * @property-read mixed $created
+ * @method static \Illuminate\Database\Eloquent\Builder|Follow newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Follow newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Follow onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Follow query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Follow whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Follow whereFollowerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Follow whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Follow whereProfileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Follow whereReasonDeleted($value)
+ * @method static \Illuminate\Database\Query\Builder|Follow withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Follow withoutTrashed()
+ * @mixin \Eloquent
  */
 class Follow extends Model
 {

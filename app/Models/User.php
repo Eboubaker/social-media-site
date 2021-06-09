@@ -19,6 +19,8 @@ use Illuminate\Notifications\HasDatabaseNotifications;
 use Illuminate\Support\Facades\DB;
 
 /**
+ * App\Models\User
+ *
  * @property Image profileImage
  * @property Collection<Profile> profiles
  * @property Profile activeProfile
@@ -29,9 +31,51 @@ use Illuminate\Support\Facades\DB;
  * @property string email
  * @property \DateTime phone_verified_at
  * @property \DateTime email_verified_at
- *
- *
  * @method static User create(array $array)
+ * @property int $id
+ * @property string|null $email
+ * @property string|null $phone
+ * @property string $first_name
+ * @property string $last_name
+ * @property \Illuminate\Support\Carbon|null $phone_verified_at
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string $password
+ * @property string $api_token
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $reason_deleted
+ * @property-read \App\Models\Profile|null $activeProfile
+ * @property-read mixed $created
+ * @property mixed $phone_number
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Profile[] $profiles
+ * @property-read int|null $profiles_count
+ * @property-read \App\Models\UserSettings|null $settings
+ * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereApiToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePhoneVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereReasonDeleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|User withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements MustVerifyEmail
 {

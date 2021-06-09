@@ -30,9 +30,72 @@ use Illuminate\Support\Facades\Auth;
 use Watson\Validating\ValidatingTrait;
 
 /**
+ * App\Models\Profile
+ *
  * @property string lastName
  * @property User $account
  * @property ProfileSettings $settings
+ * @property int $id
+ * @property int $user_id
+ * @property string $username
+ * @property bool|null $active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $reason_deleted
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $comments
+ * @property-read int|null $comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Community[] $communities
+ * @property-read int|null $communities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $communitiesPosts
+ * @property-read int|null $communities_posts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CommunityMember[] $communitiesSubscriptions
+ * @property-read int|null $communities_subscriptions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $createdPosts
+ * @property-read int|null $created_posts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Profile[] $followers
+ * @property-read int|null $followers_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Follow[] $followersModels
+ * @property-read int|null $followers_models_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Profile[] $followings
+ * @property-read int|null $followings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Follow[] $followingsModels
+ * @property-read int|null $followings_models_count
+ * @property-read mixed $created
+ * @property-read string $url
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
+ * @property-read int|null $images_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Community[] $joinedCommunities
+ * @property-read int|null $joined_communities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Like[] $likes
+ * @property-read int|null $likes_count
+ * @property-read Model|\Eloquent $notifications
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $posts
+ * @property-read int|null $posts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Post[] $profilePosts
+ * @property-read int|null $profile_posts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $replies
+ * @property-read int|null $replies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PostView[] $viewedPosts
+ * @property-read int|null $viewed_posts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PostView[] $views
+ * @property-read int|null $views_count
+ * @method static \Database\Factories\ProfileFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Profile onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereReasonDeleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Profile whereUsername($value)
+ * @method static \Illuminate\Database\Query\Builder|Profile withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Profile withoutTrashed()
+ * @mixin \Eloquent
  */
 class Profile extends Model
 {
