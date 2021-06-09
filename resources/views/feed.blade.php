@@ -2,7 +2,6 @@
 
 @section('content')
 <nav-bar class="hidden sm:block"></nav-bar>
-<nav-mobile class="block sm:hidden"></nav-mobile>
 {{-- <div class="md:flex md:py-4">
     <div class="hidden md:block md:w-96 md:fixed md:left-0 content md:overflow-auto md:h-full md:pl-4 md:pb-20">@include('layouts.left-side')</div>
     <div class="hidden md:block md:w-96"></div>
