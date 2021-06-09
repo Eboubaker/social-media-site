@@ -56,7 +56,6 @@ class LoginController extends Controller
 
     private function getLoginMethod(): string
     {
-        return "phone";
         if(!$this->loginMethod)
         {
             $this->loginMethod = preg_match('/[A-Za-z]/', \request($this->loginFieldName), $matches) ? "email" : "phone";
@@ -74,6 +73,7 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        
         $validator = $this->validator($request->all());
         if($validator->fails())
         {

@@ -79,9 +79,10 @@ class RegisterController extends Controller
         $this->redirectTo = RouteServiceProvider::HOME;
         $this->verify = $verify;
         $this->phoneUtil = app('phoneNumberUtil');
+        
         $l = $this->getLoginMethod();
         $this->validatedPhone = $l === 'phone' ? $this->getValidatedPhone() : '';
-
+        
 //        $request = [
 //            "login" => "email_text|phone_text",
 //            "password" => "password"
@@ -180,7 +181,9 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $validator = $this->validator($request->all());
+        
         $validated = $validator->validate();
+        
         // if($validator->fails())
         // {
         //     return $request->wantsJson()
