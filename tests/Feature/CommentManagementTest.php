@@ -82,8 +82,7 @@ class CommentManagementTest extends TestCase
         $this->assertDatabaseMissing('comments', 
             ['body' => __FUNCTION__] + 
             $post->getMorphConstraints('commentable')
-        );
-        $comment = Comment::where('body', __FUNCTION__)->first();
+        );  
         $response->assertStatus(StatusCodes::HTTP_FORBIDDEN);
     }
 }

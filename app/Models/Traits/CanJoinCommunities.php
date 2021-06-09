@@ -7,6 +7,7 @@ use App\Models\Comment;
 use App\Models\Community;
 use App\Models\CommunityMember;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
@@ -29,7 +30,10 @@ trait CanJoinCommunities
     {
         return $this->hasMany(CommunityMember::class, 'profile_id');
     }
-    
+    public function joinedCommunities():BelongsToMany
+    {
+        return $this->belongsToMany(Community::class, CommunityMember::class);
+    }
     public function subscriptionForCommunity($community):CommunityMember|null
     {
         if($community instanceof Community)

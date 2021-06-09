@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\DataBase\Eloquent\MorphOne;
 use App\Models\Traits\HasImages;
 use App\Models\Traits\HasMembers;
 use App\Models\Traits\ModelTraits;
@@ -20,6 +21,7 @@ use Watson\Validating\ValidatingTrait;
  * @property string $name
  * @property string $description
  * @property CommunityRole $visitorRole
+ * @property CommunityMember $currentMember
  * @property CommunityRole $memberDefaultRole
  */
 class Community extends Model
@@ -87,13 +89,21 @@ class Community extends Model
         return route('community.show', $this->name);
     }
 
-    public function coverImage()
+    public function coverImage():MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable')->where('purpose', 'coverImage');
+        return (new MorphOne(Image::query()
+                            , $this
+                            , 'images.imageable_type'
+                            , 'images.imageable_id', 'id'
+                ))->withFixedConstraint('purpose', __FUNCTION__);
     }
-    public function iconImage()
+    public function iconImage():MorphOne
     {
-        return $this->morphOne(Image::class, 'imageable')->where('purpose', 'iconImage');
+        return (new MorphOne(Image::query()
+                            , $this
+                            , 'images.imageable_type'
+                            , 'images.imageable_id', 'id'
+                ))->withFixedConstraint('purpose', __FUNCTION__);
     }
 
     public function visitorRole():BelongsTo

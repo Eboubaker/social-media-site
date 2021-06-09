@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\ApiTokenController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
@@ -79,16 +81,22 @@ Route::post('/c/{community}/posts', [PostController::class, 'storeCommunityPost'
 Route::post('/u/posts', [PostController::class, 'storeProfilePost'])->name('profile.posts.store');
 Route::post('/community', [CommunityController::class, 'store'])->name('community.store');
 Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
-Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->name('profile.switch');
+
 Route::put('/community/{community}', [CommunityController::class, 'update'])->name('community.update');
 Route::delete('/community/{community}', [CommunityController::class, 'destroy'])->name('community.destory');
-Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
+
 
 Route::post('/c/{community}/posts', [PostController::class, 'storeCommunityPost'])->name('community.posts.store');
 Route::post('/u/posts', [PostController::class, 'storeProfilePost'])->name('profile.posts.store');
 #endregion
 
-
+#region backend requests
+Route::post('/token/update', [ApiTokenController::class, 'update'])->name('token.update');
+Route::get('/permissions/{community}', [PermissionsController::class, 'permissionsForCommunity'])->name('permissions.forCommunity');
+Route::get('/permissions', [PermissionsController::class, 'permissionsList'])->name('permissions.all');
+Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->name('profile.switch');
+Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
+#endregion
 
 Route::get('/', function () {
     return view('landing');

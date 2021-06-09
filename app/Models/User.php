@@ -145,12 +145,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function singleUseToken()
     {
         $send = Str::random(80);
-        $stored = $send;
-        if(config('auth.guards.api.hash'))
-        {
-            $stored = hash('sha256', $stored);
-        }
-        $this->update(['api_token' => $stored]);
+        $stored = config('auth.guards.api.hash') ? hash('sha256', $send) : $send;
+        $this->forceFill(['api_token' => $stored])->save();
         return $send;
     }
     /**

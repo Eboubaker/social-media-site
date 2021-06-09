@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\DataBase\Eloquent\MorphOne;
 use App\Models\Traits\CanComment;
 use App\Models\Traits\CanFollow;
 use App\Models\Traits\CanJoinCommunities;
@@ -14,7 +15,6 @@ use App\Models\Traits\HasImages;
 use App\Models\Traits\HasPosts;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Notifications\HasDatabaseNotifications;
 use App\Models\Traits\ModelTraits;
 use App\Models\Traits\Urlable;
@@ -157,11 +157,19 @@ class Profile extends Model
 
     public function profileImage():MorphOne
     {
-        return $this->images()->where('purpose', 'profileImage');
+        return (new MorphOne(Image::query()
+                            , $this
+                            , 'images.imageable_type'
+                            , 'images.imageable_id', 'id'
+                ))->withFixedConstraint('purpose', __FUNCTION__);
     }
     public function coverImage():MorphOne
     {
-        return $this->images()->where('purpose', 'coverImage');
+        return (new MorphOne(Image::query()
+                            , $this
+                            , 'images.imageable_type'
+                            , 'images.imageable_id', 'id'
+                ))->withFixedConstraint('purpose', __FUNCTION__);
     }
     public function communities():BelongsToMany
     {

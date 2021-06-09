@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\CustomScopes;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -18,6 +19,7 @@ use Illuminate\Support\Str;
  * @method static void restoreCascadedTrashes()
  * @method static $this create(array $attributes)
  * @method static $this make(array $attributes)
+ * @method static Collection<$this> all()
  * 
  * @mixin Illuminate\Database\Eloquent\Builder;
  */

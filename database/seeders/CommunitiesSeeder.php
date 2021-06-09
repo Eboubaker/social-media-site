@@ -23,16 +23,11 @@ class CommunitiesSeeder extends Seeder
             $profiles = Profile::all();
             foreach(range(0, 10) as $_)
             {
+                /** @var Profile $profile  */
                 $profile = $profiles->random();
-                $community = Community::factory()->make();
-
-                $community->owner()->associate($profile)->save();
-                $community->members()->save(CommunityMember::make([
-                    'profile_id' => $profile->getKey(),
-                    'role_id' => CommunityRole::OWNER_ROLE_ID
-                ]));
-                Image::factory()->make(['purpose' => 'iconImage'])->imageable()->associate($community)->save();
-                Image::factory()->make(['purpose' => 'coverImage'])->imageable()->associate($community)->save();
+                $community = $profile->ownedCommunities()->save(Community::factory()->make());
+                $community->iconImage()->save(Image::factory()->make());
+                $community->coverImage()->save(Image::factory()->make());
             }
         });
     }

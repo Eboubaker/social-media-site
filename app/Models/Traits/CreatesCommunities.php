@@ -2,10 +2,10 @@
 
 namespace App\Models\Traits;
 
+use App\DataBase\Eloquent\HasMany;
 use App\Models\Community;
-use App\Models\Profile;
+use App\Models\CommunityRole;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait CreatesCommunities
 {
@@ -24,7 +24,14 @@ trait CreatesCommunities
 
     public function ownedCommunities():HasMany
     {
-        return $this->HasMany(Community::class, 'owner_id');
+        return (new HasMany(Community::query(), $this, 'owner_id', 'id'))
+                ->afterSave(function(HasMany $relation){
+                    $community = $relation->getSavedModel();
+                    $community->members()->create([
+                        'profile_id' => $this->getKey(),
+                        'role_id' => CommunityRole::OWNER_ROLE_ID
+                    ]);
+                });
     }
 
     

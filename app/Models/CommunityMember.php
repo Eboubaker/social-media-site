@@ -4,8 +4,11 @@ namespace App\Models;
 
 use App\Models\Traits\ModelTraits;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Concerns\AsPivot;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -57,7 +60,7 @@ class CommunityMember extends Model
     }
     #region RELATIONS
 
-    public function role()
+    public function role():BelongsTo
     {
         return $this->belongsTo(CommunityRole::class, 'role_id');
     }

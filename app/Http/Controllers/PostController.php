@@ -14,7 +14,6 @@ use App\Rules\AttachementRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
 {
@@ -28,7 +27,10 @@ class PostController extends Controller
     }
     public function storeProfilePost(Request $request)
     {
-        $post = Post::make($request->all());
+        $post = Post::make([
+            'title' => $request->get('title'),
+            'body' => $request->get('body')
+        ]);
         $post->author()->associate(Profile::current());
         $post->pageable()->associate(Profile::current());
         $post->save();
@@ -56,10 +58,10 @@ class PostController extends Controller
                 {
                     if($attachement['model'] === Image::class && ! $community->allowsCurrent(config('permissions.communities.can-attach-images-to-own-post')))
                     {
-                        throw new HttpPermissionException("You dont have permission to post Images");
+                        throw new HttpPermissionException("You dont have permission to post images");
                     }else if($attachement['model'] === Video::class && ! $community->allowsCurrent(config('permissions.communities.can-attach-videos-to-own-post')))
                     {
-                        throw new HttpPermissionException("You dont have permission to post Videos");
+                        throw new HttpPermissionException("You dont have permission to post videos");
                     }
                     /**
                      * @var Image|Video $instance
