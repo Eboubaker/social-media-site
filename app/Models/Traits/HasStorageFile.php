@@ -17,7 +17,17 @@ trait HasStorageFile
     private bool $fileTrashed = false;
     private string $trashName;
 
-
+    /**
+     * @return \Illuminate\Filesystem\FilesystemAdapter
+     */
+    public static function disk()
+    {
+        return Storage::disk(self::getStorage());
+    }
+    public static function getStorage()
+    {
+        return self::instance()->storage;
+    }
     public static function bootHasStorageFile()
     {
         static::deleting(function($storable){

@@ -9,6 +9,7 @@ use App\Rules\Phone;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use libphonenumber\PhoneNumberFormat;
 
 class LoginController extends Controller
@@ -81,7 +82,7 @@ class LoginController extends Controller
                    ? response()->json(["success" => false, "errors" => $validator->errors()->all()])
                    : back()->withErrors($validator->errors());
         }
-        $request[$this->getLoginMethod()] = $request->get('login');
+        $request[$this->username()] = $request->get('login');
         if(isset($request['phone']))
         {
             $request['phone'] = $this->getValidatedPhone();
@@ -107,12 +108,20 @@ class LoginController extends Controller
 
         return $this->sendFailedLoginResponse($request);
     }
+    
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        throw ValidationException::withMessages([
+            'login' => [trans('auth.failed')],
+        ]);
+    }
+    
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         $rules = [
             'password' => ['required'],
         ];
-        if($this->getLoginMethod() === 'email')
+        if($this->username() === 'email')
         {
             $rules['email'] = ['required', 'min:4', 'email'];
             $data['email'] = $data[$this->loginFieldName];

@@ -22,12 +22,12 @@ class CreateVideosTable extends Migration
             $table->id();
             $table->morphs('videoable');
             $table->char('sha256', 64)->index('videos_by_sha256');
-
-            $table->tinyInteger('type', unsigned:true);
+            
             $table->smallInteger('width', unsigned:true);
             $table->smallInteger('height', unsigned:true);
-            $table->mediumInteger('seconds', unsigned:true);
+            $table->float('duration',total:9, places:3, unsigned:true);
             $table->unsignedBigInteger('size');
+            $table->string('mime');
             $table->string('origin_name')->nullable();
             $table->string('extension', 4);
             $table->float('sfw_score', total:2, places:1, unsigned:true)->nullable()->default(.5);

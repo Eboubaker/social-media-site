@@ -39,6 +39,7 @@ class PostController extends Controller
     }
     private function storeWithAttachements(Request $request, Post $post, Model $pageable)
     {
+        info(var_export($request->files->get('attachements')));
         $attachementsParser = new AttachementRule($pageable);
         Validator::make($request->all(), [
             'attachements.*' => [$attachementsParser] 

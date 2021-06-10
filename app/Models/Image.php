@@ -93,4 +93,17 @@ class Image extends Model
     {
         return $this->morphTo();
     }
+
+    public static function extractAttributesFromFile(string $path)
+    {
+        list(0 => $width, 1 => $height, 2 => $type, 'mime' => $mime) = getimagesize($path);
+        return [
+            'extension' => explode('/', $mime)[1],
+            'mime' => $mime,
+            'size' => filesize($path),
+            'type' => $type,
+            'width' => $width,
+            'height' => $height,
+        ];
+    }
 }

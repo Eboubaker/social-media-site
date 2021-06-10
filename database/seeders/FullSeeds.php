@@ -24,9 +24,11 @@ class FullSeeds extends Seeder
             ->call(CommunitiesSeeder::class)
             ->call(CommunityMembersSeeder::class)
             ->call(PostsSeeder::class)
-            ->call(PostViewsSeeder::class)
             ->call(CommentsSeeder::class)
             ->call(RepliesSeeder::class)
+            ->call(ImagesSeeder::class)
+            ->call(VideosSeeder::class)
+            ->call(PostViewsSeeder::class)
             ->call(LikesSeeder::class)
         ;
         });

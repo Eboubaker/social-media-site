@@ -178,6 +178,9 @@ return [
         App\Providers\RouteServiceProvider::class,
         TriggerServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Spatie\Html\HtmlServiceProvider::class,
+        ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
+
     ],
 
     /*
@@ -231,6 +234,9 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Twilio' => Aloha\Twilio\Support\Laravel\Facade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Html' => Spatie\Html\Facades\Html::class,
+        'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class
+
     ],
     'twilio' => [
         'account_sid' => env('TWILIO_SID'),

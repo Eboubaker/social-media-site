@@ -25,6 +25,9 @@ class ProfilesSeeder extends Seeder
                 Image::factory()->make(['purpose' => 'profileImage'])->imageable()->associate($profile)->save();
                 Image::factory()->make(['purpose' => 'coverImage'])->imageable()->associate($profile)->save();
             });
+            Profile::factory()->create([
+                'user_id' => User::where('email', 'admin@test.com')->first('id')->id
+            ]);
         });
         DB::transaction(function () {
             foreach (User::withCount('profiles')->get() as $user) {

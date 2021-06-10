@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiTokenController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\PostController;
@@ -42,7 +43,7 @@ Route::get('/verify/{method}/notice', [VerificationController::class, 'show'])->
 
 #region browser urls
 Route::get('/c/{community:name}/p/{post:uuid62}/r/{comment:uuid62}', [CommentController::class, 'show'])->name('community.posts.comments.show');
-Route::get('/u/{profile:username}/p/{post:uuid62}/r/{comment:uuid62}', [CommentController::class, 'show'])->name('community.posts.comments.show');
+Route::get('/u/{profile:username}/p/{post:uuid62}/r/{comment:uuid62}', [CommentController::class, 'show'])->name('profile.posts.comments.show');
 
 Route::get('/c/{community:name}', [CommunityController::class, 'show'])->name('community.show');
 Route::get('/c/{community:name}/p/{post:uuid62}/{post_by_slug}', [PostController::class, 'show'])->name('community-post.show');
@@ -51,12 +52,12 @@ Route::get('/u/{profile:username}', [ProfileController::class, 'show'])->name('p
 #endregion
 
 #region browser redirections
-// Route::get('/r/{comment:uuid62}', [CommentController::class, 'redirectToPage']);
-// Route::get('/r/{comment}', [CommentController::class, 'redirectToPage']);
+Route::get('/r/{comment:uuid62}', [CommentController::class, 'redirectToPage']);
+Route::get('/r/{comment}', [CommentController::class, 'redirectToPage']);
 
-// Route::get('/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage'])->name('post.show');
-// Route::get('/c/{community:name}/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage']);
-// Route::get('/u/{profile:username}/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage']);
+Route::get('/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage'])->name('post.show');
+Route::get('/c/{community:name}/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage']);
+Route::get('/u/{profile:username}/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage']);
 #endregion
 
 #region form requests
@@ -98,9 +99,7 @@ Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->
 Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 #endregion
 
-Route::get('/', function () {
-    return view('landing');
-})->name('landing');
+Route::get('/', [HomeController::class, 'landing']);
 
 
 

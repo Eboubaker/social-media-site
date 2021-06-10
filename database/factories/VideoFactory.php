@@ -6,7 +6,10 @@ use App\Models\Comment;
 use App\Models\Morphs\Postable;
 use App\Models\Post;
 use App\Models\Video;
+use FFMpeg\FFMpeg;
+use FFMpeg\FFProbe;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -23,8 +26,23 @@ class VideoFactory extends Factory
      * @var string
      */
     private static $temp;
-    private static $allVideos;
+    private static $original;
+    private static $files;
+    private static $loadedFiles = [];
+    private static $defaultExtension = 'mp4';
 
+    public function __construct(...$items)
+    {
+        parent::__construct(...$items);
+        if(is_null(self::$files))
+        {
+            self::$files = collect(collect(($this->model::disk()->files())));
+            foreach(self::$files as $key => $video)
+            {
+                self::$files[$key] = $this->model::disk()->path($video);
+            }
+        }
+    }
     /**
      * Define the model's default state.
      *
@@ -33,41 +51,26 @@ class VideoFactory extends Factory
      */
     public function definition()
     {
-        if(empty(self::$allVideos))
-        {
-            self::$allVideos = collect(Storage::disk('faker_videos')->files());
-        }
-        $chosen = Storage::disk('faker_videos')->path(self::$allVideos->random());
-        $temp = Storage::disk('temp')->path("tmp");
-        if(file_exists($temp))
-            unlink($temp);
-        copy($chosen, $temp);
+        $name = Str::random().'.'.self::$defaultExtension;
+        $temp = Storage::disk('temp')->path($name);
+        copy((self::$original = self::$files->random()), $temp);
         self::$temp = $temp;
-        list(0 => $width, 1 => $height, 2 => $type, 'mime' => $mime) = getimagesize(self::$temp);
         return [
-            "width" => $width, 
-            "height" => $height,
-            "size" => filesize(self::$temp),
-            "mime" => $mime,
-            'type' => $type,
-            "seconds" => 20,
-            "extension" => mimetoextension($mime),
+            'origin_name' => $name
         ];
-        $disk = Storage::disk('faker_videos');
-        $files = $disk->files();
-        $chosen = $files[random_int(0, count($files)-1)];
-        self::$video = $disk->path($chosen);
-        $atts = [
-            'meta' => (object)["with" => 1024, "height" => 1280],
-            'type' => Video::getAllowedTypes()->keys()->first()
-        ];
-        return $atts;
     }
 
     public function configure()
     {
-        return $this->afterMaking(function(Video $video){
-            copy(self::$video, $video->realPath);
+        return $this->afterMaking(function($video){
+            if( ! isset(self::$loadedFiles[self::$original]))
+            {
+                $attributes = self::$loadedFiles[self::$original] = $this->model::extractAttributesFromFile(self::$temp);
+            }else{
+                $attributes = self::$loadedFiles[self::$original];
+            }
+            $video->fill($attributes);
+            $video->temporary_file_location = self::$temp;
         });
     }
 }

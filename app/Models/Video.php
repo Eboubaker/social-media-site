@@ -4,9 +4,13 @@ namespace App\Models;
 
 use App\Models\Traits\HasStorageUrl;
 use App\Models\Traits\ModelTraits;
+use Exception;
+use FFMpeg\FFMpeg;
+use FFMpeg\FFProbe;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\Video
@@ -65,13 +69,39 @@ class Video extends Model
     HasStorageUrl,
     SoftDeletes;
 
-    public static $storage = 'videos';
+    public $storage = 'videos';
     protected $guarded = [];
+
 
     public function videoable()
     {
         return $this->morphTo();
     }
 
-    
+    public static function extractAttributesFromFile(string $path)
+    {
+        $stream = app('ffprobe')->streams($path)->first()->all();
+        $format = app('ffprobe')->format($path)->all();
+        $mime = mime_content_type($path);
+        $ret = [
+            "width" => $stream['width'],
+            "height" => $stream['height'],
+            'mime' => $mime,
+            'duration' => $format['duration'],
+            'size' => $format['size'],
+            'extension' => explode('/', $mime)[1],
+        ];
+        if($format['probe_score'] < 50)
+        {
+            throw new Exception('probe_score < 50 for:' . $path);
+        }
+        foreach($ret as $key => $v)
+        {
+            if(empty($v))
+            {
+                throw new Exception("$key is empty $key => $v");
+            }
+        }
+        return $ret;
+    }
 }

@@ -254,7 +254,7 @@ class Profile extends Model
     public static function current():Profile|null
     {
         try{
-            return Auth::user()->activeProfile;
+            return Auth::user()->activeProfile ?? null;
         }catch(\Throwable $e)
         {
             report($e);
@@ -269,7 +269,7 @@ class Profile extends Model
     public static function current_id():int|null
     {
         try{
-            return Auth::user()->activeProfile->id;
+            return Auth::user()->activeProfile->id ?? null;
         }catch(\Throwable $e)
         {
             report($e);

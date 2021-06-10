@@ -6,7 +6,10 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Models\PostView;
 use App\Models\Profile;
+use DB;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class FeedController extends Controller
@@ -14,16 +17,24 @@ class FeedController extends Controller
 
     public function index(Request $request)
     {
-        $parameters = (object) $request->all();
-        $user = Auth::user();
+        $current_id = Profile::current_id();
         $posts = Post::query()
         ->with(['comments', 'videos', 'images', 'pageable'])
-        ->whereDoesntHave('views', function($query){
-            $query->where('viewer_id', Profile::current_id());
+        ->whereHas('images')
+        ->whereDoesntHave('views', function($query) use($current_id){
+            $query->where('viewer_id', $current_id);
         })
         ->limit(10)
         ->get();
-
+        $views = [];
+        foreach($posts as $post)
+        {
+            $views[] = [
+                'viewer_id' => $current_id,
+                'post_id' => $post->id
+            ];
+        }
+        DB::table(PostView::tablename())->insert($views);
         return PostResource::collection($posts);
     }
 

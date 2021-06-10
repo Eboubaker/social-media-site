@@ -166,7 +166,10 @@
       },
       submit: function(){
         var formData = new FormData();
-        formData.append("attachements", this.form.attachements);
+        for(let i = 0; i < this.form.attachements.length; i++)
+        {
+          formData.append("attachements[" +i+ "]", this.form.attachements[i]);
+        }
         formData.append('body', this.form.body);
         formData.append('title', this.form.title);
         axios.post('/u/posts', formData, {
@@ -174,10 +177,10 @@
               'Content-Type': 'multipart/form-data'
             }
         }).then((res)=>{
-          
+          console.log(res);
         })
         .catch((e)=>{
-
+          console.log(e);
         }).then((e)=>{
           this.close();
         });

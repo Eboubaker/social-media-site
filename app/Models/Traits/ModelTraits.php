@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 
 /**
  * @method static void doForceDelete()
+ * @method static Builder where($attribute, $value)
  * @method static void includeTrashed()
  * @method static void onlyIncludeTrashed()
  * @method static void cascadeTrash()
@@ -30,7 +31,14 @@ trait ModelTraits
     protected static $deletedAtColumnName = null;
 
 
-
+    public static function instance()
+    {
+        if(is_null(self::$instance))
+        {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
     public static function bootModelTraits()
     {
         static::addGlobalScope(new CustomScopes);

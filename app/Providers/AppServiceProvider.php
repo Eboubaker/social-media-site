@@ -61,6 +61,9 @@ class AppServiceProvider extends ServiceProvider
             // if the cookie or the browser's locale is invalid or unknown we fallback
             return config('app.fallback_locale');
         });
+        $this->app->singleton('ffprobe', function(){
+            return \FFMpeg\FFProbe::create();
+        });
     }
 
     /**
