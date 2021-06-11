@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Post class="hidden sm:block" v-for="post in posts" :key="post.id" :post="post" />
+    <Post class="sm:block" v-for="post in posts" :key="post.id" :post="post" />
   </div>
 </template>
 <script>
@@ -29,8 +29,9 @@ export default {
   methods: {
     fetchData() {
       axios
-        .post("/api/feed", { parameters: {} })
+        .post("/wapi/feed", { parameters: {} })
         .then(res => {
+          console.log(res);
           this.posts.push(...res.data.data);
         })
         .catch(err => {

@@ -50,6 +50,6 @@ class HomeController extends Controller
     }
     public function feedForProfile(Request $request, Profile $profile)
     {
-        return (new FeedController)->index($request);
+        return view('feed');
     }
 }

@@ -4071,10 +4071,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     fetchData: function fetchData() {
       var _this = this;
 
-      axios.post("/api/feed", {
+      axios.post("/wapi/feed", {
         parameters: {}
       }).then(function (res) {
         var _this$posts;
+
+        console.log(res);
 
         (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(res.data.data));
       })["catch"](function (err) {
@@ -5721,6 +5723,9 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.component("posts-component", __webpack_
 
 var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
   el: "#app"
+});
+var feed = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
+  el: '#vue-feed'
 });
 
 /***/ }),
@@ -30903,7 +30908,7 @@ var render = function() {
     _vm._l(_vm.posts, function(post) {
       return _c("Post", {
         key: post.id,
-        staticClass: "hidden sm:block",
+        staticClass: "sm:block",
         attrs: { post: post }
       })
     }),
@@ -32557,219 +32562,249 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "w-11/12 mx-auto md:w-3/4" }, [
-    _c("div", { staticClass: "my-0 rounded-lg shadow-lg bg-white" }, [
-      _c("div", { staticClass: "flex flex-row justify-between items-center" }, [
+  return _c(
+    "div",
+    {
+      staticClass: "w-11/12 mx-auto md:w-3/4",
+      model: {
+        value: _vm.post,
+        callback: function($$v) {
+          _vm.post = $$v
+        },
+        expression: "post"
+      }
+    },
+    [
+      _c("div", { staticClass: "my-0 rounded-lg shadow-lg bg-white" }, [
         _c(
           "div",
-          {
-            staticClass: "flex justify-start items-center pt-2 px-4 space-x-2"
-          },
+          { staticClass: "flex flex-row justify-between items-center" },
           [
-            _vm._m(0),
+            _c(
+              "div",
+              {
+                staticClass:
+                  "flex justify-start items-center pt-2 px-4 space-x-2"
+              },
+              [
+                _c("a", { attrs: { href: "" } }, [
+                  _c("img", {
+                    staticClass: "w-14 h-14 rounded-full",
+                    attrs: {
+                      src: _vm.post.author.profileImage.url,
+                      alt: "tree"
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "flex flex-col -space-y-1" }, [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "text-lg hover:underline",
+                      attrs: { href: "#" }
+                    },
+                    [
+                      _c("h4", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.post.author.firstName +
+                              " " +
+                              _vm.post.author.lastName
+                          )
+                        )
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    { staticClass: "hover:underline", attrs: { href: "" } },
+                    [_c("small", [_vm._v(_vm._s(_vm.post.createdAt))])]
+                  )
+                ])
+              ]
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "flex flex-col -space-y-1" }, [
+            _c("div", { staticClass: "relative items-center" }, [
               _c(
-                "a",
-                { staticClass: "text-lg hover:underline", attrs: { href: "" } },
-                [_c("h4", [_vm._v(_vm._s(_vm.post.author.name))])]
+                "button",
+                {
+                  staticClass:
+                    "relative z-30 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer",
+                  class: _vm.isOpen
+                    ? "bg-red-100 text-logo-red hover:text-logo-red "
+                    : "bg-transparent",
+                  on: {
+                    click: function($event) {
+                      _vm.isOpen = !_vm.isOpen
+                    }
+                  }
+                },
+                [
+                  _c(
+                    "svg",
+                    {
+                      staticClass: "w-6",
+                      attrs: {
+                        xmlns: "http://www.w3.org/2000/svg",
+                        fill: "none",
+                        viewBox: "0 0 24 24",
+                        stroke: "currentColor"
+                      }
+                    },
+                    [
+                      _c("path", {
+                        attrs: {
+                          "stroke-linecap": "round",
+                          "stroke-linejoin": "round",
+                          "stroke-width": "2",
+                          d:
+                            "M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+                        }
+                      })
+                    ]
+                  )
+                ]
               ),
               _vm._v(" "),
-              _c("a", { staticClass: "hover:underline", attrs: { href: "" } }, [
-                _c("small", [_vm._v(_vm._s(_vm.post.createdAt))])
-              ])
+              _vm.isOpen
+                ? _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "on-clickaway",
+                          rawName: "v-on-clickaway",
+                          value: _vm.hide,
+                          expression: "hide"
+                        }
+                      ],
+                      staticClass:
+                        "absolute z-30 right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
+                    },
+                    [_vm._m(0), _vm._v(" "), _vm._m(1)]
+                  )
+                : _vm._e()
             ])
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "relative items-center" }, [
-          _c(
-            "button",
-            {
-              staticClass:
-                "relative z-30 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer",
-              class: _vm.isOpen
-                ? "bg-red-100 text-logo-red hover:text-logo-red "
-                : "bg-transparent",
-              on: {
-                click: function($event) {
-                  _vm.isOpen = !_vm.isOpen
-                }
-              }
-            },
-            [
-              _c(
-                "svg",
-                {
-                  staticClass: "w-6",
-                  attrs: {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    fill: "none",
-                    viewBox: "0 0 24 24",
-                    stroke: "currentColor"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      "stroke-linecap": "round",
-                      "stroke-linejoin": "round",
-                      "stroke-width": "2",
-                      d:
-                        "M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-                    }
-                  })
-                ]
-              )
-            ]
-          ),
+        _c("div", { staticClass: "px-4 py-2" }, [
+          _c("h2", [_vm._v(_vm._s(_vm.post.title))]),
           _vm._v(" "),
-          _vm.isOpen
-            ? _c(
-                "div",
-                {
-                  directives: [
-                    {
-                      name: "on-clickaway",
-                      rawName: "v-on-clickaway",
-                      value: _vm.hide,
-                      expression: "hide"
-                    }
-                  ],
-                  staticClass:
-                    "absolute z-30 right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
-                },
-                [_vm._m(1), _vm._v(" "), _vm._m(2)]
-              )
-            : _vm._e()
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "px-4 py-2" }, [
-        _c("p", [_vm._v(_vm._s(_vm.post.content.title))]),
+          _c("p", [_vm._v(_vm._s(_vm.post.body))])
+        ]),
         _vm._v(" "),
-        _c("p", [_vm._v(_vm._s(_vm.post.content.body))])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "flex flex-row justify-evenly border-t" }, [
-        _c("div", { staticClass: "flex place-items-center" }, [
-          _c(
-            "button",
-            {
-              staticClass:
-                "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
-            },
-            [
-              _c(
-                "svg",
-                {
-                  staticStyle: { width: "24px", height: "24px" },
-                  attrs: { viewBox: "0 0 24 24" }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      fill: "currentColor",
-                      d:
-                        "M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
-                    }
-                  })
-                ]
-              )
-            ]
-          ),
+        _c("div", { staticClass: "flex flex-row justify-evenly border-t" }, [
+          _c("div", { staticClass: "flex place-items-center" }, [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticStyle: { width: "24px", height: "24px" },
+                    attrs: { viewBox: "0 0 24 24" }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        fill: "currentColor",
+                        d:
+                          "M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
+                      }
+                    })
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("p", { staticClass: "ml-1 text-lg" }, [
+              _vm._v(_vm._s(_vm.post.likes_count))
+            ])
+          ]),
           _vm._v(" "),
-          _c("p", { staticClass: "ml-1 text-lg" }, [
-            _vm._v(_vm._s(_vm.post.likes.length))
+          _c("div", { staticClass: "flex place-items-center" }, [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    attrs: {
+                      xmlns: "http://www.w3.org/2000/svg",
+                      height: "24",
+                      fill: "none",
+                      viewBox: "0 0 24 24",
+                      stroke: "currentColor"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        "stroke-linecap": "round",
+                        "stroke-linejoin": "round",
+                        "stroke-width": "2",
+                        d:
+                          "M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                      }
+                    })
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("p", { staticClass: "ml-1 text-lg" }, [
+              _vm._v(_vm._s(_vm.post.commentsCount))
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "flex place-items-center" }, [
+            _c(
+              "button",
+              {
+                staticClass:
+                  "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
+              },
+              [
+                _c(
+                  "svg",
+                  {
+                    staticStyle: { width: "24px", height: "24px" },
+                    attrs: { viewBox: "0 0 24 24" }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        fill: "currentColor",
+                        d:
+                          "M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z"
+                      }
+                    })
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("p", { staticClass: "ml-1 text-lg" }, [_vm._v("0")])
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "flex place-items-center" }, [
-          _c(
-            "button",
-            {
-              staticClass:
-                "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
-            },
-            [
-              _c(
-                "svg",
-                {
-                  attrs: {
-                    xmlns: "http://www.w3.org/2000/svg",
-                    height: "24",
-                    fill: "none",
-                    viewBox: "0 0 24 24",
-                    stroke: "currentColor"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      "stroke-linecap": "round",
-                      "stroke-linejoin": "round",
-                      "stroke-width": "2",
-                      d:
-                        "M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                    }
-                  })
-                ]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c("p", { staticClass: "ml-1 text-lg" }, [
-            _vm._v(_vm._s(_vm.post.commentsCount))
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex place-items-center" }, [
-          _c(
-            "button",
-            {
-              staticClass:
-                "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
-            },
-            [
-              _c(
-                "svg",
-                {
-                  staticStyle: { width: "24px", height: "24px" },
-                  attrs: { viewBox: "0 0 24 24" }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      fill: "currentColor",
-                      d:
-                        "M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z"
-                    }
-                  })
-                ]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c("p", { staticClass: "ml-1 text-lg" }, [_vm._v("0")])
-        ])
-      ]),
-      _vm._v(" "),
-      _vm._m(3)
-    ])
-  ])
+        _vm._m(2)
+      ])
+    ]
+  )
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("a", { attrs: { href: "" } }, [
-      _c("img", {
-        staticClass: "w-14 h-14 rounded-full",
-        attrs: { src: "/img/150x150.png", alt: "tree" }
-      })
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

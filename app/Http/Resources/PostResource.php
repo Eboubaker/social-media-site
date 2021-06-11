@@ -21,6 +21,7 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'author' => new ProfileResource($this->whenLoaded('author')),
             'title' => $this->title,
+            'body' => $this->body,
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'videos' => VideoResource::collection($this->whenLoaded('videos')),

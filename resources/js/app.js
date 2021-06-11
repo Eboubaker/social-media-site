@@ -39,3 +39,7 @@ Vue.component("posts-component", require("./components/Posts.vue").default);
 var app = new Vue({
   el: "#app",
 });
+
+var feed = new Vue({
+  el: '#vue-feed'
+});

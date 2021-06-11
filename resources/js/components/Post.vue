@@ -1,14 +1,14 @@
 <template>
-  <div class="w-11/12 mx-auto md:w-3/4">
+  <div v-model="post" class="w-11/12 mx-auto md:w-3/4">
     <div class="my-0 rounded-lg shadow-lg bg-white">
       <div class="flex flex-row justify-between items-center">
         <div class="flex justify-start items-center pt-2 px-4 space-x-2">
           <a href>
-            <img class="w-14 h-14 rounded-full" src="/img/150x150.png" alt="tree" />
+            <img class="w-14 h-14 rounded-full" v-bind:src="post.author.profileImage.url" alt="tree" />
           </a>
           <div class="flex flex-col -space-y-1">
-            <a class="text-lg hover:underline" href>
-              <h4>{{ post.author.name }}</h4>
+            <a class="text-lg hover:underline" href="#">
+              <h4>{{ post.author.firstName + " " + post.author.lastName }}</h4>
             </a>
             <a class="hover:underline" href>
               <small>{{ post.createdAt }}</small>
@@ -91,8 +91,8 @@
         </div>
       </div>
       <div class="px-4 py-2">
-        <p>{{ post.content.title }}</p>
-        <p>{{ post.content.body }}</p>
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.body }}</p>
         
       </div>
       <!-- <div class="flex justify-between px-2 text-sm">
@@ -120,7 +120,7 @@
               />
             </svg>
           </button>
-          <p class="ml-1 text-lg">{{ post.likes.length }}</p>
+          <p class="ml-1 text-lg">{{ post.likes_count }}</p>
         </div>
         <div class="flex place-items-center">
           <button

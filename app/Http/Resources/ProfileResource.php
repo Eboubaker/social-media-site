@@ -19,8 +19,13 @@ class ProfileResource extends JsonResource
             "id" => $this->id,
             "profileImage" => new ImageResource($this->whenLoaded('profileImage')),
             "coverImage" => new ImageResource($this->whenLoaded('coverImage')),
-            "firstName" => $this->first_name,
-            "lastName" => $this->last_name
+            "firstName" => $this->whenLoaded('account', function(){
+                return $this->account->first_name;
+            }),
+            "lastName" => $this->whenLoaded('account', function(){
+                return $this->account->last_name;
+            }),
+            "username" => $this->username,
         ];
     }
 }

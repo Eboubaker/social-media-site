@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiTokenController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\PermissionsController;
@@ -99,6 +100,7 @@ Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->
 Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 #endregion
 
+Route::post('/wapi/feed', [FeedController::class, 'wapiIndex']);
 Route::get('/', [HomeController::class, 'landing']);
 
 
