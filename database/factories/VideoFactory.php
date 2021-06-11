@@ -36,10 +36,10 @@ class VideoFactory extends Factory
         parent::__construct(...$items);
         if(is_null(self::$files))
         {
-            self::$files = collect(collect(($this->model::disk()->files())));
+            self::$files = collect(($this->model::disk('faker_')->files()));
             foreach(self::$files as $key => $video)
             {
-                self::$files[$key] = $this->model::disk()->path($video);
+                self::$files[$key] = $this->model::disk('faker_')->path($video);
             }
         }
     }
@@ -62,15 +62,15 @@ class VideoFactory extends Factory
 
     public function configure()
     {
-        return $this->afterMaking(function($video){
+        return $this->afterMaking(function($model){
             if( ! isset(self::$loadedFiles[self::$original]))
             {
                 $attributes = self::$loadedFiles[self::$original] = $this->model::extractAttributesFromFile(self::$temp);
             }else{
                 $attributes = self::$loadedFiles[self::$original];
             }
-            $video->fill($attributes);
-            $video->temporary_file_location = self::$temp;
+            $model->fill($attributes);
+            $model->temporary_file_location = self::$temp;
         });
     }
 }

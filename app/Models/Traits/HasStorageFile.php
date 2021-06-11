@@ -20,9 +20,9 @@ trait HasStorageFile
     /**
      * @return \Illuminate\Filesystem\FilesystemAdapter
      */
-    public static function disk()
+    public static function disk($prepend='')
     {
-        return Storage::disk(self::getStorage());
+        return Storage::disk($prepend.self::getStorage());
     }
     public static function getStorage()
     {
