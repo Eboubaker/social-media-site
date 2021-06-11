@@ -35,7 +35,8 @@ class FeedController extends Controller
             ];
         }
         DB::table(PostView::tablename())->insert($views);
-        return PostResource::collection($posts);
+        // return PostResource::collection($posts);
+        return view('feed');
     }
 
     /**

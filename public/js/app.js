@@ -3987,14 +3987,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var _this = this;
 
       var formData = new FormData();
-      formData.append("attachements", this.form.attachements);
+
+      for (var i = 0; i < this.form.attachements.length; i++) {
+        formData.append("attachements[" + i + "]", this.form.attachements[i]);
+      }
+
       formData.append('body', this.form.body);
       formData.append('title', this.form.title);
       axios.post('/u/posts', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      }).then(function (res) {})["catch"](function (e) {}).then(function (e) {
+      }).then(function (res) {
+        console.log(res);
+      })["catch"](function (e) {
+        console.log(e);
+      }).then(function (e) {
         _this.close();
       });
     },

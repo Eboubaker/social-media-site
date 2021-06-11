@@ -3,19 +3,19 @@
 namespace App\Rules;
 
 use App\Exceptions\HttpPermissionException;
-use App\Models\Community;
 use App\Models\Image;
-use App\Models\Profile;
 use App\Models\Video;
 use Exception;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
+use App\Models\Traits\Attachement;
 
 class AttachementRule implements Rule
 {
-    /** @var UploadedFile[] $parsedFiles */
-    private $parsedFiles;
+    /** @var \Illuminate\Support\Collection<Model implements Attachement> $models */
+    private $models;
 
     /**
      * Create a new rule instance.
@@ -24,7 +24,7 @@ class AttachementRule implements Rule
      */
     public function __construct(Model $pageable)
     {
-        $this->parsedFiles = [];
+        $this->models = Collection::make();
         $this->pageable = $pageable;
         $this->message = "this attachement is not allowed";
     }
@@ -38,104 +38,25 @@ class AttachementRule implements Rule
      */
     public function passes($index, $file)
     {
-        
         try{
-            $mime = mime_content_type($file->path());
-            list($type, $extension) = explode('/', $mime);
-            
-            if($type === 'video')
+            $type = explode('/', mime_content_type($file->path()))[0];
+            $attributes = [
+                'origin_name' => $file->getClientOriginalName()
+            ];
+            if($type === 'image')
             {
-                if($this->pageable instanceof Community && ! $this->pageable->allowsCurrent(config('permissions.communities.can-attach-videos-to-own-comment')))
-                {
-                    throw new HttpPermissionException("You don't have permissions to post images");
-                }
-                if($extension !== 'mp4'
-                    || $file->getSize() > 1024 * 1024 * 300
-                    
-                )
-                {
-                    return false;
-                }
-                $this->parsedFiles[] = [
-                    'extension' => $extension,
-                    'mime' => $mime,
-                    'origin_name' => $file->getClientOriginalName() ?: 'video_' . preg_replace('/[^\d]/', '_', strval(now())),
-                    'size' => $file->getSize(),
-                    'path' => $file->path(),
-                    'model' => Video::class,
-                ];
-            }else if($type === 'image')
+                $attributes += Image::extractAttributesFromFile($file->path());
+                $model = Image::make($attributes);
+            }else if($type === 'video')
             {
-                if($this->pageable instanceof Community && ! $this->pageable->allowsCurrent(config('permissions.communities.can-attach-images-to-own-comment')))
-                {
-                    throw new HttpPermissionException("You don't have permissions to post images");
-                }
-                if(!in_array($extension, ['png', 'jpg'])
-                    || $file->getSize() > 1024 * 1024 * 30
-                )
-                {
-                    return false;
-                }
-                
-                list(0 => $width, 1 => $height, 2 => $type, 'mime' => $mime) = getimagesize($file->path());
-                
-                $this->parsedFiles[] = [
-                    'extension' => $extension,
-                    'mime' => $mime,
-                    'origin_name' => $file->getClientOriginalName() ?: 'image_' . preg_replace('/[^\d]/', '_', strval(now())),
-                    'size' => $file->getSize(),
-                    'path' => $file->path(),
-                    'type' => $type,
-                    'width' => $width,
-                    'height' => $height,
-                    'model' => Image::class,
-                ];
-                if($file->getSize() < 1024 * 1024 && $extension !== 'png')
-                {
-                    goto nocompress;
-                }
-                if($extension === 'png' && $file->getSize() < 1024 * 1024)
-                {
-                    $percent = 1;
-                }
-                compress:
-                
-                    $percent = $percent ?? 1024 * 1024 / $file->getSize();
-                    $newwidth = $width * $percent;
-                    $newheight = $height * $percent;
-                    
-                    $reduced = imagecreatetruecolor($newwidth, $newheight);
-                    $source = false;
-                    
-                    if($type == IMAGETYPE_JPEG)
-                    {
-                        $source = imagecreatefromjpeg($file->path());
-                    }else if($type == IMAGETYPE_PNG)
-                    {
-                        $source = imagecreatefrompng($file->path());
-                    }
-                    
-                    if( $source === false)
-                    {
-                        $this->failWithMessage("Could not read attachement: ".$file->getClientOriginalName());
-                    }
-                    // Resize
-                    $success = imagecopyresized($reduced, $source, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-                    
-                    if( ! $success)
-                    {
-                        $this->failWithMessage("Image is too large, could not reduce image size: ".$file->getClientOriginalName()) ;
-                    }
-                    
-                    // Output
-                    $success = imagejpeg($reduced, $file->path());
-                    if( ! $success)
-                    {
-                        $this->failWithMessage("Image is too large, could not reduce image size");
-                    }
-                nocompress:
-                    return true;
+                $attributes += Video::extractAttributesFromFile($file->path());
+                $model = Video::make($attributes);
+            }else{
+                $this->failWithMessage('unsupported media type');
             }
+            $model->setTemporaryFileLocationAttribute($file->path());
+            $this->models[] = $model;
+            return true;
         }catch(\Throwable $e)
         {
             if($e instanceof HttpPermissionException)
@@ -159,7 +80,6 @@ class AttachementRule implements Rule
 
     private function setMessage($message)
     {
-        dd('message Chaned To $message');
         $this->message = $message;
     }
     private function failWithMessage($message)
@@ -167,8 +87,8 @@ class AttachementRule implements Rule
         $this->setMessage($message);
         throw new Exception($message);
     }
-    public function getParsed()
+    public function getModels()
     {
-        return $this->parsedFiles;
+        return $this->models;
     }
 }

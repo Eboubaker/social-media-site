@@ -60,6 +60,29 @@ class PostManagementTest extends TestCase
         
         $response->assertRedirect($post->url);
     }
+    public function test_visitor_can_post_with_video_on_community_with_permissions()
+    {
+        $community = $this->currentProfile->ownedCommunities()->save(Community::factory()->make());
+        $path = Storage::disk('faker_videos')->path(collect(Storage::disk('faker_videos')->files())->random());
+        $tmp = sys_get_temp_dir() . '\upload.mp4';
+        copy($path, $tmp);
+        $response = $this->post(route('community.posts.store', [$community->getKey()]), [
+            'title' => "sample title",
+            "body" => "this is a body sample",
+            "attachements" => [
+                new UploadedFile($tmp, "my best image.mp4", "image/mp4")
+            ]
+        ]);
+        $this->assertDatabaseHas('posts', [
+            'title' => "sample title"
+        ]);
+        $post = Post::where('title', "sample title")->first();
+        $this->assertDatabaseHas('videos',
+            $post->getMorphConstraints('videoable')
+        );
+        
+        $response->assertRedirect($post->url);
+    }
     public function test_visitor_cant_post_on_community_with_private_permissions()
     {
         $role = CommunityRole::create([

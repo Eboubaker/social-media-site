@@ -11,16 +11,18 @@ use App\Models\Post;
 use App\Models\Profile;
 use App\Models\Video;
 use App\Rules\AttachementRule;
+use DebugBar\DebugBar;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Html\Elements\Input;
 
 class PostController extends Controller
 {
     public function show($pageable, Post $post)
     {
-        return view('post.show')->with($post);
+        return new PostResource($post->load(['images', 'videos', 'comments', 'likes', 'views']));
     }
     public function create(Request $request)
     {
@@ -39,26 +41,17 @@ class PostController extends Controller
     }
     private function storeWithAttachements(Request $request, Post $post, Model $pageable)
     {
-        info(var_export($request->files->get('attachements')));
-        $attachementsParser = new AttachementRule($pageable);
+        $parser = new AttachementRule($pageable);
         Validator::make($request->all(), [
-            'attachements.*' => [$attachementsParser] 
+            'attachements.*' => $parser
         ])->validate();
-        $parsedFiles = $attachementsParser->getParsed();
         DB::beginTransaction();
         try{
             $post->save();
-            foreach($parsedFiles as $attachement)
+            foreach($parser->getModels() as $attachement)
             {
-                /**
-                 * @var Image|Video $instance
-                 */
-                $instance = $attachement['model']::make(
-                    collect($attachement)->forget(['model', 'path'])->all()
-                );
-                $instance->temporaryFileLocation = $attachement['path'];
-                $instance->imageable()->associate($post);
-                $instance->save();
+                $attachement->attacheable()->associate($post);
+                $attachement->save();
             }
             DB::commit();
         }catch(\Throwable $e)

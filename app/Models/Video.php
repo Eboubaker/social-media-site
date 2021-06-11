@@ -2,15 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Attachement;
 use App\Models\Traits\HasStorageUrl;
 use App\Models\Traits\ModelTraits;
 use Exception;
-use FFMpeg\FFMpeg;
-use FFMpeg\FFProbe;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * App\Models\Video
@@ -62,7 +60,7 @@ use Illuminate\Support\Facades\Storage;
  * @method static \Illuminate\Database\Query\Builder|Video withoutTrashed()
  * @mixin \Eloquent
  */
-class Video extends Model
+class Video extends Model implements Attachement
 {
     use HasFactory, 
     ModelTraits, 
@@ -77,8 +75,11 @@ class Video extends Model
     {
         return $this->morphTo();
     }
-
-    public static function extractAttributesFromFile(string $path)
+    public function attacheable()
+    {
+        return $this->videoable();
+    }
+    public static function extractAttributesFromFile($path)
     {
         $stream = app('ffprobe')->streams($path)->first()->all();
         $format = app('ffprobe')->format($path)->all();
@@ -87,10 +88,18 @@ class Video extends Model
             "width" => $stream['width'],
             "height" => $stream['height'],
             'mime' => $mime,
+            'extension' => explode('/', $mime)[1],
             'duration' => $format['duration'],
             'size' => $format['size'],
-            'extension' => explode('/', $mime)[1],
         ];
+        // TODO: implement sfw score
+        // foreach($frames as $frame)
+        // {
+        //     if(Image::getScore($frame) < .4)
+        //     {
+        //         throw new NotSFWException();
+        //     }
+        // }
         if($format['probe_score'] < 50)
         {
             throw new Exception('probe_score < 50 for:' . $path);

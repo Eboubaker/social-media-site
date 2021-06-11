@@ -17,6 +17,11 @@ trait HasStorageFile
     private bool $fileTrashed = false;
     private string $trashName;
 
+
+
+
+    public static abstract function extractAttributesFromFile(string $path);
+
     /**
      * @return \Illuminate\Filesystem\FilesystemAdapter
      */
@@ -137,9 +142,13 @@ trait HasStorageFile
         }
         return false;
     }
+    /**
+     * @return $this
+     */
     public function setTemporaryFileLocationAttribute($fullPath)
     {
         $this->att_temp = $fullPath;
+        return $this;
     }
     public function copyTemporaryFileToStorage()
     {

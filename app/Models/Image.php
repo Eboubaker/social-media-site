@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\Attachement;
 use App\Models\Traits\HasStorageUrl;
 use App\Models\Traits\ModelTraits;
 use App\Rules\PolymorphicRelationExists;
@@ -62,7 +63,7 @@ use Illuminate\Support\Facades\Validator;
  * @method static \Illuminate\Database\Query\Builder|Image withoutTrashed()
  * @mixin \Eloquent
  */
-class Image extends Model
+class Image extends Model implements Attachement
 {
     use HasFactory, 
     ModelTraits, 
@@ -93,8 +94,11 @@ class Image extends Model
     {
         return $this->morphTo();
     }
-
-    public static function extractAttributesFromFile(string $path)
+    public function attacheable()
+    {
+        return $this->imageable();
+    }
+    public static function extractAttributesFromFile($path)
     {
         list(0 => $width, 1 => $height, 2 => $type, 'mime' => $mime) = getimagesize($path);
         return [
