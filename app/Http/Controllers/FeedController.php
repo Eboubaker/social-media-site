@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 class FeedController extends Controller
 {
-
     public function wapiIndex(Request $request)
     {
         return $this->index($request);
@@ -31,22 +30,33 @@ class FeedController extends Controller
     public function index(Request $request)
     {
         $current_id = Profile::current_id();
-        $posts = Post::query()
+        $query = Post::query()
         ->with(['videos', 'images', 'pageable', 'author', 'author.profileImage', 'author.account'])
+        ->whereHas('images')
         ->withCount(['likes', 'views', 'comments'])
-        // ->whereDoesntHave('views', fn($q)=>$q->where('viewer_id', $current_id))// where user didnt view the post before
-        ->where('pageable_type', 'App\Models\Community')
-        ->whereIn('pageable_id', Profile::current()->joinedCommunities()->select('communities.id'))
+        // ->whereDoesntHave('views', fn ($q) =>$q->where('viewer_id', $current_id))// where user didnt view the post before
+        ->orderByDesc('likes_count')
+        ->orderBy('created_at', 'desc');
+        $profilePosts = $query->clone();
+
+
+        $profilePosts->where('author_id', $current_id);
+        $feedPosts = $query->clone();
+        
+        // ->where('pageable_type', 'App\Models\Community')
+        // ->whereIn('pageable_id', Profile::current()->joinedCommunities()->select('communities.id'))
+        
+        
+        $posts = $profilePosts->union($feedPosts)
         ->limit(10)
         ->get();
-        $views = [];
-        foreach($posts as $post)
-        {
-            $views[] = [
-                'viewer_id' => $current_id,// NIGGAA LOOOK AT THE FEEEEEEEEED
-                'post_id' => $post->id
-            ];
-        }
+        // $views = [];
+        // foreach ($posts as $post) {
+        //     $views[] = [
+        //         'viewer_id' => $current_id,
+        //         'post_id' => $post->id
+        //     ];
+        // }
         // DB::table(PostView::tablename())->insert($views);
         return PostResource::collection($posts);
     }

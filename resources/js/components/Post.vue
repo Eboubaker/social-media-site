@@ -94,6 +94,9 @@
         <h2>{{ post.title }}</h2>
         <p>{{ post.body }}</p>
         
+        <div class="w-full h-full" v-for="image in post.images" :image="image" :key='image.id' >
+            <img v-bind:src="image.url" v-bind:alt="image.name" />
+        </div>
       </div>
       <!-- <div class="flex justify-between px-2 text-sm">
         <div>
@@ -158,7 +161,7 @@
         </div>
       </div>
 
-      <div class="hidden space-y-2 border-t-2 pt-4 pb-2">
+      <div class="space-y-2 border-t-2 pt-4 pb-2">
         <div class="flex justify-between items-center space-x-2">
           <img class="w-10 h-10 rounded-full" src="/img/150x150.png" />
           <form class="flex-auto" action="#" method="#">

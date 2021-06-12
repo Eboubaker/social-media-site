@@ -11,11 +11,13 @@ export default {
   },
   data() {
     return {
+      profile: null,
       posts: [],
       loading: false
     };
   },
   created() {
+    this.profile = Vue.prototype.$currentProfile;
     this.fetchData();
     document.body.onscroll = function() {
       const perc =

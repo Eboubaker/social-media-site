@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProfileResource;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,9 +12,6 @@ use Illuminate\Validation\UnauthorizedException;
 
 class ProfileController extends Controller
 {
-
-
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -51,7 +49,10 @@ class ProfileController extends Controller
     {
         return view('profile.show', compact('profile'));
     }
-
+    public function current()
+    {
+        return new ProfileResource(Profile::current()->load(['profileImage', 'account']));
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -84,12 +85,10 @@ class ProfileController extends Controller
      */
     public function destroy(Profile $profile)
     {
-        if(Auth::id() === $profile->account->getKey())
-        {
-            if(Profile::current_id() === $profile->getKey())
-            {
+        if (Auth::id() === $profile->account->getKey()) {
+            if (Profile::current_id() === $profile->getKey()) {
                 abort(403, "Profile is active");
-            }else{
+            } else {
                 $profile->delete();
                 return redirect('/');
             }
@@ -100,8 +99,7 @@ class ProfileController extends Controller
 
     public function switch(Profile $profile)
     {
-        if(Auth::user()->owns($profile))
-        {
+        if (Auth::user()->owns($profile)) {
             $profile->update(["active" => true]);
             return redirect('/');
         }

@@ -19,15 +19,17 @@ class ProfilesSeeder extends Seeder
     {
         DB::transaction(function () {
             $users = User::all();
-            Profile::factory()->count(100)->make()->each(function(Profile $profile)use($users){
+            Profile::factory()->count(100)->make()->each(function (Profile $profile) use ($users) {
                 $profile->active = true;
                 $profile->account()->associate($users->random())->save();
                 Image::factory()->make(['purpose' => 'profileImage'])->imageable()->associate($profile)->save();
                 Image::factory()->make(['purpose' => 'coverImage'])->imageable()->associate($profile)->save();
             });
-            Profile::factory()->create([
+            $p = Profile::factory()->create([
                 'user_id' => User::where('email', 'admin@test.com')->first('id')->id
             ]);
+            Image::factory()->make(['purpose' => 'profileImage'])->imageable()->associate($p)->save();
+            Image::factory()->make(['purpose' => 'coverImage'])->imageable()->associate($p)->save();
         });
         DB::transaction(function () {
             foreach (User::withCount('profiles')->get() as $user) {

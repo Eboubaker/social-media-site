@@ -25,10 +25,10 @@ App\Http\Api::routes();
 Route::get("/posts/create", [PostController::class, "create"])->name('posts.create');
 
 //-- Legal stuff
-Route::get('/terms',function(){
+Route::get('/terms', function () {
     return "The terms blade-view";
 })->name('legal.terms');
-Route::get('/privacy',function(){
+Route::get('/privacy', function () {
     return "The privacy blade-view";
 })->name('legal.privacy');
 
@@ -100,31 +100,12 @@ Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->
 Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 #endregion
 
+
+#region backend api
+Route::post('/wapi/profile/current', [ProfileController::class, 'current']);
 Route::post('/wapi/feed', [FeedController::class, 'wapiIndex']);
+#endregion
+
+
+
 Route::get('/', [HomeController::class, 'landing']);
-
-
-# Test
-Route::get('/profile',function(){
-    return view("profile.show");
-});
-
-
-
-//$i = imagecreatefrompng('D:\Users\MCS\Downloads\1044147.png');
-//imagewebp($i, "C:\Users\me\Pictures\Camera Roll\out.webp");
-
-
-
-
-
-
-// Route::get('/sms/send/{to}', function(\Vonage\Client $nexmo, $to){
-//     $message = $nexmo->message()->send([
-//         'to' => $to,
-//         'from' => '@leggetter',
-//         'text' => 'PIN CODE #5145'
-//     ]);
-//     Log::info('sent message: ' . $message['message-id']);
-// });
-

@@ -4051,11 +4051,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   data: function data() {
     return {
+      profile: null,
       posts: [],
       loading: false
     };
   },
   created: function created() {
+    this.profile = Vue.prototype.$currentProfile;
     this.fetchData();
 
     document.body.onscroll = function () {
@@ -4695,6 +4697,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -4981,6 +4996,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue_clickaway__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-clickaway */ "./node_modules/vue-clickaway/dist/vue-clickaway.common.js");
 /* harmony import */ var _PlayGround_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlayGround.vue */ "./resources/js/components/PlayGround.vue");
+//
+//
+//
 //
 //
 //
@@ -5721,11 +5739,14 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.component("posts-component", __webpack_
 //   },
 // });
 
-var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-  el: "#app"
-});
-var feed = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-  el: '#vue-feed'
+axios.post('/wapi/profile/current').then(function (res) {
+  vue__WEBPACK_IMPORTED_MODULE_1__.default.prototype.$currentProfile = res.data.data;
+  var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
+    el: "#app"
+  });
+  var feed = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
+    el: '#vue-feed'
+  });
 });
 
 /***/ }),
@@ -31778,6 +31799,29 @@ var render = function() {
             staticClass: "flex flex-row space-x-1 justify-evenly items-center"
           },
           [
+            _c("div", { staticClass: "notifications" }, [
+              _c(
+                "a",
+                {
+                  staticClass:
+                    "px-2 bg-white border shadow-2xl rounded-md flex justify-center items-center my-1 hover:border-logo-red",
+                  attrs: {
+                    href: "/u/" + this.$currentProfile.username,
+                    title: "Profile",
+                    type: "button"
+                  }
+                },
+                [
+                  _c("img", {
+                    staticClass: "w-10 h-10 ",
+                    attrs: { src: this.$currentProfile.profileImage.url }
+                  }),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(this.$currentProfile.username))])
+                ]
+              )
+            ]),
+            _vm._v(" "),
             _c(
               "div",
               { staticClass: "notifications" },
@@ -32690,11 +32734,28 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c("div", { staticClass: "px-4 py-2" }, [
-          _c("h2", [_vm._v(_vm._s(_vm.post.title))]),
-          _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(_vm.post.body))])
-        ]),
+        _c(
+          "div",
+          { staticClass: "px-4 py-2" },
+          [
+            _c("h2", [_vm._v(_vm._s(_vm.post.title))]),
+            _vm._v(" "),
+            _c("p", [_vm._v(_vm._s(_vm.post.body))]),
+            _vm._v(" "),
+            _vm._l(_vm.post.images, function(image) {
+              return _c(
+                "div",
+                {
+                  key: image.id,
+                  staticClass: "w-full h-full",
+                  attrs: { image: image }
+                },
+                [_c("img", { attrs: { src: image.url, alt: image.name } })]
+              )
+            })
+          ],
+          2
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "flex flex-row justify-evenly border-t" }, [
           _c("div", { staticClass: "flex place-items-center" }, [
@@ -32897,7 +32958,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "hidden space-y-2 border-t-2 pt-4 pb-2" }, [
+    return _c("div", { staticClass: "space-y-2 border-t-2 pt-4 pb-2" }, [
       _c(
         "div",
         { staticClass: "flex justify-between items-center space-x-2" },

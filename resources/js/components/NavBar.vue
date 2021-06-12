@@ -55,6 +55,19 @@
         </a>
       </div>
       <div class="flex flex-row space-x-1 justify-evenly items-center">
+        <!-- ````````````````/Profile start````````````````  -->
+        <div class="notifications">
+          <a
+            v-bind:href="'/u/'+this.$currentProfile.username"
+            title="Profile"
+            class="px-2 bg-white border shadow-2xl rounded-md flex justify-center items-center my-1 hover:border-logo-red"
+            type="button"
+          >
+            <img class="w-10 h-10 " v-bind:src="this.$currentProfile.profileImage.url">
+            <p>{{ this.$currentProfile.username }}</p>
+          </a>
+        </div>
+
         <!-- ````````````````/Notifications start````````````````  -->
         <div class="notifications">
           <button

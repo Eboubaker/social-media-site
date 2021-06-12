@@ -15,7 +15,7 @@ class CustomScopes implements Scope
      * @var string[]
      */
     protected $extensions = [
-        'TreeDelete', 
+        'TreeDelete',
         'TreeRestore',
         'TreeRestoreCascaded',
         'TreeForceDelete',
@@ -59,7 +59,7 @@ class CustomScopes implements Scope
         $builder->macro('treeDelete', function (Builder $builder) {
             return $builder
                 ->cursor()
-                ->each(function($model){
+                ->each(function ($model) {
                     $model->delete();
                 });
         });
@@ -68,13 +68,12 @@ class CustomScopes implements Scope
     protected function addTreeForceDelete(Builder $builder)
     {
         $builder->macro('treeForceDelete', function (Builder $builder) {
-            if($builder->getModel()->canBeSoftDeleted())
-            {
-                return $builder->cursor()->each(function($model){
-                    $model->forceDelete();
+            if ($builder->getModel()->canBeSoftDeleted()) {
+                return $builder->cursor()->each(function ($model) {
+                    $model->doForceDelete();
                 });
-            }else{
-                return $builder->cursor()->each(function($model){
+            } else {
+                return $builder->cursor()->each(function ($model) {
                     $model->delete();
                 });
             }
@@ -85,14 +84,12 @@ class CustomScopes implements Scope
     {
         $builder->macro('cascadeDeleteRelation', function (Builder $builder, $relatedInstance, string $relation) {
             $parent = $builder->getModel();
-            if($parent->forceDeleting())
-            {
+            if ($parent->forceDeleting()) {
                 return $parent->{$relation}()->includeTrashed()->treeForceDelete();
-            }else if($relatedInstance->canBeSoftDeleted())
-            {
+            } elseif ($relatedInstance->canBeSoftDeleted()) {
                 return $parent->{$relation}()
                 ->cursor()
-                ->each(function($model){
+                ->each(function ($model) {
                     $model->update(['reason_deleted' => REASON_CASCADE]);
                     $model->delete();
                 });
@@ -109,8 +106,7 @@ class CustomScopes implements Scope
     protected function addTreeRestoreCascaded(Builder $builder)
     {
         $builder->macro('treeRestoreCascaded', function (Builder $builder) {
-            if($builder->getModel()->canBeSoftDeleted())
-            {
+            if ($builder->getModel()->canBeSoftDeleted()) {
                 return $builder->where('reason_deleted', REASON_CASCADE)->treeRestore();
             }
             return $builder;
@@ -119,12 +115,11 @@ class CustomScopes implements Scope
     protected function addTreeRestore(Builder $builder)
     {
         $builder->macro('treeRestore', function (Builder $builder) {
-            if($builder->getModel()->canBeSoftDeleted())
-            {
+            if ($builder->getModel()->canBeSoftDeleted()) {
                 return $builder
                 ->onlyIncludeTrashed()
                 ->cursor()
-                ->each(function($model){
+                ->each(function ($model) {
                     $model->restore();
                     $model->update(["reason_deleted" => null]);
                 });
@@ -136,8 +131,7 @@ class CustomScopes implements Scope
     protected function addIncludeTrashed(Builder $builder)
     {
         $builder->macro('includeTrashed', function (Builder $builder) {
-            if($builder->getModel()->canBeSoftDeleted())
-            {
+            if ($builder->getModel()->canBeSoftDeleted()) {
                 return $builder->withTrashed();
             }
             return $builder;
@@ -147,13 +141,10 @@ class CustomScopes implements Scope
     protected function addOnlyIncludeTrashed(Builder $builder)
     {
         $builder->macro('onlyIncludeTrashed', function (Builder $builder) {
-            if($builder->getModel()->canBeSoftDeleted())
-            {
+            if ($builder->getModel()->canBeSoftDeleted()) {
                 return $builder->onlyTrashed();
             }
             return $builder;
         });
     }
-
-    
 }

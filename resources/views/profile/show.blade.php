@@ -189,7 +189,7 @@
                 <li>
                   <feed class="space-y-4"></feed>
                   <!--second tweet-->
-                  {{-- <article class="border rounded-lg mt-6">
+                  <article class="border rounded-lg mt-6">
                     <div class="flex flex-shrink-0 p-4 pb-0">
                       <a href="#" class="flex-shrink-0 group block">
                         <div class="flex items-center">
@@ -293,7 +293,7 @@
                       </div>
                     </div>
                     <hr class="border-gray-800" />
-                  </article> --}}
+                  </article>
                 </li>
               </ul>
             </section>
