@@ -104,7 +104,10 @@ Route::post('/wapi/feed', [FeedController::class, 'wapiIndex']);
 Route::get('/', [HomeController::class, 'landing']);
 
 
-
+# Test
+Route::get('/profile',function(){
+    return view("profile.show");
+});
 
 
 
