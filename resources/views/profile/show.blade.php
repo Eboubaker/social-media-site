@@ -34,8 +34,8 @@
       </div> --}}
       <div class="pt-16">
         <main role="main">
-          <div class="flex flex-col items-start w-1/2 bg-white mx-auto">
-            <div class="px-4 py-2">
+          <div class="flex flex-col items-start py-2 w-1/2 bg-white mx-auto">
+            {{-- <div class="px-4 py-2">
                 <a
                     href
                     class="text-2xl font-medium rounded-full border hover:border-logo-red hover:text-logo-red float-right "
@@ -48,7 +48,7 @@
                     </g>
                     </svg>
                 </a>
-            </div>
+            </div> --}}
             <section class="w-10/12 mx-auto " >
               <!--Content (Center)-->
               <!-- Nav back-->
@@ -201,7 +201,7 @@
                             />
                           </div>
                           <div class="ml-3">
-                            <p class="text-base leading-6 font-medium text-white">
+                            <p class="text-base leading-6 font-medium ">
                               Sonali Hirave
                               <span
                                 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150"
@@ -213,7 +213,7 @@
                     </div>
 
                     <div class="pl-16">
-                      <p class="text-base width-auto font-medium text-white flex-shrink">
+                      <p class="text-base width-auto font-medium  flex-shrink">
                         Day 07 of the challenge
                         <a href="#" class="text-blue-400">#100DaysOfCode</a>
                         I was wondering what I can do with
@@ -241,7 +241,7 @@
 
                       <div class="flex items-center py-4">
                         <div
-                          class="flex-1 flex items-center text-white text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out"
+                          class="flex-1 flex items-center  text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out"
                         >
                           <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
                             <g>
@@ -253,7 +253,7 @@
                           12.3 k
                         </div>
                         <div
-                          class="flex-1 flex items-center text-white text-xs text-gray-400 hover:text-green-400 transition duration-350 ease-in-out"
+                          class="flex-1 flex items-center  text-xs text-gray-400 hover:text-green-400 transition duration-350 ease-in-out"
                         >
                           <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
                             <g>
@@ -265,7 +265,7 @@
                           14 k
                         </div>
                         <div
-                          class="flex-1 flex items-center text-white text-xs text-gray-400 hover:text-red-600 transition duration-350 ease-in-out"
+                          class="flex-1 flex items-center  text-xs text-gray-400 hover:text-red-600 transition duration-350 ease-in-out"
                         >
                           <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
                             <g>
@@ -277,7 +277,7 @@
                           14 k
                         </div>
                         <div
-                          class="flex-1 flex items-center text-white text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out"
+                          class="flex-1 flex items-center  text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out"
                         >
                           <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
                             <g>

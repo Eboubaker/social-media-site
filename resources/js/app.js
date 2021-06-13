@@ -16,7 +16,10 @@ window.Vue = Vue;
 Vue.component("feed", require("./components/Feed.vue").default);
 Vue.component("nav-bar", require("./components/NavBar.vue").default);
 Vue.component("post", require("./components/Post.vue").default);
-Vue.component("profile-type",require("./components/SocialBuisnessAccount.vue").default);
+Vue.component(
+  "profile-type",
+  require("./components/SocialBuisnessAccount.vue").default
+);
 Vue.component("play-ground", require("./components/PlayGround.vue").default);
 Vue.component("creat-post", require("./components/CreatPost.vue").default);
 Vue.component("posts-component", require("./components/Posts.vue").default);
@@ -36,14 +39,20 @@ Vue.component("posts-component", require("./components/Posts.vue").default);
 //   },
 // });
 
-axios.post('/wapi/profile/current')
-  .then(res =>
-  {
-    Vue.prototype.$currentProfile = res.data.data;
-    var app = new Vue({
-      el: "#app",
-    });
-    var feed = new Vue({
-      el: '#vue-feed'
-    });
+var app = new Vue({
+  el: "#app",
+});
+
+var feed = new Vue({
+  el: "#vue-feed",
+});
+
+axios.post("/wapi/profile/current").then((res) => {
+  Vue.prototype.$currentProfile = res.data.data;
+  var app = new Vue({
+    el: "#g-app",
   });
+  var feed = new Vue({
+    el: "#vue-feed",
+  });
+});

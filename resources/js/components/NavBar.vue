@@ -50,13 +50,14 @@
           class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
           href="#"
         >
-          <span class="material-icons">trending_up</span>
-          <span class>Following</span>
+          <span class="material-icons">local_grocery_store</span>
+          <span class>Marketplace</span>
         </a>
       </div>
       <div class="flex flex-row space-x-1 justify-evenly items-center">
         <!-- ````````````````/Profile start````````````````  -->
-        <div class="notifications">
+
+        <!-- <div class="profile">
           <a
             v-bind:href="'/u/'+this.$currentProfile.username"
             title="Profile"
@@ -66,7 +67,7 @@
             <img class="w-10 h-10 " v-bind:src="this.$currentProfile.profileImage.url">
             <p>{{ this.$currentProfile.username }}</p>
           </a>
-        </div>
+        </div>-->
 
         <!-- ````````````````/Notifications start````````````````  -->
         <div class="notifications">
@@ -147,6 +148,18 @@
           <Settings v-if="settingOpen" v-on-clickaway="hide" :user="user" />
         </div>
         <!-- ````````````````/Settings end````````````````  -->
+
+        <!-- ````````````````/Profile start````````````````  -->
+        <!-- <div class="Profile flex-none">
+          <a
+            href="#"
+            class="w-28 bg-white border rounded-full flex justify-between items-center space-x-1 my-1 hover:text-logo-red hover:border-logo-red"
+          >
+            <img class="w-10 h-10 rounded-full" src="/img/150x150.png" />
+            <span>abdelhak</span>
+          </a>
+        </div> -->
+        <!-- ````````````````/Profile end````````````````  -->
 
         <!-- ````````````````/Menu start````````````````  -->
         <div class="Menu md:hidden">

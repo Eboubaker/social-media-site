@@ -187,7 +187,7 @@
           </div>
           <div class="col-start-2 col-span-3 space-x-1 ml-4">
             <a class="font-semibold text-sm hover:underline" href="#">Like</a>
-            <a class="font-semibold text-sm hover:underline" href="#">Replay</a>
+            <a class="font-semibold text-sm hover:underline" href="#">Reply</a>
             <a class="text-sm hover:underline" href="#">1h</a>
           </div>
         </div>

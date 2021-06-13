@@ -4710,6 +4710,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -5526,7 +5539,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      user: [],
+      loading: false
+    };
+  },
   methods: {
     logout: function logout() {
       axios.post("/en/logout").then(function (res) {
@@ -5739,13 +5763,19 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.component("posts-component", __webpack_
 //   },
 // });
 
-axios.post('/wapi/profile/current').then(function (res) {
+var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
+  el: "#app"
+});
+var feed = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
+  el: "#vue-feed"
+});
+axios.post("/wapi/profile/current").then(function (res) {
   vue__WEBPACK_IMPORTED_MODULE_1__.default.prototype.$currentProfile = res.data.data;
   var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-    el: "#app"
+    el: "#g-app"
   });
   var feed = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-    el: '#vue-feed'
+    el: "#vue-feed"
   });
 });
 
@@ -30638,7 +30668,7 @@ var render = function() {
                     }
                   ],
                   staticClass:
-                    "w-full rounded text-lg focus:ring-logo-red focus:border-logo-red",
+                    "w-full mb-2 rounded text-lg focus:ring-logo-red focus:border-logo-red",
                   attrs: {
                     type: "text",
                     name: "title",
@@ -31799,29 +31829,6 @@ var render = function() {
             staticClass: "flex flex-row space-x-1 justify-evenly items-center"
           },
           [
-            _c("div", { staticClass: "notifications" }, [
-              _c(
-                "a",
-                {
-                  staticClass:
-                    "px-2 bg-white border shadow-2xl rounded-md flex justify-center items-center my-1 hover:border-logo-red",
-                  attrs: {
-                    href: "/u/" + this.$currentProfile.username,
-                    title: "Profile",
-                    type: "button"
-                  }
-                },
-                [
-                  _c("img", {
-                    staticClass: "w-10 h-10 ",
-                    attrs: { src: this.$currentProfile.profileImage.url }
-                  }),
-                  _vm._v(" "),
-                  _c("p", [_vm._v(_vm._s(this.$currentProfile.username))])
-                ]
-              )
-            ]),
-            _vm._v(" "),
             _c(
               "div",
               { staticClass: "notifications" },
@@ -32120,10 +32127,10 @@ var staticRenderFns = [
           },
           [
             _c("span", { staticClass: "material-icons" }, [
-              _vm._v("trending_up")
+              _vm._v("local_grocery_store")
             ]),
             _vm._v(" "),
-            _c("span", {}, [_vm._v("Following")])
+            _c("span", {}, [_vm._v("Marketplace")])
           ]
         )
       ]
@@ -33039,7 +33046,7 @@ var staticRenderFns = [
               staticClass: "font-semibold text-sm hover:underline",
               attrs: { href: "#" }
             },
-            [_vm._v("Replay")]
+            [_vm._v("Reply")]
           ),
           _vm._v(" "),
           _c(
@@ -33656,19 +33663,36 @@ var render = function() {
         _c(
           "div",
           {
-            staticClass: "py-1 space-y-1 overflow-auto overscroll-contain",
+            staticClass:
+              "py-1 space-y-1 divide-y overflow-auto overscroll-contain",
             attrs: { role: "none" }
           },
           [
+            _c(
+              "a",
+              {
+                staticClass:
+                  "flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+                attrs: {
+                  href: "/u/" + this.$currentProfile.username,
+                  role: "menuitem"
+                }
+              },
+              [
+                _c("img", {
+                  staticClass: "w-12 h-12 rounded-full",
+                  attrs: { src: this.$currentProfile.profileImage.url, alt: "" }
+                }),
+                _vm._v(" "),
+                _c("div", [
+                  _c("p", { staticClass: "text-xl font-medium" }, [
+                    _vm._v(_vm._s(this.$currentProfile.username))
+                  ])
+                ])
+              ]
+            ),
+            _vm._v(" "),
             _vm._m(0),
-            _vm._v(" "),
-            _vm._m(1),
-            _vm._v(" "),
-            _vm._m(2),
-            _vm._v(" "),
-            _vm._m(3),
-            _vm._v(" "),
-            _c("hr", { staticClass: "my-2" }),
             _vm._v(" "),
             _c("div", { staticClass: "flex-auto w-full px-1" }, [
               _c(
@@ -33697,84 +33721,49 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass:
-          "flex flex-row items-center border-b space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900",
-        attrs: { href: "#", role: "menuitem" }
-      },
-      [
-        _c("img", {
-          staticClass: "w-12 h-12 rounded-full",
-          attrs: { src: "/img/150x150.png", alt: "" }
-        }),
-        _vm._v(" "),
-        _c("div", [
-          _c("p", { staticClass: "text-xl font-medium" }, [_vm._v("Abdelhak")])
-        ])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass:
-          "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
-        attrs: { href: "#" }
-      },
-      [
-        _c("span", { staticClass: "material-icons" }, [
-          _vm._v("account_circle")
-        ]),
-        _vm._v(" "),
-        _c("p", [_vm._v("Account Parameter")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass:
-          "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
-        attrs: { href: "#" }
-      },
-      [
-        _c("span", { staticClass: "material-icons" }, [
-          _vm._v("account_circle")
-        ]),
-        _vm._v(" "),
-        _c("p", [_vm._v("Apperance")])
-      ]
-    )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        staticClass:
-          "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
-        attrs: { href: "#" }
-      },
-      [
-        _c("span", { staticClass: "material-icons" }, [
-          _vm._v("account_circle")
-        ]),
-        _vm._v(" "),
-        _c("p", [_vm._v("Apperance")])
-      ]
-    )
+    return _c("div", [
+      _c(
+        "a",
+        {
+          staticClass:
+            "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
+          attrs: { href: "#" }
+        },
+        [
+          _c("span", { staticClass: "material-icons" }, [_vm._v("settings")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("Settings")])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass:
+            "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
+          attrs: { href: "#" }
+        },
+        [
+          _c("span", { staticClass: "material-icons" }, [_vm._v("palette")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("Apperance")])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass:
+            "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
+          attrs: { href: "#" }
+        },
+        [
+          _c("span", { staticClass: "material-icons" }, [_vm._v("info")]),
+          _vm._v(" "),
+          _c("p", [_vm._v("About")])
+        ]
+      )
+    ])
   }
 ]
 render._withStripped = true

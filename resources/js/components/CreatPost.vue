@@ -57,7 +57,7 @@
             <input
               v-model="form.title"
               type="text"
-              class="w-full rounded text-lg focus:ring-logo-red focus:border-logo-red"
+              class="w-full mb-2 rounded text-lg focus:ring-logo-red focus:border-logo-red"
               name="title"
               id="title"
               placeholder="Post title" />
