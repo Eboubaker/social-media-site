@@ -11,7 +11,7 @@
                 {{ comment.body }}
                 </p>
             </div> 
-            <div class="space-x-1 ml-4">
+            <div class="space-x-1 ml-2">
                 <svg v-on:click="this.unlike" v-if="this.comment.is_liked" class="inline-block w-5 h-5 cursor-pointer fill-current transition-all text-red-600 hover:text-red-500" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
                 <svg v-on:click="this.like" v-else class="inline-block w-5 h-5 cursor-pointer fill-current text-gray-500 transition-all duration-200 hover:text-red-500" viewBox="0 0 24 24"><path d="M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"/></svg>
                 <a class="font-semibold text-sm hover:underline cursor-pointer" v-on:click="this.showReplies">Reply</a>
@@ -21,7 +21,7 @@
                 <p v-if="this.comment.replies_count > 0" class="ml-2 inline-block text-sm font-light tracking-tight">{{ this.pluralize('replies', this.comment.replies_count, true) }}</p>
                 <div class="my-1"></div>
                 <Comment v-for="reply in comment.replies" :post="post" :comment="reply" :level="level+1" :key="reply.id"/>
-                <a v-on:click="!loadingReplies ? loadMoreReplies() : null" v-if="comment.replies_count > 0" v-bind:class="this.loadingComments ? 'cursor-wait' : 'cursor-pointer'" class="hover:underline mt-1 mr-auto">View More Replies...<svg v-if="this.loadingReplies" class="inline-block mx-2 mt-1 text-gray-600 w-5 h-5 stroke-current" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a"><stop stop-color="#000" stop-opacity="0" offset="0%"/><stop stop-color="#111" stop-opacity=".631" offset="63.146%"/><stop stop-color="#222" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)"><path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2"> <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></path><circle fill="#000" cx="36" cy="18" r="1"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></circle></g></g></svg></a>
+                <a v-on:click="!loadingReplies ? loadMoreReplies() : null" v-if="comment.replies_count > comment.replies.length" v-bind:class="this.loadingReplies ? 'cursor-wait' : 'cursor-pointer'" class="hover:underline mt-1 mr-auto">View More Replies...<svg v-if="this.loadingReplies" class="inline-block mx-2 mt-1 text-gray-600 w-5 h-5 stroke-current" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a"><stop stop-color="#000" stop-opacity="0" offset="0%"/><stop stop-color="#111" stop-opacity=".631" offset="63.146%"/><stop stop-color="#222" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)"><path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2"> <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></path><circle fill="#000" cx="36" cy="18" r="1"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></circle></g></g></svg></a>
                 <div class="my-1"></div>
                 <div v-if="replyOpen" class="flex justify-between items-center space-x-2 my-2">
                     <img class="w-7 h-7 rounded-full" v-bind:src="$currentProfile.profileImage.url" />
@@ -62,10 +62,14 @@ export default {
             replyOpen: false,
             loadingReplies: false,
             callbacks: [],
+            attachements : []
         }
     },
     created(){
-        // console.log(this.comment);
+        if(!this.comment.replies)
+        {
+            this.comment.replies = [];
+        }
     },
     updated: function () {
         this.$nextTick(function () {
@@ -116,7 +120,8 @@ export default {
         },
         sendReply: function(){
             axios.post('/r/'+this.comment.id+'/reply',{
-                body: this.reply
+                body: this.reply,
+                attachements : this.attachements
             })
             .then(res => {
                 console.log(res)

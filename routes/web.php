@@ -100,6 +100,8 @@ Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->
 Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 
 Route::post('/p/{post}/comments', [PostController::class, 'loadComments'])->name('posts.loadComments');
+Route::post('/r/{comment}/replies', [CommentController::class, 'loadReplies'])->name('comments.loadReplies');
+
 #endregion
 
 
