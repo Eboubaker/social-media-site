@@ -3879,10 +3879,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       reply: '',
       replyOpen: false,
       loadingReplies: false,
-      callbacks: []
+      callbacks: [],
+      attachements: []
     };
   },
-  created: function created() {// console.log(this.comment);
+  created: function created() {
+    if (!this.comment.replies) {
+      this.comment.replies = [];
+    }
   },
   updated: function updated() {
     this.$nextTick(function () {
@@ -3949,7 +3953,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var _this2 = this;
 
       axios.post('/r/' + this.comment.id + '/reply', {
-        body: this.reply
+        body: this.reply,
+        attachements: this.attachements
       }).then(function (res) {
         console.log(res);
         _this2.reply = '';
@@ -4259,12 +4264,24 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     var data = {
       posts: [],
       loading: false,
-      profile: null
+      profile: null,
+      sortBy: 'best' // possible value: [best,hot,top,new,active]
+
     };
     var arr = window.location.pathname.split('/');
     if (arr[1] === 'u') data.profile = arr[2];
     console.log('data');
     return data;
+  },
+  watch: {
+    sortBy: {
+      handler: function handler(val, oldVal) {
+        if (val !== oldVal) {
+          this.posts = [];
+          this.fetchData();
+        }
+      }
+    }
   },
   created: function created() {
     window.fetchData = this.fetchData;
@@ -4285,9 +4302,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       if (!this.loading) {
         this.loading = true;
-        var url = this.profile ? "/wapi/feed?skip=".concat(this.posts.length, "&username=").concat(this.profile) : "/wapi/feed?skip=".concat(this.posts.length);
-        axios.post(url, {
-          parameters: {}
+        axios.post('/wapi/feed', {
+          username: this.profile,
+          skip: this.posts.length,
+          sortBy: this.sortBy
         }).then(function (res) {
           var _this$posts;
 
@@ -31480,7 +31498,7 @@ var render = function() {
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "space-x-1 ml-4" },
+        { staticClass: "space-x-1 ml-2" },
         [
           this.comment.is_liked
             ? _c(
@@ -31598,14 +31616,12 @@ var render = function() {
             })
           }),
           _vm._v(" "),
-          _vm.comment.replies_count > 0
+          _vm.comment.replies_count > _vm.comment.replies.length
             ? _c(
                 "a",
                 {
                   staticClass: "hover:underline mt-1 mr-auto",
-                  class: this.loadingComments
-                    ? "cursor-wait"
-                    : "cursor-pointer",
+                  class: this.loadingReplies ? "cursor-wait" : "cursor-pointer",
                   on: {
                     click: function($event) {
                       !_vm.loadingReplies ? _vm.loadMoreReplies() : null
@@ -34228,7 +34244,7 @@ var render = function() {
               staticClass: "flex text-gray-600 text-sm font-bold tracking-tight"
             },
             [
-              this.post.comments_count > 5
+              this.post.comments_count > this.post.comments.length
                 ? _c(
                     "a",
                     {
