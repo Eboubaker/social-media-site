@@ -9,7 +9,9 @@ use App\Models\Like;
 use App\Models\Post;
 use App\Models\PostView;
 use App\Models\Profile;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -42,14 +44,14 @@ class FeedController extends Controller
         //     select * from `users`
         // SQL;
         // TODO: convert this HUGE query into a text query
+        /** @var Builder|QueryBuilder $query */
         $query = Post::query()
-        ->select(['posts.*', 
+        ->select(['posts.*',
             DB::raw("COALESCE(pv.viewed_count,0) as viewed_count"), 
             DB::raw("(select exists(select * from likes where likes.likeable_id=posts.id and likes.likeable_type='App\\\\Models\\\\Post' and likes.liker_id=$current_id)) as is_liked"),
-            DB::raw("(select count(*) from `likes` where `posts`.`id` = `likes`.`likeable_id` and `likes`.`likeable_type` = 'App\\\\Models\\\\Post' and `likes`.`deleted_at` is null) as `likes_count`"),
-            DB::raw("(select count(*) from `comments` where `posts`.`id` = `comments`.`commentable_id` and `comments`.`commentable_type` = 'App\\\\Models\\\\Post' and `comments`.`deleted_at` is null) as `comments_count`"),
-            DB::raw("(select count(*) from `post_views` where `posts`.`id` = `post_views`.`post_id`) as `views_count`"),
-            DB::raw("get_rating((Select `comments_count`), (Select `likes_count`),(Select `views_count`)) as rating")
+            DB::raw("@likes_count:=(select count(*) from `likes` where `posts`.`id` = `likes`.`likeable_id` and `likes`.`likeable_type` = 'App\\\\Models\\\\Post' and `likes`.`deleted_at` is null) as `likes_count`"),
+            DB::raw("@comments_count:=(select count(*) from `comments` where `posts`.`id` = `comments`.`commentable_id` and `comments`.`commentable_type` = 'App\\\\Models\\\\Post' and `comments`.`deleted_at` is null) as `comments_count`"),
+            DB::raw("@views_count:=(select count(*) from `post_views` where `posts`.`id` = `post_views`.`post_id`) as `views_count`"),
         ])
         ->withCount('likes', 'comments', 'views')
         ->leftJoin('post_views as pv', function($join) use ($current_id){
@@ -57,8 +59,6 @@ class FeedController extends Controller
         })
         ->with(['videos', 'images', 'pageable', 'author', 'author.profileImage', 'author.account'])
         ;
-        
-
         if($profilePage = ! empty(request('username')))
         {
             $p = DB::table('profiles')->where('username', request('username'))->first('id');
@@ -68,16 +68,36 @@ class FeedController extends Controller
             }
             $posts = $query->where('author_id', $p->id)->orderByDesc('created_at');
         }else{
-            $currentProfilePosts = $query->clone()->where('author_id', $current_id)->where('pv.viewed_count', 0)->orderByDesc('created_at');
-            $query->orderByDesc('rating');
-            $communitiesPosts = $query->clone()->where('pageable_type', 'App\Models\Community');
-            $followingsPosts = $query->clone()->whereIn('author_id', Profile::current()->followings()->select('profiles_followers.profile_id'));
-            // after this the query will be as big as 4kb of text :((
-            $posts = $currentProfilePosts->union($followingsPosts)->union($communitiesPosts);
+            $sortBy = request('sortBy');
+            $orderBy = "rating_$sortBy";
+            if($sortBy === 'hot')
+            {
+                $query->addSelect(DB::raw("(@likes_count+@comments_count+0E0)/(now()-posts.created_at) as rating_$sortBy"));
+                // DB::raw("@rating:=get_rating((Select `comments_count`), (Select `likes_count`),(Select `views_count`)) as rating_top")
+            }else if($sortBy === 'best')
+            {
+                $query->addSelect(DB::raw("(@likes_count-@views_count) as rating_$sortBy"));
+            }else if($sortBy === 'active')
+            {
+                $query->addSelect(DB::raw("((@comments_count+0E0)/(@likes_count+1)) as rating_$sortBy"));
+            }else if($sortBy === 'top')
+            {
+                $sortBy = 'likes_count';
+            }else //* if sortBy = new  or anything else
+            { 
+                $orderBy = 'created_at';
+            }
+            // $currentProfilePosts = $query->clone()->addSelect(DB::raw('1 as sortKey'))->where('author_id', $current_id)->where('pv.viewed_count', 0)->orderByRaw('sortKey, created_at');
+            // $query->orderByRaw("sortKey, rating");
+            $communitiesPosts = $query->clone()->addSelect(DB::raw('2 as sortKey'))->where('pageable_type', 'App\Models\Community');
+            $followingsPosts = $query->clone()->addSelect(DB::raw('3 as sortKey'))->whereIn('author_id', Profile::current()->followings()->select('profiles_followers.profile_id'));
+            //! after this the query will be as big as 4kb of text :((
+            $posts = $followingsPosts->union($communitiesPosts)->orderByRaw("sortKey, $orderBy desc");
         }
         
-        $posts = $posts->skip(request('skip') ?: 0)
+        $posts = $posts
             ->limit(10)
+            ->skip(request('skip') ?: 0)
             ->get()
             ->each(function (Post $post) use($current_id) { 
                 $post->setRelation('comments', tap($post->comments()
