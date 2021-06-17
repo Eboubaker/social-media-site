@@ -124,7 +124,7 @@ class CommentController extends Controller
         throw new HttpInternalServerErrorException;
     }
 
-    public function loadComments(Comment $comment)
+    public function loadReplies(Comment $comment)
     {
         $post = $comment->post;
         if($post->pageable instanceof Community && ! $post->pageable->allowsCurrent(config('permissions.communities.can-view-posts'))
@@ -135,7 +135,7 @@ class CommentController extends Controller
         }
         $skip = request('skip') ?: 0;
         $limit = request('limit') ?: 5;
-        $comments = $post->comments()->with(['commentor', 'images', 'videos'])->withCount(['likes', 'replies'])->skip($skip)->limit($limit)->get();
+        $comments = $comment->replies()->with(['commentor', 'images', 'videos'])->withCount(['likes', 'replies'])->skip($skip)->limit($limit)->get();
         return CommentResource::collection($comments);
     }
 
