@@ -50,24 +50,12 @@
           class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
           href="#"
         >
-          <span class="material-icons">local_grocery_store</span>
-          <span class>Marketplace</span>
+          <span class="material-icons">trending_up</span>
+          <span class>Following</span>
         </a>
       </div>
       <div class="flex flex-row space-x-1 justify-evenly items-center">
-        <!-- ````````````````/Profile start````````````````  -->
-
-        <!-- <div class="profile">
-          <a
-            v-bind:href="'/u/'+this.$currentProfile.username"
-            title="Profile"
-            class="px-2 bg-white border shadow-2xl rounded-md flex justify-center items-center my-1 hover:border-logo-red"
-            type="button"
-          >
-            <img class="w-10 h-10 " v-bind:src="this.$currentProfile.profileImage.url">
-            <p>{{ this.$currentProfile.username }}</p>
-          </a>
-        </div>-->
+        
 
         <!-- ````````````````/Notifications start````````````````  -->
         <div class="notifications">
@@ -142,24 +130,12 @@
             class="w-10 h-10 px-2 bg-white border shadow-2xl rounded-full flex justify-center items-center my-1 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red"
             type="button"
           >
-            <span class="material-icons w-7 h-7">arrow_drop_down_circle</span>
+            <span style="margin-top: 3px" class="material-icons w-7 h-7">arrow_drop_down_circle</span>
           </button>
           <!-- Settings Block -->
           <Settings v-if="settingOpen" v-on-clickaway="hide" :user="user" />
         </div>
         <!-- ````````````````/Settings end````````````````  -->
-
-        <!-- ````````````````/Profile start````````````````  -->
-        <!-- <div class="Profile flex-none">
-          <a
-            href="#"
-            class="w-28 bg-white border rounded-full flex justify-between items-center space-x-1 my-1 hover:text-logo-red hover:border-logo-red"
-          >
-            <img class="w-10 h-10 rounded-full" src="/img/150x150.png" />
-            <span>abdelhak</span>
-          </a>
-        </div> -->
-        <!-- ````````````````/Profile end````````````````  -->
 
         <!-- ````````````````/Menu start````````````````  -->
         <div class="Menu md:hidden">

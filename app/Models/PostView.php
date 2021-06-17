@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * App\Models\PostView
  *
  * @property int $id
+ * @property int $viewed_count
  * @property int $viewer_id
  * @property int $post_id
  * @property \Illuminate\Support\Carbon|null $viewed_at

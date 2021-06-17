@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProfileResource;
+use App\Http\StatusCodes;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\UnauthorizedException;
@@ -35,7 +37,7 @@ class ProfileController extends Controller
     public function store(Request $request)
     {
         // this profile will be active others will be unactive automatically.
-        Auth::user()->profiles()->create($request->all());
+        Auth::user()->profiles()->create($this->validated($request->all()));
         return redirect('/');
     }
 
@@ -73,7 +75,7 @@ class ProfileController extends Controller
      */
     public function update(Request $request, Profile $profile)
     {
-        $profile->update($request->all());
+        $profile->update($this->validated($request->all()));
         return redirect($profile->url);
     }
 
@@ -85,15 +87,15 @@ class ProfileController extends Controller
      */
     public function destroy(Profile $profile)
     {
-        if (Auth::id() === $profile->account->getKey()) {
-            if (Profile::current_id() === $profile->getKey()) {
-                abort(403, "Profile is active");
+        if (Auth::id() === $profile->user_id) {
+            if (Profile::current()->is($profile) && DB::table('profiles')->where('user_id', Auth::id())->count() <= 1) {
+                abort(StatusCodes::HTTP_NOT_ACCEPTABLE, "YOU ONLY HAVE ONE PROFILE");
             } else {
                 $profile->delete();
                 return redirect('/');
             }
         }
-        abort(401, "UnAuthorized");
+        abort(StatusCodes::HTTP_UNAUTHORIZED);
     }
 
 
@@ -104,5 +106,21 @@ class ProfileController extends Controller
             return redirect('/');
         }
         throw new UnauthorizedException("you don't own this profile");
+    }
+
+
+    public function validated($data)
+    {
+        $validated = Validator::make($data,
+            [
+                'username' => ['required', 'min:3', 'max:255', 'regex:/^[A-Za-z][A-Za-z0-9_]+$/', Rule::unique('profiles', 'username')->ignore(Profile::current_id())],
+            ],[
+                'username.unique' => "Another user is using that username already.",
+                'username.regex' => "username may only contain alpha numeric letters and lowdashes(_), no spaces allowed"
+            ],[
+                
+        ])->validate();
+
+        return $validated;
     }
 }

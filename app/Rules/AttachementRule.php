@@ -22,10 +22,9 @@ class AttachementRule implements Rule
      *
      * @return void
      */
-    public function __construct(Model $pageable)
+    public function __construct()
     {
         $this->models = Collection::make();
-        $this->pageable = $pageable;
         $this->message = "this attachement is not allowed";
     }
 

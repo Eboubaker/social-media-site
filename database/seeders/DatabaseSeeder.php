@@ -20,8 +20,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::transaction(function(){
-            $this->call(FullSeeds::class);
-        });
+        $this->call(SeedByCommunities::class);
     }   
 }

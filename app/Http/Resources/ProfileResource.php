@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Morphs\Profileable;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\MissingValue;
 
 class ProfileResource extends JsonResource
 {
@@ -38,11 +39,12 @@ class ProfileResource extends JsonResource
             'followers_count' => $this->whenLoaded('followers', function () {
                 return $this->followers->count();
             }),
+            'url' => $this->resource->url,
         ];
-        if ( ! isset($resource['followers_count']) && $this->followers_count !== null) {
+        if ($resource['followers_count'] instanceof MissingValue && $this->followers_count !== null) {
             $resource['followers_count'] = $this->followers_count;
         }
-        if ( ! isset($resource['followings_count']) && $this->followings_count !== null) {
+        if ($resource['followings_count'] instanceof MissingValue && $this->followings_count !== null) {
             $resource['followings_count'] = $this->followings_count;
         }
         return $resource;

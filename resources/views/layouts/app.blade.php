@@ -21,7 +21,7 @@
     {{-- <script src="{{asset('js/jQuery.js')}}"></script> --}}
     {{-- <script src="{{asset('js/lightslider.js')}}"></script> --}}
 
-    {{--    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"--}}
+       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 {{--          rel="stylesheet">--}}
 
 </head>
@@ -31,7 +31,17 @@
         @yield('content')
     </div>
     @stack('scripts')
-
+    <script defer>
+        window.addEventListener('load', function(){
+            Vue.prototype.$currentProfile = JSON.parse(`{!! json_encode((new App\Http\Resources\ProfileResource(App\Models\Profile::currentOrNew()))->toResponse(request())->getData()->data) !!}`);
+            var app = new Vue({
+                el: "#app",
+            })
+            var feed = new Vue({
+                el: '#vue-feed',
+            })
+        })
+    </script>
 </body>
 
 </html>

@@ -79,9 +79,9 @@ use Illuminate\Support\Facades\DB;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, 
-    Notifiable, 
-    HasDatabaseNotifications, 
+    use HasFactory,
+    Notifiable,
+    HasDatabaseNotifications,
     MustVerifyPhone,
     SoftDeletes,
 
@@ -105,7 +105,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $with = ['activeProfile'];
+    protected $with = ['activeProfile', 'activeProfile.profileImage'];
 
 
 
@@ -113,7 +113,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public static function boot()
     {
         parent::boot();
-        static::created(function(User $user){
+        static::created(function (User $user) {
             $user->settings()->create();
         });
     }
@@ -201,10 +201,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function owns($profile)
     {
-        if($profile instanceof Profile)
-        {
+        if ($profile instanceof Profile) {
             $profile_id = $profile->getKey();
-        }else{
+        } else {
             $profile_id = $profile;
         }
         return DB::table('profiles')->where('id', $profile_id)->where('user_id', $this->getKey())->exists();

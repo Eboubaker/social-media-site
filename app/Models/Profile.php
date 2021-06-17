@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\DataBase\Eloquent\HasMany as CustomHasMany;
 use App\DataBase\Eloquent\MorphOne;
 use App\Models\Traits\CanComment;
 use App\Models\Traits\CanFollow;
@@ -33,6 +34,7 @@ use Watson\Validating\ValidatingTrait;
  * App\Models\Profile
  *
  * @property string lastName
+ * @property bool is_liked
  * @property User $account
  * @property ProfileSettings $settings
  * @property int $id
@@ -99,12 +101,11 @@ use Watson\Validating\ValidatingTrait;
  */
 class Profile extends Model
 {
-    use HasFactory, 
-    Notifiable, 
-    HasDatabaseNotifications, 
-    SoftDeletes, 
-    ValidatingTrait,
-    ModelTraits, 
+    use HasFactory,
+    Notifiable,
+    HasDatabaseNotifications,
+    SoftDeletes,
+    ModelTraits,
 
     CreatesPosts,
     CreatesCommunities,
@@ -128,66 +129,77 @@ class Profile extends Model
     protected $casts = [
         'active' => 'boolean',
     ];
-
-    protected $rules = [
-        'username' => ['required', 'unique:profiles,username', 'min:3', 'max:255', 'regex:/^[A-Za-z0-9_]+$/'],
-        'user_id' => ['exists:App\Models\User,id']
-    ];
-    protected $validationMessages = [
-        'user_id.exists' => "the linked account does not exist",
-        'username.unique' => "Another user is using that username already.",
-        'username.regex' => "username may only contain alpha numeric letters and lowdashes(_), no spaces allowed"
-    ];
-    protected $validationAttributeNames = [
-        'user_id' => 'The Account'
-    ];
-    protected $throwValidationExceptions = true;
-
+    protected $with = ['profileImage'];
 
     public function __construct($attributes = [])
     {
         parent::__construct($attributes);
         $this->setAttribute('active', $attributes['active'] ?? 1);
     }
+
+    public function getIsLikedAttribute():bool
+    {
+        return $this->likes()->where('liker_id', Profile::current_id())->exists();
+    }
     public static function boot()
     {
         parent::boot();
         // set other profiles active state to false when a new profile is created.
-        static::created(function(Profile $profile){
+        static::created(function (Profile $profile) {
             $user = $profile->account;
-            if($user->profiles()->count() > 1)
-            {
+            if ($user->profiles()->count() > 1) {
                 $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->update(["active" => false]);
             }
             $profile->settings()->create();
+            $profile->data()->create();
         });
         // assert only one active profile per account
-        static::updating(function(Profile $profile){
+        static::updating(function (Profile $profile) {
             $user = $profile->account;
-            if((bool)$profile->active !== (bool)$profile->getOriginal('active') && (bool)$profile->active === true)
-            {
-                if ($user->profiles()->count() <= 1) 
-                {
+            if ((bool)$profile->active !== (bool)$profile->getOriginal('active') && (bool)$profile->active === true) {
+                if ($user->profiles()->count() <= 1) {
                     throw new \Exception("attempting to deactivate profile but the user only has one profile");
                 }
                 $oldActive = $user->profiles()->where('id', '!=', $profile->getKey())->whereActive(true)->first();
-                if ( ! is_null($oldActive)) 
-                {
+                if (! is_null($oldActive)) {
                     $oldActive->update(["active" => false]);
                 }
             }
         });
     }
     
-    #region RELATIONS
-    /**
-     * Should not be used for creating
-     *
-     * @return HasMany
-     */
-    public function communitiesPosts():HasMany
+    public function getFollowingsCountAttribute()
     {
-        return $this->createdPosts()->whereHasMorph('pageable', Community::class);
+        if (isset($this->attributes['followings_count'])) {
+            return $this->attributes['followings_count'];
+        }
+        if ($this->relationLoaded('followings')) {
+            return $this->followings->count();
+        }
+        return $this->followings()->count();
+    }
+    public function getFollowersCountAttribute()
+    {
+        if (isset($this->attributes['followers_count'])) {
+            return $this->attributes['followers_count'];
+        }
+        if ($this->relationLoaded('followers')) {
+            return $this->followers->count();
+        }
+        return $this->followers()->count();
+    }
+
+
+
+
+    #region RELATIONS
+    public function data():HasOne
+    {
+        return $this->hasOne(ProfileData::class);
+    }
+    public function communitiesPosts():CustomHasMany
+    {
+        return $this->createdPosts()->withFixedConstraint('pageable_type', 'App\Models\Community');
     }
     public function profilePosts():MorphMany
     {
@@ -197,9 +209,9 @@ class Profile extends Model
     {
         return $this->views();
     }
-    public function replies():HasMany
+    public function replies():CustomHasMany
     {
-        return $this->comments()->whereHasMorph('commentable', Comment::class);
+        return $this->comments()->withFixedConstraint('commentable_type', 'App\Models\Comment');
     }
     public function account():BelongsTo
     {
@@ -209,30 +221,51 @@ class Profile extends Model
     {
         return $this->morphTo();
     }
-    public function likedPosts()
+    public function likedPosts():CustomHasMany
     {
-        return $this->likes()->whereHasMorph('likeable', Post::class);
+        return $this->likes()->withFixedConstraint('likeable_type', 'App\Models\Post');
     }
-    public function likedComments()
+    public function likedComments():CustomHasMany
     {
-        return $this->likes()->whereHasMorph('likeable', Comment::class);
+        return $this->likes()->withFixedConstraint('likeable_type', 'App\Models\Comment');
     }
 
     public function profileImage():MorphOne
     {
-        return (new MorphOne(Image::query()
-                            , $this
-                            , 'images.imageable_type'
-                            , 'images.imageable_id', 'id'
-                ))->withFixedConstraint('purpose', __FUNCTION__);
+        return (new MorphOne(
+            Image::query(),
+            $this,
+            'images.imageable_type',
+            'images.imageable_id',
+            'id'
+        ))
+        ->withDefault(function(){
+            return new Image([
+                'id' => Image::DEFAULT_PROFILE_PROFILE_IMAGE_ID,
+                'type' => IMAGETYPE_JPEG,
+                'extension' => 'jpeg',
+                'mime' => 'image/jpeg'
+            ]);
+        })
+        ->withFixedConstraint('purpose', __FUNCTION__);
     }
     public function coverImage():MorphOne
     {
-        return (new MorphOne(Image::query()
-                            , $this
-                            , 'images.imageable_type'
-                            , 'images.imageable_id', 'id'
-                ))->withFixedConstraint('purpose', __FUNCTION__);
+        return (new MorphOne(
+            Image::query(),
+            $this,
+            'images.imageable_type',
+            'images.imageable_id',
+            'id'
+        ))->withDefault(function(){
+            return new Image([
+                'id' => Image::DEFAULT_PROFILE_COVER_IMAGE_ID,
+                'type' => IMAGETYPE_JPEG,
+                'extension' => 'jpeg',
+                'mime' => 'image/jpeg'
+            ]);
+        })
+        ->withFixedConstraint('purpose', __FUNCTION__);
     }
     public function communities():BelongsToMany
     {
@@ -253,13 +286,21 @@ class Profile extends Model
      */
     public static function current():Profile|null
     {
-        try{
+        try {
             return Auth::user()->activeProfile ?? null;
-        }catch(\Throwable $e)
-        {
+        } catch (\Throwable $e) {
             report($e);
         }
         return null;
+    }
+    /**
+     * returns the currently logged-in user's active profile, new profile if null
+     *
+     * @return Profile
+     */
+    public static function currentOrNew():Profile
+    {
+        return self::current() ?? new Profile;
     }
     /**
      * returns the id of the currently logged-in user's active profile
@@ -268,10 +309,9 @@ class Profile extends Model
      */
     public static function current_id():int|null
     {
-        try{
+        try {
             return Auth::user()->activeProfile->id ?? null;
-        }catch(\Throwable $e)
-        {
+        } catch (\Throwable $e) {
             report($e);
         }
         return null;
@@ -283,24 +323,22 @@ class Profile extends Model
     }
     public function getUrlAttribute(): string
     {
-        return route('profile.show', $this->getAttribute('username'));
+        return empty($this->getAttribute('username')) ? '' : route('profile.show', $this->getAttribute('username'));
     }
 
 
     public function allows($permission_id, $profile): bool
     {
-        if(empty($permission_id) || empty($profile))
+        if (empty($permission_id) || empty($profile)) {
             return false;
-        if($profile instanceof Profile)
-        {
-            if( ! $profile->exists)
-            {
+        }
+        if ($profile instanceof Profile) {
+            if (! $profile->exists) {
                 return false;
             }
             $profile_id = $profile->getKey();
-        }else{
-            if( ! Profile::where('id', $profile)->exists())
-            {
+        } else {
+            if (! Profile::where('id', $profile)->exists()) {
                 return false;
             }
             $profile_id = $profile;
@@ -310,61 +348,48 @@ class Profile extends Model
         $we_are_friends = $he_follow_me && $i_follow_him;
 
         $settings = $this->settings;
-        if($permission_id === config('permissions.profiles.can-comment'))
-        {
-            if($settings->allow_non_followers_to_comment_on_my_profile_posts)
-            {
+        if ($permission_id === config('permissions.profiles.can-comment')) {
+            if ($settings->allow_non_followers_to_comment_on_my_profile_posts) {
                 return true;
             }
-            if($he_follow_me && $settings->allow_followers_to_comment_on_my_profile_posts)
-            {
+            if ($he_follow_me && $settings->allow_followers_to_comment_on_my_profile_posts) {
                 return true;
             }
-            if($i_follow_him && $settings->allow_followings_to_comment_on_my_profile_posts)
-            {
+            if ($i_follow_him && $settings->allow_followings_to_comment_on_my_profile_posts) {
                 return true;
             }
-            if($we_are_friends && $settings->allow_friends_to_comment_on_my_profile_posts)
-            {
+            if ($we_are_friends && $settings->allow_friends_to_comment_on_my_profile_posts) {
                 return true;
             }
-        }else if($permission_id === config('permissions.profiles.can-view-posts'))
-        {
-            if($settings->allow_non_followers_to_view_my_profile_posts)
-            {
+        } elseif ($permission_id === config('permissions.profiles.can-view-posts')) {
+            if ($settings->allow_non_followers_to_view_my_profile_posts) {
                 return true;
             }
-            if($he_follow_me && $settings->allow_followers_to_view_my_profile_posts)
-            {
+            if ($he_follow_me && $settings->allow_followers_to_view_my_profile_posts) {
                 return true;
             }
-            if($i_follow_him && $settings->allow_followings_to_view_my_profile_posts)
-            {
+            if ($i_follow_him && $settings->allow_followings_to_view_my_profile_posts) {
                 return true;
             }
-            if($we_are_friends && $settings->allow_friends_to_view_my_profile_posts)
-            {
+            if ($we_are_friends && $settings->allow_friends_to_view_my_profile_posts) {
                 return true;
             }
-        }else if($permission_id === config('permissions.profiles.can-follow'))
-        {
-            if($settings->allow_others_to_follow_me)
-            {
+        } elseif ($permission_id === config('permissions.profiles.can-follow')) {
+            if ($settings->allow_others_to_follow_me) {
                 return true;
             }
-            if($i_follow_him && $settings->allow_followings_to_follow_me_back)
-            {
+            if ($i_follow_him && $settings->allow_followings_to_follow_me_back) {
                 return true;
             }
         }
         return false;
     }
     /**
-     * 
+     *
      * Does this community allow this action for the current profile?
-     * 
+     *
      * @param int $permission_id if of the permission
-     * @return true if this community allows the action for the current profile 
+     * @return true if this community allows the action for the current profile
      * @return false if this community does not allow the current profile to do the action
      */
     public function allowsCurrent(int $permission_id): bool

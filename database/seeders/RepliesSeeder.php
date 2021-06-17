@@ -23,8 +23,10 @@ class RepliesSeeder extends Seeder
             foreach(range(1, $comments->count() / 2) as $i)
             {
                 $commentable = $comments->random();
-                $comment = Comment::factory()->make(['commentor_id' => $profiles->random()->getKey()]);
-                
+                $comment = Comment::factory()->make([
+                    'commentor_id' => $profiles->random()->id,
+                    'post_id' => $commentable->post_id,
+                ]);
                 $commentable->comments()->save($comment);
                 $comments->add($comment);
             }

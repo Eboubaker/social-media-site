@@ -13,6 +13,7 @@ use App\Models\Traits\Urlable;
 use App\Rules\PolymorphicRelationExists;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -20,8 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * App\Models\Comment
  *
  * @property Comment|Post $commentable
- * @property Comment|Post $ancestor_commentable
- * @property Comment|Post $ancestorCommentable
+ * @property Post $post
  * @property int $id
  * @property string $uuid62
  * @property int $commentor_id
@@ -80,56 +80,23 @@ class Comment extends Model
     public const CREATED_AT = "created_at";
     public const UPDATED_AT = "updated_at";
     protected $guarded = [];
+    protected $with = ['commentor', 'images', 'videos'];
 
-
-    protected $rules = [
-        'commentor_id' => ['exists:App\Models\Profile,id'],
-        'body' => ['required', 'max:2048'],
-    ];
-    protected $validationMessages = [
-        'commentor_id.exists' => "comment author not found.",
-    ];
-    protected $validationAttributeNames = [
-        'commentable_id' => 'comment location'
-    ];
-    protected $throwValidationExceptions = true;
-
-    public function __construct($atts=[])
+    public function replies()
     {
-        parent::__construct($atts);
-        $this->rules['commentable_id'][] = new PolymorphicRelationExists($this, 'commentable');
+        return $this->comments();
     }
-
-    private $anc_commentable = false;
-
-    public function commentable(): MorphTo
-    {
-        return $this->morphTo();
-    }
-    
     public function commentor()
     {
         return $this->belongsTo(Profile::class, 'commentor_id');
     }
-
-    public function getAncestorCommentableAttribute(): Post
+    public function commentable(): MorphTo
     {
-        if($this->anc_commentable === false)
-        {
-            $nestingLevel = 10;
-            $commentable = $this->commentable;
-            while($nestingLevel-- > 0 && $commentable instanceof Comment)
-            {
-                $commentable = $commentable->commentable;
-            }
-            $this->anc_commentable = $commentable;
-        }
-        return $this->anc_commentable;
+        return $this->morphTo();
     }
-
     public function getUrlAttribute(): string
     {
-        $post = $this->ancestor_commentable;
+        $post = $this->post;
         if($post->pageable instanceof Community)
         {
             return route('community.posts.comments.show', [$post->pageable->name, $post->uuid62, $this->uuid62]);
@@ -137,5 +104,10 @@ class Comment extends Model
         {
             return route('profile.posts.comments.show', [$post->pageable->username, $post->uuid62, $this->uuid62]);
         }
+    }
+
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class);
     }
 }

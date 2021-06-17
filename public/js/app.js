@@ -3792,6 +3792,212 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Comment.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Comment.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'Comment',
+  components: {
+    Comment: Comment
+  },
+  props: {
+    post: {
+      type: Object
+    },
+    comment: {
+      type: Object
+    },
+    level: {
+      type: Number
+    }
+  },
+  data: function data() {
+    return {
+      reply: '',
+      replyOpen: false,
+      loadingReplies: false,
+      callbacks: []
+    };
+  },
+  created: function created() {// console.log(this.comment);
+  },
+  updated: function updated() {
+    this.$nextTick(function () {
+      var _iterator = _createForOfIteratorHelper(this.callbacks),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var callback = _step.value;
+          callback(this);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      this.callbacks = [];
+    });
+  },
+  methods: {
+    loadMoreReplies: function loadMoreReplies() {
+      var _this = this;
+
+      this.loadingReplies = true;
+      axios.post('/r/' + this.comment.id + '/replies?skip=' + this.comment.replies.length + '&limit=10', {
+        skip: this.comment.replies.length
+      }).then(function (res) {
+        var _this$comment$replies;
+
+        console.log(res);
+
+        (_this$comment$replies = _this.comment.replies).push.apply(_this$comment$replies, _toConsumableArray(res.data.data));
+      })["catch"](function (e) {
+        return console.error(e);
+      }).then(function (e) {
+        _this.loadingReplies = false;
+      });
+    },
+    showReplies: function showReplies() {
+      this.replyOpen = !this.replyOpen;
+
+      if (this.replyOpen) {
+        this.callbacks.push(function (instance) {
+          var el = instance.$refs.reply;
+
+          if (typeof jQuery === "function" && el instanceof jQuery) {
+            el = el[0];
+          }
+
+          var rect = el.getBoundingClientRect();
+          rect.top >= 0 && rect.left >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          /* or $(window).height() */
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+          /* or $(window).width() */
+          && instance.$smoothScroll({
+            scrollTo: instance.$refs.reply,
+            offset: -window.innerHeight * .7
+          });
+        });
+      }
+    },
+    sendReply: function sendReply() {
+      var _this2 = this;
+
+      axios.post('/r/' + this.comment.id + '/reply', {
+        body: this.reply
+      }).then(function (res) {
+        console.log(res);
+        _this2.reply = '';
+        if (_this2.comment.replies === undefined) _this2.comment.replies = [];
+
+        _this2.comment.replies.push(res.data);
+
+        _this2.comment.replies_count++;
+      })["catch"](function (e) {
+        return console.error(e);
+      });
+    },
+    like: function like() {
+      var _this3 = this;
+
+      axios.post('/r/' + this.comment.id + '/like').then(function (res) {
+        _this3.comment.is_liked = true;
+        _this3.comment.likes_count++;
+      })["catch"](function (e) {
+        return console.error(e);
+      });
+    },
+    unlike: function unlike() {
+      var _this4 = this;
+
+      axios.post('/r/' + this.comment.id + '/unlike').then(function (res) {
+        _this4.comment.is_liked = false;
+        _this4.comment.likes_count--;
+      })["catch"](function (e) {
+        return console.error(e);
+      });
+    },
+    loadReplies: function loadReplies() {
+      var _this5 = this;
+
+      axios.post('/r/' + this.comment.id + '/replies?skip=' + this.replies.length).then(function (res) {
+        var _this5$replies;
+
+        (_this5$replies = _this5.replies).push.apply(_this5$replies, _toConsumableArray(res.data.data));
+      })["catch"](function (e) {
+        return console.error(e);
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CreatPost.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/CreatPost.vue?vue&type=script&lang=js& ***!
@@ -3809,7 +4015,7 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
@@ -4033,7 +4239,7 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
@@ -4050,22 +4256,26 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     Post: _Post__WEBPACK_IMPORTED_MODULE_0__.default
   },
   data: function data() {
-    return {
-      profile: null,
+    var data = {
       posts: [],
-      loading: false
+      loading: false,
+      profile: null
     };
+    var arr = window.location.pathname.split('/');
+    if (arr[1] === 'u') data.profile = arr[2];
+    console.log('data');
+    return data;
   },
   created: function created() {
-    this.profile = Vue.prototype.$currentProfile;
+    window.fetchData = this.fetchData;
     this.fetchData();
 
     document.body.onscroll = function () {
       var perc = this.scrollY / (document.body.offsetHeight - window.innerHeight);
 
-      if (!this.loading && perc > 0.7) {
-        this.loading = true;
-        this.fetchData();
+      if (perc > 0.7) {
+        console.log(perc);
+        window.fetchData();
       }
     };
   },
@@ -4073,19 +4283,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     fetchData: function fetchData() {
       var _this = this;
 
-      axios.post("/wapi/feed", {
-        parameters: {}
-      }).then(function (res) {
-        var _this$posts;
+      if (!this.loading) {
+        this.loading = true;
+        var url = this.profile ? "/wapi/feed?skip=".concat(this.posts.length, "&username=").concat(this.profile) : "/wapi/feed?skip=".concat(this.posts.length);
+        axios.post(url, {
+          parameters: {}
+        }).then(function (res) {
+          var _this$posts;
 
-        console.log(res);
+          console.log(res);
 
-        (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(res.data.data));
-      })["catch"](function (err) {
-        console.log(err);
-      }).then(function () {
-        return _this.loading = false;
-      });
+          (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(res.data.data));
+        })["catch"](function (err) {
+          console.log(err);
+        }).then(function () {
+          return _this.loading = false;
+        });
+      }
     }
   }
 });
@@ -4699,30 +4913,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -5008,10 +5198,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vue_clickaway__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-clickaway */ "./node_modules/vue-clickaway/dist/vue-clickaway.common.js");
-/* harmony import */ var _PlayGround_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PlayGround.vue */ "./resources/js/components/PlayGround.vue");
-//
-//
-//
+/* harmony import */ var _Comment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Comment */ "./resources/js/components/Comment.vue");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -5210,6 +5409,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    Comment: _Comment__WEBPACK_IMPORTED_MODULE_1__.default
+  },
   mixins: [vue_clickaway__WEBPACK_IMPORTED_MODULE_0__.mixin],
   // components: { PlayGround },
   props: {
@@ -5219,12 +5421,99 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      isOpen: false
+      isOpen: false,
+      commentBody: '',
+      loadingComments: false
     };
   },
+  computed: {// a computed getter
+  },
   methods: {
+    likesShort: function likesShort() {
+      var num = this.post.likes_count;
+      var lookup = [{
+        value: 1,
+        symbol: ""
+      }, {
+        value: 1e3,
+        symbol: "k"
+      }, {
+        value: 1e6,
+        symbol: "M"
+      }, {
+        value: 1e9,
+        symbol: "G"
+      }, {
+        value: 1e12,
+        symbol: "T"
+      }, {
+        value: 1e15,
+        symbol: "P"
+      }, {
+        value: 1e18,
+        symbol: "E"
+      }];
+      var rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+      var item = lookup.slice().reverse().find(function (item) {
+        return num >= item.value;
+      });
+      return item ? (num / item.value).toFixed(1).replace(rx, "$1") + item.symbol : "0";
+    },
     hide: function hide() {
       this.isOpen = false;
+    },
+    showComments: function showComments() {},
+    loadMoreComments: function loadMoreComments() {
+      var _this = this;
+
+      this.loadingComments = true;
+      axios.post('/p/' + this.post.id + '/comments', {
+        skip: this.post.comments.length
+      }).then(function (res) {
+        var _this$post$comments;
+
+        console.log(res);
+
+        (_this$post$comments = _this.post.comments).push.apply(_this$post$comments, _toConsumableArray(res.data.data));
+      })["catch"](function (e) {
+        return console.error(e);
+      }).then(function (e) {
+        _this.loadingComments = false;
+      });
+    },
+    comment: function comment() {
+      var _this2 = this;
+
+      axios.post('/p/' + this.post.id + '/comment', {
+        body: this.commentBody
+      }).then(function (res) {
+        _this2.commentBody = '';
+
+        _this2.post.comments.push(res.data);
+
+        _this2.post.comments_count++;
+      })["catch"](function (e) {
+        return console.error(e);
+      });
+    },
+    like: function like() {
+      var _this3 = this;
+
+      if (this.post.is_liked) {
+        axios.post('/p/' + this.post.id + '/unlike').then(function (res) {
+          _this3.post.is_liked = false;
+          _this3.post.likes_count--;
+        })["catch"](function (e) {
+          console.log(e);
+        });
+      } else {
+        axios.post('/p/' + this.post.id + '/like').then(function (res) {
+          _this3.post.is_liked = true;
+          _this3.post.likes_count++;
+        })["catch"](function (e) {
+          console.log(e);
+        });
+      }
     }
   }
 });
@@ -5533,27 +5822,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  data: function data() {
-    return {
-      user: [],
-      loading: false
-    };
-  },
   methods: {
     logout: function logout() {
-      axios.post("/en/logout").then(function (res) {
+      axios.post("/logout").then(function (res) {
         window.location.href = "/";
       })["catch"](function (e) {});
     }
@@ -5726,6 +5998,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpinejs */ "./node_modules/alpinejs/dist/alpine.js");
 /* harmony import */ var alpinejs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpinejs__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue2_smooth_scroll__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue2-smooth-scroll */ "./node_modules/vue2-smooth-scroll/src/index.js");
 __webpack_require__(/*! ./bootstrap.js */ "./resources/js/bootstrap.js");
 
 __webpack_require__(/*! ./scroll-view */ "./resources/js/scroll-view.js");
@@ -5738,17 +6011,27 @@ __webpack_require__(/*! ./create-posts */ "./resources/js/create-posts.js"); // 
 
  // import VueResource from "vue-resource";
 
- // tell Vue to use the vue-resource plugin
+
+window.pluralize = __webpack_require__(/*! pluralize */ "./node_modules/pluralize/pluralize.js"); // tell Vue to use the vue-resource plugin
 // Vue.use(VueResource);
 
 window.Vue = vue__WEBPACK_IMPORTED_MODULE_1__.default;
+
+vue__WEBPACK_IMPORTED_MODULE_1__.default.use(vue2_smooth_scroll__WEBPACK_IMPORTED_MODULE_2__.default);
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component("feed", __webpack_require__(/*! ./components/Feed.vue */ "./resources/js/components/Feed.vue").default);
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component("nav-bar", __webpack_require__(/*! ./components/NavBar.vue */ "./resources/js/components/NavBar.vue").default);
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component("post", __webpack_require__(/*! ./components/Post.vue */ "./resources/js/components/Post.vue").default);
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component("profile-type", __webpack_require__(/*! ./components/SocialBuisnessAccount.vue */ "./resources/js/components/SocialBuisnessAccount.vue").default);
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component("play-ground", __webpack_require__(/*! ./components/PlayGround.vue */ "./resources/js/components/PlayGround.vue").default);
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component("creat-post", __webpack_require__(/*! ./components/CreatPost.vue */ "./resources/js/components/CreatPost.vue").default);
-vue__WEBPACK_IMPORTED_MODULE_1__.default.component("posts-component", __webpack_require__(/*! ./components/Posts.vue */ "./resources/js/components/Posts.vue").default); // Vue.directive("clickaway", {
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component("posts-component", __webpack_require__(/*! ./components/Posts.vue */ "./resources/js/components/Posts.vue").default);
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component("comment", __webpack_require__(/*! ./components/Comment.vue */ "./resources/js/components/Comment.vue").default);
+
+vue__WEBPACK_IMPORTED_MODULE_1__.default.prototype.pluralize = function () {
+  var _window;
+
+  return (_window = window).pluralize.apply(_window, arguments);
+}; // Vue.directive("clickaway", {
 //   bind() {
 //     this.event = (event) => this.vm.$emit(this.expression, event);
 //     this.el.addEventListener("click", this.stopProp);
@@ -5762,22 +6045,6 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.component("posts-component", __webpack_
 //     event.stopPropagation();
 //   },
 // });
-
-var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-  el: "#app"
-});
-var feed = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-  el: "#vue-feed"
-});
-axios.post("/wapi/profile/current").then(function (res) {
-  vue__WEBPACK_IMPORTED_MODULE_1__.default.prototype.$currentProfile = res.data.data;
-  var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-    el: "#g-app"
-  });
-  var feed = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
-    el: "#vue-feed"
-  });
-});
 
 /***/ }),
 
@@ -5832,7 +6099,7 @@ window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__.default({
   \**************************************/
 /***/ (() => {
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -5914,7 +6181,7 @@ window.addEventListener('load', function () {
   \*************************************/
 /***/ (() => {
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
@@ -24808,6 +25075,511 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/pluralize/pluralize.js":
+/*!*********************************************!*\
+  !*** ./node_modules/pluralize/pluralize.js ***!
+  \*********************************************/
+/***/ (function(module) {
+
+/* global define */
+
+(function (root, pluralize) {
+  /* istanbul ignore else */
+  if (true) {
+    // Node.
+    module.exports = pluralize();
+  } else {}
+})(this, function () {
+  // Rule storage - pluralize and singularize need to be run sequentially,
+  // while other rules can be optimized using an object for instant lookups.
+  var pluralRules = [];
+  var singularRules = [];
+  var uncountables = {};
+  var irregularPlurals = {};
+  var irregularSingles = {};
+
+  /**
+   * Sanitize a pluralization rule to a usable regular expression.
+   *
+   * @param  {(RegExp|string)} rule
+   * @return {RegExp}
+   */
+  function sanitizeRule (rule) {
+    if (typeof rule === 'string') {
+      return new RegExp('^' + rule + '$', 'i');
+    }
+
+    return rule;
+  }
+
+  /**
+   * Pass in a word token to produce a function that can replicate the case on
+   * another word.
+   *
+   * @param  {string}   word
+   * @param  {string}   token
+   * @return {Function}
+   */
+  function restoreCase (word, token) {
+    // Tokens are an exact match.
+    if (word === token) return token;
+
+    // Lower cased words. E.g. "hello".
+    if (word === word.toLowerCase()) return token.toLowerCase();
+
+    // Upper cased words. E.g. "WHISKY".
+    if (word === word.toUpperCase()) return token.toUpperCase();
+
+    // Title cased words. E.g. "Title".
+    if (word[0] === word[0].toUpperCase()) {
+      return token.charAt(0).toUpperCase() + token.substr(1).toLowerCase();
+    }
+
+    // Lower cased words. E.g. "test".
+    return token.toLowerCase();
+  }
+
+  /**
+   * Interpolate a regexp string.
+   *
+   * @param  {string} str
+   * @param  {Array}  args
+   * @return {string}
+   */
+  function interpolate (str, args) {
+    return str.replace(/\$(\d{1,2})/g, function (match, index) {
+      return args[index] || '';
+    });
+  }
+
+  /**
+   * Replace a word using a rule.
+   *
+   * @param  {string} word
+   * @param  {Array}  rule
+   * @return {string}
+   */
+  function replace (word, rule) {
+    return word.replace(rule[0], function (match, index) {
+      var result = interpolate(rule[1], arguments);
+
+      if (match === '') {
+        return restoreCase(word[index - 1], result);
+      }
+
+      return restoreCase(match, result);
+    });
+  }
+
+  /**
+   * Sanitize a word by passing in the word and sanitization rules.
+   *
+   * @param  {string}   token
+   * @param  {string}   word
+   * @param  {Array}    rules
+   * @return {string}
+   */
+  function sanitizeWord (token, word, rules) {
+    // Empty string or doesn't need fixing.
+    if (!token.length || uncountables.hasOwnProperty(token)) {
+      return word;
+    }
+
+    var len = rules.length;
+
+    // Iterate over the sanitization rules and use the first one to match.
+    while (len--) {
+      var rule = rules[len];
+
+      if (rule[0].test(word)) return replace(word, rule);
+    }
+
+    return word;
+  }
+
+  /**
+   * Replace a word with the updated word.
+   *
+   * @param  {Object}   replaceMap
+   * @param  {Object}   keepMap
+   * @param  {Array}    rules
+   * @return {Function}
+   */
+  function replaceWord (replaceMap, keepMap, rules) {
+    return function (word) {
+      // Get the correct token and case restoration functions.
+      var token = word.toLowerCase();
+
+      // Check against the keep object map.
+      if (keepMap.hasOwnProperty(token)) {
+        return restoreCase(word, token);
+      }
+
+      // Check against the replacement map for a direct word replacement.
+      if (replaceMap.hasOwnProperty(token)) {
+        return restoreCase(word, replaceMap[token]);
+      }
+
+      // Run all the rules against the word.
+      return sanitizeWord(token, word, rules);
+    };
+  }
+
+  /**
+   * Check if a word is part of the map.
+   */
+  function checkWord (replaceMap, keepMap, rules, bool) {
+    return function (word) {
+      var token = word.toLowerCase();
+
+      if (keepMap.hasOwnProperty(token)) return true;
+      if (replaceMap.hasOwnProperty(token)) return false;
+
+      return sanitizeWord(token, token, rules) === token;
+    };
+  }
+
+  /**
+   * Pluralize or singularize a word based on the passed in count.
+   *
+   * @param  {string}  word      The word to pluralize
+   * @param  {number}  count     How many of the word exist
+   * @param  {boolean} inclusive Whether to prefix with the number (e.g. 3 ducks)
+   * @return {string}
+   */
+  function pluralize (word, count, inclusive) {
+    var pluralized = count === 1
+      ? pluralize.singular(word) : pluralize.plural(word);
+
+    return (inclusive ? count + ' ' : '') + pluralized;
+  }
+
+  /**
+   * Pluralize a word.
+   *
+   * @type {Function}
+   */
+  pluralize.plural = replaceWord(
+    irregularSingles, irregularPlurals, pluralRules
+  );
+
+  /**
+   * Check if a word is plural.
+   *
+   * @type {Function}
+   */
+  pluralize.isPlural = checkWord(
+    irregularSingles, irregularPlurals, pluralRules
+  );
+
+  /**
+   * Singularize a word.
+   *
+   * @type {Function}
+   */
+  pluralize.singular = replaceWord(
+    irregularPlurals, irregularSingles, singularRules
+  );
+
+  /**
+   * Check if a word is singular.
+   *
+   * @type {Function}
+   */
+  pluralize.isSingular = checkWord(
+    irregularPlurals, irregularSingles, singularRules
+  );
+
+  /**
+   * Add a pluralization rule to the collection.
+   *
+   * @param {(string|RegExp)} rule
+   * @param {string}          replacement
+   */
+  pluralize.addPluralRule = function (rule, replacement) {
+    pluralRules.push([sanitizeRule(rule), replacement]);
+  };
+
+  /**
+   * Add a singularization rule to the collection.
+   *
+   * @param {(string|RegExp)} rule
+   * @param {string}          replacement
+   */
+  pluralize.addSingularRule = function (rule, replacement) {
+    singularRules.push([sanitizeRule(rule), replacement]);
+  };
+
+  /**
+   * Add an uncountable word rule.
+   *
+   * @param {(string|RegExp)} word
+   */
+  pluralize.addUncountableRule = function (word) {
+    if (typeof word === 'string') {
+      uncountables[word.toLowerCase()] = true;
+      return;
+    }
+
+    // Set singular and plural references for the word.
+    pluralize.addPluralRule(word, '$0');
+    pluralize.addSingularRule(word, '$0');
+  };
+
+  /**
+   * Add an irregular word definition.
+   *
+   * @param {string} single
+   * @param {string} plural
+   */
+  pluralize.addIrregularRule = function (single, plural) {
+    plural = plural.toLowerCase();
+    single = single.toLowerCase();
+
+    irregularSingles[single] = plural;
+    irregularPlurals[plural] = single;
+  };
+
+  /**
+   * Irregular rules.
+   */
+  [
+    // Pronouns.
+    ['I', 'we'],
+    ['me', 'us'],
+    ['he', 'they'],
+    ['she', 'they'],
+    ['them', 'them'],
+    ['myself', 'ourselves'],
+    ['yourself', 'yourselves'],
+    ['itself', 'themselves'],
+    ['herself', 'themselves'],
+    ['himself', 'themselves'],
+    ['themself', 'themselves'],
+    ['is', 'are'],
+    ['was', 'were'],
+    ['has', 'have'],
+    ['this', 'these'],
+    ['that', 'those'],
+    // Words ending in with a consonant and `o`.
+    ['echo', 'echoes'],
+    ['dingo', 'dingoes'],
+    ['volcano', 'volcanoes'],
+    ['tornado', 'tornadoes'],
+    ['torpedo', 'torpedoes'],
+    // Ends with `us`.
+    ['genus', 'genera'],
+    ['viscus', 'viscera'],
+    // Ends with `ma`.
+    ['stigma', 'stigmata'],
+    ['stoma', 'stomata'],
+    ['dogma', 'dogmata'],
+    ['lemma', 'lemmata'],
+    ['schema', 'schemata'],
+    ['anathema', 'anathemata'],
+    // Other irregular rules.
+    ['ox', 'oxen'],
+    ['axe', 'axes'],
+    ['die', 'dice'],
+    ['yes', 'yeses'],
+    ['foot', 'feet'],
+    ['eave', 'eaves'],
+    ['goose', 'geese'],
+    ['tooth', 'teeth'],
+    ['quiz', 'quizzes'],
+    ['human', 'humans'],
+    ['proof', 'proofs'],
+    ['carve', 'carves'],
+    ['valve', 'valves'],
+    ['looey', 'looies'],
+    ['thief', 'thieves'],
+    ['groove', 'grooves'],
+    ['pickaxe', 'pickaxes'],
+    ['passerby', 'passersby']
+  ].forEach(function (rule) {
+    return pluralize.addIrregularRule(rule[0], rule[1]);
+  });
+
+  /**
+   * Pluralization rules.
+   */
+  [
+    [/s?$/i, 's'],
+    [/[^\u0000-\u007F]$/i, '$0'],
+    [/([^aeiou]ese)$/i, '$1'],
+    [/(ax|test)is$/i, '$1es'],
+    [/(alias|[^aou]us|t[lm]as|gas|ris)$/i, '$1es'],
+    [/(e[mn]u)s?$/i, '$1s'],
+    [/([^l]ias|[aeiou]las|[ejzr]as|[iu]am)$/i, '$1'],
+    [/(alumn|syllab|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, '$1i'],
+    [/(alumn|alg|vertebr)(?:a|ae)$/i, '$1ae'],
+    [/(seraph|cherub)(?:im)?$/i, '$1im'],
+    [/(her|at|gr)o$/i, '$1oes'],
+    [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|automat|quor)(?:a|um)$/i, '$1a'],
+    [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)(?:a|on)$/i, '$1a'],
+    [/sis$/i, 'ses'],
+    [/(?:(kni|wi|li)fe|(ar|l|ea|eo|oa|hoo)f)$/i, '$1$2ves'],
+    [/([^aeiouy]|qu)y$/i, '$1ies'],
+    [/([^ch][ieo][ln])ey$/i, '$1ies'],
+    [/(x|ch|ss|sh|zz)$/i, '$1es'],
+    [/(matr|cod|mur|sil|vert|ind|append)(?:ix|ex)$/i, '$1ices'],
+    [/\b((?:tit)?m|l)(?:ice|ouse)$/i, '$1ice'],
+    [/(pe)(?:rson|ople)$/i, '$1ople'],
+    [/(child)(?:ren)?$/i, '$1ren'],
+    [/eaux$/i, '$0'],
+    [/m[ae]n$/i, 'men'],
+    ['thou', 'you']
+  ].forEach(function (rule) {
+    return pluralize.addPluralRule(rule[0], rule[1]);
+  });
+
+  /**
+   * Singularization rules.
+   */
+  [
+    [/s$/i, ''],
+    [/(ss)$/i, '$1'],
+    [/(wi|kni|(?:after|half|high|low|mid|non|night|[^\w]|^)li)ves$/i, '$1fe'],
+    [/(ar|(?:wo|[ae])l|[eo][ao])ves$/i, '$1f'],
+    [/ies$/i, 'y'],
+    [/\b([pl]|zomb|(?:neck|cross)?t|coll|faer|food|gen|goon|group|lass|talk|goal|cut)ies$/i, '$1ie'],
+    [/\b(mon|smil)ies$/i, '$1ey'],
+    [/\b((?:tit)?m|l)ice$/i, '$1ouse'],
+    [/(seraph|cherub)im$/i, '$1'],
+    [/(x|ch|ss|sh|zz|tto|go|cho|alias|[^aou]us|t[lm]as|gas|(?:her|at|gr)o|[aeiou]ris)(?:es)?$/i, '$1'],
+    [/(analy|diagno|parenthe|progno|synop|the|empha|cri|ne)(?:sis|ses)$/i, '$1sis'],
+    [/(movie|twelve|abuse|e[mn]u)s$/i, '$1'],
+    [/(test)(?:is|es)$/i, '$1is'],
+    [/(alumn|syllab|vir|radi|nucle|fung|cact|stimul|termin|bacill|foc|uter|loc|strat)(?:us|i)$/i, '$1us'],
+    [/(agend|addend|millenni|dat|extrem|bacteri|desiderat|strat|candelabr|errat|ov|symposi|curricul|quor)a$/i, '$1um'],
+    [/(apheli|hyperbat|periheli|asyndet|noumen|phenomen|criteri|organ|prolegomen|hedr|automat)a$/i, '$1on'],
+    [/(alumn|alg|vertebr)ae$/i, '$1a'],
+    [/(cod|mur|sil|vert|ind)ices$/i, '$1ex'],
+    [/(matr|append)ices$/i, '$1ix'],
+    [/(pe)(rson|ople)$/i, '$1rson'],
+    [/(child)ren$/i, '$1'],
+    [/(eau)x?$/i, '$1'],
+    [/men$/i, 'man']
+  ].forEach(function (rule) {
+    return pluralize.addSingularRule(rule[0], rule[1]);
+  });
+
+  /**
+   * Uncountable rules.
+   */
+  [
+    // Singular words with no plurals.
+    'adulthood',
+    'advice',
+    'agenda',
+    'aid',
+    'aircraft',
+    'alcohol',
+    'ammo',
+    'analytics',
+    'anime',
+    'athletics',
+    'audio',
+    'bison',
+    'blood',
+    'bream',
+    'buffalo',
+    'butter',
+    'carp',
+    'cash',
+    'chassis',
+    'chess',
+    'clothing',
+    'cod',
+    'commerce',
+    'cooperation',
+    'corps',
+    'debris',
+    'diabetes',
+    'digestion',
+    'elk',
+    'energy',
+    'equipment',
+    'excretion',
+    'expertise',
+    'firmware',
+    'flounder',
+    'fun',
+    'gallows',
+    'garbage',
+    'graffiti',
+    'hardware',
+    'headquarters',
+    'health',
+    'herpes',
+    'highjinks',
+    'homework',
+    'housework',
+    'information',
+    'jeans',
+    'justice',
+    'kudos',
+    'labour',
+    'literature',
+    'machinery',
+    'mackerel',
+    'mail',
+    'media',
+    'mews',
+    'moose',
+    'music',
+    'mud',
+    'manga',
+    'news',
+    'only',
+    'personnel',
+    'pike',
+    'plankton',
+    'pliers',
+    'police',
+    'pollution',
+    'premises',
+    'rain',
+    'research',
+    'rice',
+    'salmon',
+    'scissors',
+    'series',
+    'sewage',
+    'shambles',
+    'shrimp',
+    'software',
+    'species',
+    'staff',
+    'swine',
+    'tennis',
+    'traffic',
+    'transportation',
+    'trout',
+    'tuna',
+    'wealth',
+    'welfare',
+    'whiting',
+    'wildebeest',
+    'wildlife',
+    'you',
+    /pok[eé]mon$/i,
+    // Regexes.
+    /[^aeiou]ese$/i, // "chinese", "japanese"
+    /deer$/i, // "deer", "reindeer"
+    /fish$/i, // "fish", "blowfish", "angelfish"
+    /measles$/i,
+    /o[iu]s$/i, // "carnivorous"
+    /pox$/i, // "chickpox", "smallpox"
+    /sheep$/i
+  ].forEach(pluralize.addUncountableRule);
+
+  return pluralize;
+});
+
+
+/***/ }),
+
 /***/ "./node_modules/process/browser.js":
 /*!*****************************************!*\
   !*** ./node_modules/process/browser.js ***!
@@ -29665,6 +30437,45 @@ exports.mixin = mixin;
 
 /***/ }),
 
+/***/ "./resources/js/components/Comment.vue":
+/*!*********************************************!*\
+  !*** ./resources/js/components/Comment.vue ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Comment_vue_vue_type_template_id_54ded044___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Comment.vue?vue&type=template&id=54ded044& */ "./resources/js/components/Comment.vue?vue&type=template&id=54ded044&");
+/* harmony import */ var _Comment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Comment.vue?vue&type=script&lang=js& */ "./resources/js/components/Comment.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _Comment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _Comment_vue_vue_type_template_id_54ded044___WEBPACK_IMPORTED_MODULE_0__.render,
+  _Comment_vue_vue_type_template_id_54ded044___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Comment.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/CreatPost.vue":
 /*!***********************************************!*\
   !*** ./resources/js/components/CreatPost.vue ***!
@@ -30170,6 +30981,22 @@ component.options.__file = "resources/js/components/SocialBuisnessAccount.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/Comment.vue?vue&type=script&lang=js&":
+/*!**********************************************************************!*\
+  !*** ./resources/js/components/Comment.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Comment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Comment.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Comment.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Comment_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/CreatPost.vue?vue&type=script&lang=js&":
 /*!************************************************************************!*\
   !*** ./resources/js/components/CreatPost.vue?vue&type=script&lang=js& ***!
@@ -30359,6 +31186,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SocialBuisnessAccount_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SocialBuisnessAccount.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/SocialBuisnessAccount.vue?vue&type=script&lang=js&");
  /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SocialBuisnessAccount_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Comment.vue?vue&type=template&id=54ded044&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/components/Comment.vue?vue&type=template&id=54ded044& ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Comment_vue_vue_type_template_id_54ded044___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Comment_vue_vue_type_template_id_54ded044___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Comment_vue_vue_type_template_id_54ded044___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Comment.vue?vue&type=template&id=54ded044& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Comment.vue?vue&type=template&id=54ded044&");
+
 
 /***/ }),
 
@@ -30579,6 +31423,391 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SocialBuisnessAccount_vue_vue_type_template_id_5cd4df1e___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SocialBuisnessAccount_vue_vue_type_template_id_5cd4df1e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SocialBuisnessAccount.vue?vue&type=template&id=5cd4df1e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/SocialBuisnessAccount.vue?vue&type=template&id=5cd4df1e&");
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Comment.vue?vue&type=template&id=54ded044&":
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Comment.vue?vue&type=template&id=54ded044& ***!
+  \*******************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "flex" }, [
+    _c(
+      "a",
+      {
+        staticClass: "w-10 h-10 mr-1 flex-shrink-0",
+        attrs: { href: "/u/" + _vm.comment.commentor.username }
+      },
+      [
+        _c("img", {
+          staticClass: "w-10 h-10 rounded-full",
+          attrs: { src: _vm.comment.commentor.profileImage.url }
+        })
+      ]
+    ),
+    _vm._v(" "),
+    _c("div", { staticClass: "flex-grow" }, [
+      _c("div", { staticClass: "bg-gray-100 rounded-2xl px-3 py-1 ml-1" }, [
+        _c(
+          "a",
+          {
+            staticClass: "hover:underline font-semibold text-sm inline-block",
+            attrs: { href: "/u/" + _vm.comment.commentor.username }
+          },
+          [_vm._v(_vm._s(_vm.comment.commentor.username))]
+        ),
+        _vm._v(" "),
+        _c("span", { staticClass: "text-sm inline-block" }, [
+          _vm._v(_vm._s(_vm.comment.createdAt))
+        ]),
+        _vm._v(" "),
+        _c("p", { staticClass: "block" }, [
+          _vm._v("\n            " + _vm._s(_vm.comment.body) + "\n            ")
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "space-x-1 ml-4" },
+        [
+          this.comment.is_liked
+            ? _c(
+                "svg",
+                {
+                  staticClass:
+                    "inline-block w-5 h-5 cursor-pointer fill-current transition-all text-red-600 hover:text-red-500",
+                  attrs: {
+                    viewBox: "0 0 20 20",
+                    xmlns: "http://www.w3.org/2000/svg"
+                  },
+                  on: { click: this.unlike }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      "fill-rule": "evenodd",
+                      d:
+                        "M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z",
+                      "clip-rule": "evenodd"
+                    }
+                  })
+                ]
+              )
+            : _c(
+                "svg",
+                {
+                  staticClass:
+                    "inline-block w-5 h-5 cursor-pointer fill-current text-gray-500 transition-all duration-200 hover:text-red-500",
+                  attrs: { viewBox: "0 0 24 24" },
+                  on: { click: this.like }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      d:
+                        "M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
+                    }
+                  })
+                ]
+              ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass:
+                "font-semibold text-sm hover:underline cursor-pointer",
+              on: { click: this.showReplies }
+            },
+            [_vm._v("Reply")]
+          ),
+          _vm._v(" "),
+          this.comment.likes_count > 0
+            ? _c("div", { staticClass: "inline-block h-2" }, [
+                _c("div", {
+                  staticClass: "w-1 h-1 p-0 m-0 bg-gray-500 rounded-full",
+                  staticStyle: { "margin-top": ".15rem" }
+                })
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          this.comment.likes_count > 0
+            ? _c(
+                "p",
+                {
+                  staticClass:
+                    "ml-2 inline-block text-sm font-light tracking-tight"
+                },
+                [
+                  _vm._v(
+                    _vm._s(
+                      this.pluralize("like", this.comment.likes_count, true)
+                    )
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          this.comment.replies_count > 0
+            ? _c("div", { staticClass: "inline-block h-2" }, [
+                _c("div", {
+                  staticClass: "w-1 h-1 p-0 m-0 bg-gray-500 rounded-full",
+                  staticStyle: { "margin-top": ".15rem" }
+                })
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          this.comment.replies_count > 0
+            ? _c(
+                "p",
+                {
+                  staticClass:
+                    "ml-2 inline-block text-sm font-light tracking-tight"
+                },
+                [
+                  _vm._v(
+                    _vm._s(
+                      this.pluralize(
+                        "replies",
+                        this.comment.replies_count,
+                        true
+                      )
+                    )
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "my-1" }),
+          _vm._v(" "),
+          _vm._l(_vm.comment.replies, function(reply) {
+            return _c("Comment", {
+              key: reply.id,
+              attrs: { post: _vm.post, comment: reply, level: _vm.level + 1 }
+            })
+          }),
+          _vm._v(" "),
+          _vm.comment.replies_count > 0
+            ? _c(
+                "a",
+                {
+                  staticClass: "hover:underline mt-1 mr-auto",
+                  class: this.loadingComments
+                    ? "cursor-wait"
+                    : "cursor-pointer",
+                  on: {
+                    click: function($event) {
+                      !_vm.loadingReplies ? _vm.loadMoreReplies() : null
+                    }
+                  }
+                },
+                [
+                  _vm._v("View More Replies..."),
+                  this.loadingReplies
+                    ? _c(
+                        "svg",
+                        {
+                          staticClass:
+                            "inline-block mx-2 mt-1 text-gray-600 w-5 h-5 stroke-current",
+                          attrs: {
+                            viewBox: "0 0 38 38",
+                            xmlns: "http://www.w3.org/2000/svg"
+                          }
+                        },
+                        [
+                          _c(
+                            "defs",
+                            [
+                              _c(
+                                "linearGradient",
+                                {
+                                  attrs: {
+                                    x1: "8.042%",
+                                    y1: "0%",
+                                    x2: "65.682%",
+                                    y2: "23.865%",
+                                    id: "a"
+                                  }
+                                },
+                                [
+                                  _c("stop", {
+                                    attrs: {
+                                      "stop-color": "#000",
+                                      "stop-opacity": "0",
+                                      offset: "0%"
+                                    }
+                                  }),
+                                  _c("stop", {
+                                    attrs: {
+                                      "stop-color": "#111",
+                                      "stop-opacity": ".631",
+                                      offset: "63.146%"
+                                    }
+                                  }),
+                                  _c("stop", {
+                                    attrs: {
+                                      "stop-color": "#222",
+                                      offset: "100%"
+                                    }
+                                  })
+                                ],
+                                1
+                              )
+                            ],
+                            1
+                          ),
+                          _c(
+                            "g",
+                            { attrs: { fill: "none", "fill-rule": "evenodd" } },
+                            [
+                              _c(
+                                "g",
+                                { attrs: { transform: "translate(1 1)" } },
+                                [
+                                  _c(
+                                    "path",
+                                    {
+                                      attrs: {
+                                        d: "M36 18c0-9.94-8.06-18-18-18",
+                                        id: "Oval-2",
+                                        stroke: "url(#a)",
+                                        "stroke-width": "2"
+                                      }
+                                    },
+                                    [
+                                      _c("animateTransform", {
+                                        attrs: {
+                                          attributeName: "transform",
+                                          type: "rotate",
+                                          from: "0 18 18",
+                                          to: "360 18 18",
+                                          dur: "0.9s",
+                                          repeatCount: "indefinite"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _c(
+                                    "circle",
+                                    {
+                                      attrs: {
+                                        fill: "#000",
+                                        cx: "36",
+                                        cy: "18",
+                                        r: "1"
+                                      }
+                                    },
+                                    [
+                                      _c("animateTransform", {
+                                        attrs: {
+                                          attributeName: "transform",
+                                          type: "rotate",
+                                          from: "0 18 18",
+                                          to: "360 18 18",
+                                          dur: "0.9s",
+                                          repeatCount: "indefinite"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    : _vm._e()
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "my-1" }),
+          _vm._v(" "),
+          _vm.replyOpen
+            ? _c(
+                "div",
+                {
+                  staticClass:
+                    "flex justify-between items-center space-x-2 my-2"
+                },
+                [
+                  _c("img", {
+                    staticClass: "w-7 h-7 rounded-full",
+                    attrs: { src: _vm.$currentProfile.profileImage.url }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "flex-auto" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.reply,
+                          expression: "reply"
+                        }
+                      ],
+                      ref: "reply",
+                      staticClass:
+                        "bg-gray-100 w-full rounded-r-full rounded-l-full py-2 pl-5 px-2 border-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none focus:outline-none",
+                      attrs: {
+                        type: "text",
+                        "auto-compleat": "off",
+                        placeholder:
+                          _vm.comment.replies > 0
+                            ? "add reply"
+                            : "reply to u/" + _vm.comment.commentor.username
+                      },
+                      domProps: { value: _vm.reply },
+                      on: {
+                        keyup: function($event) {
+                          if (
+                            !$event.type.indexOf("key") &&
+                            _vm._k(
+                              $event.keyCode,
+                              "enter",
+                              13,
+                              $event.key,
+                              "Enter"
+                            )
+                          ) {
+                            return null
+                          }
+                          return _vm.sendReply($event)
+                        },
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.reply = $event.target.value
+                        }
+                      }
+                    })
+                  ])
+                ]
+              )
+            : _vm._e()
+        ],
+        2
+      )
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
 
 
 /***/ }),
@@ -31966,9 +33195,14 @@ var render = function() {
                     }
                   },
                   [
-                    _c("span", { staticClass: "material-icons w-7 h-7" }, [
-                      _vm._v("arrow_drop_down_circle")
-                    ])
+                    _c(
+                      "span",
+                      {
+                        staticClass: "material-icons w-7 h-7",
+                        staticStyle: { "margin-top": "3px" }
+                      },
+                      [_vm._v("arrow_drop_down_circle")]
+                    )
                   ]
                 ),
                 _vm._v(" "),
@@ -32127,10 +33361,10 @@ var staticRenderFns = [
           },
           [
             _c("span", { staticClass: "material-icons" }, [
-              _vm._v("local_grocery_store")
+              _vm._v("trending_up")
             ]),
             _vm._v(" "),
-            _c("span", {}, [_vm._v("Marketplace")])
+            _c("span", {}, [_vm._v("Following")])
           ]
         )
       ]
@@ -32613,34 +33847,21 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    {
-      staticClass: "w-11/12 mx-auto md:w-3/4",
-      model: {
-        value: _vm.post,
-        callback: function($$v) {
-          _vm.post = $$v
-        },
-        expression: "post"
-      }
-    },
-    [
-      _c("div", { staticClass: "my-0 rounded-lg shadow-lg bg-white" }, [
-        _c(
-          "div",
-          { staticClass: "flex flex-row justify-between items-center" },
-          [
-            _c(
+  return _c("div", { staticClass: "w-11/12 mx-auto md:w-3/4" }, [
+    _c("div", { staticClass: "my-0 rounded-lg shadow-lg bg-white" }, [
+      _c("div", { staticClass: "flex flex-row justify-between items-center" }, [
+        _vm.post.pageable_type === "Profile"
+          ? _c(
               "div",
               {
                 staticClass:
-                  "flex justify-start items-center pt-2 px-4 space-x-2"
+                  "flex justify-start items-center pt-2 px-4 space-x-2 group"
               },
               [
-                _c("a", { attrs: { href: "" } }, [
+                _c("a", { attrs: { href: _vm.post.author.url } }, [
                   _c("img", {
-                    staticClass: "w-14 h-14 rounded-full",
+                    staticClass:
+                      "w-14 h-14 rounded-full border-3 border-transparent group-hover:border-purple-600",
                     attrs: {
                       src: _vm.post.author.profileImage.url,
                       alt: "tree"
@@ -32653,7 +33874,7 @@ var render = function() {
                     "a",
                     {
                       staticClass: "text-lg hover:underline",
-                      attrs: { href: "#" }
+                      attrs: { href: _vm.post.author.url }
                     },
                     [
                       _c("h4", [
@@ -32668,211 +33889,591 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
+                  _c("span", [
+                    _c("small", [_vm._v(_vm._s(_vm.post.createdAt))])
+                  ])
+                ])
+              ]
+            )
+          : _vm.post.pageable_type === "Community"
+          ? _c(
+              "div",
+              {
+                staticClass:
+                  "flex justify-start items-center pt-2 px-4 space-x-2"
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    staticClass: "inline-block group",
+                    attrs: { href: _vm.post.pageable.url }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "w-6 h-6 rounded-full inline-block",
+                      attrs: {
+                        src: _vm.post.pageable.iconImage.url,
+                        alt: "tree"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c(
+                      "p",
+                      {
+                        staticClass:
+                          "inline-block text-sm font-bold text-gray-800 group-hover:underline"
+                      },
+                      [_vm._v("c/" + _vm._s(_vm.post.pageable.name))]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "inline-block" }, [
                   _c(
                     "a",
-                    { staticClass: "hover:underline", attrs: { href: "" } },
+                    {
+                      staticClass: "text-sm hover:underline inline-block",
+                      attrs: { href: _vm.post.author.url }
+                    },
+                    [_vm._v("posted by u/" + _vm._s(_vm.post.author.username))]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    { staticClass: "text-sm tracking-tighter text-gray-600" },
                     [_c("small", [_vm._v(_vm._s(_vm.post.createdAt))])]
                   )
                 ])
               ]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "relative items-center" }, [
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "relative items-center" }, [
+          _c(
+            "button",
+            {
+              staticClass:
+                "relative z-30 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer",
+              class: _vm.isOpen
+                ? "bg-red-100 text-logo-red hover:text-logo-red "
+                : "bg-transparent",
+              on: {
+                click: function($event) {
+                  _vm.isOpen = !_vm.isOpen
+                }
+              }
+            },
+            [
               _c(
-                "button",
+                "svg",
                 {
-                  staticClass:
-                    "relative z-30 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer",
-                  class: _vm.isOpen
-                    ? "bg-red-100 text-logo-red hover:text-logo-red "
-                    : "bg-transparent",
-                  on: {
-                    click: function($event) {
-                      _vm.isOpen = !_vm.isOpen
-                    }
+                  staticClass: "w-6",
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    fill: "none",
+                    viewBox: "0 0 24 24",
+                    stroke: "currentColor"
                   }
                 },
                 [
-                  _c(
+                  _c("path", {
+                    attrs: {
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round",
+                      "stroke-width": "2",
+                      d:
+                        "M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+                    }
+                  })
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _vm.isOpen
+            ? _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "on-clickaway",
+                      rawName: "v-on-clickaway",
+                      value: _vm.hide,
+                      expression: "hide"
+                    }
+                  ],
+                  staticClass:
+                    "absolute z-30 right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
+                },
+                [_vm._m(1), _vm._v(" "), _vm._m(2)]
+              )
+            : _vm._e()
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "px-4 py-2" },
+        [
+          _c("h2", { staticClass: "text-xl font-semibold" }, [
+            _vm._v(_vm._s(_vm.post.title))
+          ]),
+          _vm._v(" "),
+          _c("p", { staticClass: "mt-2 tracking-tight" }, [
+            _vm._v(_vm._s(_vm.post.body))
+          ]),
+          _vm._v(" "),
+          _vm._l(_vm.post.images, function(image) {
+            return _c(
+              "div",
+              {
+                key: image.id,
+                staticClass: "w-full h-full mt-4 rounded-lg p-2",
+                attrs: { image: image }
+              },
+              [
+                _c("img", {
+                  staticClass:
+                    "rounded-md mx-auto shadow-xl object-cover object-top",
+                  staticStyle: { "max-height": "100vh", "min-width": "450px" },
+                  attrs: { src: image.url, alt: image.name }
+                })
+              ]
+            )
+          })
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "flex justify-start px-4 mt-2 text-sm" }, [
+        _c("div", { staticClass: "flex space-x-2" }, [
+          _vm.post.likes_count > 0
+            ? _c("div", [
+                _c(
+                  "a",
+                  {
+                    staticClass: "hover:underline cursor-pointer",
+                    on: { click: this.showComments }
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(
+                        this.likesShort() +
+                          " " +
+                          this.pluralize("like", _vm.post.likes_count)
+                      ) + " "
+                    )
+                  ]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.post.comments_count > 0
+            ? _c("div", [
+                _c(
+                  "a",
+                  {
+                    staticClass: "hover:underline cursor-pointer",
+                    attrs: { title: "show comments" },
+                    on: { click: this.showComments }
+                  },
+                  [
+                    _vm._v(
+                      _vm._s(
+                        this.pluralize("comment", _vm.post.comments_count, true)
+                      )
+                    )
+                  ]
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.post.shares_count > 0
+            ? _c("div", [
+                _c("a", { staticClass: "hover:underline cursor-pointer" }, [
+                  _vm._v(
+                    _vm._s(this.pluralize("share", _vm.post.shares_count, true))
+                  )
+                ])
+              ])
+            : _vm._e()
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "flex flex-row justify-evenly border-t" }, [
+        _c("div", { staticClass: "flex place-items-center" }, [
+          _c(
+            "button",
+            {
+              staticClass:
+                "flex justify-center  focus:outline-none items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1",
+              on: { click: _vm.like }
+            },
+            [
+              this.post.is_liked
+                ? _c(
                     "svg",
                     {
-                      staticClass: "w-6",
+                      staticStyle: { width: "24px", height: "24px" },
                       attrs: {
-                        xmlns: "http://www.w3.org/2000/svg",
-                        fill: "none",
-                        viewBox: "0 0 24 24",
-                        stroke: "currentColor"
+                        fill: "red",
+                        viewBox: "0 0 20 20",
+                        xmlns: "http://www.w3.org/2000/svg"
                       }
                     },
                     [
                       _c("path", {
                         attrs: {
-                          "stroke-linecap": "round",
-                          "stroke-linejoin": "round",
-                          "stroke-width": "2",
+                          "fill-rule": "evenodd",
                           d:
-                            "M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+                            "M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z",
+                          "clip-rule": "evenodd"
                         }
                       })
                     ]
                   )
-                ]
-              ),
-              _vm._v(" "),
-              _vm.isOpen
-                ? _c(
-                    "div",
+                : _c(
+                    "svg",
                     {
-                      directives: [
-                        {
-                          name: "on-clickaway",
-                          rawName: "v-on-clickaway",
-                          value: _vm.hide,
-                          expression: "hide"
-                        }
-                      ],
-                      staticClass:
-                        "absolute z-30 right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
+                      staticStyle: { width: "24px", height: "24px" },
+                      attrs: { fill: "currentColor", viewBox: "0 0 24 24" }
                     },
-                    [_vm._m(0), _vm._v(" "), _vm._m(1)]
+                    [
+                      _c("path", {
+                        attrs: {
+                          d:
+                            "M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
+                        }
+                      })
+                    ]
                   )
-                : _vm._e()
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "px-4 py-2" },
-          [
-            _c("h2", [_vm._v(_vm._s(_vm.post.title))]),
-            _vm._v(" "),
-            _c("p", [_vm._v(_vm._s(_vm.post.body))]),
-            _vm._v(" "),
-            _vm._l(_vm.post.images, function(image) {
-              return _c(
-                "div",
-                {
-                  key: image.id,
-                  staticClass: "w-full h-full",
-                  attrs: { image: image }
-                },
-                [_c("img", { attrs: { src: image.url, alt: image.name } })]
-              )
-            })
-          ],
-          2
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "flex flex-row justify-evenly border-t" }, [
-          _c("div", { staticClass: "flex place-items-center" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
-              },
-              [
-                _c(
-                  "svg",
-                  {
-                    staticStyle: { width: "24px", height: "24px" },
-                    attrs: { viewBox: "0 0 24 24" }
-                  },
-                  [
-                    _c("path", {
-                      attrs: {
-                        fill: "currentColor",
-                        d:
-                          "M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z"
-                      }
-                    })
-                  ]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("p", { staticClass: "ml-1 text-lg" }, [
-              _vm._v(_vm._s(_vm.post.likes_count))
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "flex place-items-center" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
-              },
-              [
-                _c(
-                  "svg",
-                  {
-                    attrs: {
-                      xmlns: "http://www.w3.org/2000/svg",
-                      height: "24",
-                      fill: "none",
-                      viewBox: "0 0 24 24",
-                      stroke: "currentColor"
-                    }
-                  },
-                  [
-                    _c("path", {
-                      attrs: {
-                        "stroke-linecap": "round",
-                        "stroke-linejoin": "round",
-                        "stroke-width": "2",
-                        d:
-                          "M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                      }
-                    })
-                  ]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("p", { staticClass: "ml-1 text-lg" }, [
-              _vm._v(_vm._s(_vm.post.commentsCount))
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "flex place-items-center" }, [
-            _c(
-              "button",
-              {
-                staticClass:
-                  "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
-              },
-              [
-                _c(
-                  "svg",
-                  {
-                    staticStyle: { width: "24px", height: "24px" },
-                    attrs: { viewBox: "0 0 24 24" }
-                  },
-                  [
-                    _c("path", {
-                      attrs: {
-                        fill: "currentColor",
-                        d:
-                          "M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z"
-                      }
-                    })
-                  ]
-                )
-              ]
-            ),
-            _vm._v(" "),
-            _c("p", { staticClass: "ml-1 text-lg" }, [_vm._v("0")])
-          ])
+            ]
+          )
         ]),
         _vm._v(" "),
-        _vm._m(2)
-      ])
-    ]
-  )
+        _c("div", { staticClass: "flex place-items-center" }, [
+          _c(
+            "button",
+            {
+              staticClass:
+                "flex justify-center items-center focus:outline-none hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
+            },
+            [
+              _c(
+                "svg",
+                {
+                  attrs: {
+                    xmlns: "http://www.w3.org/2000/svg",
+                    height: "24",
+                    fill: "none",
+                    viewBox: "0 0 24 24",
+                    stroke: "currentColor"
+                  }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      "stroke-linecap": "round",
+                      "stroke-linejoin": "round",
+                      "stroke-width": "2",
+                      d:
+                        "M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                    }
+                  })
+                ]
+              )
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "flex place-items-center" }, [
+          _c(
+            "button",
+            {
+              staticClass:
+                "flex justify-center items-center hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
+            },
+            [
+              _c(
+                "svg",
+                {
+                  staticStyle: { width: "24px", height: "24px" },
+                  attrs: { viewBox: "0 0 24 24" }
+                },
+                [
+                  _c("path", {
+                    attrs: {
+                      fill: "currentColor",
+                      d:
+                        "M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z"
+                    }
+                  })
+                ]
+              )
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "space-y-2 border-t-2 p-4 px-3" },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "flex text-gray-600 text-sm font-bold tracking-tight"
+            },
+            [
+              this.post.comments_count > 5
+                ? _c(
+                    "a",
+                    {
+                      staticClass: "hover:underline mt-1 mr-auto",
+                      class: this.loadingComments
+                        ? "cursor-wait"
+                        : "cursor-pointer",
+                      on: {
+                        click: function($event) {
+                          !_vm.loadingComments ? _vm.loadMoreComments() : null
+                        }
+                      }
+                    },
+                    [
+                      _vm._v(
+                        "View " +
+                          _vm._s(
+                            this.post.comments_count -
+                              this.post.comments.length <
+                              5
+                              ? this.post.comments_count -
+                                  this.post.comments.length
+                              : ""
+                          ) +
+                          " More " +
+                          _vm._s(
+                            this.pluralize(
+                              "comment",
+                              this.post.comments_count -
+                                this.post.comments.length
+                            )
+                          ) +
+                          "..."
+                      ),
+                      this.loadingComments
+                        ? _c(
+                            "svg",
+                            {
+                              staticClass:
+                                "inline-block mx-2 mt-1 text-gray-600 w-5 h-5 stroke-current",
+                              attrs: {
+                                viewBox: "0 0 38 38",
+                                xmlns: "http://www.w3.org/2000/svg"
+                              }
+                            },
+                            [
+                              _c(
+                                "defs",
+                                [
+                                  _c(
+                                    "linearGradient",
+                                    {
+                                      attrs: {
+                                        x1: "8.042%",
+                                        y1: "0%",
+                                        x2: "65.682%",
+                                        y2: "23.865%",
+                                        id: "a"
+                                      }
+                                    },
+                                    [
+                                      _c("stop", {
+                                        attrs: {
+                                          "stop-color": "#000",
+                                          "stop-opacity": "0",
+                                          offset: "0%"
+                                        }
+                                      }),
+                                      _c("stop", {
+                                        attrs: {
+                                          "stop-color": "#111",
+                                          "stop-opacity": ".631",
+                                          offset: "63.146%"
+                                        }
+                                      }),
+                                      _c("stop", {
+                                        attrs: {
+                                          "stop-color": "#222",
+                                          offset: "100%"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _c(
+                                "g",
+                                {
+                                  attrs: {
+                                    fill: "none",
+                                    "fill-rule": "evenodd"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "g",
+                                    { attrs: { transform: "translate(1 1)" } },
+                                    [
+                                      _c(
+                                        "path",
+                                        {
+                                          attrs: {
+                                            d: "M36 18c0-9.94-8.06-18-18-18",
+                                            id: "Oval-2",
+                                            stroke: "url(#a)",
+                                            "stroke-width": "2"
+                                          }
+                                        },
+                                        [
+                                          _c("animateTransform", {
+                                            attrs: {
+                                              attributeName: "transform",
+                                              type: "rotate",
+                                              from: "0 18 18",
+                                              to: "360 18 18",
+                                              dur: "0.9s",
+                                              repeatCount: "indefinite"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      ),
+                                      _c(
+                                        "circle",
+                                        {
+                                          attrs: {
+                                            fill: "#000",
+                                            cx: "36",
+                                            cy: "18",
+                                            r: "1"
+                                          }
+                                        },
+                                        [
+                                          _c("animateTransform", {
+                                            attrs: {
+                                              attributeName: "transform",
+                                              type: "rotate",
+                                              from: "0 18 18",
+                                              to: "360 18 18",
+                                              dur: "0.9s",
+                                              repeatCount: "indefinite"
+                                            }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        : _vm._e()
+                    ]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              this.post.comments_count > 10
+                ? _c(
+                    "a",
+                    { staticClass: "hover:underline mt-1 ml-auto mr-1" },
+                    [_vm._v("Sort by newest")]
+                  )
+                : _vm._e()
+            ]
+          ),
+          _vm._v(" "),
+          _vm._l(_vm.post.comments, function(comment) {
+            return _c("Comment", {
+              key: comment.id,
+              attrs: { comment: comment, post: _vm.post, level: 1 }
+            })
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "flex justify-between items-center space-x-2" },
+            [
+              _c("img", {
+                staticClass: "w-10 h-10 rounded-full",
+                attrs: { src: _vm.$currentProfile.profileImage.url }
+              }),
+              _vm._v(" "),
+              _c("div", { staticClass: "flex-auto" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.commentBody,
+                      expression: "commentBody"
+                    }
+                  ],
+                  staticClass:
+                    "bg-gray-100 w-full rounded-r-full rounded-l-full py-2 pl-5 px-2 border-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none focus:outline-none",
+                  attrs: {
+                    type: "text",
+                    "auto-compleat": "off",
+                    placeholder:
+                      _vm.post.comments_count > 0
+                        ? "add comment"
+                        : "be the first to comment"
+                  },
+                  domProps: { value: _vm.commentBody },
+                  on: {
+                    keyup: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.comment($event)
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.commentBody = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ]
+          )
+        ],
+        2
+      )
+    ])
+  ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "inline-block h-2" }, [
+      _c("div", {
+        staticClass: "w-1 h-1 p-0 m-0 bg-gray-500 rounded-full",
+        staticStyle: { "margin-top": ".15rem" }
+      })
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -32959,107 +34560,6 @@ var staticRenderFns = [
           _c("p", [_vm._v("Find support or report post")])
         ]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "space-y-2 border-t-2 pt-4 pb-2" }, [
-      _c(
-        "div",
-        { staticClass: "flex justify-between items-center space-x-2" },
-        [
-          _c("img", {
-            staticClass: "w-10 h-10 rounded-full",
-            attrs: { src: "/img/150x150.png" }
-          }),
-          _vm._v(" "),
-          _c(
-            "form",
-            { staticClass: "flex-auto", attrs: { action: "#", method: "#" } },
-            [
-              _c("input", {
-                staticClass:
-                  "bg-gray-100 w-full rounded-r-full rounded-l-full py-2 px-2 border-none focus:border-logo-black focus:ring-1 focus:ring-logo-black outline-none focus:outline-none",
-                attrs: {
-                  type: "text",
-                  name: "comment",
-                  id: "comment",
-                  placeholder: "Add a comment..."
-                }
-              })
-            ]
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "grid md:grid-cols-12" }, [
-        _c(
-          "a",
-          { staticClass: "w-10 h-10 mr-2 md:mr-0", attrs: { href: "#" } },
-          [
-            _c("img", {
-              staticClass: "w-10 h-10 rounded-full",
-              attrs: { src: "/img/150x150.png" }
-            })
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass:
-              "col-start-2 col-span-10 bg-gray-100 rounded-2xl px-3 py-1"
-          },
-          [
-            _c(
-              "a",
-              {
-                staticClass: "hover:underline font-semibold text-sm",
-                attrs: { href: "#" }
-              },
-              [_vm._v("Abdelhak")]
-            ),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v(
-                "\n            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cumque,\n            temporibus.\n          "
-              )
-            ])
-          ]
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "col-start-2 col-span-3 space-x-1 ml-4" }, [
-          _c(
-            "a",
-            {
-              staticClass: "font-semibold text-sm hover:underline",
-              attrs: { href: "#" }
-            },
-            [_vm._v("Like")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "font-semibold text-sm hover:underline",
-              attrs: { href: "#" }
-            },
-            [_vm._v("Reply")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            { staticClass: "text-sm hover:underline", attrs: { href: "#" } },
-            [_vm._v("1h")]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("a", { staticClass: "hover:underline", attrs: { href: "#" } }, [
-        _vm._v("Load more...")
-      ])
     ])
   }
 ]
@@ -33643,7 +35143,7 @@ var render = function() {
       "div",
       {
         staticClass:
-          "origin-top-right absolute right-0 w-80 h-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none",
+          "origin-top-right absolute right-0 w-80 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none",
         attrs: {
           role: "menu",
           "aria-orientation": "vertical",
@@ -33663,8 +35163,7 @@ var render = function() {
         _c(
           "div",
           {
-            staticClass:
-              "py-1 space-y-1 divide-y overflow-auto overscroll-contain",
+            staticClass: "py-1 space-y-1 overflow-auto overscroll-contain",
             attrs: { role: "none" }
           },
           [
@@ -33672,7 +35171,7 @@ var render = function() {
               "a",
               {
                 staticClass:
-                  "flex flex-row items-center space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900",
+                  "flex flex-row items-center border-b space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900",
                 attrs: {
                   href: "/u/" + this.$currentProfile.username,
                   role: "menuitem"
@@ -33694,6 +35193,10 @@ var render = function() {
             _vm._v(" "),
             _vm._m(0),
             _vm._v(" "),
+            _vm._m(1),
+            _vm._v(" "),
+            _c("hr", { staticClass: "my-2" }),
+            _vm._v(" "),
             _c("div", { staticClass: "flex-auto w-full px-1" }, [
               _c(
                 "button",
@@ -33704,7 +35207,7 @@ var render = function() {
                 },
                 [
                   _c("span", { staticClass: "material-icons" }, [
-                    _vm._v("account_circle")
+                    _vm._v("logout")
                   ]),
                   _vm._v("\n          Logout\n        ")
                 ]
@@ -33721,49 +35224,39 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c(
-        "a",
-        {
-          staticClass:
-            "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
-          attrs: { href: "#" }
-        },
-        [
-          _c("span", { staticClass: "material-icons" }, [_vm._v("settings")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("Settings")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass:
-            "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
-          attrs: { href: "#" }
-        },
-        [
-          _c("span", { staticClass: "material-icons" }, [_vm._v("palette")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("Apperance")])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass:
-            "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
-          attrs: { href: "#" }
-        },
-        [
-          _c("span", { staticClass: "material-icons" }, [_vm._v("info")]),
-          _vm._v(" "),
-          _c("p", [_vm._v("About")])
-        ]
-      )
-    ])
+    return _c(
+      "a",
+      {
+        staticClass:
+          "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
+        attrs: { href: "#" }
+      },
+      [
+        _c("span", { staticClass: "material-icons" }, [
+          _vm._v("manage_accounts")
+        ]),
+        _vm._v(" "),
+        _c("p", [_vm._v("Profile Parameter")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass:
+          "flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded",
+        attrs: { href: "#" }
+      },
+      [
+        _c("span", { staticClass: "material-icons" }, [_vm._v("view_in_ar")]),
+        _vm._v(" "),
+        _c("p", [_vm._v("Apperance")])
+      ]
+    )
   }
 ]
 render._withStripped = true
@@ -34168,6 +35661,153 @@ function normalizeComponent (
     exports: scriptExports,
     options: options
   }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/vue2-smooth-scroll/src/index.js":
+/*!******************************************************!*\
+  !*** ./node_modules/vue2-smooth-scroll/src/index.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+// we use requestAnimationFrame to be called by the browser before every repaint
+let requestAnimationFrame;
+
+// Get the top position of an element in the document
+const getTop = function(element, start) {
+  // return value of html.getBoundingClientRect().top ... IE : 0, other browsers : -pageYOffset
+  if (element.nodeName === 'HTML') return -start;
+  return element.getBoundingClientRect().top + start;
+};
+
+function getDefaultConfig() {
+  return {
+    duration: 500,
+    offset: 0,
+    container: window,
+    updateHistory: true,
+    easingFunction: null,
+  };
+}
+
+const smoothScrollCtx = Symbol('smoothScrollCtx')
+
+function _smoothScroll({ scrollTo, offset, duration, container, updateHistory, hash, easingFunction }) {
+  if (!requestAnimationFrame) {
+    requestAnimationFrame = window.requestAnimationFrame ||
+    function(fn) {
+      window.setTimeout(fn, 16);
+    };
+  }
+
+  // Using the history api to solve issue: back doesn't work
+  // most browser don't update :target when the history api is used:
+  // THIS IS A BUG FROM THE BROWSERS.
+  if (updateHistory && window.history.pushState && location.hash !== hash) window.history.pushState('', '', hash);
+
+
+  const startPoint = container.scrollTop || window.pageYOffset;
+  // Get the top position of an element in the document
+  // return value of html.getBoundingClientRect().top ... IE : 0, other browsers : -pageYOffset
+  let end = getTop(scrollTo, startPoint);
+
+  // Ajusts offset from the end
+  end += offset;
+
+  const clock = Date.now();
+  const easeFn = (typeof easingFunction === 'function' && easingFunction) || easeInOutCubic;
+  const step = function() {
+    // the time elapsed from the beginning of the scroll
+    const elapsed = Date.now() - clock;
+    // calculate the scroll position we should be in
+    let position = end;
+    if (elapsed < duration) {
+      position = startPoint + (end - startPoint) * easeFn(elapsed / duration);
+
+      requestAnimationFrame(step);
+    } else if (updateHistory) {
+      location.replace('#' + scrollTo.id);
+      // this will cause the :target to be activated.
+    }
+
+    container === window ? container.scrollTo(0, position) : (container.scrollTop = position);
+  };
+  step();
+}
+
+const VueSmoothScroll = {
+  install(Vue, config) {
+    Vue.directive('smooth-scroll', {
+      inserted(el, binding, vnode) {
+        // Do not initialize smoothScroll when running server side, handle it in client
+        // We do not want this script to be applied in browsers that do not support those
+        // That means no smoothscroll on IE9 and below.
+        if (typeof window !== 'object' || window.pageYOffset === undefined) return;
+
+        let resolvedConfig = Object.assign({}, getDefaultConfig());
+        if (config) {
+          Object.assign(resolvedConfig, config);
+        }
+
+        let { duration, offset, container, updateHistory, easingFunction } = binding.value || {};
+        duration = duration || resolvedConfig.duration;
+        offset = offset || resolvedConfig.offset;
+        container = container || resolvedConfig.container;
+        updateHistory = updateHistory !== undefined ? updateHistory : resolvedConfig.updateHistory;
+        easingFunction = easingFunction || resolvedConfig.easingFunction;
+
+        if (typeof container === 'string') {
+          container = document.querySelector(container);
+        }
+
+        const clickHandler = function(ev) {
+          ev.preventDefault();
+          const hash = vnode.data.attrs.href;
+          const scrollTo = document.getElementById(hash.substring(1));
+          if (!scrollTo) return; // Do not scroll to non-existing node
+
+          _smoothScroll({ scrollTo, offset, duration, container, updateHistory, hash, easingFunction });
+        }
+        // Attach the smoothscroll function
+        el.addEventListener('click', clickHandler);
+
+        el[smoothScrollCtx] = {
+          clickHandler
+        }
+      },
+      unbind(el) {
+        el.removeEventListener('click', el[smoothScrollCtx].clickHandler)
+        el[smoothScrollCtx] = null
+      }
+    });
+
+    Vue.prototype.$smoothScroll = (args) => {
+      const resolvedArgs = Object.assign({}, getDefaultConfig(), config, args);
+      return _smoothScroll(resolvedArgs)
+    }
+  }
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VueSmoothScroll);
+
+/* istanbul ignore if */
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(VueSmoothScroll)
+}
+
+/**
+ * ease in out function
+ * @see https://gist.github.com/gre/1650294
+ */
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 }
 
 
@@ -46176,8 +47816,9 @@ Vue.compile = compileToFunctions;
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -46199,10 +47840,38 @@ Vue.compile = compileToFunctions;
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = __webpack_modules__;
 /******/ 	
-/******/ 	// the startup function
-/******/ 	// It's empty as some runtime module handles the default behavior
-/******/ 	__webpack_require__.x = x => {};
 /************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	(() => {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = (result, chunkIds, fn, priority) => {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var [chunkIds, fn, priority] = deferred[i];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every((key) => (__webpack_require__.O[key](chunkIds[j])))) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					result = fn();
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
@@ -46270,15 +47939,12 @@ Vue.compile = compileToFunctions;
 /******/ 		
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// Promise = chunk loading, 0 = chunk loaded
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"/js/app": 0
+/******/ 			"/js/app": 0,
+/******/ 			"css/app": 0
 /******/ 		};
 /******/ 		
-/******/ 		var deferredModules = [
-/******/ 			["./resources/js/app.js"],
-/******/ 			["./resources/sass/app.scss"]
-/******/ 		];
 /******/ 		// no chunk on demand loading
 /******/ 		
 /******/ 		// no prefetching
@@ -46289,75 +47955,44 @@ Vue.compile = compileToFunctions;
 /******/ 		
 /******/ 		// no HMR manifest
 /******/ 		
-/******/ 		var checkDeferredModules = x => {};
+/******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
 /******/ 		
 /******/ 		// install a JSONP callback for chunk loading
 /******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime, executeModules] = data;
+/******/ 			var [chunkIds, moreModules, runtime] = data;
 /******/ 			// add "moreModules" to the modules object,
 /******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0, resolves = [];
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					resolves.push(installedChunks[chunkId][0]);
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
+/******/ 			var moduleId, chunkId, i = 0;
 /******/ 			for(moduleId in moreModules) {
 /******/ 				if(__webpack_require__.o(moreModules, moduleId)) {
 /******/ 					__webpack_require__.m[moduleId] = moreModules[moduleId];
 /******/ 				}
 /******/ 			}
-/******/ 			if(runtime) runtime(__webpack_require__);
+/******/ 			if(runtime) var result = runtime(__webpack_require__);
 /******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			while(resolves.length) {
-/******/ 				resolves.shift()();
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkIds[i]] = 0;
 /******/ 			}
-/******/ 		
-/******/ 			// add entry modules from loaded chunk to deferred list
-/******/ 			if(executeModules) deferredModules.push.apply(deferredModules, executeModules);
-/******/ 		
-/******/ 			// run deferred modules when all chunks ready
-/******/ 			return checkDeferredModules();
+/******/ 			return __webpack_require__.O(result);
 /******/ 		}
 /******/ 		
 /******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 		
-/******/ 		function checkDeferredModulesImpl() {
-/******/ 			var result;
-/******/ 			for(var i = 0; i < deferredModules.length; i++) {
-/******/ 				var deferredModule = deferredModules[i];
-/******/ 				var fulfilled = true;
-/******/ 				for(var j = 1; j < deferredModule.length; j++) {
-/******/ 					var depId = deferredModule[j];
-/******/ 					if(installedChunks[depId] !== 0) fulfilled = false;
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferredModules.splice(i--, 1);
-/******/ 					result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
-/******/ 				}
-/******/ 			}
-/******/ 			if(deferredModules.length === 0) {
-/******/ 				__webpack_require__.x();
-/******/ 				__webpack_require__.x = x => {};
-/******/ 			}
-/******/ 			return result;
-/******/ 		}
-/******/ 		var startup = __webpack_require__.x;
-/******/ 		__webpack_require__.x = () => {
-/******/ 			// reset startup function so it can be called again when more startup code is added
-/******/ 			__webpack_require__.x = startup || (x => {});
-/******/ 			return (checkDeferredModules = checkDeferredModulesImpl)();
-/******/ 		};
 /******/ 	})();
 /******/ 	
 /************************************************************************/
 /******/ 	
-/******/ 	// run startup
-/******/ 	var __webpack_exports__ = __webpack_require__.x();
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	__webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/app"], () => (__webpack_require__("./resources/sass/app.scss")))
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
 ;

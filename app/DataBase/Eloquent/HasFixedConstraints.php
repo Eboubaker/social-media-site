@@ -14,12 +14,10 @@ trait HasFixedConstraints
         return $this;
     }
 
-    public function setFixedConstraints(Model $model)
+    protected function setFixedConstraints(Model $model)
     {
-        foreach($this->saveConstraints as $attribute => $value)
-        {
-            if(is_null($model->getAttribute($attribute)))
-            {
+        foreach ($this->saveConstraints as $attribute => $value) {
+            if (is_null($model->getAttribute($attribute))) {
                 $model->setAttribute($attribute, $value);
             }
         }

@@ -18,6 +18,7 @@ class CommunityRolesSeeder extends Seeder
     {
         DB::transaction(function () {
             $visitor_permissions = [
+                CommunityPermission::find(config('permissions.communities.can-view-posts')),
                 CommunityPermission::find(config('permissions.communities.can-reply-to-comments')),
                 CommunityPermission::find(config('permissions.communities.can-create-posts')),
                 CommunityPermission::find(config('permissions.communities.can-comment-on-posts')),

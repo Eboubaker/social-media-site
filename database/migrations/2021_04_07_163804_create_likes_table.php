@@ -19,7 +19,9 @@ class CreateLikesTable extends Migration
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
             $table->morphs('likeable');
-            $table->foreignId('liker_id')->references('id')->on(Profile::tablename())->constrained()->cascadeOnDelete();
+            $table->foreignId('liker_id')->constrained(Profile::tablename())->cascadeOnDelete();
+
+            $table->unique(['liker_id', 'likeable_id', 'likeable_type']);
             MigrationHelper::addTimeStamps($table, Like::class);
         });
     }

@@ -24,7 +24,10 @@ class CommentsSeeder extends Seeder
                 foreach(range(1, $posts->count()) as $i)
                 {
                     $commentable = $posts->random();
-                    $comment = Comment::factory()->make(['commentor_id' => $profiles->random()->getKey()]);
+                    $comment = Comment::factory()->make([
+                        'commentor_id' => $profiles->random()->id,
+                        'post_id' => $commentable->id,
+                    ]);
                     $commentable->comments()->save($comment);
                 }
             });

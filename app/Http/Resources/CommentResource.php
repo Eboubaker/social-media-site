@@ -2,9 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Comment;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @mixins \App\Models\Comment
+ */
 class CommentResource extends JsonResource
 {
     /**
@@ -15,16 +17,20 @@ class CommentResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $resource = [
             'id' => $this->id,
-            'author' => new ProfileResource($this->whenLoaded('author')),
-            'comments' => self::collection($this->whenLoaded('comments')),
+            'body' => $this->body,
+            'commentor' => new ProfileResource($this->whenLoaded('commentor')),
+            'replies' => CommentResource::collection($this->whenLoaded('replies')),
+            'replies_count' => $this->replies_count,
+            'likes_count' => $this->likes_count,
+            'is_liked' => $this->is_liked,
+            'post_id' => $this->post_id,
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'videos' => VideoResource::collection($this->whenLoaded('videos')),
-            'commentsCount' => $this->comments->count(),
-            'body' => $this->body,
-            'createdAt' => $this->created_at->diffForHumans(),
+            'createdAt' => $this->created_at->diffForHumans(syntax:true,short:true),
             'updatedAt' => $this->updated_at->diffForHumans(),
         ];
+        return $resource;
     }
 }

@@ -19,12 +19,12 @@ class PostResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $resource = [
             'id' => $this->id,
             'author' => new ProfileResource($this->whenLoaded('author')),
             'title' => $this->title,
             'body' => $this->body,
-            'comments' => CommentResource::collection($this->whenLoaded('comments')),
+            'pageable_type' => str_replace('App\Models\\', '', $this->pageable_type),
             'pageable' => $this->whenLoaded('pageable', function () {
                 if ($this->pageable instanceof Community) {
                     return new CommunityResource($this->pageable);
@@ -35,13 +35,16 @@ class PostResource extends JsonResource
             }),
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'videos' => VideoResource::collection($this->whenLoaded('videos')),
-            'commentsCount' => $this->whenLoaded('comments', function () {
-                return $this->comments->count();
-            }),
+            'comments' => CommentResource::collection($this->whenLoaded('comments')),
             'likes' => LikeResource::collection($this->whenLoaded('likes')),
-            'views' => LikeResource::collection($this->whenLoaded('likes')),
+            'views' => ViewResource::collection($this->whenLoaded('likes')),
+            'comments_count' => $this->comments_count,
+            'likes_count' => $this->likes_count,
+            'views_count' => $this->views_count,
             'createdAt' => $this->created_at->diffForHumans(),
             'updatedAt' => $this->updated_at,
+            'is_liked' => $this->is_liked ? true : false,
         ];
+        return $resource;
     }
 }

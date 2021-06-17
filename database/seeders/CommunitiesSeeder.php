@@ -26,8 +26,6 @@ class CommunitiesSeeder extends Seeder
                 /** @var Profile $profile  */
                 $profile = $profiles->random();
                 $community = $profile->ownedCommunities()->save(Community::factory()->make());
-                $community->iconImage()->save(Image::factory()->make());
-                $community->coverImage()->save(Image::factory()->make());
             }
         });
     }

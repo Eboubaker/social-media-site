@@ -85,6 +85,11 @@ return [
             'url' => env('APP_URL').'/storage/videos/',
             'visibility' => 'public',
         ],
+        'seeds' => [
+            'driver' => 'local',
+            'root' => storage_path('app\seeds\\'),
+            'visibility' => 'private',
+        ],
         'trash' => [
             'driver' => 'local',
             'root' => storage_path('app\trash\\'),

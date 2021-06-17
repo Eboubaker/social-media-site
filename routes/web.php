@@ -76,7 +76,7 @@ Route::post('/r/{comment}/like', [LikeController::class, 'likeComment'])->name('
 Route::post('/r/{comment}/unlike', [LikeController::class, 'unlikeComment'])->name('comment.unlike');
 
 Route::post('/p/{post}/comment', [CommentController::class, 'storeComment'])->name('post.storeComment');
-Route::post('/r/{comment}/comment', [CommentController::class, 'storeReply'])->name('comment.storeComment');
+Route::post('/r/{comment}/reply', [CommentController::class, 'storeReply'])->name('comment.storeComment');
 Route::post('/r/{comment}/update', [CommentController::class, 'update'])->name('comment.update');
 
 Route::post('/c/{community}/posts', [PostController::class, 'storeCommunityPost'])->name('community.posts.store');
@@ -98,10 +98,12 @@ Route::get('/permissions/{community}', [PermissionsController::class, 'permissio
 Route::get('/permissions', [PermissionsController::class, 'permissionsList'])->name('permissions.all');
 Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->name('profile.switch');
 Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
+
+Route::post('/p/{post}/comments', [PostController::class, 'loadComments'])->name('posts.loadComments');
 #endregion
 
 
-#region backend api
+#region backend api requests
 Route::post('/wapi/profile/current', [ProfileController::class, 'current']);
 Route::post('/wapi/feed', [FeedController::class, 'wapiIndex']);
 #endregion

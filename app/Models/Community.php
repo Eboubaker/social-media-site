@@ -72,7 +72,6 @@ class Community extends Model
 {
     use HasFactory, 
     SoftDeletes,
-    ValidatingTrait,
     Urlable,
 
     ModelTraits,
@@ -81,18 +80,11 @@ class Community extends Model
 
 
     protected $guarded = [];
-    protected $rules = [
-        'owner_id' => ['exists:App\Models\Profile,id'],
-        'name' => ['required', 'unique:App\Models\Community,name', 'min:2', 'max:20', 'regex:/^[A-Za-z]+$/'],
-        'description' => ['max:255']
-    ];
-    protected $validationMessages = [
-        'username.unique' => "Another user is using that username already.",
-        'name.regex' => "name must only contain letters (a-z or A-Z) no spaces allowed"
-    ];
-    protected $throwValidationExceptions = true;
 
+    protected $with = ['iconImage'];
+    
 
+    
 
     public function posts():MorphMany
     {
@@ -139,7 +131,15 @@ class Community extends Model
                             , $this
                             , 'images.imageable_type'
                             , 'images.imageable_id', 'id'
-                ))->withFixedConstraint('purpose', __FUNCTION__);
+                ))->withDefault(function(){
+                    return new Image([
+                        'id' => Image::DEFAULT_COMMUNITY_COVER_IMAGE_ID,
+                        'type' => IMAGETYPE_JPEG,
+                        'extension' => 'jpeg',
+                        'mime' => 'image/jpeg'
+                    ]);
+                })
+                ->withFixedConstraint('purpose', __FUNCTION__);
     }
     public function iconImage():MorphOne
     {
@@ -147,7 +147,15 @@ class Community extends Model
                             , $this
                             , 'images.imageable_type'
                             , 'images.imageable_id', 'id'
-                ))->withFixedConstraint('purpose', __FUNCTION__);
+                ))->withDefault(function(){
+                    return new Image([
+                        'id' => Image::DEFAULT_COMMUNITY_ICON_IMAGE_ID,
+                        'type' => IMAGETYPE_JPEG,
+                        'extension' => 'jpeg',
+                        'mime' => 'image/jpeg'
+                    ]);
+                })
+                ->withFixedConstraint('purpose', __FUNCTION__);
     }
 
     public function visitorRole():BelongsTo

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\HttpPermissionException;
+use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Http\StatusCodes;
 use App\Models\Community;
@@ -11,11 +12,14 @@ use App\Models\Post;
 use App\Models\Profile;
 use App\Models\Video;
 use App\Rules\AttachementRule;
+use App\Rules\PolymorphicRelationExists;
 use DebugBar\DebugBar;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Spatie\Html\Elements\Input;
 
 class PostController extends Controller
@@ -41,7 +45,7 @@ class PostController extends Controller
     }
     private function storeWithAttachements(Request $request, Post $post, Model $pageable)
     {
-        $parser = new AttachementRule($pageable);
+        $parser = new AttachementRule();
         Validator::make($request->all(), [
             'attachements.*' => $parser
         ])->validate();
@@ -50,6 +54,14 @@ class PostController extends Controller
             $post->save();
             foreach($parser->getModels() as $attachement)
             {
+                if($pageable instanceof Community && $attachement instanceof Video && ~$pageable->allowsCurrent(config('permissions.communities.can-attach-videos-to-own-post')))
+                {
+                    throw ValidationException::withMessages(['attachements' => 'You are not allowed to post videos to this community']);
+                }
+                if($pageable instanceof Community && $attachement instanceof Image && ~$pageable->allowsCurrent(config('permissions.communities.can-attach-images-to-own-post')))
+                {
+                    throw ValidationException::withMessages(['attachements' => 'You are not allowed to post videos to this community']);
+                }
                 $attachement->attacheable()->associate($post);
                 $attachement->save();
             }
@@ -65,16 +77,16 @@ class PostController extends Controller
     {
         if($community->allowsCurrent(config('permissions.communities.can-create-posts')))
         {
-            $post = Post::make([
-                'title' => $request->get('title'),
-                'body' => $request->get('body'),
-            ]);
+            $post = Post::make($this->validated($request->all()));
             $post->author()->associate(Profile::current());
             $post->pageable()->associate($community);
             $post = $this->storeWithAttachements($request, $post, $community);
-            return response()->redirectTo($post->url);
+            return $request->wantsJson() 
+                    ? new JsonResponse(new PostResource($post), StatusCodes::HTTP_CREATED)
+                    : response()->redirectTo($post->url);
+        }else{
+            throw new HttpPermissionException;
         }
-        throw new HttpPermissionException;
     }
     public function destroy(Post $post)
     {
@@ -86,7 +98,7 @@ class PostController extends Controller
     }
     public function update(Request $request, Post $post)
     {
-        if(DB::transaction(fn()=>$post->update($request->all())))
+        if(DB::transaction(fn()=>$post->update($this->validated($request->all()))))
         {
             // $post->refresh();
             return response()->json((new PostResource($post))->toArray($request));
@@ -99,4 +111,30 @@ class PostController extends Controller
         return redirect($post->url);
     }
     
+
+    public function loadComments(Post $post)
+    {
+        if($post->pageable instanceof Community && ! $post->pageable->allowsCurrent(config('permissions.communities.can-view-posts'))
+            || $post->pageable instanceof Profile && ! $post->pageable->allowsCurrent(config('permissions.profiles.can-view-posts'))
+        )
+        {
+            throw new HttpPermissionException;
+        }
+        $skip = request('skip') ?: 0;
+        $limit = request('limit') ?: 5;
+        $comments = $post->comments()->with(['commentor', 'images', 'videos'])->withCount(['likes', 'replies'])->skip($skip)->limit($limit)->get();
+        return CommentResource::collection($comments);
+    }
+    public function validated(array $data)
+    {
+        $validated = Validator::make(data:$data, rules:[
+                'title' => ['max:255'],
+                'body' => ['max:10000'],
+            ])->validate();
+        if(empty(request('title')) && empty(request('body')) && request()->files->get('attachements')->count() === 0)
+        {
+            throw ValidationException::withMessages(['post' => "post can't be empty"]);
+        }
+        return $validated;
+    }
 }

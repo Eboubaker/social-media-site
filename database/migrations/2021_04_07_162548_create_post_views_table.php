@@ -21,7 +21,7 @@ class CreatePostViewsTable extends Migration
             $table->id();
             $table->foreignId('viewer_id')->constrained(Profile::tablename())->cascadeOnDelete();
             $table->foreignId('post_id')->constrained(Post::tablename())->cascadeOnDelete();
-
+            $table->smallInteger('viewed_count', unsigned:true)->nullable()->default(1);
             $table->unique(['viewer_id', 'post_id']);
             MigrationHelper::addTimeStamps($table, PostView::class);
         });

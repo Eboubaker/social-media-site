@@ -70,26 +70,15 @@ class Image extends Model implements Attachement
     HasStorageUrl,
     SoftDeletes;
 
+    public const DEFAULT_COMMUNITY_ICON_IMAGE_ID = 1;
+    public const DEFAULT_COMMUNITY_COVER_IMAGE_ID = 2;
+    public const DEFAULT_PROFILE_COVER_IMAGE_ID = 3;
+    public const DEFAULT_PROFILE_PROFILE_IMAGE_ID = 4;
+
     public $storage = 'images';
+
     protected $guarded = [];
     
-    protected $rules = [
-
-    ];
-    protected $validationMessages = [
-
-    ];
-    protected $validationAttributeNames = [
-        'imageable_id' => 'The related item'
-    ];
-    protected $throwValidationExceptions = true;
-
-
-    public function __construct($args=[])
-    {
-        parent::__construct($args);
-        $this->rules['imageable_id'][] = new PolymorphicRelationExists($this, 'imageable');
-    }
     public function imageable()
     {
         return $this->morphTo();
@@ -109,5 +98,11 @@ class Image extends Model implements Attachement
             'width' => $width,
             'height' => $height,
         ];
+    }
+    public static function extractModelFromFile($path, array $adds = [])
+    {
+        $temp = tempnam(sys_get_temp_dir(), 'png');
+        copy($path, $temp);
+        return Image::make($adds + self::extractAttributesFromFile($path))->setTemporaryFileLocationAttribute($temp);
     }
 }

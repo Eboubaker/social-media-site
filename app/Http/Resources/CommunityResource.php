@@ -19,7 +19,8 @@ class CommunityResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'iconImage' => new ImageResource($this->whenLoaded('iconImage')),
-            'members_count' => $this->members_count
+            'members_count' => $this->members_count,
+            'url' => $this->resource->url,
         ];
     }
 }

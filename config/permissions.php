@@ -9,6 +9,7 @@ return [
         'can-view-posts'  => crc32('profile-can-view-posts'),
     ],
     'communities' => [
+        'can-view-posts'                           => crc32('communities-can-view-posts'),
         'can-create-posts'                           => crc32('communities-can-create-posts'),
         'can-modify-own-posts'                       => crc32('communities-can-modify-own-posts'),
         'can-modify-members-posts'                   => crc32('communities-can-modify-members-posts'),

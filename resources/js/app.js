@@ -9,20 +9,23 @@ require("./create-posts");
 import Vue from "vue";
 // import VueResource from "vue-resource";
 import "alpinejs";
-
+window.pluralize = require('pluralize');
 // tell Vue to use the vue-resource plugin
 // Vue.use(VueResource);
 window.Vue = Vue;
+import VueSmoothScroll from 'vue2-smooth-scroll'
+Vue.use(VueSmoothScroll)
 Vue.component("feed", require("./components/Feed.vue").default);
 Vue.component("nav-bar", require("./components/NavBar.vue").default);
 Vue.component("post", require("./components/Post.vue").default);
-Vue.component(
-  "profile-type",
-  require("./components/SocialBuisnessAccount.vue").default
-);
+Vue.component("profile-type",require("./components/SocialBuisnessAccount.vue").default);
 Vue.component("play-ground", require("./components/PlayGround.vue").default);
 Vue.component("creat-post", require("./components/CreatPost.vue").default);
 Vue.component("posts-component", require("./components/Posts.vue").default);
+Vue.component("comment", require("./components/Comment.vue").default);
+
+
+Vue.prototype.pluralize = (...atts) => window.pluralize(...atts);
 // Vue.directive("clickaway", {
 //   bind() {
 //     this.event = (event) => this.vm.$emit(this.expression, event);
@@ -38,21 +41,3 @@ Vue.component("posts-component", require("./components/Posts.vue").default);
 //     event.stopPropagation();
 //   },
 // });
-
-var app = new Vue({
-  el: "#app",
-});
-
-var feed = new Vue({
-  el: "#vue-feed",
-});
-
-axios.post("/wapi/profile/current").then((res) => {
-  Vue.prototype.$currentProfile = res.data.data;
-  var app = new Vue({
-    el: "#g-app",
-  });
-  var feed = new Vue({
-    el: "#vue-feed",
-  });
-});

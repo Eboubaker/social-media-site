@@ -10,36 +10,46 @@ export default {
     Post
   },
   data() {
-    return {
-      profile: null,
+    var data = {
       posts: [],
-      loading: false
+      loading: false,
+      profile:null
     };
+    var arr = window.location.pathname.split('/')
+    if(arr[1] === 'u')
+      data.profile = arr[2]
+    console.log('data');
+    return data
   },
   created() {
-    this.profile = Vue.prototype.$currentProfile;
+    window.fetchData = this.fetchData;
     this.fetchData();
     document.body.onscroll = function() {
-      const perc =
-        this.scrollY / (document.body.offsetHeight - window.innerHeight);
-      if (!this.loading && perc > 0.7) {
-        this.loading = true;
-        this.fetchData();
+      const perc = this.scrollY / (document.body.offsetHeight - window.innerHeight);
+      if (perc > 0.7) {
+        console.log(perc);
+        window.fetchData();
       }
     };
   },
   methods: {
     fetchData() {
-      axios
-        .post("/wapi/feed", { parameters: {} })
-        .then(res => {
-          console.log(res);
-          this.posts.push(...res.data.data);
-        })
-        .catch(err => {
-          console.log(err);
-        })
-        .then(() => (this.loading = false));
+      if(!this.loading)
+      {
+        this.loading = true;
+        let url  = this.profile ? `/wapi/feed?skip=${this.posts.length}&username=${this.profile}` : `/wapi/feed?skip=${this.posts.length}`;
+        axios
+          .post(url, { parameters: {} })
+          .then(res => {
+            console.log(res);
+            this.posts.push(...res.data.data);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .then(() => this.loading = false);
+      }
+      
     }
   }
 };

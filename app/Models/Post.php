@@ -74,13 +74,12 @@ use Watson\Validating\ValidatingTrait;
  * @method static \Illuminate\Database\Eloquent\Builder|Post withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @method static \Illuminate\Database\Query\Builder|Post withoutTrashed()
  */
-class Post extends Model implements HasAttachementsInterface
+class Post extends Model
 {
     use HasFactory, 
     HasUUid62,
     SoftDeletes,
     Sluggable,
-    ValidatingTrait,
 
     ModelTraits,
     Urlable,
@@ -91,43 +90,13 @@ class Post extends Model implements HasAttachementsInterface
     Viewable,
     Likeable;
 
-    protected $rules = [
-        '*' => 'allowed_attributes:slug,uuid62,author_id,title,body,pageable_id,pageable_type',
-        'author_id' => ['exists:App\Models\Profile,id'],
-        'title' => ['required', 'min:3', 'max:255'],
-        'body' => ['max:10000'],
-    ];
-    protected $validationMessages = [
-        'author_id.exists' => "post author not found.",
-    ];
-    protected $validationAttributeNames = [
-        'pageable_id' => 'liker'
-    ];
-    protected $throwValidationExceptions = true;
 
-    public function __construct($atts=[])
-    {
-        parent::__construct($atts);
-        $this->rules['pageable_id'][] = new PolymorphicRelationExists($this, 'pageable');
-    }
     protected $guarded = [];
+
 
     public function pageable()
     {
         return $this->morphTo('pageable');
-    }
-
-    public function deleteAttachements()
-    {
-        $post = $this;
-        DB::transaction(function() use ($post){
-            $post->videos()->cursor()->each(function(Video $video){
-                $video->delete();
-            });
-            $post->images()->cursor()->each(function(Image $image){
-                $image->delete();
-            });
-        });
     }
 
     public function getAttachementsAttribute()
@@ -166,5 +135,12 @@ class Post extends Model implements HasAttachementsInterface
             return route('profile-post.show', [$this->pageable->username, $this->uuid62, $this->slug]);
         }
         return '';
+    }
+    public function viewCountForCurrent():int
+    {
+        return DB::table('post_views')
+                ->where('viewer_id', Profile::current_id())
+                ->where('post_id', $this->id)
+                ->first('viewed_count')->viewed_count ?? 0;
     }
 }

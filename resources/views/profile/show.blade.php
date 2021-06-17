@@ -17,7 +17,7 @@
           <a class="flex justify-between items-center w-full px-2 pt-2 text-center" href="#">
             Account
             <span class="material-icons">arrow_drop_down_circle</span>
-          </a>
+          </a>c
           <a class="flex justify-between items-center w-full px-2 pt-2 text-center" href="#">
             Saved Content
             <span class="material-icons">arrow_drop_down_circle</span>
@@ -78,12 +78,12 @@
               <!-- User card-->
               <div>
                 <div
-                  class="w-full bg-cover bg-no-repeat bg-center"
-                  style="height: 200px; background-image: url(https://pbs.twimg.com/profile_banners/2161323234/1585151401/600x200);"
+                  class="w-full bg-cover bg-no-repeat bg-center rounded-sm shadow-xl"
+                  style="height: 200px; background-color: #1a1a1a;"
                 >
                   <img
-                    class="opacity-0 w-full h-full"
-                    src="https://pbs.twimg.com/profile_banners/2161323234/1585151401/600x200"
+                    class="w-full h-full rounded-sm"
+                    src="{{ $profile->coverImage->url }}"
                     alt
                   />
                 </div>
@@ -97,9 +97,10 @@
                           class="md rounded-full relative avatar"
                         >
                           <img
-                            style="height:9rem; width:9rem;"
-                            class="md rounded-full relative border-4 border-gray-900"
-                            src="https://pbs.twimg.com/profile_images/1254779846615420930/7I4kP65u_400x400.jpg"
+                            width="200"
+                            height="200"
+                            class="md rounded-full relative border-2 border-blue-200 antialiased"
+                            src="{{ $profile->profileImage->url }}"
                             alt
                           />
                           <div class="absolute"></div>
@@ -120,8 +121,8 @@
                     <div>
                       <h2
                         class="text-xl leading-6 font-bold"
-                      >{{Auth::user()->first_name}} {{Auth::user()->last_name}}</h2>
-                      <p class="text-sm leading-5 font-medium text-gray-600">{{Auth::user()->email}}</p>
+                      >{{ $profile->account->first_name }} {{ $profile->account->last_name }}</h2>
+                      <p class="text-sm leading-5 font-medium text-gray-600">u/{{ $profile->username }}</p>
                     </div>
                     <!-- Description and others -->
                     <div class="mt-3">
@@ -146,7 +147,7 @@
                             href="#"
                             target="#"
                             class="leading-5 ml-1 text-logo-red"
-                          >www.abdelhak-darbeida.com</a>
+                          >{{ $profile->username }}</a>
                         </span>
                         <span class="flex mr-2">
                           <svg viewBox="0 0 24 24" class="h-5 w-5 paint-icon">
@@ -164,7 +165,7 @@
                               <circle cx="12" cy="17.486" r="1.285" />
                             </g>
                           </svg>
-                          <span class="leading-5 ml-1">Joined {{Auth::user()->created_at->format('M d,Y')}}</span>
+                          <span class="leading-5 ml-1">Joined {{ $profile->created_at->format('F, Y') }}</span>
                         </span>
                       </div>
                     </div>
@@ -172,11 +173,11 @@
                       class="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid"
                     >
                       <div class="text-center pr-3">
-                        <span class="font-bold">520</span>
+                        <span class="font-bold">{{ $profile->followings_count }}</span>
                         <span class="text-gray-600">Following</span>
                       </div>
                       <div class="text-center px-3">
-                        <span class="font-bold">23,4m</span>
+                        <span class="font-bold">{{ $profile->followers_count }}</span>
                         <span class="text-gray-600">Followers</span>
                       </div>
                     </div>
@@ -184,10 +185,10 @@
                 </div>
                 <hr class="border-gray-800" />
               </div>
-
+              <feed :profile="{{ $profile->id }}" class="space-y-4"></feed>
               <ul class="list-none">
                 <li>
-                  {{-- <feed class="space-y-4"></feed> --}}
+                  
                   <!--second tweet-->
                   <article class="border rounded-lg mt-6">
                     <div class="flex flex-shrink-0 p-4 pb-0">
