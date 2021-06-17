@@ -13,13 +13,25 @@ export default {
     var data = {
       posts: [],
       loading: false,
-      profile:null
+      profile:null,
+      sortBy: 'best', // possible value: [best,hot,top,new,active]
     };
     var arr = window.location.pathname.split('/')
     if(arr[1] === 'u')
       data.profile = arr[2]
     console.log('data');
     return data
+  },
+  watch: {
+    sortBy:{
+      handler: function(val, oldVal){
+        if(val !== oldVal)
+        {
+          this.posts = [];
+          this.fetchData();
+        }
+      }
+    }
   },
   created() {
     window.fetchData = this.fetchData;
@@ -37,9 +49,12 @@ export default {
       if(!this.loading)
       {
         this.loading = true;
-        let url  = this.profile ? `/wapi/feed?skip=${this.posts.length}&username=${this.profile}` : `/wapi/feed?skip=${this.posts.length}`;
         axios
-          .post(url, { parameters: {} })
+          .post('/wapi/feed', {
+            username:this.profile,
+            skip:this.posts.length,
+            sortBy:this.sortBy
+          })
           .then(res => {
             console.log(res);
             this.posts.push(...res.data.data);
@@ -49,7 +64,6 @@ export default {
           })
           .then(() => this.loading = false);
       }
-      
     }
   }
 };
