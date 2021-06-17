@@ -24,26 +24,26 @@
         </a>
         <div>
           <a
-          class="flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
-          href="#"
-        >
-          <span class="material-icons">settings</span>
-          <p>Settings</p>
-        </a>
-        <a
-          class="flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
-          href="#"
-        >
-          <span class="material-icons">palette</span>
-          <p>Apperance</p>
-        </a>
-        <a
-          class="flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
-          href="#"
-        >
-          <span class="material-icons">info</span>
-          <p>About</p>
-        </a>
+            class="flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+            href="#"
+          >
+            <span class="material-icons">settings</span>
+            <p>Settings</p>
+          </a>
+          <a
+            class="flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+            href="#"
+          >
+            <span class="material-icons">palette</span>
+            <p>Apperance</p>
+          </a>
+          <a
+            class="flex flex-auto align-center mx-1 my-1 px-2 py-2 space-x-2 hover:bg-gray-200 rounded"
+            href="#"
+          >
+            <span class="material-icons">info</span>
+            <p>About</p>
+          </a>
         </div>
         <div class="flex-auto w-full px-1">
           <button
@@ -69,7 +69,7 @@ export default {
   methods: {
     logout: function() {
       axios
-        .post("/en/logout")
+        .post("/logout")
         .then(res => {
           window.location.href = "/";
         })

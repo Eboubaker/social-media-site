@@ -120,8 +120,8 @@
                     <div>
                       <h2
                         class="text-xl leading-6 font-bold"
-                      >ℜ𝔦𝔠𝔞𝔯𝔡𝔬ℜ𝔦𝔟𝔢𝔦𝔯𝔬.dev</h2>
-                      <p class="text-sm leading-5 font-medium text-gray-600">@Ricardo_oRibeir</p>
+                      >{{Auth::user()->first_name}} {{Auth::user()->last_name}}</h2>
+                      <p class="text-sm leading-5 font-medium text-gray-600">{{Auth::user()->email}}</p>
                     </div>
                     <!-- Description and others -->
                     <div class="mt-3">
@@ -164,7 +164,7 @@
                               <circle cx="12" cy="17.486" r="1.285" />
                             </g>
                           </svg>
-                          <span class="leading-5 ml-1">Joined December, 2019</span>
+                          <span class="leading-5 ml-1">Joined {{Auth::user()->created_at->format('M d,Y')}}</span>
                         </span>
                       </div>
                     </div>
@@ -187,7 +187,7 @@
 
               <ul class="list-none">
                 <li>
-                  <feed class="space-y-4"></feed>
+                  {{-- <feed class="space-y-4"></feed> --}}
                   <!--second tweet-->
                   <article class="border rounded-lg mt-6">
                     <div class="flex flex-shrink-0 p-4 pb-0">
@@ -202,7 +202,7 @@
                           </div>
                           <div class="ml-3">
                             <p class="text-base leading-6 font-medium ">
-                              Sonali Hirave
+                              {{Auth::user()->first_name}} {{Auth::user()->last_name}}
                               <span
                                 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150"
                               >@ShonaDesign . 16 April</span>
@@ -215,14 +215,14 @@
                     <div class="pl-16">
                       <p class="text-base width-auto font-medium  flex-shrink">
                         Day 07 of the challenge
-                        <a href="#" class="text-blue-400">#100DaysOfCode</a>
+                        <a href="#" class="text-logo-red">#100DaysOfCode</a>
                         I was wondering what I can do with
-                        <a href="#" class="text-blue-400">#tailwindcss</a>, so just started building
+                        <a href="#" class="text-logo-red">#tailwindcss</a>, so just started building
                         Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion.
                         [07/100]
                         <a
                           href="#"
-                          class="text-blue-400"
+                          class="text-logo-red"
                         >#WomenWhoCode #CodeNewbie</a>
                       </p>
 
@@ -241,7 +241,7 @@
 
                       <div class="flex items-center py-4">
                         <div
-                          class="flex-1 flex items-center  text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out"
+                          class="flex-1 flex items-center  text-xs text-gray-400 hover:text-logo-red transition duration-350 ease-in-out"
                         >
                           <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
                             <g>
@@ -277,7 +277,7 @@
                           14 k
                         </div>
                         <div
-                          class="flex-1 flex items-center  text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out"
+                          class="flex-1 flex items-center  text-xs text-gray-400 hover:text-logo-red transition duration-350 ease-in-out"
                         >
                           <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
                             <g>
