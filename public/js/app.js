@@ -4255,6 +4255,146 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -4262,15 +4402,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   data: function data() {
     var data = {
+      form: {
+        visibility: "public",
+        body: "",
+        title: "",
+        attachements: []
+      },
       posts: [],
       loading: false,
       profile: null,
-      sortBy: 'best' // possible value: [best,hot,top,new,active]
+      sortBy: "best" // possible value: [best,hot,top,new,active]
 
     };
-    var arr = window.location.pathname.split('/');
-    if (arr[1] === 'u') data.profile = arr[2];
-    console.log('data');
+    var arr = window.location.pathname.split("/");
+    if (arr[1] === "u") data.profile = arr[2];
+    console.log("data");
     return data;
   },
   watch: {
@@ -4302,7 +4448,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       if (!this.loading) {
         this.loading = true;
-        axios.post('/wapi/feed', {
+        axios.post("/wapi/feed", {
           username: this.profile,
           skip: this.posts.length,
           sortBy: this.sortBy
@@ -4318,6 +4464,42 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           return _this.loading = false;
         });
       }
+    },
+    refreshAttachements: function refreshAttachements(e) {
+      var _this$form$attachemen;
+
+      var files = e.target.files || e.dataTransfer.files;
+
+      (_this$form$attachemen = this.form.attachements).push.apply(_this$form$attachemen, _toConsumableArray(files));
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      var formData = new FormData();
+
+      for (var i = 0; i < this.form.attachements.length; i++) {
+        formData.append("attachements[" + i + "]", this.form.attachements[i]);
+      }
+
+      formData.append("body", this.form.body);
+      formData.append("title", this.form.title);
+      axios.post("/u/posts", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }).then(function (res) {
+        console.log(res.data.data);
+
+        _this2.posts.unshift(res.data.data);
+      })["catch"](function (e) {
+        console.log(e);
+      }).then(function (e) {
+        _this2.close();
+      });
+    },
+    close: function close() {
+      // destroy the vue listeners, etc
+      this.$destroy();
     }
   }
 });
@@ -32201,17 +32383,322 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    _vm._l(_vm.posts, function(post) {
-      return _c("Post", {
-        key: post.id,
-        staticClass: "sm:block",
-        attrs: { post: post }
+    [
+      _vm._m(0),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _c("div", [
+        _c("form", { attrs: { action: "#" } }, [
+          _vm._m(2),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.title,
+                expression: "form.title"
+              }
+            ],
+            staticClass:
+              "w-full mb-2 rounded text-lg focus:ring-logo-red focus:border-logo-red",
+            attrs: {
+              type: "text",
+              name: "title",
+              id: "title",
+              placeholder: "Post title"
+            },
+            domProps: { value: _vm.form.title },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "title", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.body,
+                expression: "form.body"
+              }
+            ],
+            staticClass:
+              "w-full h-52 rounded text-lg focus:ring-logo-red focus:border-logo-red",
+            attrs: { name: "body", id: "body", placeholder: "Write your post" },
+            domProps: { value: _vm.form.body },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "body", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "flex items-center justify-center space-x-4" },
+            [
+              _c("input", {
+                attrs: {
+                  type: "file",
+                  multiple: "",
+                  name: "attachements[]",
+                  id: "image",
+                  hidden: ""
+                },
+                on: { change: _vm.refreshAttachements }
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass:
+                    "flex items-center justify-center rounded-md p-2 w-12 cursor-pointer hover:bg-red-50 hover:text-logo-red transition-all ease-in-out",
+                  attrs: { title: "upload image", for: "image" }
+                },
+                [
+                  _c(
+                    "svg",
+                    {
+                      attrs: {
+                        xmlns: "http://www.w3.org/2000/svg",
+                        fill: "none",
+                        viewBox: "0 0 24 24",
+                        stroke: "currentColor"
+                      }
+                    },
+                    [
+                      _c("path", {
+                        attrs: {
+                          "stroke-linecap": "round",
+                          "stroke-linejoin": "round",
+                          "stroke-width": "2",
+                          d:
+                            "M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("path", {
+                        attrs: {
+                          "stroke-linecap": "round",
+                          "stroke-linejoin": "round",
+                          "stroke-width": "2",
+                          d: "M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                        }
+                      })
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                attrs: {
+                  type: "file",
+                  multiple: "",
+                  name: "attachements[]",
+                  id: "video",
+                  hidden: ""
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass:
+                    "flex items-center justify-center rounded-md p-2 w-12 cursor-pointer hover:bg-red-50 hover:text-logo-red transition-all ease-in-out",
+                  attrs: { title: "upload video", for: "video" }
+                },
+                [
+                  _c(
+                    "svg",
+                    {
+                      attrs: {
+                        xmlns: "http://www.w3.org/2000/svg",
+                        fill: "none",
+                        viewBox: "0 0 24 24",
+                        stroke: "currentColor"
+                      }
+                    },
+                    [
+                      _c("path", {
+                        attrs: {
+                          "stroke-linecap": "round",
+                          "stroke-linejoin": "round",
+                          "stroke-width": "2",
+                          d:
+                            "M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
+                        }
+                      })
+                    ]
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                attrs: {
+                  type: "file",
+                  name: "attachements[]",
+                  id: "audio",
+                  hidden: ""
+                }
+              }),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass:
+                    "flex items-center justify-center rounded-md p-2 w-12 cursor-pointer hover:bg-red-50 hover:text-logo-red transition-all ease-in-out",
+                  attrs: { title: "upload audio", for: "audio" }
+                },
+                [
+                  _c(
+                    "svg",
+                    {
+                      attrs: {
+                        xmlns: "http://www.w3.org/2000/svg",
+                        fill: "none",
+                        viewBox: "0 0 24 24",
+                        stroke: "currentColor"
+                      }
+                    },
+                    [
+                      _c("path", {
+                        attrs: {
+                          "stroke-linecap": "round",
+                          "stroke-linejoin": "round",
+                          "stroke-width": "2",
+                          d:
+                            "M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
+                        }
+                      })
+                    ]
+                  )
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "w-11/12 mx-7 my-4 py-2 text-center text-white bg-gray-700 hover:bg-logo-black transition-all ease-in-out rounded-md",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.submit()
+                }
+              }
+            },
+            [_vm._v("Post")]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._l(_vm.posts, function(post) {
+        return _c("Post", {
+          key: post.id,
+          staticClass: "sm:block",
+          attrs: { post: post }
+        })
       })
-    }),
-    1
+    ],
+    2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "flex flex-row justify-items-center" }, [
+      _c("div", [_vm._v("start")]),
+      _vm._v(" "),
+      _c("div", [_vm._v("start")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "flex flex-col" }, [
+      _c("div", [_vm._v("Sort Posts By")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "felx justify-center bg-red-200" }, [
+        _c("a", { attrs: { href: "#" } }, [
+          _c("span", { staticClass: "material-icons" }, [
+            _vm._v("auto_awesome")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("a", { attrs: { href: "#" } }, [
+          _c("span", { staticClass: "material-icons" }, [
+            _vm._v("local_fire_department")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("a", { attrs: { href: "#" } }, [
+          _c("span", { staticClass: "material-icons" }, [
+            _vm._v("local_fire_department")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("a", { attrs: { href: "#" } }, [
+          _c("span", { staticClass: "material-icons" }, [
+            _vm._v("local_fire_department")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("a", { attrs: { href: "#" } }, [
+          _c("span", { staticClass: "material-icons" }, [
+            _vm._v("local_fire_department")
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "flex items-center space-x-2 my-4" }, [
+      _c("a", { attrs: { href: "#" } }, [
+        _c("img", {
+          staticClass: "w-10 h-10 rounded-full",
+          attrs: { src: "/img/150x150.png", alt: "" }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", [
+        _c("p", { staticClass: "text-sm" }, [_vm._v("Abdelhak")]),
+        _vm._v(" "),
+        _c(
+          "select",
+          {
+            staticClass: "p-0 w-16 h-5 rounded-none text-xs",
+            attrs: { id: "" }
+          },
+          [
+            _c("option", { attrs: { value: "" } }, [_vm._v("public")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "" } }, [_vm._v("friends")]),
+            _vm._v(" "),
+            _c("option", { attrs: { value: "" } }, [_vm._v("private")])
+          ]
+        )
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -33329,7 +33816,7 @@ var staticRenderFns = [
           {
             staticClass:
               "flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32",
-            attrs: { href: "#" }
+            attrs: { href: "/" }
           },
           [
             _c("span", { staticClass: "material-icons" }, [_vm._v("public")]),

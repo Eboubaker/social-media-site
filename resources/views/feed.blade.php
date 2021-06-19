@@ -770,7 +770,7 @@
     {{-- <div class="hidden md:block md:w-96"></div> --}}
     <div class="flex-auto pb-8">
         <div class="flex flex-col space-y-2">
-        <div class="font-2xl font-medium pl-32">Popular Posts</div>
+        {{-- <div class="font-2xl font-medium pl-32">Popular Posts</div> --}}
         <feed class="space-y-4"></feed>
         </div>
     </div>

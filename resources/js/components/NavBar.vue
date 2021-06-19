@@ -27,7 +27,7 @@
       <div class="hidden md:flex md:flex-row md:justify-center md:space-x-2 md:w-2/3">
         <a
           class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
-          href="#"
+          href="/"
         >
           <span class="material-icons">public</span>
           <span>World</span>
