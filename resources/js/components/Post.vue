@@ -8,7 +8,7 @@
           </a>
           <div class="flex flex-col -space-y-1">
             <a class="text-lg hover:underline" v-bind:href="post.author.url">
-              <h4>{{ post.author.firstName + " " + post.author.lastName }}</h4>
+              <h4>{{ post.author.username }}</h4>
             </a>
             <span>
               <small>{{ post.createdAt }}</small>
