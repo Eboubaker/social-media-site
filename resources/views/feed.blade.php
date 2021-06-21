@@ -770,6 +770,8 @@
     {{-- <div class="hidden md:block md:w-96"></div> --}}
     <div class="flex-auto pb-8">
         <div class="flex flex-col space-y-2">
+    {{-- <t-input value="Hello world" name="my-input" /> --}}
+    {{-- <t-rich-select>t rich text</t-rich-select> --}}
         {{-- <div class="font-2xl font-medium pl-32">Popular Posts</div> --}}
         <feed class="space-y-4"></feed>
         </div>

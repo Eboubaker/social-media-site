@@ -1,5 +1,7 @@
 <template>
   <div>
+    <!-- <t-input value="Hello world" name="my-input" /> -->
+
     <button
       title="Add new Post"
       class="modal-open w-10 h-10 px-2 bg-white border shadow-2xl rounded-full flex justify-center items-center my-1 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red"
@@ -41,26 +43,57 @@
 
           <!--Body-->
           <form class action="#">
-            <div class="flex items-center space-x-2 my-4">
-              <a href="#">
-                <img class="w-10 h-10 rounded-full" src="/img/150x150.png" alt />
-              </a>
-              <div>
-                <p class="text-sm">Abdelhak</p>
-                <select id class="p-0 w-16 h-5 rounded-none text-xs">
-                  <option value>public</option>
-                  <option value>friends</option>
-                  <option value>private</option>
-                </select>
+            <div class="flex justify-between items-center space-x-2 my-4">
+              <div class="flex place-items-center space-x-2">
+                <a href="#">
+                  <img
+                    class="w-14 h-14 rounded-full"
+                    v-bind:src="this.$currentProfile.profileImage.url"
+                    alt
+                  />
+                </a>
+                <div>
+                  <p class="text-xl font-semibold">{{ this.$currentProfile.username }}</p>
+                </div>
               </div>
-            </div> 
+              <t-rich-select
+                v-model="selected"
+                :options="options"
+                class="w-2/3"
+                :fetch-options="fetchOptions"
+                placeholder="where are you going to post"
+                value-attribute="full_name"
+                text-attribute="full_name"
+                :minimum-input-length="1"
+              >
+                <template
+                  class="divide-y"
+                  slot="label"
+                  slot-scope="{ className, option, query, options, selectedOption }"
+                >
+                  <div class="flex flex-col ml-2 text-gray-800">
+                    <strong>{{ options[1] }}</strong>
+                  </div>
+                  <div class="flex">
+                    <span class="flex-shrink-0">
+                      <img class="w-10 h-10 rounded-full" :src="option.raw.owner.avatar_url" />
+                    </span>
+                    <div class="flex flex-col ml-2 text-gray-800">
+                      <strong>{{ option.raw.full_name }}</strong>
+                      <span class="text-sm leading-tight text-gray-700">{{ option.raw.description }}</span>
+                    </div>
+                  </div>
+                </template>
+              </t-rich-select>
+            </div>
             <input
               v-model="form.title"
               type="text"
               class="w-full mb-2 rounded text-lg focus:ring-logo-red focus:border-logo-red"
               name="title"
               id="title"
-              placeholder="Post title" />
+              placeholder="Post title"
+            />
             <textarea
               v-model="form.body"
               class="w-full h-52 rounded text-lg focus:ring-logo-red focus:border-logo-red"
@@ -69,7 +102,14 @@
               placeholder="Write your post"
             ></textarea>
             <div class="flex items-center justify-center space-x-4">
-              <input type="file" multiple name="attachements[]" v-on:change="refreshAttachements" id="image" hidden />
+              <input
+                type="file"
+                multiple
+                name="attachements[]"
+                v-on:change="refreshAttachements"
+                id="image"
+                hidden
+              />
               <label
                 title="upload image"
                 class="flex items-center justify-center rounded-md p-2 w-12 cursor-pointer hover:bg-red-50 hover:text-logo-red transition-all ease-in-out"
@@ -148,48 +188,63 @@
   </div>
 </template>
 <script>
-  export default {
-    data(){
-      return{
-        form:{
-          visibility:"public",
-          body:"",
-          title:"",
-          attachements:[],
-        }
-      };
-    },
-    methods:{
-      refreshAttachements(e) {
-        var files = e.target.files || e.dataTransfer.files;
-        this.form.attachements.push(...files);
+export default {
+  data() {
+    return {
+      form: {
+        visibility: "public",
+        body: "",
+        title: "",
+        attachements: []
       },
-      submit: function(){
-        var formData = new FormData();
-        for(let i = 0; i < this.form.attachements.length; i++)
-        {
-          formData.append("attachements[" +i+ "]", this.form.attachements[i]);
-        }
-        formData.append('body', this.form.body);
-        formData.append('title', this.form.title);
-        axios.post('/u/posts', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-        }).then((res)=>{
+      selected: null,
+      options: ["Option 1", "Option 2"]
+    };
+  },
+  methods: {
+    //  createOption (text) {
+    //   this.options.push(text)
+    //   this.selected = text
+    // },
+    fetchOptions(q) {
+      return fetch(
+        `https://api.github.com/search/repositories?q=${q}&type=public`
+      )
+        .then(response => response.json())
+        .then(data => ({ results: data.items }));
+    },
+    refreshAttachements(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      this.form.attachements.push(...files);
+    },
+    submit: function() {
+      var formData = new FormData();
+      for (let i = 0; i < this.form.attachements.length; i++) {
+        formData.append("attachements[" + i + "]", this.form.attachements[i]);
+      }
+      formData.append("body", this.form.body);
+      formData.append("title", this.form.title);
+      axios
+        .post("/u/posts", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        })
+        .then(res => {
           console.log(res);
         })
-        .catch((e)=>{
+        .catch(e => {
           console.log(e);
-        }).then((e)=>{
+        })
+        .then(e => {
           this.close();
         });
-      },
-      close () {
-        // destroy the vue listeners, etc
-        this.$destroy();
-      }
+    },
+    close() {
+      // destroy the vue listeners, etc
+      this.$destroy();
     }
-  };
+  }
+};
 </script>
 
