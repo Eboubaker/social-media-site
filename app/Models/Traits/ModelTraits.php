@@ -2,7 +2,8 @@
 
 namespace App\Models\Traits;
 
-use App\CustomScopes;
+use App\Scopes\CascadedTrashScope;
+use App\Scopes\IncludeIsLikedScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -18,10 +19,8 @@ use Illuminate\Support\Str;
  * @method static void cascadeTrash()
  * @method static void restoreCascadedTrashes()
  * @method static void restoreCascadedTrashes()
- * @method static $this create(array $attributes)
- * @method static $this make(array $attributes)
  * @method static Collection<$this> all()
- * 
+ * @method static includeIsLikedAttribute($profile_id)
  * @mixin Illuminate\Database\Eloquent\Builder;
  */
 trait ModelTraits
@@ -41,7 +40,8 @@ trait ModelTraits
     }
     public static function bootModelTraits()
     {
-        static::addGlobalScope(new CustomScopes);
+        static::addGlobalScope(new CascadedTrashScope);
+        static::addGlobalScope(new IncludeIsLikedScope);
     }
 
     public function doForceDelete()
@@ -69,10 +69,9 @@ trait ModelTraits
     {
         if(is_null(self::$deletedAtColumnName))
         {
-            $instance = new self;
-            if($instance->canBeSoftDeleted())
+            if(self::instance()->canBeSoftDeleted())
             {
-                self::$deletedAtColumnName = $instance->getDeletedAtColumn();
+                self::$deletedAtColumnName = self::instance()->getDeletedAtColumn();
             }else{
                 self::$deletedAtColumnName = 'deleted_at';
             }
@@ -176,5 +175,10 @@ trait ModelTraits
             $relation."_id" => $this->getKey(),
             $relation."_type" => $this->getMorphClass()
         ];
+    }
+
+    public static function morphClass()
+    {
+        return self::instance()->getMorphClass();
     }
 }

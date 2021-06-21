@@ -81,7 +81,7 @@ class Community extends Model
 
     protected $guarded = [];
 
-    protected $with = ['iconImage'];
+    protected $with = [];
     
 
     

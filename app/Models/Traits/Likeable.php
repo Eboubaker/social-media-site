@@ -5,6 +5,7 @@ namespace App\Models\Traits;
 
 use App\Models\Like;
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 

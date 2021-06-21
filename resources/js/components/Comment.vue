@@ -134,17 +134,25 @@ export default {
             .catch(e => console.error(e))
         },
         like: function(){
+            console.log("like");
             axios.post('/r/'+this.comment.id+'/like')
             .then(res => {
+                console.log("liked");
+                console.log(res);
                 this.comment.is_liked = true;
+                console.log(this.comment.is_liked);
                 this.comment.likes_count++;
             })
             .catch(e => console.error(e))
         },
         unlike: function(){
+            console.log("unlike");
             axios.post('/r/'+this.comment.id+'/unlike')
             .then(res => {
+                console.log("unliked");
+                console.log(res);
                 this.comment.is_liked = false;
+                console.log(this.comment.is_liked);
                 this.comment.likes_count--;
             })
             .catch(e => console.error(e))

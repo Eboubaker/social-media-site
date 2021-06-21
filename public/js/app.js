@@ -3970,8 +3970,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     like: function like() {
       var _this3 = this;
 
+      console.log("like");
       axios.post('/r/' + this.comment.id + '/like').then(function (res) {
+        console.log("liked");
+        console.log(res);
         _this3.comment.is_liked = true;
+        console.log(_this3.comment.is_liked);
         _this3.comment.likes_count++;
       })["catch"](function (e) {
         return console.error(e);
@@ -3980,8 +3984,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     unlike: function unlike() {
       var _this4 = this;
 
+      console.log("unlike");
       axios.post('/r/' + this.comment.id + '/unlike').then(function (res) {
+        console.log("unliked");
+        console.log(res);
         _this4.comment.is_liked = false;
+        console.log(_this4.comment.is_liked);
         _this4.comment.likes_count--;
       })["catch"](function (e) {
         return console.error(e);
@@ -4419,16 +4427,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     console.log("data");
     return data;
   },
-  watch: {
-    sortBy: {
-      handler: function handler(val, oldVal) {
-        if (val !== oldVal) {
-          this.posts = [];
-          this.fetchData();
-        }
-      }
-    }
-  },
+  // watch: {
+  //   sortBy: {
+  //     handler: function(val, oldVal) {
+  //       if (val !== oldVal) {
+  //         this.posts = [];
+  //         this.fetchData();
+  //       }
+  //     }
+  //   }
+  // },
   created: function created() {
     window.fetchData = this.fetchData;
     this.fetchData();
@@ -4455,9 +4463,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }).then(function (res) {
           var _this$posts;
 
-          console.log(res);
+          console.log(res.data.data);
 
           (_this$posts = _this.posts).push.apply(_this$posts, _toConsumableArray(res.data.data));
+
+          console.log(_this.posts);
         })["catch"](function (err) {
           console.log(err);
         }).then(function () {

@@ -1,13 +1,12 @@
 <?php
 
-namespace App;
+namespace App\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Support\Facades\Log;
 
-class CustomScopes implements Scope
+class CascadedTrashScope implements Scope
 {
     /**
      * All of the extensions to be added to the builder.

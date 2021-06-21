@@ -129,7 +129,7 @@ class Profile extends Model
     protected $casts = [
         'active' => 'boolean',
     ];
-    protected $with = ['profileImage'];
+    protected $with = [];
 
     public function __construct($attributes = [])
     {
@@ -232,6 +232,7 @@ class Profile extends Model
 
     public function profileImage():MorphOne
     {
+        
         return (new MorphOne(
             Image::query(),
             $this,
@@ -278,6 +279,19 @@ class Profile extends Model
     }
 
     #endregion
+
+    /**
+     * returns the currently logged-in user's active profile
+     * @param string|array $withEagerLoads
+     * @return HasOne
+     */
+     public static function currentRelation($withEagerLoads = null):HasOne
+     {
+        $query = Profile::query()->whereActive(true)->limit(1);
+        if($withEagerLoads !== null)
+            $query->with(func_get_args());
+        return new HasOne($query, new User(['id' => Auth::id()]), 'user_id', 'id');
+     }
 
     /**
      * returns the currently logged-in user's active profile

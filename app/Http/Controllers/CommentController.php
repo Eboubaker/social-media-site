@@ -65,6 +65,7 @@ class CommentController extends Controller
         }
         $comment->likes_count = 0;
         $comment->replies_count = 0;
+        $comment->is_liked = false;
         return $comment;
     }
 
@@ -92,9 +93,8 @@ class CommentController extends Controller
     public function storeReply(Request $request, Comment $comment)
     {
         $post = $comment->post;
-
         $reply = Comment::make($this->validated($request->all()))
-        ->commentor()->associate(Profile::current())
+        ->commentor()->associate(Profile::currentRelation('profileImage')->first())
         ->commentable()->associate($comment)
         ->post()->associate($post);
         if($post->pageable instanceof Community)
@@ -116,8 +116,9 @@ class CommentController extends Controller
                 throw new HttpPermissionException;
             }
         }
-        $reply = $comment->comments()->save($reply);
-        if ($reply && $reply->exists) 
+        $reply->commentable()->associate($comment);
+        $reply = $this->storeWithAttachements($request, $reply, $comment);
+        if ($reply->exists) 
         {
             return new JsonResponse(new CommentResource($reply), StatusCodes::HTTP_CREATED);
         }
@@ -135,7 +136,14 @@ class CommentController extends Controller
         }
         $skip = request('skip') ?: 0;
         $limit = request('limit') ?: 5;
-        $comments = $comment->replies()->with(['commentor', 'images', 'videos'])->withCount(['likes', 'replies'])->skip($skip)->limit($limit)->get();
+        $comments = $comment
+                    ->replies()
+                    ->includeIsLikedAttribute(Profile::currentRelation()->first('id')->id)
+                    ->with(['commentor', 'commentor.profileImage', 'images', 'videos'])
+                    ->withCount(['likes', 'replies'])
+                    ->skip($skip)
+                    ->limit($limit)
+                    ->get();
         return CommentResource::collection($comments);
     }
 

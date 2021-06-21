@@ -46,9 +46,9 @@ class FeedController extends Controller
         // TODO: convert this HUGE query into a text query
         /** @var Builder|QueryBuilder $query */
         $query = Post::query()
-        ->select(['posts.*',
+        ->includeIsLikedAttribute($current_id)
+        ->addSelect([
             DB::raw("COALESCE(pv.viewed_count,0) as viewed_count"), 
-            DB::raw("(select exists(select * from likes where likes.likeable_id=posts.id and likes.likeable_type='App\\\\Models\\\\Post' and likes.liker_id=$current_id)) as is_liked"),
             DB::raw("@likes_count:=(select count(*) from `likes` where `posts`.`id` = `likes`.`likeable_id` and `likes`.`likeable_type` = 'App\\\\Models\\\\Post' and `likes`.`deleted_at` is null) as `likes_count`"),
             DB::raw("@comments_count:=(select count(*) from `comments` where `posts`.`id` = `comments`.`commentable_id` and `comments`.`commentable_type` = 'App\\\\Models\\\\Post' and `comments`.`deleted_at` is null) as `comments_count`"),
             DB::raw("@views_count:=(select count(*) from `post_views` where `posts`.`id` = `post_views`.`post_id`) as `views_count`"),
@@ -57,7 +57,7 @@ class FeedController extends Controller
         ->leftJoin('post_views as pv', function($join) use ($current_id){
             $join->on('posts.id', '=', 'pv.post_id')->where('pv.viewer_id', $current_id);
         })
-        ->with(['videos', 'images', 'pageable', 'author', 'author.profileImage', 'author.account'])
+        ->with(['videos', 'images', 'author', 'author.profileImage'])
         ;
         if($profilePage = ! empty(request('username')))
         {
@@ -100,16 +100,23 @@ class FeedController extends Controller
             ->skip(request('skip') ?: 0)
             ->get()
             ->each(function (Post $post) use($current_id) { 
+                if($post->pageable_type === Community::morphClass())
+                {
+                    $post->setRelation('pageable', $post->pageable()->with('iconImage')->first());
+                }else if($post->pageable_type === Profile::morphClass()){
+                    $post->setRelation('pageable', $post->pageable()->with('profileImage')->first());
+                }
                 $post->setRelation('comments', tap($post->comments()
                             ->select([
                                 'comments.*',
                                 DB::raw("(select exists(select * from likes where likes.likeable_id=comments.id and likes.likeable_type='App\\\\Models\\\\Comment' and likes.liker_id=$current_id)) as is_liked")
                             ])
                             ->withCount(['likes', 'replies'])
+                            ->with(['commentor', 'commentor.profileImage'])
                             ->take(5)
                             ->get())
                             ->each(function($comment){
-                                $comment->setRelation('replies', $comment->replies()->limit(5)->get());
+                                $comment->setRelation('replies', $comment->replies()->with(['commentor', 'commentor.profileImage'])->withCount(['likes', 'replies'])->limit(5)->get());
                             }));
             });
         // update view_count in post_views table

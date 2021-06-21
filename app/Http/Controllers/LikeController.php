@@ -7,8 +7,6 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
 use App\Models\Profile;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class LikeController extends Controller
 {
@@ -19,6 +17,10 @@ class LikeController extends Controller
 
     public function likePost(Post $post)
     {
+        if($post->likes()->where('liker_id', Profile::current_id())->exists())
+        {
+            return response(status:StatusCodes::HTTP_EXPECTATION_FAILED);
+        }
         Like::create(
             ['liker_id' => Profile::current_id()] +
             $post->getMorphConstraints('likeable')
@@ -36,6 +38,10 @@ class LikeController extends Controller
 
     public function likeComment(Comment $comment)
     {
+        if($comment->likes()->where('liker_id', Profile::current_id())->exists())
+        {
+            return response(status:StatusCodes::HTTP_EXPECTATION_FAILED);
+        }
         Like::create(
             $comment->getMorphConstraints('likeable') +
             ['liker_id' => Profile::current_id()]
@@ -44,7 +50,10 @@ class LikeController extends Controller
     }
     public function unlikeComment(Comment $comment)
     {
-        $comment->likes()->where('liker_id', Profile::current_id())->forceDelete();
+        if(!$comment->likes()->where('liker_id', Profile::current_id())->forceDelete())
+        {
+            return response(status:StatusCodes::HTTP_EXPECTATION_FAILED);
+        }
         return response(status:StatusCodes::HTTP_NO_CONTENT);
     }
 }

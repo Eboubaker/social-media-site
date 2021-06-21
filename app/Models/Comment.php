@@ -43,6 +43,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read int|null $likes_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Video[] $videos
  * @property-read int|null $videos_count
+ * @method static self make($parameters)
  * @method static \Database\Factories\CommentFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Comment newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Comment newQuery()
@@ -80,7 +81,7 @@ class Comment extends Model
     public const CREATED_AT = "created_at";
     public const UPDATED_AT = "updated_at";
     protected $guarded = [];
-    protected $with = ['commentor', 'images', 'videos'];
+    protected $with = [];
 
     public function replies()
     {

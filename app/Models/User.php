@@ -105,7 +105,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $with = ['activeProfile', 'activeProfile.profileImage'];
+    protected $with = [];
 
 
 

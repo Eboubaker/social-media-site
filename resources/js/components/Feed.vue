@@ -167,16 +167,16 @@ export default {
     console.log("data");
     return data;
   },
-  watch: {
-    sortBy: {
-      handler: function(val, oldVal) {
-        if (val !== oldVal) {
-          this.posts = [];
-          this.fetchData();
-        }
-      }
-    }
-  },
+  // watch: {
+  //   sortBy: {
+  //     handler: function(val, oldVal) {
+  //       if (val !== oldVal) {
+  //         this.posts = [];
+  //         this.fetchData();
+  //       }
+  //     }
+  //   }
+  // },
   created() {
     window.fetchData = this.fetchData;
     this.fetchData();
@@ -200,8 +200,9 @@ export default {
             sortBy: this.sortBy
           })
           .then(res => {
-            console.log(res);
+            console.log(res.data.data);
             this.posts.push(...res.data.data);
+            console.log(this.posts);
           })
           .catch(err => {
             console.log(err);

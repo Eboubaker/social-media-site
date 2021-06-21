@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Morphs\Profileable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
 
@@ -20,33 +19,14 @@ class ProfileResource extends JsonResource
             "id" => $this->id,
             "profileImage" => new ImageResource($this->whenLoaded('profileImage')),
             "coverImage" => new ImageResource($this->whenLoaded('coverImage')),
-            "firstName" => $this->whenLoaded('account', function () {
-                return $this->account->first_name;
-            }),
-            "lastName" => $this->whenLoaded('account', function () {
-                return $this->account->last_name;
-            }),
+            "account" => new UserResource($this->whenLoaded('account')),
             "username" => $this->username,
-            'followers' => $this->whenLoaded('followers', function () {
-                return ProfileResource::collection($this->followers);
-            }),
-            'followings' => $this->whenLoaded('followings', function () {
-                return ProfileResource::collection($this->followings);
-            }),
-            'followings_count' => $this->whenLoaded('followings', function () {
-                return $this->followings->count();
-            }),
-            'followers_count' => $this->whenLoaded('followers', function () {
-                return $this->followers->count();
-            }),
-            'url' => $this->resource->url,
+            'followers' => ProfileResource::collection($this->whenLoaded('followers')),
+            'followings' => ProfileResource::collection($this->whenLoaded('followings')),
+            'followings_count' => $this->followers_count ?: new MissingValue,
+            'followers_count' => $this->followings_count ?: new MissingValue,
+            'url' => $this->url,
         ];
-        if ($resource['followers_count'] instanceof MissingValue && $this->followers_count !== null) {
-            $resource['followers_count'] = $this->followers_count;
-        }
-        if ($resource['followings_count'] instanceof MissingValue && $this->followings_count !== null) {
-            $resource['followings_count'] = $this->followings_count;
-        }
         return $resource;
     }
 }

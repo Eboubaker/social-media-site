@@ -33,13 +33,10 @@
     @stack('scripts')
     <script defer>
         window.addEventListener('load', function(){
-            Vue.prototype.$currentProfile = JSON.parse(`{!! json_encode((new App\Http\Resources\ProfileResource(App\Models\Profile::currentOrNew()))->toResponse(request())->getData()->data) !!}`);
+            Vue.prototype.$currentProfile = JSON.parse(`{!! json_encode((new App\Http\Resources\ProfileResource(App\Models\Profile::currentRelation()->with(['account', 'profileImage'])->firstOrNew()))->toResponse(request())->getData()->data) !!}`);
             var app = new Vue({
                 el: "#app",
-            })
-            var feed = new Vue({
-                el: '#vue-feed',
-            })
+            });
         })
     </script>
 </body>
