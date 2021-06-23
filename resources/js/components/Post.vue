@@ -1,5 +1,5 @@
 <template>
-  <div class="w-11/12 mx-auto md:w-3/4">
+  <div class="w-full">
     <div class="my-0 rounded-lg shadow-lg bg-white">
       <div class="flex flex-row justify-between items-center">
         <div v-if="post.pageable_type === 'Profile'" class="flex justify-start items-center pt-2 px-4 space-x-2 group">
@@ -16,11 +16,11 @@
           </div>
         </div>
         <div v-else-if="post.pageable_type === 'Community'" class="flex justify-start items-center pt-2 px-4 space-x-2">
-          <a v-bind:href="post.pageable.url" class="inline-block group">
+          <a v-if="withPageIcon" v-bind:href="post.pageable.url" class="inline-block group">
             <img class="w-6 h-6 rounded-full inline-block" v-bind:src="post.pageable.iconImage.url" alt="tree" />
-            <p class="inline-block text-sm font-bold text-gray-800 group-hover:underline">c/{{ post.pageable.name }}</p>
+            <p class="inline-block text-xs font-bold text-gray-800 group-hover:underline">c/{{ post.pageable.name }}</p>
           </a>
-          <div class="inline-block h-2"><div class="w-1 h-1 p-0 m-0 bg-gray-500 rounded-full" style="margin-top: .15rem;"></div></div>
+          <div v-if="withPageIcon" class="inline-block h-2"><div class="w-1 h-1 p-0 m-0 bg-gray-500 rounded-full" style="margin-top: .15rem;"></div></div>
           <div class="inline-block">
             <a class="text-sm hover:underline inline-block" v-bind:href="post.author.url">posted by u/{{ post.author.username }}</a>
             <span class="text-sm tracking-tighter text-gray-600">
@@ -108,7 +108,11 @@
         <p class="mt-2 tracking-tight">{{ post.body }}</p>
         
         <div class="w-full h-full mt-4 rounded-lg p-2" v-for="image in post.images" :image="image" :key='image.id' >
-            <img style="max-height: 100vh; min-width: 450px" class="rounded-md mx-auto shadow-xl object-cover object-top" v-bind:src="image.url" v-bind:alt="image.name" />
+            <img style="max-height: 100vh;" class="rounded-md mx-auto shadow-xl object-cover object-top" v-bind:src="image.url" v-bind:alt="image.name" />
+        </div>
+        <div class="w-full h-full mt-4 rounded-lg p-2" v-for="video in post.videos" :video="video" :key='video.id' >
+            <video controls loop style="max-height: 100vh;" class="rounded-md mx-auto shadow-xl object-cover object-top" v-bind:src="video.url" v-bind:alt="video.name">
+            </video>
         </div>
       </div>
       <div class="flex justify-start px-4 mt-2 text-sm">
@@ -174,10 +178,10 @@
       
       <div class="space-y-2 border-t-2 p-4 px-3">
         <div class="flex text-gray-600 text-sm font-bold tracking-tight">
-          <a v-on:click="!loadingComments ? loadMoreComments() : null" v-if="this.post.comments_count > this.post.comments.length" v-bind:class="this.loadingComments ? 'cursor-wait' : 'cursor-pointer'" class="hover:underline mt-1 mr-auto">View {{ ((this.post.comments_count - this.post.comments.length) < 5) ? this.post.comments_count - this.post.comments.length : '' }} More {{ this.pluralize('comment', this.post.comments_count - this.post.comments.length) }}...<svg v-if="this.loadingComments" class="inline-block mx-2 mt-1 text-gray-600 w-5 h-5 stroke-current" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a"><stop stop-color="#000" stop-opacity="0" offset="0%"/><stop stop-color="#111" stop-opacity=".631" offset="63.146%"/><stop stop-color="#222" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)"><path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2"> <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></path><circle fill="#000" cx="36" cy="18" r="1"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></circle></g></g></svg></a>
-          <a v-if="this.post.comments_count > 10" class="hover:underline mt-1 ml-auto mr-1">Sort by newest</a>
+          <a v-on:click="!loadingComments ? loadMoreComments() : null" v-if="post.comments_count > post.comments.length" v-bind:class="this.loadingComments ? 'cursor-wait' : 'cursor-pointer'" class="hover:underline mt-1 mr-auto">View {{ ((this.post.comments_count - this.post.comments.length) < 5) ? this.post.comments_count - this.post.comments.length : '' }} More {{ this.pluralize('comment', this.post.comments_count - this.post.comments.length) }}...<svg v-if="this.loadingComments" class="inline-block mx-2 mt-1 text-gray-600 w-5 h-5 stroke-current" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a"><stop stop-color="#000" stop-opacity="0" offset="0%"/><stop stop-color="#111" stop-opacity=".631" offset="63.146%"/><stop stop-color="#222" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)"><path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2"> <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></path><circle fill="#000" cx="36" cy="18" r="1"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></circle></g></g></svg></a>
+          <a v-if="post.comments_count > 10" class="hover:underline mt-1 ml-auto mr-1">Sort by newest</a>
         </div>
-        <Comment v-for="comment in post.comments" :comment="comment" :post="post" :level="1" :key="comment.id" />
+        <Comment v-for="comment in post.comments" :comment="comment" :post="post" :level="1" :key="'p/'+post.id+'/r/'+comment.id" />
         <div class="flex justify-between items-center space-x-2">
           <img class="w-10 h-10 rounded-full" v-bind:src="$currentProfile.profileImage.url" />
           <div class="flex-auto">
@@ -205,7 +209,10 @@ export default {
   props: {
     post: {
       type: Object
-    }
+    },
+    withPageIcon:{
+      type: Boolean
+    },
   },
   data() {
     return {
@@ -271,7 +278,7 @@ export default {
       if(this.post.is_liked){
         axios.post('/p/'+this.post.id+'/unlike')
         .then(res => {
-          this.post.is_liked=false
+          this.post.is_liked=false;
           this.post.likes_count--;
         }).catch(e => {
           console.log(e);
@@ -279,8 +286,8 @@ export default {
       }else{
         axios.post('/p/'+this.post.id+'/like')
         .then(res => {
-          this.post.is_liked=true
-          this.post.likes_count++
+          this.post.is_liked=true;
+          this.post.likes_count++;
         }).catch(e => {
           console.log(e);
         })

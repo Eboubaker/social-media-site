@@ -1,2 +1,2 @@
 @echo off
-php artisan tinker tinker.php
+"C:\xampp\php\php.exe" artisan tinker tinker.php

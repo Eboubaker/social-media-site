@@ -118,7 +118,7 @@
         <!-- ````````````````/Model start````````````````  -->
         <div class="Model">
           <!-- Model Block -->
-          <Creatpost />
+          <!-- <Creatpost /> -->
         </div>
         <!-- ````````````````/Model end````````````````  -->
 

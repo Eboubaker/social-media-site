@@ -30,8 +30,8 @@ class SeedByCommunities extends Seeder
         ->call(UsersSeeder::class)
         ->call(DefaultsSeeder::class)
         ;
-        $this->memes();
-        $this->arabmemes();
+        // $this->memes();
+        // $this->arabmemes();
         $this->quotes();
         $this->facts();
 

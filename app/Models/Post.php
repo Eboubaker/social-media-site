@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\DataBase\Eloquent\MorphMany;
 use App\Models\Traits\Commentable;
 use App\Models\HasAttachements as HasAttachementsInterface;
 use App\Models\Traits\HasAttachements;
@@ -86,10 +87,11 @@ class Post extends Model
     HasAuthor, 
     HasImages,
     HasVideos,
-    Commentable,
     Viewable,
     Likeable;
-
+    use Commentable{
+        comments as protected commentable_comments;
+    }
 
     protected $guarded = [];
 
@@ -99,6 +101,11 @@ class Post extends Model
         return $this->morphTo('pageable');
     }
 
+
+    public function comments(): MorphMany
+    {
+        return $this->commentable_comments()->withFixedConstraint('post_id', $this->id);
+    }
     public function getAttachementsAttribute()
     {
         $this->images->merge($this->videos);

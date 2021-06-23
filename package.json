@@ -22,7 +22,7 @@
         "tailwindcss": "^2.0.3",
         "vue": "^2.5.17",
         "vue-loader": "^15.9.5",
-        "vue-template-compiler": "^2.6.10"
+        "vue-template-compiler": "2.6.13"
     },
     "dependencies": {
         "@material/textfield": "^10.0.0",

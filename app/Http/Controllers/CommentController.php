@@ -79,7 +79,7 @@ class CommentController extends Controller
             throw new HttpPermissionException("You don't have permission to comment on this community");
         }
         $comment = Comment::make($this->validated($request->all()))
-        ->commentor()->associate(Profile::current())
+        ->commentor()->associate(Profile::currentRelation('profileImage')->first())
         ->commentable()->associate($post)
         ->post()->associate($post);
         $comment = $this->storeWithAttachements(request(), $comment, $post);
@@ -102,7 +102,7 @@ class CommentController extends Controller
             $community = $post->pageable;
             if($community->allowsCurrent(config('permissions.communities.can-reply-to-comments')))
             {
-                $reply = $comment->comments()->save($reply);
+                // $reply = $comment->comments()->save($reply);
             }else{
                 throw new HttpPermissionException;
             }
@@ -111,7 +111,7 @@ class CommentController extends Controller
             $profile = $post->pageable;
             if($profile->allowsCurrent(config('permissions.profiles.can-comment')))
             {
-                $reply = $comment->comments()->save($reply);
+                // $reply = $comment->comments()->save($reply);
             }else{
                 throw new HttpPermissionException;
             }

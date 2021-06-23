@@ -3,11 +3,10 @@
 
 namespace App\Models\Traits;
 
-
+use App\DataBase\Eloquent\MorphMany as CustomMorphMany;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait Commentable
 {
@@ -25,9 +24,10 @@ trait Commentable
         }
     }
 
-    public function comments():MorphMany
+    public function comments():CustomMorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        $instance = new Comment;
+        return new CustomMorphMany($instance->query(), new static, 'commentable_type', 'commentable_id', 'id');
     }
 
     public function linkedComments():HasMany

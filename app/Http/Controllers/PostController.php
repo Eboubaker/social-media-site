@@ -17,6 +17,7 @@ use DebugBar\DebugBar;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -38,10 +39,11 @@ class PostController extends Controller
             'title' => $request->get('title'),
             'body' => $request->get('body')
         ]);
-        $post->author()->associate(Profile::current());
-        $post->pageable()->associate(Profile::current());
-        $post = $this->storeWithAttachements($request, $post, Profile::current());
-        return response()->redirectTo($post->url);
+        $author = Profile::currentRelation('profileImage')->first();
+        $post->author()->associate($author);
+        $post->pageable()->associate($author);
+        $post = $this->storeWithAttachements($request, $post, $author);
+        return new PostResource($post);
     }
     private function storeWithAttachements(Request $request, Post $post, Model $pageable)
     {
@@ -52,18 +54,25 @@ class PostController extends Controller
         DB::beginTransaction();
         try{
             $post->save();
-            foreach($parser->getModels() as $attachement)
+            foreach($parser->getModels() as $key => $attachement)
             {
-                if($pageable instanceof Community && $attachement instanceof Video && ~$pageable->allowsCurrent(config('permissions.communities.can-attach-videos-to-own-post')))
+                if($attachement instanceof Image)
                 {
-                    throw ValidationException::withMessages(['attachements' => 'You are not allowed to post videos to this community']);
-                }
-                if($pageable instanceof Community && $attachement instanceof Image && ~$pageable->allowsCurrent(config('permissions.communities.can-attach-images-to-own-post')))
+                    if($pageable instanceof Profile || $pageable instanceof Community && $pageable->allowsCurrent(config('permissions.communities.can-attach-images-to-own-post')))
+                    {
+                        $post->images()->save($attachement);
+                    }else{
+                        throw ValidationException::withMessages(["attachement-$key" => 'You are not allowed to post images to this community']);
+                    }
+                }else if($attachement instanceof Video)
                 {
-                    throw ValidationException::withMessages(['attachements' => 'You are not allowed to post videos to this community']);
+                    if($pageable instanceof Profile || $pageable instanceof Community && $pageable->allowsCurrent(config('permissions.communities.can-attach-videos-to-own-post')))
+                    {
+                        $post->videos()->save($attachement);
+                    }else{
+                        throw ValidationException::withMessages(["attachement-$key" => 'You are not allowed to post videos to this community']);
+                    }
                 }
-                $attachement->attacheable()->associate($post);
-                $attachement->save();
             }
             DB::commit();
         }catch(\Throwable $e)
@@ -71,6 +80,10 @@ class PostController extends Controller
             DB::rollBack();
             throw $e;
         }
+        $post->views_count = 0;
+        $post->comments_count = 0;
+        $post->likes_count = 0;
+        $post->setRelation('comments', new Collection);
         return $post;
     }
     public function storeCommunityPost(Request $request, Community $community)

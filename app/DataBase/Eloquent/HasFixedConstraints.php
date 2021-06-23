@@ -7,10 +7,11 @@ trait HasFixedConstraints
 {
     protected $saveConstraints = [];
 
-    public function withFixedConstraint($attribute, $value)
+    public function withFixedConstraint($attribute, $value, $with_selecting = true)
     {
         $this->saveConstraints[$attribute] = $value;
-        $this->query->where($attribute, $value);
+        if($with_selecting)
+            $this->query->where($attribute, $value);
         return $this;
     }
 

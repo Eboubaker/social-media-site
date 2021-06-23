@@ -11,6 +11,7 @@
         "php": ">=7.4",
         "ext-gd": "*",
         "ext-json": "*",
+        "ext-memcached": "*",
         "aloha/twilio": "^4.0",
         "cviebrock/eloquent-sluggable": "^8.0",
         "fideloper/proxy": "^4.4",

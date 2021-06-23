@@ -85,7 +85,7 @@ class Comment extends Model
 
     public function replies()
     {
-        return $this->comments();
+        return $this->comments()->withFixedConstraint('post_id', $this->post_id, false);
     }
     public function commentor()
     {

@@ -48,10 +48,10 @@ class FeedController extends Controller
         $query = Post::query()
         ->includeIsLikedAttribute($current_id)
         ->addSelect([
-            DB::raw("COALESCE(pv.viewed_count,0) as viewed_count"), 
-            DB::raw("@likes_count:=(select count(*) from `likes` where `posts`.`id` = `likes`.`likeable_id` and `likes`.`likeable_type` = 'App\\\\Models\\\\Post' and `likes`.`deleted_at` is null) as `likes_count`"),
-            DB::raw("@comments_count:=(select count(*) from `comments` where `posts`.`id` = `comments`.`commentable_id` and `comments`.`commentable_type` = 'App\\\\Models\\\\Post' and `comments`.`deleted_at` is null) as `comments_count`"),
-            DB::raw("@views_count:=(select count(*) from `post_views` where `posts`.`id` = `post_views`.`post_id`) as `views_count`"),
+            DB::raw("COALESCE(pv.viewed_count,0) as `posts.viewed_count`"), 
+            DB::raw("@likes_count:=(select count(*) from `likes` where `posts`.`id` = `likes`.`likeable_id` and `likes`.`likeable_type` = 'App\\\\Models\\\\Post' and `likes`.`deleted_at` is null) as `posts.likes_count`"),
+            DB::raw("@comments_count:=(select count(*) from `comments` where `posts`.`id` = `comments`.`commentable_id` and `comments`.`commentable_type` = 'App\\\\Models\\\\Post' and `comments`.`deleted_at` is null) as `posts.comments_count`"),
+            DB::raw("@views_count:=(select count(*) from `post_views` where `posts`.`id` = `post_views`.`post_id`) as `posts.views_count`"),
         ])
         ->withCount('likes', 'comments', 'views')
         ->leftJoin('post_views as pv', function($join) use ($current_id){
@@ -72,17 +72,18 @@ class FeedController extends Controller
             $orderBy = "rating_$sortBy";
             if($sortBy === 'hot')
             {
-                $query->addSelect(DB::raw("(@likes_count+@comments_count+0E0)/(now()-posts.created_at) as rating_$sortBy"));
+                $query->addSelect(DB::raw("(@likes_count+3*@comments_count+0E0)/(now()-posts.created_at) as rating_$sortBy"));
                 // DB::raw("@rating:=get_rating((Select `comments_count`), (Select `likes_count`),(Select `views_count`)) as rating_top")
             }else if($sortBy === 'best')
             {
-                $query->addSelect(DB::raw("(@likes_count-@views_count) as rating_$sortBy"));
+                $query->addSelect(DB::raw("(2*@comments_count+@likes_count-@views_count) as rating_$sortBy"));
             }else if($sortBy === 'active')
             {
-                $query->addSelect(DB::raw("((@comments_count+0E0)/(@likes_count+1)) as rating_$sortBy"));
+                $query->addSelect(DB::raw("@total_comments_count:=(select count(*) from `comments` where `posts`.`id` = `comments`.`post_id` and `comments`.`deleted_at` is null) as `posts.total_comments_count`"));
+                $query->addSelect(DB::raw("((@total_comments_count+0E0)/(@likes_count+1)) as rating_$sortBy"));
             }else if($sortBy === 'top')
             {
-                $sortBy = 'likes_count';
+                $orderBy = 'likes_count';
             }else //* if sortBy = new  or anything else
             { 
                 $orderBy = 'created_at';
@@ -96,29 +97,26 @@ class FeedController extends Controller
         }
         
         $posts = $posts
-            ->limit(10)
-            ->skip(request('skip') ?: 0)
-            ->get()
-            ->each(function (Post $post) use($current_id) { 
-                if($post->pageable_type === Community::morphClass())
-                {
-                    $post->setRelation('pageable', $post->pageable()->with('iconImage')->first());
-                }else if($post->pageable_type === Profile::morphClass()){
-                    $post->setRelation('pageable', $post->pageable()->with('profileImage')->first());
-                }
-                $post->setRelation('comments', tap($post->comments()
-                            ->select([
-                                'comments.*',
-                                DB::raw("(select exists(select * from likes where likes.likeable_id=comments.id and likes.likeable_type='App\\\\Models\\\\Comment' and likes.liker_id=$current_id)) as is_liked")
-                            ])
-                            ->withCount(['likes', 'replies'])
-                            ->with(['commentor', 'commentor.profileImage'])
-                            ->take(5)
-                            ->get())
-                            ->each(function($comment){
-                                $comment->setRelation('replies', $comment->replies()->with(['commentor', 'commentor.profileImage'])->withCount(['likes', 'replies'])->limit(5)->get());
-                            }));
-            });
+            ->skip($request->post('skip', 0))
+            ->limit(min(50, $request->post('count', 10)))
+            ->get();
+        $posts->each(function (Post $post) use($current_id) { 
+            if($post->pageable_type === Community::morphClass())
+            {
+                $post->setRelation('pageable', $post->pageable()->with('iconImage')->first());
+            }else if($post->pageable_type === Profile::morphClass()){
+                $post->setRelation('pageable', $post->pageable()->with('profileImage')->first());
+            }
+            $post->setRelation('comments', tap($post->comments()
+                        ->includeIsLikedAttribute($current_id)
+                        ->withCount(['likes', 'replies'])
+                        ->with(['commentor', 'commentor.profileImage'])
+                        ->take(5)
+                        ->get())
+                        ->each(function($comment) use($current_id){
+                            $comment->setRelation('replies', $comment->replies()->includeIsLikedAttribute($current_id)->with(['commentor', 'commentor.profileImage'])->withCount(['likes', 'replies'])->limit(5)->get());
+                        }));
+        });
         // update view_count in post_views table
         if($posts->count() > 0)
         {
@@ -137,50 +135,5 @@ class FeedController extends Controller
         }
         //send posts as resource
         return PostResource::collection($posts);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -7,7 +7,9 @@ use App\Models\Community;
 use App\Models\CommunityMember;
 use App\Models\CommunityRole;
 use App\Models\Profile;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class CommunityController extends Controller
@@ -22,8 +24,11 @@ class CommunityController extends Controller
     {
         return view('community.create');
     }
-    public function show(Community $community)
+    public function show(string $community)
     {
+        $community = cache()->remember("community_${community}_data", 30, function () use($community){
+            return Community::with(['coverImage', 'iconImage'])->where('name', $community)->first();
+        });
         return view('community.show', compact('community'));
     }
     public function store(Request $request)
@@ -42,6 +47,19 @@ class CommunityController extends Controller
     {
         return view('community.edit', compact('community'));
     }
+
+    public function search(Request $request, string $search)
+    {
+        $query = DB::table('communities')->where('name', 'like', "%$search%");
+        if($request->input('only_joined', false))
+        {
+            $query->join('communities_members', 'communities.id', '=', 'communities_members.community_id')
+                    ->where('communities_members.profile_id', Profile::current_id());
+        }
+        $query->limit(5);
+        return new JsonResponse($query->get(['name'])->map(fn($r)=>$r->name));
+    }
+
     public function update(Request $request, Community $community)
     {
         if($community->currentIsMember())
