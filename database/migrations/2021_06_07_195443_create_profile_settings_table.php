@@ -18,7 +18,7 @@ class CreateProfileSettingsTable extends Migration
         Schema::create('profiles_settings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('profile_id')->constrained('profiles')->cascadeOnDelete();
-
+            $table->string('sortBy')->nullable()->default('best');
             foreach(ProfileSettings::permsList() as $perm => $default)
             {
                 $table->boolean($perm)->nullable()->default($default);

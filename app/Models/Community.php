@@ -118,7 +118,11 @@ class Community extends Model
     }
     public function currentIsMember():bool
     {
-        return $this->currentMember()->exists();
+        if(is_null($this->func_currentIsMember))
+        {
+            $this->func_currentIsMember = $this->currentMember()->exists();
+        }
+        return $this->func_currentIsMember;
     }
     public function getUrlAttribute(): string
     {

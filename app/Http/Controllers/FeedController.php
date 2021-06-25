@@ -27,7 +27,8 @@ class FeedController extends Controller
     }
     public function feedForVisitor(Request $request)
     {
-        return html()->span("طنح روح دير ")->attribute('dir', 'rtl')->addChild(html()->a('/login', 'login'))->toHtml();
+        // return html()->span("طنح روح دير ")->attribute('dir', 'rtl')->addChild(html()->a('/login', 'login'))->toHtml();
+        return redirect('login');
     }
 
 
@@ -69,7 +70,20 @@ class FeedController extends Controller
             $posts = $query->where('author_id', $p->id)->orderByDesc('created_at');
         }else{
             $sortBy = request('sortBy');
+            $cacheName = 'profile.'.$current_id.'.profileSettings.sortBy';
+            $storedSortBy = cache()->remember($cacheName, 3600, function() use($current_id){
+                return DB::table('profiles_settings')->where('profile_id', $current_id)->first('sortBy')->sortBy;
+            });
+            if($sortBy == null)
+            {
+                $sortBy = $storedSortBy;
+            }else if($sortBy !== $storedSortBy && in_array($sortBy, ['best', 'top', 'hot', 'new', 'active']) && is_int($current_id))
+            {
+                DB::table('profiles_settings')->where('profile_id', $current_id)->update(['sortBy' => $sortBy]);
+                cache()->forget($cacheName);
+            }
             $orderBy = "rating_$sortBy";
+            $order_add = "";
             if($sortBy === 'hot')
             {
                 $query->addSelect(DB::raw("(@likes_count+3*@comments_count+0E0)/(now()-posts.created_at) as rating_$sortBy"));
@@ -81,6 +95,7 @@ class FeedController extends Controller
             {
                 $query->addSelect(DB::raw("@total_comments_count:=(select count(*) from `comments` where `posts`.`id` = `comments`.`post_id` and `comments`.`deleted_at` is null) as `posts.total_comments_count`"));
                 $query->addSelect(DB::raw("((@total_comments_count+0E0)/(@likes_count+1)) as rating_$sortBy"));
+                $order_add = ",likes_count desc";
             }else if($sortBy === 'top')
             {
                 $orderBy = 'likes_count';
@@ -93,7 +108,7 @@ class FeedController extends Controller
             $communitiesPosts = $query->clone()->addSelect(DB::raw('2 as sortKey'))->where('pageable_type', 'App\Models\Community');
             $followingsPosts = $query->clone()->addSelect(DB::raw('3 as sortKey'))->whereIn('author_id', Profile::current()->followings()->select('profiles_followers.profile_id'));
             //! after this the query will be as big as 4kb of text :((
-            $posts = $followingsPosts->union($communitiesPosts)->orderByRaw("sortKey, $orderBy desc");
+            $posts = $followingsPosts->union($communitiesPosts)->orderByRaw("sortKey, $orderBy desc $order_add");
         }
         
         $posts = $posts

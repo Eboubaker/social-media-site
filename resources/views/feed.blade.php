@@ -57,7 +57,7 @@
 <div class="flex w-full h-full mt-20">
   <div class="w-7/12 mx-auto h-full">
       <div class="md:mx-auto w-11/12">
-        <feed class="rounded-lg bg-gray-400 min-h-screen p-2 sm:p-4 md:p-12 shadow-inner border-2 border-gray-300"></feed>
+        <feed class="rounded-lg bg-gray-50 min-h-screen p-2 sm:p-4 md:p-12 shadow-inner"></feed>
       </div>
   </div>
   <div class="hidden md:block flex-none md:w-5/12">

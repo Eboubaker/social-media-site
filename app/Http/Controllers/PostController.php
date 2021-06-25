@@ -83,6 +83,7 @@ class PostController extends Controller
         $post->views_count = 0;
         $post->comments_count = 0;
         $post->likes_count = 0;
+        $post->load('videos', 'images');
         $post->setRelation('comments', new Collection);
         return $post;
     }

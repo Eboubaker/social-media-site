@@ -19,6 +19,8 @@ class CommunityResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'iconImage' => new ImageResource($this->whenLoaded('iconImage')),
+            'coverImage' => new ImageResource($this->whenLoaded('coverImage')),
+            'currentIsMember' => $this->currentIsMember(),
             'members_count' => $this->members_count,
             'url' => $this->resource->url,
         ];

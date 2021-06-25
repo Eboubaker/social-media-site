@@ -46,7 +46,7 @@ class HomeController extends Controller
 
     public function feedForVisitor(Request $request)
     {
-        return html()->span("طنح روح دير ")->attribute('dir', 'rtl')->addChild(html()->a('/login', 'login'))->toHtml();
+        return redirect('/login');//html()->span("طنح روح دير ")->attribute('dir', 'rtl')->addChild(html()->a('/login', 'login'))->toHtml();
     }
     public function feedForProfile(Request $request, Profile $profile)
     {

@@ -33,8 +33,8 @@
     @stack('scripts')
     <script defer>
         window.addEventListener('load', function(){
-            Vue.prototype.$currentProfile = JSON.parse(`{!! json_encode((new App\Http\Resources\ProfileResource(App\Models\Profile::currentRelation()->with(['account', 'profileImage'])->firstOrNew()))->toResponse(request())->getData()->data) !!}`);
-            var app = new Vue({
+            Vue.prototype.$currentProfile = JSON.parse(`{!! json_encode((new App\Http\Resources\ProfileResource(App\Models\Profile::currentRelation()->with(['account', 'profileImage', 'settings'])->firstOrNew()))->toResponse(request())->getData()->data) !!}`);
+            window.app = new Vue({
                 el: "#app",
             });
         })

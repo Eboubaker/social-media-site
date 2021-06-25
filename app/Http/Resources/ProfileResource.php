@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use DB;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
 
@@ -25,6 +26,7 @@ class ProfileResource extends JsonResource
             'followings' => ProfileResource::collection($this->whenLoaded('followings')),
             'followings_count' => $this->followers_count ?: new MissingValue,
             'followers_count' => $this->followings_count ?: new MissingValue,
+            'settings' => new ProfileSettingsResource($this->whenLoaded('settings')),
             'url' => $this->url,
         ];
         return $resource;

@@ -84,6 +84,9 @@ Route::post('/u/posts', [PostController::class, 'storeProfilePost'])->name('prof
 Route::post('/community', [CommunityController::class, 'store'])->name('community.store');
 Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
 
+Route::post('/c/{community}/join', [CommunityController::class, 'join'])->name('community.join');
+Route::post('/c/{community}/leave', [CommunityController::class, 'leave'])->name('community.leave');
+
 Route::put('/community/{community}', [CommunityController::class, 'update'])->name('community.update');
 Route::delete('/community/{community}', [CommunityController::class, 'destroy'])->name('community.destory');
 

@@ -27,7 +27,7 @@ trait Commentable
     public function comments():CustomMorphMany
     {
         $instance = new Comment;
-        return new CustomMorphMany($instance->query(), new static, 'commentable_type', 'commentable_id', 'id');
+        return new CustomMorphMany($instance->query(), $this, 'commentable_type', 'commentable_id', 'id');
     }
 
     public function linkedComments():HasMany

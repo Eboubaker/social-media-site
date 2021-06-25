@@ -337,7 +337,7 @@ export default {
       loading: false,
       profile: null,
       community: null,
-      sortBy: "best" // possible value: [best,hot,top,new,active]
+      sortBy: this.$currentProfile.settings.sortBy // possible value: [best,hot,top,new,active]
     };
     var arr = window.location.pathname.split("/");
     if (arr[1] === "u") data.profile = arr[2];

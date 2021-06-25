@@ -83,7 +83,8 @@ class SeedByCommunities extends Seeder
             $title = Str::startsWith($name, 'img') ? null : $name;
             $post = tap(Post::make([
                 'title' => $title,
-                'author_id' => $profiles->random()->id
+                'author_id' => $profiles->random()->id,
+                'created_at' => now()->subSeconds(random_int(0, 3600*24*30)),
             ])
             ->pageable()->associate($community))->save();
             $post->images()->save(Image::extractModelFromFile(Storage::disk('seeds')->path($image)));
@@ -95,6 +96,7 @@ class SeedByCommunities extends Seeder
         $community = Community::factory()->create([
             'name' => 'quotes',
             'owner_id' => $this->profileWithRandomPic(User::random()->id, 'father_of_words1')->id,
+            'created_at' => now()->subSeconds(random_int(0, 3600*24*90)),
         ]);
         $profiles = new Collection();
         $profiles[] = $this->profileWithRandomPic(User::random()->id, 'Isolda_Robertina');
@@ -105,6 +107,7 @@ class SeedByCommunities extends Seeder
             CommunityMember::create([
                 'profile_id' => $profile->id,
                 'community_id' => $community->id,
+                
             ]);
         });
         foreach(Storage::disk('seeds')->files('/english_quotes_minified') as $image)
@@ -113,7 +116,8 @@ class SeedByCommunities extends Seeder
             $title = Str::startsWith($name, 'img') ? null : $name;
             $post = tap(Post::make([
                 'title' => $title,
-                'author_id' => $profiles->random()->id
+                'author_id' => $profiles->random()->id,
+                'created_at' => now()->subSeconds(random_int(0, 3600*24*30)),
             ])
             ->pageable()->associate($community))->save();
             $post->images()->save(Image::extractModelFromFile(Storage::disk('seeds')->path($image)));
@@ -190,7 +194,8 @@ class SeedByCommunities extends Seeder
                 $t = ['title' => $t];
             }
             $post = Post::make($t + [
-                'author_id' => $profiles->random()->id
+                'author_id' => $profiles->random()->id,
+                'created_at' => now()->subSeconds(random_int(0, 3600*24*30)),
             ])
             ->pageable()->associate($community)->save();
         }
@@ -200,6 +205,7 @@ class SeedByCommunities extends Seeder
         $community = Community::factory()->create([
             'name' => 'didyouknow',
             'owner_id' => $this->profileWithRandomPic(User::random()->id, 'curious_human')->id,
+            'created_at' => now()->subSeconds(random_int(0, 3600*24*90)),
         ]);
         $profiles = new Collection();
         $profiles[] = $this->profileWithRandomPic(User::random()->id, 'the_end_of_the_end');
@@ -278,7 +284,8 @@ class SeedByCommunities extends Seeder
                 $t = ['title' => 'Did you know that ' . $t];
             }
             $post = Post::make($t + [
-                'author_id' => $profiles->random()->id
+                'author_id' => $profiles->random()->id,
+                'created_at' => now()->subSeconds(random_int(0, 3600*24*30)),
             ])
             ->pageable()->associate($community)->save();
         }
@@ -288,6 +295,7 @@ class SeedByCommunities extends Seeder
         $community = Community::factory()->create([
             'name' => 'arabmemes',
             'owner_id' => $this->profileWithRandomPic(User::random()->id, 'tarek')->id,
+            'created_at' => now()->subSeconds(random_int(0, 3600*24*90)),
         ]);
         $profiles = new Collection();
         
@@ -299,6 +307,7 @@ class SeedByCommunities extends Seeder
             CommunityMember::create([
                 'profile_id' => $profile->id,
                 'community_id' => $community->id,
+                'joined' => now()->subSeconds(3600*24*30),
             ]);
         });
         foreach(Storage::disk('seeds')->files('/arabic_memes_minified') as $image)
@@ -307,7 +316,8 @@ class SeedByCommunities extends Seeder
             $title = Str::startsWith($name, 'img') ? null : $name;
             $post = tap(Post::make([
                 'title' => $title,
-                'author_id' => $profiles->random()->id
+                'author_id' => $profiles->random()->id,
+                'created_at' => now()->subSeconds(random_int(0, 3600*24*30)),
             ])
             ->pageable()->associate($community))->save();
             $post->images()->save(Image::extractModelFromFile(Storage::disk('seeds')->path($image)));

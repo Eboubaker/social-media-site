@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\HttpInternalServerErrorException;
 use App\Exceptions\HttpPermissionException;
+use App\Http\StatusCodes;
 use App\Models\Community;
 use App\Models\CommunityMember;
 use App\Models\CommunityRole;
@@ -11,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class CommunityController extends Controller
 {
@@ -106,5 +109,38 @@ class CommunityController extends Controller
         }
         forbidden:
             throw new HttpPermissionException;
+    }
+
+    public function join(Request $request, Community $community)
+    {
+        $pid = Profile::currentRelation()->first('id')->id;
+        if(DB::table('communities_members')
+                ->where('community_id', $community->id)
+                ->where('profile_id', $pid)
+                ->exists())
+        {
+            abort(StatusCodes::HTTP_EXPECTATION_FAILED, 'already a member');
+        }
+        CommunityMember::create([
+            'community_id' => $community->id,
+            'profile_id' => $pid
+        ]);
+        return Response::make();
+    }
+    public function leave(Request $request, Community $community)
+    {
+        $pid = Profile::currentRelation()->first('id')->id;
+        if(is_null($member = DB::table('communities_members')
+                ->where('community_id', $community->id)
+                ->where('profile_id', $pid)
+                ->first('id')))
+        {
+            abort(StatusCodes::HTTP_EXPECTATION_FAILED, 'not a member');
+        }
+        if(DB::table('communities_members')->delete($member->id))
+        {
+            return Response::make(status:StatusCodes::HTTP_NO_CONTENT);;
+        }
+        throw new HttpInternalServerErrorException;
     }
 }
