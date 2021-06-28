@@ -145,7 +145,7 @@ class Community extends Model
                 })
                 ->withFixedConstraint('purpose', __FUNCTION__);
     }
-    public function iconImage():MorphOne
+    public function avatarImage():MorphOne
     {
         return (new MorphOne(Image::query()
                             , $this

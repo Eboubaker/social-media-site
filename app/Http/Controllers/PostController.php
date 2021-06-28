@@ -39,7 +39,7 @@ class PostController extends Controller
             'title' => $request->get('title'),
             'body' => $request->get('body')
         ]);
-        $author = Profile::currentRelation('profileImage')->first();
+        $author = Profile::currentRelation('avatarImage')->first();
         $post->author()->associate($author);
         $post->pageable()->associate($author);
         $post = $this->storeWithAttachements($request, $post, $author);

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\HttpInternalServerErrorException;
 use App\Http\Resources\ProfileResource;
 use App\Http\StatusCodes;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\UnauthorizedException;
@@ -49,11 +51,18 @@ class ProfileController extends Controller
      */
     public function show(Profile $profile)
     {
-        return view('profile.show', compact('profile'));
+        $pid = $profile->id;
+        $profile->following = DB::table('profiles_followers')->where('profile_id', $profile->id)->where('follower_id', Profile::current_id())->exists();
+        $profile->for_page_created_at = $profile->created_at->format('F, Y');
+        $profile->load(['avatarImage', 'coverImage', 'account']);
+        $profile->loadCount(['followings', 'followers']);
+
+        $profile = json_encode((new ProfileResource($profile))->toResponse(request())->getData()->data);
+        return view('profile.show', ['profile_id' => $pid, 'profileJson' => $profile]);
     }
     public function current()
     {
-        return new ProfileResource(Profile::current()->load(['profileImage', 'account']));
+        return new ProfileResource(Profile::current()->load(['avatarImage', 'account']));
     }
     /**
      * Show the form for editing the specified resource.

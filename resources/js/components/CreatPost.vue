@@ -48,7 +48,7 @@
                 <a href="#">
                   <img
                     class="w-14 h-14 rounded-full"
-                    v-bind:src="this.$currentProfile.profileImage.url"
+                    v-bind:src="this.$currentProfile.avatarImage.url"
                     alt
                   />
                 </a>

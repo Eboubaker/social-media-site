@@ -22,7 +22,7 @@ class ProfilesSeeder extends Seeder
             Profile::factory()->count(100)->make()->each(function (Profile $profile) use ($users) {
                 $profile->active = true;
                 $profile->account()->associate($users->random())->save();
-                Image::factory()->make(['purpose' => 'profileImage'])->imageable()->associate($profile)->save();
+                Image::factory()->make(['purpose' => 'avatarImage'])->imageable()->associate($profile)->save();
                 Image::factory()->make(['purpose' => 'coverImage'])->imageable()->associate($profile)->save();
             });
             $p = Profile::factory()->create([

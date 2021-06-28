@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Watson\Validating\ValidatingTrait;
@@ -217,10 +218,6 @@ class Profile extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function notifications():MorphTo
-    {
-        return $this->morphTo();
-    }
     public function likedPosts():CustomHasMany
     {
         return $this->likes()->withFixedConstraint('likeable_type', 'App\Models\Post');
@@ -230,7 +227,7 @@ class Profile extends Model
         return $this->likes()->withFixedConstraint('likeable_type', 'App\Models\Comment');
     }
 
-    public function profileImage():MorphOne
+    public function avatarImage():MorphOne
     {
         
         return (new MorphOne(

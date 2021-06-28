@@ -14,12 +14,12 @@ trait Commentable
     public static function bootCommentable()
     {
         static::deleting(function(Model $commentable){
-            $commentable->cascadeDeleteRelation(Comment::make(), 'linkedComments');
+            $commentable->cascadeDeleteRelation(Comment::make(), 'comments');
         });
         if(self::canBeSoftDeleted())
         {
             static::restored(function(Model $commentable){
-                $commentable->restoreCascadedRelation('linkedComments');
+                $commentable->restoreCascadedRelation('comments');
             });
         }
     }

@@ -51,6 +51,7 @@ Vue.component("creat-post", require("./components/CreatPost.vue").default);
 Vue.component("posts-component", require("./components/Posts.vue").default);
 Vue.component("comment", require("./components/Comment.vue").default);
 Vue.component("community-head", require("./components/CommunityHead.vue").default);
+Vue.component("profile-head", require("./components/ProfileHead.vue").default);
 
 Vue.prototype.pluralize = (...atts) => window.pluralize(...atts);
 // Vue.directive("clickaway", {

@@ -1,14 +1,14 @@
 @extends('layouts.app')
 @section('content')
 <nav-bar class="mb-14"></nav-bar>
-<div class="bg-gray-0 w-full h-full">
+<div class="bg-white w-full h-full">
     <community-head></community-head>
     <div class="w-full sm:w-11/12 mx-auto h-full flex">
         <div class="md:mr-auto w-full md:w-7/12">
             <feed class="rounded bg-gray-50 min-h-screen p-2 sm:p-4 md:p-12 shadow-inner"></feed>
         </div>
         <div class="w-5/12 hidden ml-4 md:block h-full">
-            <div class="w-full h-full bg-gray-100 rounded p-4 text-gray-900">
+            <div class="w-full h-full bg-gray-50 rounded p-4 text-gray-900">
                 <div class="font-semibold text-lg text-black flex justify-between">
                     <div>About Community</div>
                     <div class="bg-gray-300 rounded-full hover:bg-gray-900 p-1 group cursor-pointer"><svg class="w-6 h-6 group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg></div>

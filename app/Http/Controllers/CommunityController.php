@@ -30,7 +30,7 @@ class CommunityController extends Controller
     public function show(string $community)
     {
         $community = cache()->remember("community_${community}_data", 30, function () use($community){
-            return Community::with(['coverImage', 'iconImage'])->where('name', $community)->first();
+            return Community::with(['coverImage', 'avatarImage'])->where('name', $community)->first();
         });
         return view('community.show', compact('community'));
     }
@@ -87,7 +87,7 @@ class CommunityController extends Controller
                     goto forbidden;
                 }
             }
-            if(request()->file('iconImage'))
+            if(request()->file('avatarImage'))
             {
                 if($community->allowsCurrent(config('permissions.communities.can-modify-community-icon-image')))
                 {

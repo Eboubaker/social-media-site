@@ -5,32 +5,15 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\FeedController;
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-
-// set default locale
-// Group all routes with the locale
-// NOTE: API routes should not be added here instead they should be in ~/routes/api.php
-
-App\Http\Api::routes();
-
-
-Route::get("/posts/create", [PostController::class, "create"])->name('posts.create');
-
-//-- Legal stuff
-Route::get('/terms', function () {
-    return "The terms blade-view";
-})->name('legal.terms');
-Route::get('/privacy', function () {
-    return "The privacy blade-view";
-})->name('legal.privacy');
 
 //-- Authentication Routes --//
 Auth::routes();
@@ -42,7 +25,8 @@ Route::get('/verify/{method}/notice', [VerificationController::class, 'show'])->
 
 
 
-#region browser urls
+
+#region //! browser urls
 Route::get('/c/{community:name}/p/{post:uuid62}/r/{comment:uuid62}', [CommentController::class, 'show'])->name('community.posts.comments.show');
 Route::get('/u/{profile:username}/p/{post:uuid62}/r/{comment:uuid62}', [CommentController::class, 'show'])->name('profile.posts.comments.show');
 
@@ -52,7 +36,12 @@ Route::get('/u/{profile:username}/p/{post:uuid62}/{post_by_slug}', [PostControll
 Route::get('/u/{profile:username}', [ProfileController::class, 'show'])->name('profile.show');
 #endregion
 
-#region browser redirections
+
+
+
+
+
+#region //! browser redirections
 Route::get('/r/{comment:uuid62}', [CommentController::class, 'redirectToPage']);
 Route::get('/r/{comment}', [CommentController::class, 'redirectToPage']);
 
@@ -61,12 +50,20 @@ Route::get('/c/{community:name}/p/{post:uuid62}/{garbage?}', [PostController::cl
 Route::get('/u/{profile:username}/p/{post:uuid62}/{garbage?}', [PostController::class, 'redirectToPage']);
 #endregion
 
-#region form requests
+
+
+
+
+#region //! form requests
 Route::get('/community/create', [CommunityController::class, 'create'])->name('community.create');
 Route::get('/c/{community:name}/edit', [CommunityController::class, 'edit'])->name('community.edit');
 #endregion
 
-#region backend submits
+
+
+
+
+#region //! backend submits
 Route::post('/c/{comment}/update', [CommentController::class, 'update'])->name('comments.update');
 
 Route::post('/p/{post}/like', [LikeController::class, 'likePost'])->name('post.like');
@@ -87,6 +84,9 @@ Route::post('/profile', [ProfileController::class, 'store'])->name('profile.stor
 Route::post('/c/{community}/join', [CommunityController::class, 'join'])->name('community.join');
 Route::post('/c/{community}/leave', [CommunityController::class, 'leave'])->name('community.leave');
 
+Route::post('/u/{profile}/follow', [FollowController::class, 'follow'])->name('profile.follow');
+Route::post('/u/{profile}/unfollow', [FollowController::class, 'unfollow'])->name('profile.unfollow');
+
 Route::put('/community/{community}', [CommunityController::class, 'update'])->name('community.update');
 Route::delete('/community/{community}', [CommunityController::class, 'destroy'])->name('community.destory');
 
@@ -95,24 +95,37 @@ Route::post('/c/{community}/posts', [PostController::class, 'storeCommunityPost'
 Route::post('/u/posts', [PostController::class, 'storeProfilePost'])->name('profile.posts.store');
 #endregion
 
-#region backend requests
+#region //! backend requests
 Route::post('/token/update', [ApiTokenController::class, 'update'])->name('token.update');
 Route::get('/permissions/{community}', [PermissionsController::class, 'permissionsForCommunity'])->name('permissions.forCommunity');
 Route::get('/permissions', [PermissionsController::class, 'permissionsList'])->name('permissions.all');
-Route::post('/profile/switch/{profile}', [ProfileController::class, 'switch'])->name('profile.switch');
+Route::post('/u/switch/{profile}', [ProfileController::class, 'switch'])->name('profile.switch');
 Route::post('/api/setLocale', [\App\Http\Controllers\AppLanguageController::class, 'update'])->name('locale.update');
 
 Route::post('/p/{post}/comments', [PostController::class, 'loadComments'])->name('posts.loadComments');
 Route::post('/r/{comment}/replies', [CommentController::class, 'loadReplies'])->name('comments.loadReplies');
 
+Route::post('/n/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
+Route::post('/n/read', [NotificationController::class, 'read'])->name('notifications.read');
+
 #endregion
 
 
-#region backend api requests
+#region //! backend wapi requests
 Route::post('/wapi/profile/current', [ProfileController::class, 'current']);
 Route::post('/wapi/feed', [FeedController::class, 'wapiIndex']);
 #endregion
 
 
 
+//-- Legal stuff
+Route::get('/terms', function () {
+    return "The terms blade-view";
+})->name('legal.terms');
+Route::get('/privacy', function () {
+    return "The privacy blade-view";
+})->name('legal.privacy');
+
+
+// landing
 Route::get('/', [HomeController::class, 'landing']);

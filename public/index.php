@@ -1,5 +1,5 @@
 <?php
-$start = microtime(true);
+// $start = microtime(true);
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
@@ -52,6 +52,6 @@ $kernel = $app->make(Kernel::class);
 $response = tap($kernel->handle(
     $request = Request::capture()
 ))->send();
-$time_elapsed_secs = microtime(true) - $start;
-info('Request: '. $_SERVER['REQUEST_URI'] . " took " . $time_elapsed_secs . " seconds");
+// $time_elapsed_secs = microtime(true) - $start;
+// info('Request: '. $_SERVER['REQUEST_URI'] . " took " . $time_elapsed_secs . " seconds");
 $kernel->terminate($request, $response);

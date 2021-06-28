@@ -144,4 +144,6 @@ return [
 
     ],
 
+    /** if true then log all queries */
+    'log_queries' => env("LOG_QUERIES", false)
 ];

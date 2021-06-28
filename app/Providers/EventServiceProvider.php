@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\NewFollowCreated;
+use App\Listeners\SendNewFollowerNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -16,8 +18,11 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         Registered::class => [
-//            SendEmailVerificationNotification::class,
+        //    SendEmailVerificationNotification::class,
 
+        ],
+        NewFollowCreated::class => [
+            SendNewFollowerNotification::class,
         ],
     ];
 

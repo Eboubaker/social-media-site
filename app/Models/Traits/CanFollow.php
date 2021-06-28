@@ -33,6 +33,6 @@ trait CanFollow
 
     public function followings():BelongsToMany
     {
-        return $this->belongsToMany(Profile::class, 'profiles_followers', 'follower_id');
+        return $this->belongsToMany(Profile::class, 'profiles_followers', 'follower_id', 'profile_id', 'id', 'id');
     }
 }

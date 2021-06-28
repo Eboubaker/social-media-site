@@ -14,7 +14,7 @@
           class="flex flex-row items-center border-b space-x-2 mx-1 px-4 py-2 rounded text-xs text-gray-700 hover:bg-gray-100 hover:text-gray-900"
           role="menuitem"
         >
-          <img class="w-12 h-12 rounded-full" v-bind:src="this.$currentProfile.profileImage.url" alt />
+          <img class="w-12 h-12 rounded-full" v-bind:src="this.$currentProfile.avatarImage.url" alt />
           <div>
             <p class="text-xl font-medium">{{ this.$currentProfile.username }}</p>
           </div>

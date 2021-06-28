@@ -2,7 +2,7 @@
     <div class="flex flex-row justify-between items-center">
       <div class="flex justify-start items-center pt-2 px-4 space-x-2">
         <a class="" href>
-          <img class="w-14 rounded-full" src="{{$profileImage ?? '/img/150x150.png'}}" alt="tree" />
+          <img class="w-14 rounded-full" src="{{$avatarImage ?? '/img/150x150.png'}}" alt="tree" />
         </a>
         <div class="flex flex-col -space-y-1">
           <a class="text-lg hover:underline" href>

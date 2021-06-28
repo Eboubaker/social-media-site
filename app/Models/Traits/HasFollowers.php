@@ -33,6 +33,6 @@ trait HasFollowers
 
     public function followers():BelongsToMany
     {
-        return $this->belongsToMany(Profile::class, 'profiles_followers', 'profile_id', 'follower_id');
+        return  $this->belongsToMany(Profile::class, 'profiles_followers', 'profile_id', 'follower_id', 'id', 'id');
     }
 }

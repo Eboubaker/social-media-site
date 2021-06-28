@@ -1,10 +1,10 @@
 <template>
-  <div class="w-full">
+  <div class="w-full" >
     <div class="my-0 rounded-lg shadow-lg bg-white">
       <div class="flex flex-row justify-between items-center">
         <div v-if="post.pageable_type === 'Profile'" class="flex justify-start items-center pt-2 px-4 space-x-2 group">
           <a v-bind:href="post.author.url">
-            <img class="w-14 h-14 rounded-full border-3 border-transparent group-hover:border-purple-600" v-bind:src="post.author.profileImage.url" alt="tree" />
+            <img class="w-14 h-14 rounded-full border-3 border-transparent group-hover:border-purple-600" v-bind:src="post.author.avatarImage.url" alt="tree" />
           </a>
           <div class="flex flex-col -space-y-1">
             <a class="text-lg hover:underline" v-bind:href="post.author.url">
@@ -16,11 +16,11 @@
           </div>
         </div>
         <div v-else-if="post.pageable_type === 'Community'" class="flex justify-start items-center pt-2 px-4 space-x-2">
-          <a v-if="withPageIcon" v-bind:href="post.pageable.url" class="inline-block group">
-            <img class="w-6 h-6 rounded-full inline-block" v-bind:src="post.pageable.iconImage.url" alt="tree" />
+          <a v-bind:href="post.pageable.url" class="inline-block group">
+            <img class="w-6 h-6 rounded-full inline-block" v-bind:src="post.pageable.avatarImage.url" alt="tree" />
             <p class="inline-block text-xs font-bold text-gray-800 group-hover:underline">c/{{ post.pageable.name }}</p>
           </a>
-          <div v-if="withPageIcon" class="inline-block h-2"><div class="w-1 h-1 p-0 m-0 bg-gray-500 rounded-full" style="margin-top: .15rem;"></div></div>
+          <div class="inline-block h-2"><div class="w-1 h-1 p-0 m-0 bg-gray-500 rounded-full" style="margin-top: .15rem;"></div></div>
           <div class="inline-block">
             <a class="text-sm hover:underline inline-block" v-bind:href="post.author.url">posted by u/{{ post.author.username }}</a>
             <span class="text-sm tracking-tighter text-gray-600">
@@ -31,8 +31,8 @@
         <div class="relative items-center">
           <button
             class="relative z-30 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer"
-            :class="isOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'"
-            @click="isOpen = !isOpen"
+            :class="menueOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'"
+            @click="menueOpen = !menueOpen"
           >
             <svg
               class="w-6"
@@ -49,14 +49,8 @@
               />
             </svg>
           </button>
-          <!-- <div
-            v-if="isOpen"
-            @click="isOpen = false"
-            tabindex="-1"
-            class="fixed z-20 top-0 right-0 left-0 bottom-0 w-full h-full bg-black opacity-10 cursor-default"
-          ></div>-->
           <div
-            v-if="isOpen"
+            v-if="menueOpen"
             v-on-clickaway="hide"
             class="absolute z-30 right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
           >
@@ -80,7 +74,7 @@
             <div class="flex flex-col space-y-2 mt-2">
               <a
                 class="flex flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
-                href="#"
+                @click="hide()"
               >
                 <span class="material-icons">cancel</span>
                 <p>Hide post</p>
@@ -142,7 +136,9 @@
             </svg>
           </button>
         </div>
-        <div class="flex place-items-center">
+        <div class="flex place-items-center"
+          @click="toggleComments()"
+        >
           <button
             class="flex justify-center items-center focus:outline-none hover:bg-red-50 hover:text-logo-red transition-all ease-in-out rounded-full h-10 w-10 m-1"
           >
@@ -175,15 +171,14 @@
           </button>
         </div>
       </div>
-      
-      <div class="space-y-2 border-t-2 p-4 px-3">
+      <div v-if="post.commentsOpen || commentsOpen" class="space-y-2 border-t-2 p-4 px-3">
         <div class="flex text-gray-600 text-sm font-bold tracking-tight">
           <a v-on:click="!loadingComments ? loadMoreComments() : null" v-if="post.comments_count > post.comments.length" v-bind:class="this.loadingComments ? 'cursor-wait' : 'cursor-pointer'" class="hover:underline mt-1 mr-auto">View {{ ((this.post.comments_count - this.post.comments.length) < 5) ? this.post.comments_count - this.post.comments.length : '' }} More {{ this.pluralize('comment', this.post.comments_count - this.post.comments.length) }}...<svg v-if="this.loadingComments" class="inline-block mx-2 mt-1 text-gray-600 w-5 h-5 stroke-current" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a"><stop stop-color="#000" stop-opacity="0" offset="0%"/><stop stop-color="#111" stop-opacity=".631" offset="63.146%"/><stop stop-color="#222" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)"><path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2"> <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></path><circle fill="#000" cx="36" cy="18" r="1"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></circle></g></g></svg></a>
           <a v-if="post.comments_count > 10" class="hover:underline mt-1 ml-auto mr-1">Sort by newest</a>
         </div>
         <Comment v-for="comment in post.comments" :comment="comment" :post="post" :level="1" :key="'p/'+post.id+'/r/'+comment.id" />
         <div class="flex justify-between items-center space-x-2">
-          <img class="w-10 h-10 rounded-full" v-bind:src="$currentProfile.profileImage.url" />
+          <img class="w-10 h-10 rounded-full" v-bind:src="$currentProfile.avatarImage.url" />
           <div class="flex-auto">
             <input v-on:keyup.enter="comment" v-model="commentBody"
               class="bg-gray-100 w-full rounded-r-full rounded-l-full py-2 pl-5 px-2 border-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none focus:outline-none"
@@ -205,7 +200,6 @@ export default {
     Comment
   },
   mixins: [clickaway],
-  // components: { PlayGround },
   props: {
     post: {
       type: Object
@@ -216,16 +210,16 @@ export default {
   },
   data() {
     return {
-      isOpen: false,
       commentBody: '',
+      commentsOpen: false,
       loadingComments: false,
+      menueOpen: false,
     };
   },
-  computed: {
-    // a computed getter
-    
-  },
   methods: {
+    hide: function(){
+
+    },
     likesShort: function () {
       let num = this.post.likes_count;
       const lookup = [
@@ -244,10 +238,17 @@ export default {
       return item ? (num / item.value).toFixed(1).replace(rx, "$1") + item.symbol : "0";
     },
     hide: function() {
-      this.isOpen = false;
+      this.menueOpen = false;
     },
     showComments: function(){
-
+      this.commentsOpen = true;
+    },
+    toggleComments: function(){
+      this.commentsOpen = !this.commentsOpen;
+      if(!this.commentsOpen)
+      {
+        this.post.commentsOpen = false;
+      }
     },
     loadMoreComments: function(){
       this.loadingComments = true;

@@ -1,13 +1,12 @@
 <template>
-  <div class="space-y-4" v-if="renderComponent">
-    <div class="flex justify-center w-full mr-auto">
+  <div class="space-y-4 mb-5" v-if="renderComponent">
+    <div class="flex justify-center w-full mr-auto" v-if="profile == null || $currentProfile.id == $attrs.profile">
       <!-- <div> -->
       <button
         title="Add new Post"
         class="modal-open w-full h-10 px-2 bg-white border shadow-2xl rounded-lg flex justify-center items-center my-1 outline-none focus:outline-none focus:ring-logo-red focus:border-logo-red focus:text-logo-red hover:text-logo-red hover:border-logo-red"
       >
       <span class="text-lg font-semibold">Create New Post</span>
-
         <svg
           class="w-7 h-7 ml-4"
           xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +49,7 @@
                   <a href="#">
                     <img
                       class="w-14 h-14 rounded-full"
-                      v-bind:src="this.$currentProfile.profileImage.url"
+                      v-bind:src="this.$currentProfile.avatarImage.url"
                       alt
                     />
                   </a>
@@ -240,7 +239,6 @@
               </svg>
             </div>
             <div>Hot</div>
-            <!--v-if-->
           </div>
         </div>
         <div>
@@ -267,7 +265,6 @@
               </svg>
             </div>
             <div>Top</div>
-            <!--v-if-->
           </div>
         </div>
         <div>
@@ -281,7 +278,6 @@
               <span class="material-icons w-5 h-5">plus_one</span>
             </div>
             <div>New</div>
-            <!--v-if-->
           </div>
         </div>
         <div class="hidden xl:block">
@@ -307,12 +303,22 @@
               </svg>
             </div>
             <div>Active</div>
-            <!--v-if-->
           </div>
         </div>
       </div>
     </div>
-    <Post class="mx-1" :withPageIcon="!community && !profile" v-for="post in posts" :key="'p/'+post.id" :post="post" />
+    <div class="space-y-4" v-if="posts.length > 0">
+      <Post class="mx-1" :withPageIcon="!community && !profile" v-for="post in posts" :key="'p/'+post.id" :post="post" />
+    </div>
+    <div v-else-if="profile && !loading" class="p-5 text-gray-600 text-lg font-semibold text-center shadow-lg border border-blue-100 rounded-lg">
+      This profile has no visible posts
+    </div>
+    <div v-else-if="community && !loading" class="p-5 text-gray-600 text-lg font-semibold text-center shadow-lg border border-blue-100 rounded-lg">
+      This community has no visible posts
+    </div>
+    <div v-else-if="!loading" class="p-5 text-gray-600 text-lg font-semibold text-center shadow-lg border border-blue-100 rounded-lg">
+      Your feed is empty, You should start by <a href="/interests" class="text-blue-600 hover:underline">selecting your interests</a>.
+    </div>
   </div>
 </template>
 <script>
@@ -334,7 +340,7 @@ export default {
         attachements: []
       },
       posts: [],
-      loading: false,
+      loading: true,
       profile: null,
       community: null,
       sortBy: this.$currentProfile.settings.sortBy // possible value: [best,hot,top,new,active]
@@ -356,6 +362,7 @@ export default {
   },
   created() {
     window.fetchData = this.fetchData;
+    this.loading = false;
     this.fetchData(null, this.profile ? 10 : 20);
     document.body.onscroll = function() {
       const perc =

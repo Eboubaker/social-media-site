@@ -18,16 +18,19 @@ class ProfileResource extends JsonResource
     {
         $resource = [
             "id" => $this->id,
-            "profileImage" => new ImageResource($this->whenLoaded('profileImage')),
+            "avatarImage" => new ImageResource($this->whenLoaded('avatarImage')),
             "coverImage" => new ImageResource($this->whenLoaded('coverImage')),
             "account" => new UserResource($this->whenLoaded('account')),
             "username" => $this->username,
             'followers' => ProfileResource::collection($this->whenLoaded('followers')),
             'followings' => ProfileResource::collection($this->whenLoaded('followings')),
-            'followings_count' => $this->followers_count ?: new MissingValue,
-            'followers_count' => $this->followings_count ?: new MissingValue,
+            'followers_count' => $this->followers_count ?? new MissingValue,
+            'followings_count' => $this->followings_count ?? new MissingValue,
+            'following' => $this->following,
             'settings' => new ProfileSettingsResource($this->whenLoaded('settings')),
             'url' => $this->url,
+            'created_at' => $this->created_at ?? new MissingValue,
+            'for_page_created_at' => $this->for_page_created_at ?? new MissingValue,
         ];
         return $resource;
     }

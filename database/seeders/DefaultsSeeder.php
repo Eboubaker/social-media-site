@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Image;
+use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Storage;
@@ -17,6 +19,9 @@ class DefaultsSeeder extends Seeder
     public function run()
     {
         DB::transaction(function(){
+            $p = Profile::factory()->create([
+                'user_id' => User::where('email', 'admin@test.com')->first('id')->id
+            ]);
             $im_defaults = [
                 'imageable_id' => 1,
                 'imageable_type' => 'DEFAULT_IMAGE',

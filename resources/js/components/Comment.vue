@@ -1,7 +1,7 @@
 <template>
     <div class="flex" v-if="renderComponent">
         <a class="w-10 h-10 mr-1 flex-shrink-0" v-bind:href="'/u/'+comment.commentor.username">
-            <img class="w-10 h-10 rounded-full" v-bind:src="comment.commentor.profileImage.url" />
+            <img class="w-10 h-10 rounded-full" v-bind:src="comment.commentor.avatarImage.url" />
         </a>
         <div class="flex-grow">
             <div class="bg-gray-100 rounded-2xl px-3 py-1 ml-1">
@@ -23,8 +23,8 @@
                 <Comment v-for="reply in comment.replies" :post="post" :comment="reply" :level="level+1" :key="'p/'+post.id+'/r/'+reply.id"/>
                 <a v-on:click="!loadingReplies ? loadMoreReplies() : null" v-if="comment.replies_count > comment.replies.length" v-bind:class="this.loadingReplies ? 'cursor-wait' : 'cursor-pointer'" class="hover:underline mt-1 mr-auto">View More Replies...<svg v-if="this.loadingReplies" class="inline-block mx-2 mt-1 text-gray-600 w-5 h-5 stroke-current" viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="8.042%" y1="0%" x2="65.682%" y2="23.865%" id="a"><stop stop-color="#000" stop-opacity="0" offset="0%"/><stop stop-color="#111" stop-opacity=".631" offset="63.146%"/><stop stop-color="#222" offset="100%"/></linearGradient></defs><g fill="none" fill-rule="evenodd"><g transform="translate(1 1)"><path d="M36 18c0-9.94-8.06-18-18-18" id="Oval-2" stroke="url(#a)" stroke-width="2"> <animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></path><circle fill="#000" cx="36" cy="18" r="1"><animateTransform attributeName="transform" type="rotate" from="0 18 18" to="360 18 18" dur="0.9s" repeatCount="indefinite" /></circle></g></g></svg></a>
                 <div class="my-1"></div>
-                <div v-if="replyOpen" class="flex justify-between items-center space-x-2 my-2">
-                    <img class="w-7 h-7 rounded-full" v-bind:src="$currentProfile.profileImage.url" />
+                <div v-if="replyOpen" class="flex justify-between items-center space-x-2 my-2" v-on-clickaway="closeReply">
+                    <img class="w-7 h-7 rounded-full" v-bind:src="$currentProfile.avatarImage.url" />
                     <div class="flex-auto" >
                         <input v-on:keyup.enter="sendReply" v-model="reply"
                         class="bg-gray-100 w-full rounded-r-full rounded-l-full py-2 pl-5 px-2 border-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none focus:outline-none"
@@ -40,7 +40,9 @@
     </div>    
 </template>
 <script>
+import { mixin as clickaway } from "vue-clickaway";
 export default {
+    mixins: [clickaway],
     name: 'Comment',
     components:{
         Comment
@@ -93,6 +95,9 @@ export default {
             .then(e => {
                 this.loadingReplies = false
             })
+        },
+        closeReply: function(){
+            this.replyOpen = false;
         },
         showReplies: function(){
             this.replyOpen = !this.replyOpen

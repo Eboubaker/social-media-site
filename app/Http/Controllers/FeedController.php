@@ -54,11 +54,10 @@ class FeedController extends Controller
             DB::raw("@comments_count:=(select count(*) from `comments` where `posts`.`id` = `comments`.`commentable_id` and `comments`.`commentable_type` = 'App\\\\Models\\\\Post' and `comments`.`deleted_at` is null) as `posts.comments_count`"),
             DB::raw("@views_count:=(select count(*) from `post_views` where `posts`.`id` = `post_views`.`post_id`) as `posts.views_count`"),
         ])
-        ->withCount('likes', 'comments', 'views')
         ->leftJoin('post_views as pv', function($join) use ($current_id){
             $join->on('posts.id', '=', 'pv.post_id')->where('pv.viewer_id', $current_id);
         })
-        ->with(['videos', 'images', 'author', 'author.profileImage'])
+        ->with(['videos', 'images', 'author', 'author.avatarImage'])
         ;
         if($profilePage = ! empty(request('username')))
         {
@@ -116,20 +115,23 @@ class FeedController extends Controller
             ->limit(min(50, $request->post('count', 10)))
             ->get();
         $posts->each(function (Post $post) use($current_id) { 
+            $post->likes_count = $post->getAttribute('posts.likes_count');
+            $post->views_count = $post->getAttribute('posts.views_count');
+            $post->comments_count = $post->getAttribute('posts.comments_count');
             if($post->pageable_type === Community::morphClass())
             {
-                $post->setRelation('pageable', $post->pageable()->with('iconImage')->first());
+                $post->setRelation('pageable', $post->pageable()->with('avatarImage')->first());
             }else if($post->pageable_type === Profile::morphClass()){
-                $post->setRelation('pageable', $post->pageable()->with('profileImage')->first());
+                $post->setRelation('pageable', $post->pageable()->with('avatarImage')->first());
             }
             $post->setRelation('comments', tap($post->comments()
                         ->includeIsLikedAttribute($current_id)
                         ->withCount(['likes', 'replies'])
-                        ->with(['commentor', 'commentor.profileImage'])
+                        ->with(['commentor', 'commentor.avatarImage'])
                         ->take(5)
                         ->get())
                         ->each(function($comment) use($current_id){
-                            $comment->setRelation('replies', $comment->replies()->includeIsLikedAttribute($current_id)->with(['commentor', 'commentor.profileImage'])->withCount(['likes', 'replies'])->limit(5)->get());
+                            $comment->setRelation('replies', $comment->replies()->includeIsLikedAttribute($current_id)->with(['commentor', 'commentor.avatarImage'])->withCount(['likes', 'replies'])->limit(5)->get());
                         }));
         });
         // update view_count in post_views table

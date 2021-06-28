@@ -79,7 +79,7 @@ class CommentController extends Controller
             throw new HttpPermissionException("You don't have permission to comment on this community");
         }
         $comment = Comment::make($this->validated($request->all()))
-        ->commentor()->associate(Profile::currentRelation('profileImage')->first())
+        ->commentor()->associate(Profile::currentRelation('avatarImage')->first())
         ->commentable()->associate($post)
         ->post()->associate($post);
         $comment = $this->storeWithAttachements(request(), $comment, $post);
@@ -94,7 +94,7 @@ class CommentController extends Controller
     {
         $post = $comment->post;
         $reply = Comment::make($this->validated($request->all()))
-        ->commentor()->associate(Profile::currentRelation('profileImage')->first())
+        ->commentor()->associate(Profile::currentRelation('avatarImage')->first())
         ->commentable()->associate($comment)
         ->post()->associate($post);
         if($post->pageable instanceof Community)
@@ -139,7 +139,7 @@ class CommentController extends Controller
         $comments = $comment
                     ->replies()
                     ->includeIsLikedAttribute(Profile::currentRelation()->first('id')->id)
-                    ->with(['commentor', 'commentor.profileImage', 'images', 'videos'])
+                    ->with(['commentor', 'commentor.avatarImage', 'images', 'videos'])
                     ->withCount(['likes', 'replies'])
                     ->skip($skip)
                     ->limit($limit)

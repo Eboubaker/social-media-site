@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $follower_id
  * @property Profile $follower
  * @property Profile $following
+ * @property Profile $profile
  * @property int $id
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property string|null $reason_deleted
@@ -45,12 +46,16 @@ class Follow extends Model
     public const UPDATED_AT = null;
 
 
+    public function profile():BelongsTo
+    {
+        return $this->belongsTo(Profile::class, 'profile_id');
+    }
     public function follower():BelongsTo
     {
         return $this->belongsTo(Profile::class, 'follower_id');
     }
     public function following():BelongsTo
     {
-        return $this->belongsTo(Profile::class, 'profile_id');
+        return $this->profile();
     }
 }

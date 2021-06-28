@@ -44,7 +44,7 @@ class SeedByCommunities extends Seeder
             'name' => 'memes',
             'owner_id' => $this->profileWithRandomPic(User::random()->id, 'funnydude23')->id,
         ]);
-        $community->iconImage()->save(
+        $community->avatarImage()->save(
             Image::extractModelFromFile(Storage::disk('seeds')->path('community_pics_minified/memes_iconImage.jpg'))
         );
         $community->coverImage()->save(
@@ -331,7 +331,7 @@ class SeedByCommunities extends Seeder
             'username' => $username,
             'user_id' => $user_id,
         ]), function($profile){
-            $profile->profileImage()->save(Image::extractModelFromFile(Storage::disk('seeds')->path(collect(Storage::disk('seeds')->files('/english_people_minified'))->random())));
+            $profile->avatarImage()->save(Image::extractModelFromFile(Storage::disk('seeds')->path(collect(Storage::disk('seeds')->files('/english_people_minified'))->random())));
         });
     }
 

@@ -17,7 +17,7 @@ class AccountResource extends JsonResource
     {
         return [
             'id' => $this->public_id,
-            'profileImage' => $this->profileImage->url,
+            'avatarImage' => $this->avatarImage->url,
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
         ];

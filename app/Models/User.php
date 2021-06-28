@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\DB;
 /**
  * App\Models\User
  *
- * @property Image profileImage
  * @property Collection<Profile> profiles
  * @property Profile activeProfile
  * @property string lastName

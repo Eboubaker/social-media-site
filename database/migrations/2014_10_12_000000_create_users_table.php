@@ -3,7 +3,6 @@
 use App\Models\Profile;
 use App\Models\User;
 use App\Models\UserSettings;
-use App\Models\ProfileImage;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

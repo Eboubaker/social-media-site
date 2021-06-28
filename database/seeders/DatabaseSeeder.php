@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\BusinessCategory;
-use App\Models\ProfileImage;
 use App\Models\User;
 use App\Models\UserSettings;
 use Database\Factories\UserSettingsFactory;

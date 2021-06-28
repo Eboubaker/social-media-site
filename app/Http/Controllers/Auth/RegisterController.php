@@ -3,12 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\BusinessProfile;
-use App\Models\Image;
 use App\Models\Profile;
-use App\Models\ProfileImage;
-use App\Models\SocialProfile;
-use App\Models\UserSettings;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Rules\Phone;

@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isLocal()) {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
-        // TODO: are you sure about how you will manage different timezones for different geo-users ??
+        // TODO: how we will manage different timezones for different geo-users ??
         if(strtolower(date_default_timezone_get()) !== "africa/algiers")
         {
             date_default_timezone_set("Africa/Algiers");
@@ -73,35 +73,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('apiToken', function () {
-            return "<input hidden name='api_token' value='{{ Auth::user()->singleUseToken() }}'/>";
-        });
-        Auth::macro('profile', function(){
-            if(Auth::user())
-            {
-                return Auth::user()->activeProfile;
-            }
-            return null;
-        });
-        Validator::extendImplicit('allowed_attributes', function ($attribute, $value, $parameters, $validator) {
-            // If the attribute to validate request top level
-            if (strpos($attribute, '.') === false) {
-                return in_array($attribute, $parameters);
-            }
-        
-            // If the attribute under validation is an array
-            if (is_array($value)) {
-                return empty(array_diff_key($value, array_flip($parameters)));
-            }
-        
-            // If the attribute under validation is an object
-            foreach ($parameters as $parameter) {
-                if (substr_compare($attribute, $parameter, -strlen($parameter)) === 0) {
-                    return true;
-                }
-            }
-        
-            return false;
-        });
+        // TODO: remove
+        if (config('database.log_queries')) {
+            DB::connection()->enableQueryLog();
+        }
     }
 }
