@@ -19,7 +19,9 @@ class DefaultsSeeder extends Seeder
     public function run()
     {
         DB::transaction(function(){
+            $this->call(CategoriesSeeder::class);
             $p = Profile::factory()->create([
+                'username' => 'boubaker',
                 'user_id' => User::where('email', 'admin@test.com')->first('id')->id
             ]);
             $im_defaults = [

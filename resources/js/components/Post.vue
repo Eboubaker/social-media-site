@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full" >
+  <div class="w-full" v-if="!hidden">
     <div class="my-0 rounded-lg shadow-lg bg-white">
       <div class="flex flex-row justify-between items-center">
         <div v-if="post.pageable_type === 'Profile'" class="flex justify-start items-center pt-2 px-4 space-x-2 group">
@@ -30,7 +30,7 @@
         </div>
         <div class="relative items-center">
           <button
-            class="relative z-30 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer"
+            class="relative z-10 rounded-full bg-gray-50 hover:bg-red-50 hover:text-logo-red h-10 p-2 m-2 outline-none focus:outline-none cursor-pointer"
             :class="menueOpen ? 'bg-red-100 text-logo-red hover:text-logo-red ' : 'bg-transparent'"
             @click="menueOpen = !menueOpen"
           >
@@ -51,47 +51,69 @@
           </button>
           <div
             v-if="menueOpen"
-            v-on-clickaway="hide"
+            v-on-clickaway="hideMenue"
             class="absolute z-30 right-0 w-72 bg-white ring-2 ring-gray-100 shadow-lg rounded-lg p-2"
           >
             <div class="flex flex-col space-y-2">
               <a
-                class="flex flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
+                class="flex flex-row cursor-pointer justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
                 href="#"
               >
                 <span class="material-icons">bookmark</span>
-                <p class>save post</p>
+                <p class>Save post</p>
               </a>
               <a
-                class="flex flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
-                href="#"
+                @click="toggleNotifications()"
+                class="flex cursor-pointer flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
               >
-                <span class="material-icons">notifications</span>
-                <p class>Turn on notifications</p>
+                <span class="flex" v-if="post.notifications_on">
+                  <span class="material-icons">notifications_off</span>
+                  <p class>Turn off notifications</p>
+                </span>
+                <span class="flex" v-else>
+                  <span class="material-icons">notifications</span>
+                  <p class>Turn on notifications</p>
+                </span>
               </a>
               <hr />
             </div>
             <div class="flex flex-col space-y-2 mt-2">
               <a
-                class="flex flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
-                @click="hide()"
+                class="flex cursor-pointer flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
+                @click="hidePost()"
               >
                 <span class="material-icons">cancel</span>
                 <p>Hide post</p>
               </a>
+              <div>
+                <a
+                  ref="unsubscribe_btn"
+                  href="#"
+                  class="flex cursor-pointer flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
+                  @click="unsubscribe()"
+                >
+                  <span class='flex' v-if="post.pageable_type === 'Profile'">
+                    <span class="material-icons">remove_circle</span>
+                    <p>Unfollow this person</p>
+                  </span>
+                  <span class='flex' v-else>
+                    <span class="material-icons">remove_circle</span>
+                    <p>Leave <span class="font-semibold">r/{{ post.pageable.name }}</span></p>
+                  </span>
+                </a>
+              </div>
               <a
-                class="flex flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
-                href="#"
+                class="flex cursor-pointer flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
+                @click="deletePost()"
               >
-                <span class="material-icons">remove_circle</span>
-                <p>Unfollow this person</p>
-              </a>
-              <a
-                class="flex flex-row justify-start items-center space-x-1 hover:bg-gray-100 rounded-lg py-2"
-                href="#"
-              >
-                <span class="material-icons">report</span>
-                <p>Find support or report post</p>
+                <span v-if="post.author.id == $currentProfile.id" class="flex">
+                  <span class="material-icons">delete</span>
+                  <p>Delete Post</p>
+                </span>
+                <span v-else class="flex">
+                  <span class="material-icons">report</span>
+                  <p>Find support or report post</p>
+                </span>
               </a>
             </div>
           </div>
@@ -214,11 +236,28 @@ export default {
       commentsOpen: false,
       loadingComments: false,
       menueOpen: false,
+      hidden: false,
     };
   },
   methods: {
-    hide: function(){
-
+    hidePost: function(){
+      this.hidden = true;
+    },
+    hideMenue: function() {
+      this.menueOpen = false;
+    },
+    toggleNotifications: function(){
+      if(this.post.notifications_on)
+      {
+        axios.post('/p/'+this.post.id+'/turnOnNotifications')
+        .then(() => this.post.notifications_on = true)
+        .catch(e => console.error(e))
+      }else{
+        axios.post('/p/'+this.post.id+'/turnOffNotifications')
+        .then(() => this.post.notifications_on = false)
+        .catch(e => console.error(e))
+      }
+      this.post.notifications_on = !this.post.notifications_on;
     },
     likesShort: function () {
       let num = this.post.likes_count;
@@ -236,9 +275,6 @@ export default {
         return num >= item.value;
       });
       return item ? (num / item.value).toFixed(1).replace(rx, "$1") + item.symbol : "0";
-    },
-    hide: function() {
-      this.menueOpen = false;
     },
     showComments: function(){
       this.commentsOpen = true;
@@ -274,6 +310,14 @@ export default {
         this.post.comments_count++;
       })
       .catch(e => console.error(e));
+    },
+    deletePost: function(){
+      axios.post('/p/'+this.post.id+'/delete')
+      .then(res => {
+        this.hidden = true;
+      }).catch(e => {
+        console.error(e);
+      })
     },
     like: function(){
       if(this.post.is_liked){

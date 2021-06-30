@@ -23,6 +23,15 @@ class CommunityController extends Controller
             'show',
         ]);
     }
+
+    public function list(Request $request)
+    {
+        $communities = Community::with('avatarImage', 'category')
+            ->withCount('members')
+            ->where('is_private', false);
+
+        return view('community.list', compact('communities'));
+    }
     public function create()
     {
         return view('community.create');

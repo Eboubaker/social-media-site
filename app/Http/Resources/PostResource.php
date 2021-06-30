@@ -33,6 +33,7 @@ class PostResource extends JsonResource
                 }
                 return new MissingValue;
             }),
+            'notifications_on' => false,
             'images' => ImageResource::collection($this->whenLoaded('images')),
             'videos' => VideoResource::collection($this->whenLoaded('videos')),
             'comments' => CommentResource::collection($this->whenLoaded('comments')),
@@ -41,7 +42,7 @@ class PostResource extends JsonResource
             'comments_count' => $this->comments_count,
             'likes_count' => $this->likes_count,
             'views_count' => $this->views_count,
-            'commentsOpen' => true,
+            'commentsOpen' => $this->author_id != Profile::current_id() && $this->comment_count > 0,
             'createdAt' => $this->created_at->diffForHumans(),
             'updatedAt' => $this->updated_at,
             'is_liked' => $this->is_liked ? true : false,

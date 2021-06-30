@@ -33,6 +33,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|PostView withTrashed()
  * @method static \Illuminate\Database\Query\Builder|PostView withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|PostView whereViewedCount($value)
  */
 class PostView extends Model
 {

@@ -34,11 +34,26 @@ import VueTailwind from "vue-tailwind";
 // import VueResource from "vue-resource";
 import "alpinejs";
 window.pluralize = require("pluralize");
+import 'babel-polyfill';
 // tell Vue to use the vue-resource plugin
 // Vue.use(VueResource);
 window.Vue = Vue;
 import VueSmoothScroll from "vue2-smooth-scroll";
 Vue.use(VueSmoothScroll);
+
+import VueRx from 'vue-rx'
+import VuejsClipper from 'vuejs-clipper'
+Vue.use(VueRx)
+Vue.use(VuejsClipper, {
+  components: {
+     clipperBasic: true,
+     clipperPreview: true,
+     clipperFixed: true,
+     clipperRange: true,
+     clipperUpload :true,
+  }
+ })
+
 Vue.component("feed", require("./components/Feed.vue").default);
 Vue.component("nav-bar", require("./components/NavBar.vue").default);
 Vue.component("post", require("./components/Post.vue").default);
@@ -52,6 +67,7 @@ Vue.component("posts-component", require("./components/Posts.vue").default);
 Vue.component("comment", require("./components/Comment.vue").default);
 Vue.component("community-head", require("./components/CommunityHead.vue").default);
 Vue.component("profile-head", require("./components/ProfileHead.vue").default);
+Vue.component("profile-init-avatar", require("./components/ProfileInitAvatar.vue").default);
 
 Vue.prototype.pluralize = (...atts) => window.pluralize(...atts);
 // Vue.directive("clickaway", {

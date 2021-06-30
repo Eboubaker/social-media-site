@@ -19,6 +19,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Spatie\Html\Elements\Input;
@@ -125,7 +126,15 @@ class PostController extends Controller
         return redirect($post->url);
     }
     
-
+    public function delete(Request $request, Post $post)
+    {
+        if($post->author_id === Profile::current_id() && is_int($post->author_id))
+        {
+            $post->delete();
+            return Response::make(status:StatusCodes::HTTP_NO_CONTENT);
+        }
+        throw new HttpPermissionException;
+    }
     public function loadComments(Post $post)
     {
         if($post->pageable instanceof Community && ! $post->pageable->allowsCurrent(config('permissions.communities.can-view-posts'))

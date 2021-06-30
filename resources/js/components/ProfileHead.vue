@@ -22,7 +22,6 @@
                 height="200"
                 class="md rounded-full relative border-2 border-blue-200 antialiased"
                 :src="profile.avatarImage.url"
-                alt
               />
               <div class="absolute"></div>
             </div>
@@ -30,10 +29,10 @@
         </div>
         <!-- Follow Button -->
         <div class="flex flex-col text-right">
-          <button v-if="profile.id == $currentProfile.id"
+          <a :href="'/u/'+profile.id+'/edit'" v-if="profile.id == $currentProfile.id"
             class="flex justify-center max-h-max whitespace-nowrap focus:outline-none focus:ring rounded-full max-w-max border bg-transparent border-red-400 text-red-400 hover:border-logo-red hover:text-logo-red items-center hover:shadow-sm font-bold py-2 px-4 mr-0 ml-auto"
           >Edit Profile
-          </button>
+          </a>
           <div v-else>
             <button v-if="profile.following" @click="unfollow()" class="border-2 focus:outline-none w-32 text-center cursor-pointer border-blue-300 rounded-full py-1 px-6 font-bold text-blue-300 group hover:text-blue-400 hover:border-blue-400 hover:bg-green-400 hover:bg-opacity-30"><span class="inline-block group-hover:hidden">Following</span><span class="hidden group-hover:inline-block">Unfollow</span></button>
             <button v-else @click="follow()" class="border-2 focus:outline-none w-32 text-center cursor-pointer bg-gray-50 hover:bg-gray-200 rounded-full py-1 px-6 font-bold text-gray-900">Follow</button>
@@ -41,7 +40,6 @@
 
         </div>
       </div>
-
       <!-- Profile info -->
       <div class="space-y-1 justify-center w-full mt-3 ml-3">
         <!-- User basic-->
@@ -118,7 +116,7 @@
 export default {
     data(){
         return{
-            profile: null
+          profile: null
         }
     },
     mounted: function(){

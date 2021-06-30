@@ -5,7 +5,7 @@ module.exports = {
     "./resources/**/*.vue",
     "/storage/app/framework/views/*.php",
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'media', // or 'media' or 'class' or false
   theme: {
     extend: {
       fontSize:{

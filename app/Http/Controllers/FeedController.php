@@ -54,6 +54,7 @@ class FeedController extends Controller
             DB::raw("@comments_count:=(select count(*) from `comments` where `posts`.`id` = `comments`.`commentable_id` and `comments`.`commentable_type` = 'App\\\\Models\\\\Post' and `comments`.`deleted_at` is null) as `posts.comments_count`"),
             DB::raw("@views_count:=(select count(*) from `post_views` where `posts`.`id` = `post_views`.`post_id`) as `posts.views_count`"),
         ])
+        ->withCount(['comments', 'likes', 'views'])
         ->leftJoin('post_views as pv', function($join) use ($current_id){
             $join->on('posts.id', '=', 'pv.post_id')->where('pv.viewer_id', $current_id);
         })

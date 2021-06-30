@@ -30,6 +30,11 @@ class ProfileController extends Controller
         return view('profile.create');
     }
 
+
+    public function init(Request $request)
+    {
+        return view('profile.init', ["noApp" => true]);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -72,7 +77,12 @@ class ProfileController extends Controller
      */
     public function edit(Profile $profile)
     {
-        return view('profile.edit', compact('profile'));
+        $profile->load('avatarImage', 'coverImage', 'account', 'settings', 'followers', 'followings');
+        $profile->loadCount('followers', 'followings');
+        return view('profile.edit', [
+            'profile' => $profile,
+            'profileJson' => json_encode((new ProfileResource($profile))->toResponse(request())->getData()->data),
+        ]);
     }
 
     /**

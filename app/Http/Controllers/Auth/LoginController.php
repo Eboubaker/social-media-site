@@ -120,6 +120,7 @@ class LoginController extends Controller
     {
         $rules = [
             'password' => ['required'],
+            'remember_me' => []
         ];
         if($this->username() === 'email')
         {

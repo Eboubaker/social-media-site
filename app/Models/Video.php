@@ -59,6 +59,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Video withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Video withoutTrashed()
  * @mixin \Eloquent
+ * @property float $duration
+ * @property string $mime
+ * @method static \Illuminate\Database\Eloquent\Builder|Video whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Video whereMime($value)
  */
 class Video extends Model implements Attachement
 {

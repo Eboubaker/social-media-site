@@ -22,8 +22,9 @@
                 <div class="w-full lg:w-1/2 border p-5 rounded-lg shadow-md bg-white">
                     <h3 class="pt-4 pb-1 text-2xl text-center">Login</h3>
                     <hr />
-                    <form class="px-8 pt-6 pb-8 mb-4 rounded" method="POST" action="{{ route('login') }}">
+                    <form class="px-8  pt-6 pb-8 mb-4 rounded" method="POST" action="{{ route('login') }}">
                         @csrf
+                        <input hidden style="display: none" name="remember_me" value="1">
                         <div class="mb-4">
                             <label class="block mb-2 text-sm font-bold text-gray-700" for="login">
                                 Email or Phone Number

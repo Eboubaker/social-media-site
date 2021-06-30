@@ -10,6 +10,7 @@ use App\Models\Traits\Urlable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -67,6 +68,8 @@ use Watson\Validating\ValidatingTrait;
  * @method static \Illuminate\Database\Query\Builder|Community withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Community withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $category
+ * @property-read int|null $category_count
  */
 class Community extends Model
 {
@@ -85,7 +88,10 @@ class Community extends Model
     
 
     
-
+    public function category(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'communities_categories');
+    }
     public function posts():MorphMany
     {
         return $this->morphMany(Post::class, 'pageable');

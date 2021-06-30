@@ -62,6 +62,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Comment withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Comment withoutTrashed()
  * @mixin \Eloquent
+ * @property int $post_id
+ * @property-read \Illuminate\Database\Eloquent\Collection|Comment[] $linkedComments
+ * @property-read int|null $linked_comments_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Comment wherePostId($value)
  */
 class Comment extends Model
 {

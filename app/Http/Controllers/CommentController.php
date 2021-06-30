@@ -75,7 +75,7 @@ class CommentController extends Controller
         if($post->pageable instanceof Community && ! $post->pageable->allowsCurrent(config('permissions.communities.can-comment-on-posts')))
         {
             throw new HttpPermissionException("You don't have permission to comment on this community");
-        }else if($post->pageable instanceof Profile && ! $post->pageable->allowsCurrent(config('permissions.profile.can-comment'))){
+        }else if($post->pageable instanceof Profile && ! $post->pageable->allowsCurrent(config('permissions.profiles.can-comment'))){
             throw new HttpPermissionException("You don't have permission to comment on this community");
         }
         $comment = Comment::make($this->validated($request->all()))

@@ -156,7 +156,7 @@ export default {
       })
       .then(res => res.data.data.length > 0 ? this.notifications.push(...res.data.data) : 0)
       .catch(e => console.error(e))
-      .then(e => setTimeout(this.fetchNotifications, 10000))
+      .then(e => setTimeout(this.fetchNotifications, 5000))
     },
     readNotifications: function(){
       axios.post('/n/read', {

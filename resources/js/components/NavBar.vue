@@ -13,7 +13,7 @@
             />
           </svg>
         </a>
-        <div class="relative flex flex-row justify-start items-center rounded w-60 lg:w-80">
+        <div class="hidden lg:flex relative flex-row justify-start items-center rounded w-60 lg:w-80">
           <span class="material-icons absolute pl-2 w-7 h-7">search</span>
           <form class action="./confirm">
             <input
@@ -34,7 +34,7 @@
         </a>
         <a
           class="flex flex-row justify-center items-center text-center px-4 py-2 space-x-2 hover:bg-red-50 hover:text-logo-red rounded w-32"
-          href="#"
+          href="/communities"
         >
           <span class="material-icons">group</span>
           <span>Groups</span>

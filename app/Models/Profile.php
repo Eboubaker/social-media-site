@@ -99,6 +99,9 @@ use Watson\Validating\ValidatingTrait;
  * @method static \Illuminate\Database\Query\Builder|Profile withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Profile withoutTrashed()
  * @mixin \Eloquent
+ * @property-read \App\Models\ProfileData|null $data
+ * @property-read bool $is_liked
+ * @property-read int|null $notifications_count
  */
 class Profile extends Model
 {

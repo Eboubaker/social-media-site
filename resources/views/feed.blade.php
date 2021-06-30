@@ -2,7 +2,7 @@
 
 @section('content')
 <nav-bar class="hidden sm:block"></nav-bar>
-<div class="flex flex-col pt-20 mx-auto max-w-4xl lg:max-w-5xl xl:max-w-6xl bg-gray-200">
+<div class="flex flex-col pt-20 mx-auto max-w-4xl lg:max-w-5xl xl:max-w-6xl">
   <div class="grid grid-cols-1 gap-y-4">
     <!-- trending today -->
     <div class="flex flex-col space-y-2">
@@ -55,12 +55,12 @@
   </div>
 </div>
 <div class="flex w-full h-full mt-20">
-  <div class="w-7/12 mx-auto h-full">
+  <div class="w-full md:w-11/12 lg:w-7/12 mx-auto h-full">
       <div class="md:mx-auto w-11/12">
         <feed class="rounded-lg bg-gray-50 min-h-screen p-2 sm:p-4 md:p-12 shadow-inner"></feed>
       </div>
   </div>
-  <div class="hidden md:block flex-none md:w-5/12">
+  <div class="hidden lg:block flex-none md:w-5/12">
     <div class="flex flex-col space-y-2">
       <div class="font-2xl font-medium">Trending Videos</div>
       <div class="flex flex-col space-y-4">

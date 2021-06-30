@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\HttpInternalServerErrorException;
 use App\Http\Resources\NotificationResource;
 use App\Http\StatusCodes;
+use App\Models\Post;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,5 +30,16 @@ class NotificationController extends Controller
                 ]);
         }
         return $result ? response(status:StatusCodes::HTTP_OK) : new HttpInternalServerErrorException;
+    }
+
+
+    public function turnOnPostNotifications(Request $request, Post $post)
+    {
+        DB::table('posts_notifications_list')->insert(
+            array_merge(
+                $post->getMorphConstraints('notifiable'),
+                ["profile_id" => Profile::current_id()]
+            )
+        );
     }
 }

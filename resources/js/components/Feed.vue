@@ -414,14 +414,10 @@ export default {
         .then(res => {
           console.log("work");
           this.posts.unshift(res.data.data);
-          // this.forceRerender();
         })
         .catch(e => {
           console.log(e);
         })
-        .then(e => {
-          this.close();
-        });
     },
     forceRerender() {
         // Remove my-component from the DOM

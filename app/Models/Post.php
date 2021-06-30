@@ -74,6 +74,8 @@ use Watson\Validating\ValidatingTrait;
  * @method static \Illuminate\Database\Query\Builder|Post withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Post withUniqueSlugConstraints(\Illuminate\Database\Eloquent\Model $model, string $attribute, array $config, string $slug)
  * @method static \Illuminate\Database\Query\Builder|Post withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comment[] $linkedComments
+ * @property-read int|null $linked_comments_count
  */
 class Post extends Model
 {

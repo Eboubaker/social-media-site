@@ -33,6 +33,8 @@ Route::get('/u/{profile:username}/p/{post:uuid62}/r/{comment:uuid62}', [CommentC
 Route::get('/c/{community:name}', [CommunityController::class, 'show'])->name('community.show');
 Route::get('/c/{community:name}/p/{post:uuid62}/{post_by_slug}', [PostController::class, 'show'])->name('community-post.show');
 Route::get('/u/{profile:username}/p/{post:uuid62}/{post_by_slug}', [PostController::class, 'show'])->name('profile-post.show');
+Route::get('/communities', [CommunityController::class, 'list'])->name('communities.list');
+Route::get('/u/init', [ProfileController::class, 'init'])->name('profile.init');
 Route::get('/u/{profile:username}', [ProfileController::class, 'show'])->name('profile.show');
 #endregion
 
@@ -57,6 +59,7 @@ Route::get('/u/{profile:username}/p/{post:uuid62}/{garbage?}', [PostController::
 #region //! form requests
 Route::get('/community/create', [CommunityController::class, 'create'])->name('community.create');
 Route::get('/c/{community:name}/edit', [CommunityController::class, 'edit'])->name('community.edit');
+Route::get('/u/{profile}/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 #endregion
 
 
@@ -68,6 +71,8 @@ Route::post('/c/{comment}/update', [CommentController::class, 'update'])->name('
 
 Route::post('/p/{post}/like', [LikeController::class, 'likePost'])->name('post.like');
 Route::post('/p/{post}/unlike', [LikeController::class, 'unlikePost'])->name('post.unlike');
+
+Route::post('/p/{post}/delete', [PostController::class, 'delete'])->name('post.delete');
 
 Route::post('/r/{comment}/like', [LikeController::class, 'likeComment'])->name('comment.like');
 Route::post('/r/{comment}/unlike', [LikeController::class, 'unlikeComment'])->name('comment.unlike');
@@ -86,6 +91,7 @@ Route::post('/c/{community}/leave', [CommunityController::class, 'leave'])->name
 
 Route::post('/u/{profile}/follow', [FollowController::class, 'follow'])->name('profile.follow');
 Route::post('/u/{profile}/unfollow', [FollowController::class, 'unfollow'])->name('profile.unfollow');
+Route::put('/u//{profile}/update', [CommunityController::class, 'update'])->name('profile.update');
 
 Route::put('/community/{community}', [CommunityController::class, 'update'])->name('community.update');
 Route::delete('/community/{community}', [CommunityController::class, 'destroy'])->name('community.destory');
