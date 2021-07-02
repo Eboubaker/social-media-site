@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Notifications\NewFollowerNotification;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class NotificationResource extends JsonResource
@@ -15,7 +14,7 @@ class NotificationResource extends JsonResource
      */
     public function toArray($request)
     {
-        if($this->type === 'App\\Notifications\\NewFollowerNotification')
+        if($this->type === 'App\\Notifications\\ProfileFollowedNotification')
         {
             return [
                 'id' => $this->id,

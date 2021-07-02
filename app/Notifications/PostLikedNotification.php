@@ -2,26 +2,24 @@
 
 namespace App\Notifications;
 
-use App\Models\Follow;
+use App\Models\Post;
 use App\Models\Profile;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewFollowerNotification extends Notification implements ShouldQueue
+class PostLikedNotification extends Notification
 {
     use Queueable;
 
-    public $follower_id;
     /**
      * Create a new notification instance.
-     * @param Follow $follow
+     *
      * @return void
      */
-    public function __construct($follower_id)
+    public function __construct(public Post $post, public Profile $liker)
     {
-        $this->follower_id = $follower_id;
     }
 
     /**
@@ -43,11 +41,10 @@ class NewFollowerNotification extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        $follower = Profile::with('avatarImage')->find($this->follower_id);
         return [
-            'follower_id' => $this->follower_id,
-            'follower_avatarImage' => $follower->avatarImage->url,
-            'follower_username' => $follower->username,
+            'liker_username' => $this->liker->username,
+            'liker_avatarImage' => $this->liker->avatarImage,
+            'post_title' => $this->post->title,
         ];
     }
 }

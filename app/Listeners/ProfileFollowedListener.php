@@ -2,12 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\NewFollowCreated;
-use App\Notifications\NewFollowerNotification;
+use App\Events\ProfileFollowed;
+use App\Models\Profile;
+use App\Notifications\ProfileFollowedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendNewFollowerNotification implements ShouldQueue
+class ProfileFollowedListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -22,11 +23,11 @@ class SendNewFollowerNotification implements ShouldQueue
     /**
      * Handle the event.
      *
-     * @param  NewFollowCreated  $event
+     * @param  object  $event
      * @return void
      */
-    public function handle(NewFollowCreated $event)
+    public function handle(ProfileFollowed $event)
     {
-        
+        $event->profile->notify(new ProfileFollowedNotification($event->follower));
     }
 }

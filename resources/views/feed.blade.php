@@ -10,7 +10,7 @@
       <div class="flex space-x-4">
         <div>
           <div class="relative">
-            <img src="/images/01.png" alt class="rounded-xl object-cover h-36 xl:h-48 shadow" />
+            <img src="/images/01.png" class="rounded-xl object-cover h-36 xl:h-48 shadow" />
             <div class="absolute top-0 w-full h-full rounded-xl bg-gradient-to-b from-transparent to-black"></div>
             <div class="absolute bottom-4 left-4 right-4 text-white z-0">
               <div class="text-sm xl:text-lg font-bold">@SuboptimalEng</div>

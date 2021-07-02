@@ -3,7 +3,12 @@
 namespace App\Providers;
 
 use App\Events\NewFollowCreated;
-use App\Listeners\SendNewFollowerNotification;
+use App\Events\PostLiked;
+use App\Events\ProfileFollowed;
+use App\Events\StorableRemoved;
+use App\Listeners\PostLikedListener;
+use App\Listeners\ProfileFollowedListener;
+use App\Listeners\StorableRemovedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -21,8 +26,14 @@ class EventServiceProvider extends ServiceProvider
         //    SendEmailVerificationNotification::class,
 
         ],
-        NewFollowCreated::class => [
-            SendNewFollowerNotification::class,
+        StorableRemoved::class => [
+            StorableRemovedListener::class,
+        ],
+        ProfileFollowed::class => [
+            ProfileFollowedListener::class,
+        ],
+        PostLiked::class => [
+            PostLikedListener::class,
         ],
     ];
 
