@@ -57,10 +57,9 @@ class CascadedTrashScope implements Scope
     {
         $builder->macro('treeDelete', function (Builder $builder) {
             return $builder
-                ->cursor()
                 ->each(function ($model) {
                     $model->delete();
-                });
+                }, 500);
         });
     }
 
@@ -68,13 +67,13 @@ class CascadedTrashScope implements Scope
     {
         $builder->macro('treeForceDelete', function (Builder $builder) {
             if ($builder->getModel()->canBeSoftDeleted()) {
-                return $builder->cursor()->each(function ($model) {
+                return $builder->each(function ($model) {
                     $model->doForceDelete();
-                });
+                }, 500);
             } else {
-                return $builder->cursor()->each(function ($model) {
+                return $builder->each(function ($model) {
                     $model->delete();
-                });
+                }, 500);
             }
         });
     }
@@ -87,11 +86,10 @@ class CascadedTrashScope implements Scope
                 return $parent->{$relation}()->includeTrashed()->treeForceDelete();
             } elseif ($relatedInstance->canBeSoftDeleted()) {
                 return $parent->{$relation}()
-                ->cursor()
                 ->each(function ($model) {
                     $model->update(['reason_deleted' => REASON_CASCADE]);
                     $model->delete();
-                });
+                }, 500);
             }
             return $builder;
         });
@@ -117,11 +115,10 @@ class CascadedTrashScope implements Scope
             if ($builder->getModel()->canBeSoftDeleted()) {
                 return $builder
                 ->onlyIncludeTrashed()
-                ->cursor()
                 ->each(function ($model) {
                     $model->restore();
                     $model->update(["reason_deleted" => null]);
-                });
+                }, 500);
             }
             return $builder;
         });

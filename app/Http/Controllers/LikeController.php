@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostLiked;
 use App\Http\StatusCodes;
 use App\Models\Comment;
 use App\Models\Like;
@@ -25,6 +26,7 @@ class LikeController extends Controller
             ['liker_id' => Profile::current_id()] +
             $post->getMorphConstraints('likeable')
         );
+        event(PostLiked::class, $post, Profile::current());
         return response(status:StatusCodes::HTTP_CREATED);
     }
     public function unlikePost(Post $post)

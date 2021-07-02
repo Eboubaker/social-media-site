@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\DataBase\Eloquent\HasMany;
 use App\Models\Traits\HasApiToken;
 use App\Models\Traits\HasProfiles;
 use App\Models\Traits\MustVerifyPhone;
@@ -14,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use App\Models\Traits\ModelTraits;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\HasDatabaseNotifications;
 use Illuminate\Support\Facades\DB;
@@ -206,5 +208,11 @@ class User extends Authenticatable implements MustVerifyEmail
             $profile_id = $profile;
         }
         return DB::table('profiles')->where('id', $profile_id)->where('user_id', $this->getKey())->exists();
+    }
+
+
+    public function allCreatedPosts(): Builder
+    {
+        return Post::query()->whereIn('author_id', $this->profiles()->select('id'));
     }
 }

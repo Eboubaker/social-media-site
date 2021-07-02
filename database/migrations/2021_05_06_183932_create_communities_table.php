@@ -19,7 +19,7 @@ class CreateCommunitiesTable extends Migration
     {
         Schema::create(Community::tablename(), function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->constrained(Profile::tablename());
+            $table->foreignId('owner_id')->constrained(Profile::tablename())->cascadeOnDelete();
             $table->string('name')->unique('communities_unique_name');
             $table->string('description');
             $table->foreignId('category_id')->nullable()->constrained('categories');

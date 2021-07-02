@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
         
         Schema::create(Post::tablename(), function (Blueprint $table) {
             $table->id();
-            $table->foreignId('author_id')->nullable()->constrained(Profile::tablename());
+            $table->foreignId('author_id')->nullable()->constrained(Profile::tablename())->cascadeOnDelete();
             $table->string('title')->nullable();
             $table->text('body')->nullable();
             $table->string('uuid62')->unique()->index('posts_by_slug');

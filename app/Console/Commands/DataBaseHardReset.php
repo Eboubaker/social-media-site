@@ -40,20 +40,18 @@ class DataBaseHardReset extends Command
      */
     public function handle()
     {
-        DB::beginTransaction();
-        try {
-            User::query()->treeForceDelete();
-            DB::commit();
-        }catch(\Throwable $e)
-        {
-            report($e);
-            echo $e->getMessage() . "\n";
-        }
-        $this->call("db:wipe");
+        // DB::beginTransaction();
+        // try {
+        //     User::query()->treeForceDelete();
+        //     DB::commit();
+        // }catch(\Throwable $e)
+        // {
+        //     report($e);
+        //     echo $e->getMessage() . "\n";
+        // }
+        // $this->call("db:wipe");
         $db = config('database.connections.mysql.database');
-        DB::unprepared("
-        drop database if exists $db;create database $db;use $db;
-        ");
+        DB::unprepared("drop database if exists $db;create database $db;use $db;");
         $this->call("migrate", ['--seed' => true]);
     }
 }

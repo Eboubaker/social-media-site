@@ -2,14 +2,12 @@
 
 namespace App\Providers;
 
-use Aloha\Twilio\Twilio;
 use App\Http\Middleware\SetLocale;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 use libphonenumber\PhoneNumberUtil;
 use App\Verify\Service;
-use App\Services\Twilio\Verification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -37,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
             return PhoneNumberUtil::getInstance();
         });
         // Register Twilio Service
-        $this->app->bind(Service::class, Verification::class);
+        // $this->app->bind(Service::class, Verification::class);
 
         $this->app->singleton('country-code-for-client', function(){
             // TODO: set default region using the IP address of the client

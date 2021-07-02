@@ -2,10 +2,9 @@
 
 namespace App\Models\Traits;
 
-use App\Exceptions\NotInTransactionException;
+use App\DataBase\Eloquent\MorphMany as CustomMorphMany;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
@@ -14,7 +13,9 @@ trait HasImages
     public static function bootHasImages()
     {
         static::deleting(function(Model $imageable){
-            $imageable->cascadeDeleteRelation(Image::make(), 'images');
+            if ($imageable->images()->count()>0) {
+                $imageable->cascadeDeleteRelation(Image::make(), 'images');
+            }
         });
         if(self::canBeSoftDeleted())
         {
@@ -23,8 +24,8 @@ trait HasImages
             });
         }
     }
-    public function images():MorphMany
+    public function images():CustomMorphMany
     {
-        return $this->morphMany(Image::class, 'imageable');
+        return (new CustomMorphMany(Image::query(), $this, 'imageable_type', 'imageable_id', 'id'));
     }
 }

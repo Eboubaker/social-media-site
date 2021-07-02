@@ -13,7 +13,9 @@ trait HasProfiles
     public static function bootHasProfiles()
     {
         static::deleting(function(User $owner){
-            $owner->cascadeDeleteRelation(Profile::make(), 'profiles');
+            if($owner->softDeleting()){
+                $owner->cascadeDeleteRelation(Profile::make(), 'profiles');
+            }
         });
         if(self::canBeSoftDeleted())
         {

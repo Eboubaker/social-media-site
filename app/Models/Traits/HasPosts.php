@@ -12,7 +12,10 @@ trait HasPosts
     public static function bootHasPosts()
     {
         static::deleting(function(Model $pageable){
-            $pageable->cascadeDeleteRelation(Post::make(), 'posts');
+            if($pageable->softDeleting())
+            {
+                $pageable->cascadeDeleteRelation(Post::make(), 'posts');
+            }
         });
         if(self::canBeSoftDeleted())
         {

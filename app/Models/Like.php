@@ -40,7 +40,6 @@ use Watson\Validating\ValidatingTrait;
 class Like extends Model
 {
     use HasFactory, 
-    SoftDeletes,
     ModelTraits
     ;
     public const CREATED_AT = 'liked_at';

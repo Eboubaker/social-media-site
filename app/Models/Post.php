@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\DataBase\Eloquent\HasMany;
 use App\DataBase\Eloquent\MorphMany;
 use App\Models\Traits\Commentable;
 use App\Models\HasAttachements as HasAttachementsInterface;
@@ -13,12 +14,17 @@ use App\Models\Traits\HasVideos;
 use App\Models\Traits\Likeable;
 use App\Models\Traits\ModelTraits;
 use App\Models\Traits\Urlable;
-use App\Models\Traits\Viewable;
+use App\Models\Traits\ViewAble;
 use App\Rules\PolymorphicRelationExists;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableObserver;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\BelongsToRelationship;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany as EloquentHasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Watson\Validating\ValidatingTrait;
@@ -89,7 +95,7 @@ class Post extends Model
     HasAuthor, 
     HasImages,
     HasVideos,
-    Viewable,
+    ViewAble,
     Likeable;
     use Commentable{
         comments as protected commentable_comments;
@@ -102,8 +108,19 @@ class Post extends Model
     {
         return $this->morphTo('pageable');
     }
-
-
+    /**
+     * Undocumented function
+     *
+     * @return Builder
+     */
+    public function notifiables(): Builder
+    {
+        return Profile::query()
+                ->join('events_notifications_list', 'events_notifications_list.profile_id', '=', 'profiles.id')
+                ->where('eventable_type', $this->getMorphClass())
+                ->where('eventable_id', $this->id)
+                ;
+    }
     public function comments(): MorphMany
     {
         return $this->commentable_comments()->withFixedConstraint('post_id', $this->id);

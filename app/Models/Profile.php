@@ -143,7 +143,7 @@ class Profile extends Model
 
     public function getIsLikedAttribute():bool
     {
-        return $this->likes()->where('liker_id', Profile::current_id())->exists();
+        return $this->likes()->where('liker_id', self::current_id())->exists();
     }
     public static function boot()
     {
@@ -375,7 +375,7 @@ class Profile extends Model
             if ($we_are_friends && $settings->allow_friends_to_comment_on_my_profile_posts) {
                 return true;
             }
-        } elseif ($permission_id === config('permissions.profiles.can-view-posts')) {
+        } else if ($permission_id === config('permissions.profiles.can-view-posts')) {
             if ($settings->allow_non_followers_to_view_my_profile_posts) {
                 return true;
             }
@@ -388,7 +388,7 @@ class Profile extends Model
             if ($we_are_friends && $settings->allow_friends_to_view_my_profile_posts) {
                 return true;
             }
-        } elseif ($permission_id === config('permissions.profiles.can-follow')) {
+        } else if ($permission_id === config('permissions.profiles.can-follow')) {
             if ($settings->allow_others_to_follow_me) {
                 return true;
             }

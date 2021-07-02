@@ -14,14 +14,11 @@ trait Likeable
     public static function bootLikeable()
     {
         static::deleting(function(Model $likeable){
-            $likeable->cascadeDeleteRelation(Like::make(), 'likes');
+            if($likeable->forceDeleting())
+            {
+                $likeable->likes()->delete();
+            }
         });
-        if(self::canBeSoftDeleted())
-        {
-            static::restored(function(Model $likeable){
-                $likeable->restoreCascadedRelation('likes');
-            });
-        }
     }
     public function likes():MorphMany
     {

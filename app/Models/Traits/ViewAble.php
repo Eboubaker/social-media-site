@@ -4,23 +4,19 @@
 namespace App\Models\Traits;
 
 use App\Models\PostView;
-use App\Models\Profile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-trait Viewable
+trait ViewAble
 {
     public static function bootViewable()
     {
         static::deleting(function(Model $viewable){
-            $viewable->cascadeDeleteRelation(PostView::make(), 'views');
+            if($viewable->forceDeleting())
+            {
+                $viewable->views()->delete();
+            }
         });
-        if(self::canBeSoftDeleted())
-        {
-            static::restored(function(Model $viewable){
-                $viewable->restoreCascadedRelation('views');
-            });
-        }
     }
 
     public function views():HasMany

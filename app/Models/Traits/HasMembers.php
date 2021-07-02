@@ -10,8 +10,11 @@ trait HasMembers
 {
     public static function bootHasMembers()
     {
-        static::deleting(function(Model $space){
-            $space->cascadeDeleteRelation(CommunityMember::make(), 'members');
+        static::deleting(function($space){
+            if($space->softDeleting())
+            {
+                $space->cascadeDeleteRelation(CommunityMember::make(), 'members');
+            }
         });
         if(self::canBeSoftDeleted())
         {

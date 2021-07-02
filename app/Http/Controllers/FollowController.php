@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ProfileFollowed;
 use App\Exceptions\HttpInternalServerErrorException;
 use App\Http\StatusCodes;
 use App\Models\Profile;
-use App\Notifications\NewFollowerNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +23,7 @@ class FollowController extends Controller
         {
             if($profile->followers()->save(Profile::current()))
             {
-                $profile->notify(new NewFollowerNotification(Profile::current_id()));
+                event(ProfileFollowed::class, $profile, Profile::current());
                 return response(status:StatusCodes::HTTP_CREATED);
             }
             return new HttpInternalServerErrorException;

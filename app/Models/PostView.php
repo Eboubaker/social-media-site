@@ -38,7 +38,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PostView extends Model
 {
     use HasFactory,
-    SoftDeletes,
     ModelTraits;
 
     public const CREATED_AT = 'viewed_at';

@@ -23,7 +23,6 @@ trait CanComment
 
     public function comments():HasMany
     {
-        $instance = new Comment;
-        return new HasMany($instance->query(), $instance, 'commentor_id', 'id');
+        return new HasMany(Comment::query(), $this, 'commentor_id', 'id');
     }
 }

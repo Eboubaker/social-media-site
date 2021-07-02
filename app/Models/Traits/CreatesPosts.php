@@ -11,7 +11,10 @@ trait CreatesPosts
     public static function bootCreatesPosts()
     {
         static::deleting(function (Model $author) {
-            $author->cascadeDeleteRelation(Post::make(), 'createdPosts');
+            if($author->softDeleting())
+            {
+                $author->cascadeDeleteRelation(Post::make(), 'createdPosts');
+            }
         });
         if (self::canBeSoftDeleted()) {
             static::restored(function (Model $author) {
@@ -22,7 +25,6 @@ trait CreatesPosts
 
     public function createdPosts():HasMany
     {
-        $instance = new Post;
-        return new HasMany($instance->query(), $instance, 'author_id', 'id');
+        return new HasMany(Post::query(), $this, 'author_id', 'id');
     }
 }
