@@ -1,12 +1,12 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css",
-    "/fonts/MaterialIcons-Regular.eot": "/fonts/MaterialIcons-Regular.eot",
-    "/fonts/MaterialIcons-Regular.ijmap": "/fonts/MaterialIcons-Regular.ijmap",
-    "/fonts/MaterialIcons-Regular.svg": "/fonts/MaterialIcons-Regular.svg",
-    "/fonts/MaterialIcons-Regular.ttf": "/fonts/MaterialIcons-Regular.ttf",
-    "/fonts/MaterialIcons-Regular.woff": "/fonts/MaterialIcons-Regular.woff",
-    "/fonts/MaterialIcons-Regular.woff2": "/fonts/MaterialIcons-Regular.woff2",
-    "/img/flags.png": "/img/flags.png",
-    "/img/flags@2x.png": "/img/flags@2x.png"
+    "/js/app.js": "/js/app.js?id=3df948a1e9877e4ce4de",
+    "/css/app.css": "/css/app.css?id=6936275162fe64fada0a",
+    "/fonts/MaterialIcons-Regular.eot": "/fonts/MaterialIcons-Regular.eot?id=52e45cff6dfb40a49423",
+    "/fonts/MaterialIcons-Regular.ijmap": "/fonts/MaterialIcons-Regular.ijmap?id=ed6a98d002bc0b535dd8",
+    "/fonts/MaterialIcons-Regular.svg": "/fonts/MaterialIcons-Regular.svg?id=a1adea65594c502f9d94",
+    "/fonts/MaterialIcons-Regular.ttf": "/fonts/MaterialIcons-Regular.ttf?id=28f311faf98720e68c98",
+    "/fonts/MaterialIcons-Regular.woff": "/fonts/MaterialIcons-Regular.woff?id=e1084aa26917016c7450",
+    "/fonts/MaterialIcons-Regular.woff2": "/fonts/MaterialIcons-Regular.woff2?id=b727d90b6f00f7560143",
+    "/img/flags.png": "/img/flags.png?id=4c756015aa7f7e988cca",
+    "/img/flags@2x.png": "/img/flags@2x.png?id=836571eca1cbd52d4cb5"
 }
