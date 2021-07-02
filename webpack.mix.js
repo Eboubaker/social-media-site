@@ -10,8 +10,8 @@ mix.js("resources/js/app.js", "public/js")
         notificationsOnSuccess: false,
         processCssUrls: true,
         postCss: [tailwindcss("./tailwind.config.js")],
-    });
-
+    })
+    .version()
 //TODO: in production use a cdn to get material-icons css library (less heavy for our server)
 //
 // google icons
