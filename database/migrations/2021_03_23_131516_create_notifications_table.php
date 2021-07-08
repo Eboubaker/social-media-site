@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Profile;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,7 +14,10 @@ class CreateNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        /** @var Blueprint $schema */
+        $schema = null;
+        Schema::create('notifications', function (Blueprint $table) use(&$schema){
+            $schema=$table;
             $table->uuid('id')->primary();
             $table->string('type');
             $table->morphs('notifiable');
@@ -21,6 +25,10 @@ class CreateNotificationsTable extends Migration
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
+        $schema->cascadeMorphsWithTriggers([
+            'relation' => 'notifiable',
+            'models' => Profile::class,
+        ]);
     }
 
     /**

@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Comment;
 use App\Models\Morphs\Postable;
+use App\Models\Post;
 use App\Models\Video;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
@@ -18,7 +20,10 @@ class CreateVideosTable extends Migration
      */
     public function up()
     {
-        Schema::create(Video::tablename(), function (Blueprint $table) {
+        /** @var Blueprint $schema */
+        $schema = null;
+        Schema::create(Video::tablename(), function (Blueprint $table) use(&$schema){
+            $schema=$table;
             $table->id();
             $table->morphs('videoable');
             $table->char('sha256', 64)->index('videos_by_sha256');
@@ -33,6 +38,10 @@ class CreateVideosTable extends Migration
             $table->float('sfw_score', total:2, places:1, unsigned:true)->nullable()->default(.5);
             MigrationHelper::addTimeStamps($table, Video::class);
         });
+        $schema->cascadeMorphsWithTriggers([
+            Post::class,
+            Comment::class,
+        ]);
     }
 
     /**

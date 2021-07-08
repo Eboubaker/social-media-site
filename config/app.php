@@ -180,7 +180,7 @@ return [
         Barryvdh\Debugbar\ServiceProvider::class,
         Spatie\Html\HtmlServiceProvider::class,
         ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider::class,
-
+        App\Providers\BlueprintMacrosServiceProvider::class,
     ],
 
     /*
@@ -235,8 +235,8 @@ return [
         'Twilio' => Aloha\Twilio\Support\Laravel\Facade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Html' => Spatie\Html\Facades\Html::class,
-        'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class
-
+        'FFMpeg' => ProtoneMedia\LaravelFFMpeg\Support\FFMpeg::class,
+        'TriggerFacade' => App\DataBase\Trigger\TriggerFacade::class,
     ],
     'twilio' => [
         'account_sid' => env('TWILIO_SID'),

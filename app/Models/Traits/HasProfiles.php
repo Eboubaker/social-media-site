@@ -15,6 +15,8 @@ trait HasProfiles
         static::deleting(function(User $owner){
             if($owner->softDeleting()){
                 $owner->cascadeDeleteRelation(Profile::make(), 'profiles');
+            }else{
+                $this->profiles()->forceDelete();
             }
         });
         if(self::canBeSoftDeleted())

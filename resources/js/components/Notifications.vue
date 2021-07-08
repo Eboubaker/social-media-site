@@ -147,17 +147,18 @@ export default {
     };
   },
   created: function(){
-    this.fetchNotifications();
+    Echo.channel('quicklook')
+        .listen('.new-follower-notification', e => console.log(e));
   },
   methods: {
-    fetchNotifications: function(){
-      axios.post('/n/unread', {
-        exclude: this.notifications.map(e => e.id)
-      })
-      .then(res => res.data.data.length > 0 ? this.notifications.push(...res.data.data) : 0)
-      .catch(e => console.error(e))
-      .then(e => setTimeout(this.fetchNotifications, 5000))
-    },
+    // fetchNotifications: function(){
+    //   axios.post('/n/unread', {
+    //     exclude: this.notifications.map(e => e.id)
+    //   })
+    //   .then(res => res.data.data.length > 0 ? this.notifications.push(...res.data.data) : 0)
+    //   .catch(e => console.error(e))
+    //   .then(e => setTimeout(this.fetchNotifications, 5000))
+    // },
     readNotifications: function(){
       axios.post('/n/read', {
         ids: this.notifications.map(e => e.id)

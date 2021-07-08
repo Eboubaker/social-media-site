@@ -5493,18 +5493,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var vue_clickaway__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-clickaway */ "./node_modules/vue-clickaway/dist/vue-clickaway.common.js");
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 //
 //
 //
@@ -5653,26 +5641,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   created: function created() {
-    this.fetchNotifications();
+    Echo.channel('quicklook').listen('.new-follower-notification', function (e) {
+      return console.log(e);
+    });
   },
   methods: {
-    fetchNotifications: function fetchNotifications() {
-      var _this = this;
-
-      axios.post('/n/unread', {
-        exclude: this.notifications.map(function (e) {
-          return e.id;
-        })
-      }).then(function (res) {
-        var _this$notifications;
-
-        return res.data.data.length > 0 ? (_this$notifications = _this.notifications).push.apply(_this$notifications, _toConsumableArray(res.data.data)) : 0;
-      })["catch"](function (e) {
-        return console.error(e);
-      }).then(function (e) {
-        return setTimeout(_this.fetchNotifications, 5000);
-      });
-    },
+    // fetchNotifications: function(){
+    //   axios.post('/n/unread', {
+    //     exclude: this.notifications.map(e => e.id)
+    //   })
+    //   .then(res => res.data.data.length > 0 ? this.notifications.push(...res.data.data) : 0)
+    //   .catch(e => console.error(e))
+    //   .then(e => setTimeout(this.fetchNotifications, 5000))
+    // },
     readNotifications: function readNotifications() {
       axios.post('/n/read', {
         ids: this.notifications.map(function (e) {
@@ -7036,8 +7017,7 @@ window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/d
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__.default({
   broadcaster: 'pusher',
   key: "525bc6d4b4f09ea0242d",
-  cluster: "eu",
-  forceTLS: true
+  cluster: "eu"
 });
 
 /***/ }),

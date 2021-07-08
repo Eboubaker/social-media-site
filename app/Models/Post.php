@@ -15,6 +15,7 @@ use App\Models\Traits\Likeable;
 use App\Models\Traits\ModelTraits;
 use App\Models\Traits\Urlable;
 use App\Models\Traits\ViewAble;
+use App\Observers\PostObserver;
 use App\Rules\PolymorphicRelationExists;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableObserver;
@@ -103,7 +104,7 @@ class Post extends Model
 
     protected $guarded = [];
 
-
+    
     public function pageable()
     {
         return $this->morphTo('pageable');

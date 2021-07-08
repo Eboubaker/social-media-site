@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Community;
 use App\Models\Morphs\Profileable;
 use App\Models\Post;
 use App\Models\Profile;
@@ -18,8 +19,10 @@ class CreatePostsTable extends Migration
      */
     public function up()
     {
-        
-        Schema::create(Post::tablename(), function (Blueprint $table) {
+        /** @var Blueprint $schema */
+        $schema = null;
+        Schema::create(Post::tablename(), function (Blueprint $table) use(&$schema){
+            $schema=$table;
             $table->id();
             $table->foreignId('author_id')->nullable()->constrained(Profile::tablename())->cascadeOnDelete();
             $table->string('title')->nullable();
@@ -29,6 +32,14 @@ class CreatePostsTable extends Migration
             $table->string('slug')->unique()->nullable()->index('posts_by_slug');
             MigrationHelper::addTimeStamps($table, Post::class);
         });
+        $schema->cascadeForeignKeysWithTriggers('author_id');
+        $schema->cascadeMorphsWithTriggers([
+            'relation' => 'pageable',
+            'models' => [
+                Community::class,
+                Profile::class,
+            ]
+        ]);
     }
 
     /**

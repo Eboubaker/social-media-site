@@ -20,22 +20,20 @@ class CreateUsersTable extends Migration
     {
         Schema::create(User::tablename(), function (Blueprint $table) {
             $table->id();
-
             $table->string('email')->index()->nullable()->unique();
             $table->string('phone')->index()->nullable()->unique();
 
             $table->string('first_name');
             $table->string('last_name');
-
             $table->timestamp('phone_verified_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
-
             $table->string('password');
             $table->string('api_token')->unique();
 
             $table->rememberToken();
             MigrationHelper::addTimeStamps($table, User::class);
         });
+
     }
 
     /**

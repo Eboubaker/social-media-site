@@ -145,5 +145,5 @@ return [
     ],
 
     /** if true then log all queries */
-    'log_queries' => env("LOG_QUERIES", false)
+    'log_queries' => env("APP_ENV", 'production') !== 'production',
 ];

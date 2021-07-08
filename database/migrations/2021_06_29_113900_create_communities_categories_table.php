@@ -14,7 +14,7 @@ class CreateCommunitiesCategoriesTable extends Migration
     public function up()
     {
         Schema::create('communities_categories', function (Blueprint $table) {
-            $table->foreignId('community_id')->constrained();
+            $table->foreignId('community_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Follow;
 use App\Models\Profile;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -20,12 +21,12 @@ class ProfileFollowed implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(public Profile $profile, public Profile $follower)
+    public function __construct(public Follow $follow)
     {
     }
     public function broadcastAs()
     {
-        return 'ProfileFollowed';
+        return 'new-follower-notification';
     }
     
     /**
@@ -35,6 +36,7 @@ class ProfileFollowed implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel("App.Models.Profile.".$this->profile->id);
+        // return new PrivateChannel("App.Models.Profile.".$this->profile->id);
+        return new Channel("quicklook");
     }
 }

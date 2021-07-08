@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ProfileFollowed;
+use App\Models\Follow;
 use App\Models\Profile;
 use App\Notifications\ProfileFollowedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,7 +27,7 @@ class ProfileFollowedListener implements ShouldQueue
      * @param  object  $event
      * @return void
      */
-    public function handle(ProfileFollowed $event)
+    public function handle(Follow $event)
     {
         $event->profile->notify(new ProfileFollowedNotification($event->follower));
     }

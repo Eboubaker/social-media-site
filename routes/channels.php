@@ -22,7 +22,9 @@ Broadcast::channel('App.Models.Profile.{id}', function ($user, $id) {
     info("exists: " . $user->profiles()->where('profiles.id', $id)->exists());
     return $user->profiles()->where('profiles.id', $id)->exists();
 });
-
+Broadcast::channel('quicklook', function ($user, $id) {
+    return true;
+});
 // post events channel
 Broadcast::channel('App.Models.Post.{id}', function (User $user, $id) {
     $profile = $user->activeProfile;

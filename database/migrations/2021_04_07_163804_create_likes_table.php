@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Comment;
 use App\Models\Like;
+use App\Models\Post;
 use App\Models\Profile;
 use Database\Seeders\MigrationHelper;
 use Illuminate\Database\Migrations\Migration;
@@ -16,7 +18,10 @@ class CreateLikesTable extends Migration
      */
     public function up()
     {
-        Schema::create('likes', function (Blueprint $table) {
+        /** @var Blueprint $schema */
+        $schema = null;
+        Schema::create('likes', function (Blueprint $table) use(&$schema){
+            $schema=$table;
             $table->id();
             $table->morphs('likeable');
             $table->foreignId('liker_id')->constrained(Profile::tablename())->cascadeOnDelete();
@@ -24,6 +29,10 @@ class CreateLikesTable extends Migration
             $table->unique(['liker_id', 'likeable_id', 'likeable_type']);
             MigrationHelper::addTimeStamps($table, Like::class);
         });
+        $schema->cascadeMorphsWithTriggers([
+            Post::class,
+            Comment::class,
+        ]);
     }
 
     /**

@@ -6,11 +6,13 @@ use App\Events\NewFollowCreated;
 use App\Events\PostLiked;
 use App\Events\ProfileFollowed;
 use App\Events\StorableRemoved;
+use App\Listeners\MigrationsEndedListener;
 use App\Listeners\PostLikedListener;
 use App\Listeners\ProfileFollowedListener;
 use App\Listeners\StorableRemovedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Database\Events\MigrationsEnded;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -34,6 +36,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         PostLiked::class => [
             PostLikedListener::class,
+        ],
+        MigrationsEnded::class => [
+            MigrationsEndedListener::class,
         ],
     ];
 

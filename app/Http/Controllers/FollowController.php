@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\ProfileFollowed;
 use App\Exceptions\HttpInternalServerErrorException;
 use App\Http\StatusCodes;
+use App\Models\Follow;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,12 +19,15 @@ class FollowController extends Controller
 
     public function follow(Request $request, Profile $profile)
     {
-        info($profile);
+        $current = Profile::current();
+        $current->load(['avatarImage' => function($q){
+            $q->select(['id', 'extension']);
+        }]);
         if(!$profile->followers()->wherePivot('follower_id', Profile::current_id())->exists())
         {
-            if($profile->followers()->save(Profile::current()))
+            if($profile->followers()->save($current))
             {
-                event(ProfileFollowed::class, $profile, Profile::current());
+                event(ProfileFollowed::class, new Follow(['profile' => $profile, 'follower' => $current]));
                 return response(status:StatusCodes::HTTP_CREATED);
             }
             return new HttpInternalServerErrorException;

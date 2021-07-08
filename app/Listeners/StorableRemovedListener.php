@@ -10,6 +10,9 @@ use Illuminate\Queue\InteractsWithQueue;
 
 class StorableRemovedListener implements ShouldQueue
 {
+    public $queue = 'trashing';
+
+    
     public function handle($id, $type, $extension)
     {
         if($type === 'Image')

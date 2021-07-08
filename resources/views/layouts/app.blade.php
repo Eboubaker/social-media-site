@@ -56,10 +56,6 @@
                 el: "#app",
             });
             @endif
-            Echo.private(`App.Models.Profile.${app.$currentProfile.id}`)
-                .listen('.ProfileFollowed', (e) => {
-                    console.log(e.profile_id);
-                });
         })
     </script>
 </body>

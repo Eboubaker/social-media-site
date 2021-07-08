@@ -18,7 +18,9 @@ class CreateCommunitiesTable extends Migration
     public function up()
     {
         Schema::create(Community::tablename(), function (Blueprint $table) {
+            $schema=$table;
             $table->id();
+            //TODO: don't cascade
             $table->foreignId('owner_id')->constrained(Profile::tablename())->cascadeOnDelete();
             $table->string('name')->unique('communities_unique_name');
             $table->string('description');

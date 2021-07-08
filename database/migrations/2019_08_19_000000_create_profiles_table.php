@@ -19,7 +19,10 @@ class CreateProfilesTable extends Migration
      */
     public function up()
     {
-        Schema::create(Profile::tablename(), function (Blueprint $table) {
+        /** @var Blueprint $schema */
+        $schema = null;
+        Schema::create(Profile::tablename(), function (Blueprint $table) use(&$schema){
+            $schema=$table;
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             // $table->json('data');
@@ -27,6 +30,7 @@ class CreateProfilesTable extends Migration
             $table->boolean('active')->nullable()->default(false);
             MigrationHelper::addTimeStamps($table, Profile::class);
         });
+        $schema->cascadeForeignKeysWithTriggers('user_id');
     }
 
     /**
