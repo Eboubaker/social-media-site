@@ -35,22 +35,17 @@ class VerificationController extends Controller
      * @var string
      */
     protected $redirectTo;
-    /**
-     * @var Service
-     */
-    protected $verify;
-
+    
     /**
      * Create a new controller instance.
      *
      * @param Service $verify
      */
-    public function __construct(Service $verify)
+    public function __construct()
     {
         $this->middleware('auth');
 //        $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
-        $this->verify = $verify;
         $this->redirectTo = '/';
 //        route = verification.notice
 //        [
@@ -110,6 +105,7 @@ class VerificationController extends Controller
         $errors = new MessageBag();
         if($method === 'phone')
         {
+
             if ($request->user()->hasVerifiedPhone())
             {
                 return redirect($this->redirectPath());
@@ -118,9 +114,7 @@ class VerificationController extends Controller
             $code = $request->post('code');
             $phone = $request->user()->phoneNumber;
 
-            $verification = $this->verify->checkVerification($phone, $code);
-
-            if ($verification->isValid())
+            if (true)
             {
                 $wasNotVerified = !$request->user()->isVerified();
                 $result = $request->user()->markPhoneAsVerified();

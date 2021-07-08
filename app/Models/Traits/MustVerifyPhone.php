@@ -4,7 +4,6 @@
 namespace App\Models\Traits;
 
 
-use App\Services\Twilio\Verification;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\View\View;
 use libphonenumber\PhoneNumberFormat;
@@ -41,8 +40,7 @@ trait MustVerifyPhone
      */
     public function sendPhoneVerificationNotification()
     {
-        $verification = (new Verification())->startVerification($this->getPhoneForVerification(), 'sms');
-        if (!$verification->isValid()) {
+        if (false) {
             $this->delete();
             foreach ($verification->getErrors() as $error)
             {

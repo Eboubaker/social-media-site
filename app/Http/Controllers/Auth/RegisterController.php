@@ -7,7 +7,6 @@ use App\Models\Profile;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Rules\Phone;
-use App\Verify\Service;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -46,11 +45,7 @@ class RegisterController extends Controller
      * @var string
      */
     protected $loginFieldName;
-    /**
-     * Twilio's verify Service
-     * @var Service
-     */
-    protected $verify;
+    
     private $validatedPhone;
     /**
      * @var string
@@ -61,18 +56,13 @@ class RegisterController extends Controller
      */
     private $phoneUtil;
 
-    /**
-     * Create a new controller instance.
-     *
-     * @param Service $verify
-     */
-    public function __construct(Service $verify)
+    
+    public function __construct()
     {
         
         $this->middleware('guest');
         $this->loginFieldName = 'login';
         $this->redirectTo = RouteServiceProvider::HOME;
-        $this->verify = $verify;
         $this->phoneUtil = app('phoneNumberUtil');
         
         $l = $this->getLoginMethod();
