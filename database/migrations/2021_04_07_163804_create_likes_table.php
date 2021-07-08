@@ -28,6 +28,7 @@ class CreateLikesTable extends Migration
 
             $table->unique(['liker_id', 'likeable_id', 'likeable_type']);
             MigrationHelper::addTimeStamps($table, Like::class);
+            $table->timestamp("deleted_at")->nullable();
         });
         $schema->cascadeMorphsWithTriggers([
             Post::class,
