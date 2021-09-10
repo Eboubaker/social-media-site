@@ -117,7 +117,7 @@ Route::post('/n/read', [NotificationController::class, 'read'])->name('notificat
 #endregion
 
 
-#region //! backend wapi requests
+#region //! backend web-api requests
 Route::post('/wapi/profile/current', [ProfileController::class, 'current']);
 Route::post('/wapi/feed', [FeedController::class, 'wapiIndex']);
 #endregion

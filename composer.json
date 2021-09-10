@@ -15,14 +15,15 @@
         "fruitcake/laravel-cors": "^2.0",
         "giggsey/libphonenumber-for-php": "^8.12",
         "guzzlehttp/guzzle": "^7.0.1",
+        "hhxsv5/laravel-s": "~3.7.0",
         "laravel/framework": "^8.12",
         "laravel/octane": "^1.0",
+        "laravel/sail": "^1.0.1",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "pbmedia/laravel-ffmpeg": "^7.5",
         "pusher/pusher-php-server": "^7.0",
         "spatie/laravel-html": "^2.29",
-        "laravel/sail": "^1.0.1",
         "watson/validating": "^6.1"
     },
     "require-dev": {
@@ -33,7 +34,8 @@
         "laravel/dusk": "^6.15",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
-        "phpunit/phpunit": "^9.3.3"
+        "phpunit/phpunit": "^9.3.3",
+        "squizlabs/php_codesniffer": "*"
     },
     "config": {
         "optimize-autoloader": true,
