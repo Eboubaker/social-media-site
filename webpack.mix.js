@@ -25,3 +25,8 @@ mix.copy("node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff
 
 mix.copy("node_modules/intl-tel-input/build/img/flags.png", 'public/img');
 mix.copy("node_modules/intl-tel-input/build/img/flags@2x.png", 'public/img');
+
+mix.browserSync({
+    proxy: 'https://localhost:8000',
+    open: false,
+});

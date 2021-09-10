@@ -1,15 +1,14 @@
 {
-    "name": "laravel/laravel",
+    "name": "eboubaker/sms",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Social Media WebSite",
     "keywords": [
-        "framework",
-        "laravel"
+        "laravel",
+        "social-media-website"
     ],
     "license": "MIT",
     "require": {
         "php": ">=7.4",
-        "ext-gd": "*",
         "ext-json": "*",
         "cviebrock/eloquent-sluggable": "^8.0",
         "fideloper/proxy": "^4.4",
@@ -17,11 +16,13 @@
         "giggsey/libphonenumber-for-php": "^8.12",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
+        "laravel/octane": "^1.0",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "pbmedia/laravel-ffmpeg": "^7.5",
         "pusher/pusher-php-server": "^7.0",
         "spatie/laravel-html": "^2.29",
+        "laravel/sail": "^1.0.1",
         "watson/validating": "^6.1"
     },
     "require-dev": {
@@ -30,7 +31,6 @@
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/dusk": "^6.15",
-        "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
         "phpunit/phpunit": "^9.3.3"

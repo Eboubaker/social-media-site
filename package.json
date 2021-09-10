@@ -12,6 +12,8 @@
     "devDependencies": {
         "autoprefixer": "^10.2.5",
         "axios": "^0.21",
+        "browser-sync": "^2.27.5",
+        "browser-sync-webpack-plugin": "^2.3.0",
         "jquery": "^3.2",
         "laravel-echo": "^1.11.0",
         "laravel-mix": "^6.0.19",
@@ -22,15 +24,16 @@
         "sass": "^1.20.1",
         "sass-loader": "^8.0.0",
         "tailwindcss": "^2.0.3",
-        "vue": "^2.5.17",
+        "vue": "2.6.11",
         "vue-loader": "^15.9.5",
-        "vue-template-compiler": "2.6.13"
+        "vue-template-compiler": "2.6.11"
     },
     "dependencies": {
         "@material/textfield": "^10.0.0",
         "@tailwindcss/forms": "^0.3.2",
         "alpinejs": "^2.8.2",
         "babel-polyfill": "^6.26.0",
+        "chokidar": "^3.5.2",
         "intl-tel-input": "^17.0.12",
         "laravel-mix-purgecss": "^6.0.0",
         "material-design-icons": "^3.0.1",
