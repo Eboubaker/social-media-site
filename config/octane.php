@@ -216,6 +216,18 @@ return [
     */
 
     'max_execution_time' => 30,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Octane Swoole Configuration Options
+    |--------------------------------------------------------------------------
+    |
+    | While using Swoole, you may define additional configuration options as
+    | required by the application. You maycheck which options you need from:
+    | https://www.swoole.co.uk/docs/modules/swoole-server/configuration
+    |
+    */
+
     'swoole' => [
         'ssl' => true,
         'options' => [

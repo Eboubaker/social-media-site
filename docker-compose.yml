@@ -2,14 +2,7 @@
 version: '3'
 services:
     laravel.test:
-        build:
-            context: ./docker/8.0
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-                XDEBUG: '${APP_DEBUG:-false}'
-                XDEBUG_PORT: '${SAIL_XDEBUG_PORT:-9000}'
-        image: sail-8.0/app
+        image: zoldik0/octane
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -28,12 +21,9 @@ services:
         depends_on:
             - mysql
             - redis
-            - meilisearch
-            - selenium
+            - mailhog
     mysql:
-        build: 
-            context: ./docker/db
-            dockerfile: 'Dockerfile'
+        image: zoldik0/mysql
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
         environment:
@@ -62,18 +52,6 @@ services:
           test: ["CMD", "redis-cli", "ping"]
           retries: 3
           timeout: 5s
-    meilisearch:
-        image: 'getmeili/meilisearch:latest'
-        ports:
-            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
-        volumes:
-            - 'sailmeilisearch:/data.ms'
-        networks:
-            - sail
-        healthcheck:
-          test: ["CMD", "wget", "--no-verbose", "--spider",  "http://localhost:7700/health"]
-          retries: 3
-          timeout: 5s
     mailhog:
         image: 'mailhog/mailhog:latest'
         ports:
@@ -81,12 +59,6 @@ services:
             - '${FORWARD_MAILHOG_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
-    selenium:
-       image: 'selenium/standalone-chrome'
-       volumes:
-            - '/dev/shm:/dev/shm'
-       networks:
-           - sail
 networks:
     sail:
         driver: bridge
@@ -94,6 +66,4 @@ volumes:
     sailmysql:
         driver: local
     sailredis:
-        driver: local
-    sailmeilisearch:
         driver: local
